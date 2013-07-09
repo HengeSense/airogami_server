@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN" 
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="saveCardBodyVO.title">
+		<field-validator type="fieldexpression">
+			<param name="expression">!(saveCardBodyVO.title=="" || saveCardBodyVO.title==null) or method=="editCard"</param>
+			<message key="error.card.save.title.require">Please input a title</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">35</param>
+			<message key="error.card.save.title.length">The title should be not more than ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	<field name="saveCardVO.description">
+		<field-validator type="stringlength">
+			<param name="maxLength">300</param>
+			<message key="error.card.save.description.length">The description should be not more than ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	<field name="saveCardVO.rating">
+		<field-validator type="fieldexpression">
+			<param name="expression">!(saveCardVO.rating=="" || saveCardVO.rating==null) or method=="editCard"</param>
+			<message key="error.card.save.rating.require">Please input rating</message>
+		</field-validator>
+		<field-validator type="int">
+			<param name="min">1</param>
+			<param name="max">5</param>
+			<message key="error.card.save.rating.value">The rating must be an integer between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+	<field name="saveCardBodyVO.latitude">
+		<field-validator type="double">
+			<message key="error.card.save.latitude.value">The latitude must be a valid number</message>
+		</field-validator>
+	</field>
+	<field name="saveCardBodyVO.longitude">
+		<field-validator type="double">
+			<message key="error.card.save.longitude.value">The longitude must be a valid number</message>
+		</field-validator>
+	</field>
+	<field name="saveCardBodyVO.address">
+		<field-validator type="stringlength">
+			<param name="maxLength">100</param>
+			<message key="error.card.save.maxLength.length">The address should not be more than 100 characters</message>
+		</field-validator>
+	</field>
+	<field name="saveCardVO.albumIds">
+		<field-validator type="fieldexpression">
+			<param name="expression">!(saveCardVO.albumIds=="" || saveCardVO.albumIds==null) or method=="editCard"</param>
+			<message key="error.card.save.albumIds.require">Please input albumIds</message>
+		</field-validator>
+	</field>
+	<field name="saveCardbodyVO.file">
+		<field-validator type="fieldexpression">
+			<param name="expression">!(saveCardbodyVO.file=="" || saveCardbodyVO.file==null) or method=="editCard"</param>
+			<message key="error.card.save.file.require">Please upload an image</message>
+		</field-validator>
+	</field>
+</validators>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="airogami"
+  id="myeclipse.1369226370258"
+  context-root="/"
+  j2ee-spec="6.0"
+  archive="airogami.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

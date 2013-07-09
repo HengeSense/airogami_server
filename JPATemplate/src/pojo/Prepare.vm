@@ -1,0 +1,33 @@
+#set($hasCreatedTime=false)
+#set($hasUpdatedTime=false)
+#set($hasTime=false)
+#foreach($field in $pojo.getAllPropertiesIterator())
+#if($pojo.getMetaAttribAsBool($field, "gen-property", true))    
+    #if($field.name.equals("createdTime"))
+       #set($hasCreatedTime=true)
+       #set($field.updateable=false)
+    #end    
+    #if($field.name.endsWith("Time"))
+       #set($hasTime=true)
+    #end
+    #if($field.name.equals("updatedTime"))
+        #set($hasUpdatedTime=true)
+    #end
+    
+    #if($field.name.equals("count") || $field.name.endsWith("Count"))
+        #set($field.insertable=false)
+        #set($field.updateable=false)
+        #set($column=$field.columnIterator.next())
+        #set($column.defaultValue="0")
+    #end
+    
+    #if($field.name.equals("isViewed") || $field.name.equals("status"))
+        #set($column=$field.columnIterator.next())
+        #set($column.defaultValue="0")
+    #end
+  
+#end
+#end
+
+#set($temp = $pojo.importType("java.util.List"))
+#set($temp = $pojo.importType("java.util.ArrayList"))

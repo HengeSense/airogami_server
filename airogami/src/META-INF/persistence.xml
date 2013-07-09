@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+    
+	<persistence-unit name="airogami"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>
+			org.apache.openjpa.persistence.PersistenceProviderImpl
+		</provider>
+		<class>com.airogami.persitence.entities.Plane</class>
+		<class>com.airogami.persitence.entities.Message</class>
+		<class>com.airogami.persitence.entities.Account</class>
+		<class>com.airogami.persitence.entities.Category</class>
+		<class>com.airogami.persitence.entities.Chain</class>
+		<class>com.airogami.persitence.entities.ChainMessage</class>
+		<class>com.airogami.persitence.entities.AccountStat</class>
+		<class>com.airogami.persitence.entities.Authenticate</class>
+		<class>com.airogami.persitence.entities.ChainMessageId</class>
+		<properties>
+			<property name="openjpa.ConnectionDriverName"
+				value="com.mysql.jdbc.Driver" />
+			<property name="openjpa.ConnectionURL"
+				value="jdbc:mysql://ec2-54-244-195-174.us-west-2.compute.amazonaws.com/Airogami?autoCommit=true" />
+			<property name="openjpa.ConnectionUserName" value="Scoutin" />
+			<property name="openjpa.ConnectionPassword"
+				value="Scoutin12345!" />
+			<property name="openjpa.jdbc.TransactionIsolation"
+				value="read-committed" />
+
+			<property name="openjpa.Log"
+				value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE" />
+			<property name="openjpa.LockManager" value="version" />
+			<property name="openjpa.Optimistic" value="true" />
+
+			<property name="openjpa.RuntimeUnenhancedClasses"
+				value="unsupported" />
+			<property name="openjpa.DynamicEnhancementAgent"
+				value="false" />
+
+		</properties>
+	</persistence-unit>
+
+</persistence>

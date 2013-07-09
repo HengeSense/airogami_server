@@ -1,0 +1,20 @@
+#if($hasCreatedTime || $hasUpdatedTime || $hasTime)
+    @$pojo.importType("javax.persistence.PrePersist")
+	protected void onPrePersist(){
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
+#foreach($property in $pojo.getAllPropertiesIterator())
+#if($pojo.getMetaAttribAsBool($property, "gen-property", true) && $property.name.endsWith("Time"))
+        set$pojo.getPropertyName($property)(timestamp);
+#end
+#end
+
+	}
+#end
+
+#if($hasUpdatedTime)
+	@$pojo.importType("javax.persistence.PreUpdate")
+	protected void onPreUpdate(){
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setUpdatedTime(timestamp);
+	}
+#end
