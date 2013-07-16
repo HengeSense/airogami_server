@@ -9,13 +9,13 @@
 		<provider>
 			org.apache.openjpa.persistence.PersistenceProviderImpl
 		</provider>
+		<class>com.airogami.persitence.entities.Chain</class>
 		<class>com.airogami.persitence.entities.Plane</class>
+		<class>com.airogami.persitence.entities.AccountStat</class>
 		<class>com.airogami.persitence.entities.Message</class>
 		<class>com.airogami.persitence.entities.Account</class>
 		<class>com.airogami.persitence.entities.Category</class>
-		<class>com.airogami.persitence.entities.Chain</class>
 		<class>com.airogami.persitence.entities.ChainMessage</class>
-		<class>com.airogami.persitence.entities.AccountStat</class>
 		<class>com.airogami.persitence.entities.Authenticate</class>
 		<class>com.airogami.persitence.entities.ChainMessageId</class>
 		<properties>

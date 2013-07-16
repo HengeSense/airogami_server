@@ -41,6 +41,9 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Timestamp lastViewedTime;
 
+	private static Timestamp baseTimestamp = Timestamp
+			.valueOf("2013-01-01 00:00:00.0");
+
 	// Constructors
 
 	/** default constructor */
@@ -153,8 +156,10 @@ public class ChainMessage implements java.io.Serializable {
 	@PrePersist
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
 		setUpdatedTime(timestamp);
-		setLastViewedTime(timestamp);
+
+		setLastViewedTime(baseTimestamp);
 
 	}
 

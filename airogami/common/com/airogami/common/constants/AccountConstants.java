@@ -1,10 +1,11 @@
 package com.airogami.common.constants;
 
 public interface AccountConstants {
-	public static final int AuthenticateTypeEmail=0;
-	public static final int AuthenticateTypeFacebook=1;
-	public static final int AuthenticateTypeTwitter=2;
-	public static final int AuthenticateTypePhone=3;
+	public static final int AuthenticateTypeScreenName=0;
+	public static final int AuthenticateTypeEmail=1;
+	public static final int AuthenticateTypeFacebook=2;
+	public static final int AuthenticateTypeTwitter=3;
+	public static final int AuthenticateTypePhone=4;
 	/*The four codes specified in ISO/IEC 5218 are:
 		0 = not known,
 		1 = male,

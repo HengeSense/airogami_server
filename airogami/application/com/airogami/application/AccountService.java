@@ -1,6 +1,7 @@
 package com.airogami.application;
 
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.application.exception.EmailExistsException;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.persitence.daos.DaoUtils;
 import com.airogami.persitence.entities.Account;
@@ -23,15 +24,23 @@ public class AccountService implements IAccountService {
 		account.setAuthenticate(null);
 		try {
 			EntityManagerHelper.beginTransaction();
-			DaoUtils.accountDao.save(account);
-			DaoUtils.accountDao.flush();
-			authenticate.setAccountId(account.getAccountId());
-			accountStat.setAccountId(account.getAccountId());
-			DaoUtils.accountStatDao.save(accountStat);
-			DaoUtils.authenticateDao.save(authenticate);		
+			authenticate = DaoUtils.authenticateDao.createAuthenticate(authenticate);
+			DaoUtils.authenticateDao.flush();
+			if(authenticate == null){
+				//duplicate email
+				ae = new EmailExistsException();
+			}
+			else{
+				account.setAccountId(authenticate.getAccountId());
+				DaoUtils.accountDao.save(account);
+				DaoUtils.accountDao.flush();
+				accountStat.setAccountId(account.getAccountId());
+				DaoUtils.accountStatDao.save(accountStat);
+			}
+								
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {		
-			t.printStackTrace();
+			//t.printStackTrace();
 			if(t.getCause() == null){
 				ae = new ApplicationException();
 			}
@@ -43,8 +52,10 @@ public class AccountService implements IAccountService {
 		}
 		if (ae != null) {
 			throw ae;
-		}
+		} 
+		
 		account.setAccountStat(accountStat);
+		
 		return account;
 	}
 
@@ -59,10 +70,13 @@ public class AccountService implements IAccountService {
 		try {
 			EntityManagerHelper.beginTransaction();
 			switch (type) {
+			case AccountConstants.AuthenticateTypeScreenName:
+				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1]);
+				break;
 			case AccountConstants.AuthenticateTypeEmail:
 				account = DaoUtils.authenticateDao.authenticateWithEmail(args[0], args[1]);
 				break;
-			}
+			}			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			if(t.getCause() == null){
@@ -77,6 +91,11 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		}
+		if(account == null)
+		{
+			throw new ApplicationException("Account not found");
+		}
+		//account.getAccountStat();
 		return account;
 	}
 }

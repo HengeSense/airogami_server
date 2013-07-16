@@ -18,7 +18,7 @@ import javax.persistence.Query;
 
 public class AccountStatDAO {
 	// property constants
-	public static final String PLANE_COUNT = "planeCount";
+	public static final String LIKES_COUNT = "likesCount";
 	public static final String UNREAD_MESSGE_COUNT = "unreadMessgeCount";
 
 	private EntityManager getEntityManager() {
@@ -240,14 +240,14 @@ public class AccountStatDAO {
 		}
 	}
 
-	private static final String increasePlaneCountJPQL = "update AccountStat a set a.planeCount = a.planeCount + :count where a.accountId in (:accountId)";
+	private static final String increaseLikesCountJPQL = "update AccountStat a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
 
-	public void increasePlaneCount(java.lang.Long accountId, int count) {
+	public void increaseLikesCount(java.lang.Long accountId, int count) {
 		EntityManagerHelper.log("increaseUnreadMessgeCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager()
-					.createQuery(increasePlaneCountJPQL);
+					.createQuery(increaseLikesCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			query.executeUpdate();
@@ -325,9 +325,9 @@ public class AccountStatDAO {
 		}
 	}
 
-	public List<AccountStat> findByPlaneCount(Object planeCount,
+	public List<AccountStat> findByLikesCount(Object likesCount,
 			int... rowStartIdxAndCount) {
-		return findByProperty(PLANE_COUNT, planeCount, rowStartIdxAndCount);
+		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
 	}
 
 	public List<AccountStat> findByUnreadMessgeCount(Object unreadMessgeCount,

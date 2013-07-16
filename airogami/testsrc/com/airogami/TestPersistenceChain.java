@@ -2,6 +2,7 @@ package com.airogami;
 
 import static org.junit.Assert.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,31 @@ public class TestPersistenceChain {
 	@Test
 	public void testMatchChain() {
 		try {
-			long chainId = 8;
-			Chain chain = ServiceUtils.chainService.matchChain(chainId);
-			ObjectUtils.printObject(chain);
+			long chainId = 21;
+			Map<String, Object> result;
+			result = ServiceUtils.chainService.matchChain(chainId);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testrandChainAccount() {
+		try {
+
+			for(int i = 0; i < 10; ++i){
+				//System.out.println(DaoUtils.accountDao.randChainAccount(21));
+			   //System.out.println(DaoUtils.accountDao.randChainAccount(21, "China"));
+				//System.out.println(DaoUtils.accountDao.randChainAccount(21, "China"));
+				//System.out.println(DaoUtils.accountDao.randChainAccount(21, "China", "Zhejiang"));
+				System.out.println(DaoUtils.accountDao.randChainAccount(21, "China", "Zhejiang", "Hangzhou"));
+				
+			}
+			
+		} catch (RuntimeException re) {
+			re.printStackTrace();
 			fail();
 		}
 	}
@@ -108,13 +129,15 @@ public class TestPersistenceChain {
 	
 	@Ignore
 	@Test
-	public void testObtainChain() {
+	public void testObtainChains() {
 		long accountId = 5;
-		String start = "2013-05-31 22:36:15";
+		Timestamp start = Timestamp.valueOf("2013-05-31 22:36:15");
+		Timestamp end = Timestamp.valueOf("2013-05-31 22:36:15");
 		int limit = 2;
+		int startIdx = 0;
 		boolean forward = true;
 		try {
-			Map<String, Object> result = ServiceUtils.chainService.obtainChains(accountId, start, limit, forward);
+			Map<String, Object> result = ServiceUtils.chainService.obtainChains(accountId, startIdx, start, end, limit, forward);
 			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -136,14 +159,14 @@ public class TestPersistenceChain {
 		}
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testViewedChainMessage() {
 		long accountId = 4;
 		long chainId = 3;
-		String last = "2013-06-05 11:44:07";
+		Timestamp last = Timestamp.valueOf("2013-05-31 22:36:15");
 		try {
-			ServiceUtils.chainService.viewedChainMessage(accountId, chainId, last);
+			ServiceUtils.chainService.viewedChainMessages(accountId, chainId, last);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

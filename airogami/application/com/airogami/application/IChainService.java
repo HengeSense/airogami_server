@@ -1,5 +1,6 @@
 package com.airogami.application;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.persitence.entities.ChainMessage;
 import com.airogami.persitence.entities.Message;
 import com.airogami.persitence.entities.Chain;
+import com.airogami.persitence.entities.Plane;
 
 public interface IChainService {
 public final int MaxLimit = 50;
@@ -21,10 +23,10 @@ public final int MaxLimit = 50;
 	
 	/*
 	 * @param chainId:(long) must exist
-	 * @return chain, chain.message, chain.category, chain.accountByOwnerId if successful
+	 * @return chain, (matched) accountId if successful and chain = null if (not exist or already matched)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Chain matchChain(long chainId) throws ApplicationException;
+	public Map<String, Object> matchChain(long chainId) throws ApplicationException;
 
 	/*
 	 * @param accountId:(long) must exist
@@ -37,34 +39,59 @@ public final int MaxLimit = 50;
 	public ChainMessage replyChain(long accountId, long chainId, String content, int type) throws ApplicationException;
 	
 	/*
+	 * @param accountId:(long)
+	 * @param count:(int) should > 0
+	 * @return chains, chains.chainMessages, chains.chainMessages.account if successful
+	 * @throws ApplicationException if failed 
+	 */
+	public List<Chain> pickupChain(long accountId, int count) throws ApplicationException;
+	
+	/*
 	 * @param chainId:(long) must be not null
 	 * @param accountId:(long)
-	 * @return matchCount if successful
+	 * @return canMatchedAgain if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public int throwChain(long chainId,long accountId) throws ApplicationException;
+	public boolean throwChain(long chainId,long accountId) throws ApplicationException;
 	
 	/*
 	 * @param chainId:(long)
 	 * @param accountId:(long)
-	 * @param byOwner:(boolean)
 	 * @throws ApplicationException if failed 
 	 */ 
 	public void deleteChain(long chainId,long accountId) throws ApplicationException;
 	
-	/*
+	/* 
+	 * get replied chains
 	 * @param accountId:(long)
-	 * @param start:(String) start datetime (exclusive)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(Timestamp) start datetime (inclusive)
+	 * @param end:(Timestamp) end datetime (inclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
 	 * @param forward:(boolean)
 	 * @return more:(boolean), chains (chain.chaiMessages) if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainChains(long accountId, String start, int limit, boolean forward) throws ApplicationException;	
+	public Map<String, Object> obtainChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
+	
+	/*
+	 * get newly received chains
+	 * @param accountId:(long)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(Timestamp) start datetime (inclusive)
+	 * @param end:(Timestamp) end datetime (inclusive)
+	 * @param limit:(int) max(limit) = MaxLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), chains (chain.chaiMessages) if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> receiveChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
+	
 	
 	/*
 	 * @param accountId:(long)
-	 * @param chainId:(long)	 
+	 * @param chainId:(long) 
+	 * @return chainMessages
 	 * @throws ApplicationException if failed 
 	 */ 
 	public List<ChainMessage> obtainChainMessages(long accountId, long chainId) throws ApplicationException;
@@ -72,9 +99,10 @@ public final int MaxLimit = 50;
 	/*
 	 * @param accountId:(long)
 	 * @param chainId:(long)	 
-	 * @param last:(String)
+	 * @param last:(Timestamp) must be not-null
+	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public void viewedChainMessage(long accountId, long chainId, String last) throws ApplicationException;
+	public boolean viewedChainMessages(long accountId, long chainId, Timestamp last) throws ApplicationException;
 	
 }

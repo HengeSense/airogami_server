@@ -114,6 +114,7 @@ public class Message implements java.io.Serializable {
 	@PrePersist
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
 		setCreatedTime(timestamp);
 
 	}

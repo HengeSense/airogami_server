@@ -1,6 +1,5 @@
 package com.airogami;
 
-import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -8,7 +7,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persitence.entities.Account;
 import com.airogami.persitence.entities.Authenticate;
@@ -28,12 +26,14 @@ public class TestAccount {
 	@Test
 	public void testSignup() {		
 		try {
-			for(int i=0;i<6;++i){				
+			for(int i=0;i<5;++i){				
 				Authenticate authenticate = new Authenticate();				
 				authenticate.setEmail("tianhuyang" + i + "@gmail.com");
+				
 				authenticate.setPassword("12345678");
 				Account account = new Account();
 				account.setFullName("yangtianhu");
+				account.setScreenName("tianhuyang" + i);
 				account.setAuthenticate(authenticate);
 				account.setSex((short)0);
 				account.setStatus((short)0);
@@ -41,10 +41,11 @@ public class TestAccount {
 				account.setCity("shanghai");
 				account.setProvince("shanghai");
 				account.setCountry("China");
-				account.setAltitude(0.0);
+				account.setLatitude(0.0);
 				account.setLongitude(0.0);
 				account.setAccountId(null);
 				ManagerUtils.accountManager.signup(account);
+				ObjectUtils.printObject(account);
 			}			
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -54,12 +55,24 @@ public class TestAccount {
 	
 	@Ignore
 	@Test
-	public void testSignin() {
+	public void testSigninWithScreenName() {
+		String screenName = "tianhuyang5";
+		String password = "12345678";
+		try {
+			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password);
+			ObjectUtils.printObject(account);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+	@Ignore
+	@Test
+	public void testSigninWithEmail() {
 		String email = "tianhuyang0@gmail.com";
 		String password = "12345678";
-		int type = AccountConstants.AuthenticateTypeEmail;
 		try {
-			Account account = ManagerUtils.accountManager.signin(new String[]{email,password},type);
+			Account account = ManagerUtils.accountManager.signinWithEmail(email, password);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

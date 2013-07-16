@@ -24,7 +24,7 @@ public class AccountStat implements java.io.Serializable {
 
 	private Account account;
 
-	private Integer planeCount = 0;
+	private Integer likesCount = 0;
 
 	private Integer unreadMessgeCount = 0;
 
@@ -35,11 +35,11 @@ public class AccountStat implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AccountStat(Long accountId, Account account, Integer planeCount,
+	public AccountStat(Long accountId, Account account, Integer likesCount,
 			Integer unreadMessgeCount) {
 		this.accountId = accountId;
 		this.account = account;
-		this.planeCount = planeCount;
+		this.likesCount = likesCount;
 		this.unreadMessgeCount = unreadMessgeCount;
 	}
 
@@ -64,13 +64,13 @@ public class AccountStat implements java.io.Serializable {
 		this.account = account;
 	}
 
-	@Column(name = "PLANE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getPlaneCount() {
-		return this.planeCount;
+	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getLikesCount() {
+		return this.likesCount;
 	}
 
-	public void setPlaneCount(Integer planeCount) {
-		this.planeCount = planeCount;
+	public void setLikesCount(Integer likesCount) {
+		this.likesCount = likesCount;
 	}
 
 	@Column(name = "UNREAD_MESSGE_COUNT", nullable = false, insertable = false, updatable = false)

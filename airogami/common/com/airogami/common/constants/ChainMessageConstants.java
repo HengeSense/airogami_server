@@ -2,8 +2,7 @@ package com.airogami.common.constants;
 
 public interface ChainMessageConstants {
 
-	public final int StatusUnread = 0;
-	public final int StatusRead = 1;
-	public final int StatusReplied = 2;
-	public final int StatusDeleted = 3;
+	public final byte StatusNew = 0;
+	public final byte StatusReplied = 1;
+	public final byte StatusDeleted = 2;
 }

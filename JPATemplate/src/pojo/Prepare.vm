@@ -1,6 +1,7 @@
 #set($hasCreatedTime=false)
 #set($hasUpdatedTime=false)
 #set($hasTime=false)
+#set($chainMessageLastViewedTime=false)
 #foreach($field in $pojo.getAllPropertiesIterator())
 #if($pojo.getMetaAttribAsBool($field, "gen-property", true))    
     #if($field.name.equals("createdTime"))
@@ -10,11 +11,14 @@
     #if($field.name.endsWith("Time"))
        #set($hasTime=true)
     #end
+    #if($field.name.equals("lastViewedTime") && $pojo.getDeclarationName().equals("ChainMessage"))
+    #set($chainMessageLastViewedTime=true)
+    #end
     #if($field.name.equals("updatedTime"))
         #set($hasUpdatedTime=true)
     #end
     
-    #if($field.name.equals("count") || $field.name.endsWith("Count"))
+    #if($field.name.equals("count") || ($field.name.endsWith("Count") && !$field.name.startsWith("max")))
         #set($field.insertable=false)
         #set($field.updateable=false)
         #set($column=$field.columnIterator.next())

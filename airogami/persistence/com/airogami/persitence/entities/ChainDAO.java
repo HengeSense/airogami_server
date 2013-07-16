@@ -19,12 +19,17 @@ import javax.persistence.Query;
 
 public class ChainDAO {
 	// property constants
-	public static final String MESSAGE_COUNT = "messageCount";
+	public static final String STATUS = "status";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
+	public static final String LONGITUDE = "longitude";
+	public static final String LATITUDE = "latitude";
+	public static final String SEX = "sex";
 	public static final String COUNTRY = "country";
 	public static final String PASS_COUNT = "passCount";
 	public static final String MATCH_COUNT = "matchCount";
+	public static final String MAX_PASS_COUNT = "maxPassCount";
+	public static final String MAX_MATCH_COUNT = "maxMatchCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -253,41 +258,22 @@ public class ChainDAO {
 		}
 	}
 
-	private static final String increaseMessageCountJPQL = "update Chain a set a.messageCount = a.messageCount + :count where a.chainId in (:chainId)";
-
-	public void increaseMessageCount(java.lang.Long chainId, int count) {
-		EntityManagerHelper.log("increaseMatchCount with chainId:" + chainId,
-				Level.INFO, null);
-		try {
-			Query query = getEntityManager().createQuery(
-					increaseMessageCountJPQL);
-			query.setParameter("chainId", chainId);
-			query.setParameter("count", count);
-			query.executeUpdate();
-			EntityManagerHelper.log("increaseMatchCount successful",
-					Level.INFO, null);
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMatchCount failed", Level.SEVERE,
-					re);
-			throw re;
-		}
-	}
-
 	private static final String increasePassCountJPQL = "update Chain a set a.passCount = a.passCount + :count where a.chainId in (:chainId)";
 
 	public void increasePassCount(java.lang.Long chainId, int count) {
-		EntityManagerHelper.log("increaseMatchCount with chainId:" + chainId,
-				Level.INFO, null);
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
+				null);
 		try {
 			Query query = getEntityManager().createQuery(increasePassCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
 			query.executeUpdate();
-			EntityManagerHelper.log("increaseMatchCount successful",
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMatchCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -295,19 +281,62 @@ public class ChainDAO {
 	private static final String increaseMatchCountJPQL = "update Chain a set a.matchCount = a.matchCount + :count where a.chainId in (:chainId)";
 
 	public void increaseMatchCount(java.lang.Long chainId, int count) {
-		EntityManagerHelper.log("increaseMatchCount with chainId:" + chainId,
-				Level.INFO, null);
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
+				null);
 		try {
 			Query query = getEntityManager()
 					.createQuery(increaseMatchCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
 			query.executeUpdate();
-			EntityManagerHelper.log("increaseMatchCount successful",
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMatchCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
+	private static final String increaseMaxPassCountJPQL = "update Chain a set a.maxPassCount = a.maxPassCount + :count where a.chainId in (:chainId)";
+
+	public void increaseMaxPassCount(java.lang.Long chainId, int count) {
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseMaxPassCountJPQL);
+			query.setParameter("chainId", chainId);
+			query.setParameter("count", count);
+			query.executeUpdate();
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
+					Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
+	private static final String increaseMaxMatchCountJPQL = "update Chain a set a.maxMatchCount = a.maxMatchCount + :count where a.chainId in (:chainId)";
+
+	public void increaseMaxMatchCount(java.lang.Long chainId, int count) {
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseMaxMatchCountJPQL);
+			query.setParameter("chainId", chainId);
+			query.setParameter("count", count);
+			query.executeUpdate();
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
+					Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -357,9 +386,8 @@ public class ChainDAO {
 		}
 	}
 
-	public List<Chain> findByMessageCount(Object messageCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(MESSAGE_COUNT, messageCount, rowStartIdxAndCount);
+	public List<Chain> findByStatus(Object status, int... rowStartIdxAndCount) {
+		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByCity(Object city, int... rowStartIdxAndCount) {
@@ -369,6 +397,20 @@ public class ChainDAO {
 	public List<Chain> findByProvince(Object province,
 			int... rowStartIdxAndCount) {
 		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByLongitude(Object longitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByLatitude(Object latitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findBySex(Object sex, int... rowStartIdxAndCount) {
+		return findByProperty(SEX, sex, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByCountry(Object country, int... rowStartIdxAndCount) {
@@ -383,6 +425,17 @@ public class ChainDAO {
 	public List<Chain> findByMatchCount(Object matchCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(MATCH_COUNT, matchCount, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByMaxPassCount(Object maxPassCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(MAX_PASS_COUNT, maxPassCount, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByMaxMatchCount(Object maxMatchCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(MAX_MATCH_COUNT, maxMatchCount,
+				rowStartIdxAndCount);
 	}
 
 	/**

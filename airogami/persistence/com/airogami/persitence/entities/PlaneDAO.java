@@ -21,11 +21,14 @@ public class PlaneDAO {
 	// property constants
 	public static final String STATUS = "status";
 	public static final String LONGITUDE = "longitude";
-	public static final String ALTITUDE = "altitude";
+	public static final String LATITUDE = "latitude";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
+	public static final String SEX = "sex";
 	public static final String MATCH_COUNT = "matchCount";
+	public static final String MAX_MATCH_COUNT = "maxMatchCount";
+	public static final String LIKES = "likes";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -298,19 +301,41 @@ public class PlaneDAO {
 	private static final String increaseMatchCountJPQL = "update Plane a set a.matchCount = a.matchCount + :count where a.planeId in (:planeId)";
 
 	public void increaseMatchCount(java.lang.Long planeId, int count) {
-		EntityManagerHelper.log("increaseMatchCount with planeId:" + planeId,
-				Level.INFO, null);
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
+				null);
 		try {
 			Query query = getEntityManager()
 					.createQuery(increaseMatchCountJPQL);
 			query.setParameter("planeId", planeId);
 			query.setParameter("count", count);
 			query.executeUpdate();
-			EntityManagerHelper.log("increaseMatchCount successful",
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMatchCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
+	private static final String increaseMaxMatchCountJPQL = "update Plane a set a.maxMatchCount = a.maxMatchCount + :count where a.planeId in (:planeId)";
+
+	public void increaseMaxMatchCount(java.lang.Long planeId, int count) {
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseMaxMatchCountJPQL);
+			query.setParameter("planeId", planeId);
+			query.setParameter("count", count);
+			query.executeUpdate();
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
+					Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -369,9 +394,9 @@ public class PlaneDAO {
 		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByAltitude(Object altitude,
+	public List<Plane> findByLatitude(Object latitude,
 			int... rowStartIdxAndCount) {
-		return findByProperty(ALTITUDE, altitude, rowStartIdxAndCount);
+		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByCity(Object city, int... rowStartIdxAndCount) {
@@ -387,9 +412,23 @@ public class PlaneDAO {
 		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
 	}
 
+	public List<Plane> findBySex(Object sex, int... rowStartIdxAndCount) {
+		return findByProperty(SEX, sex, rowStartIdxAndCount);
+	}
+
 	public List<Plane> findByMatchCount(Object matchCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(MATCH_COUNT, matchCount, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByMaxMatchCount(Object maxMatchCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(MAX_MATCH_COUNT, maxMatchCount,
+				rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLikes(Object likes, int... rowStartIdxAndCount) {
+		return findByProperty(LIKES, likes, rowStartIdxAndCount);
 	}
 
 	/**

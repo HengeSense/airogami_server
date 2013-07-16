@@ -1,6 +1,7 @@
 package com.airogami.persitence.entities;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -21,10 +22,11 @@ import javax.persistence.Query;
 public class AccountDAO {
 	// property constants
 	public static final String FULL_NAME = "fullName";
+	public static final String SCREEN_NAME = "screenName";
 	public static final String SEX = "sex";
 	public static final String ICON = "icon";
 	public static final String LONGITUDE = "longitude";
-	public static final String ALTITUDE = "altitude";
+	public static final String LATITUDE = "latitude";
 	public static final String STATUS = "status";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
@@ -292,6 +294,11 @@ public class AccountDAO {
 		return findByProperty(FULL_NAME, fullName, rowStartIdxAndCount);
 	}
 
+	public List<Account> findByScreenName(Object screenName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(SCREEN_NAME, screenName, rowStartIdxAndCount);
+	}
+
 	public List<Account> findBySex(Object sex, int... rowStartIdxAndCount) {
 		return findByProperty(SEX, sex, rowStartIdxAndCount);
 	}
@@ -305,9 +312,9 @@ public class AccountDAO {
 		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
 	}
 
-	public List<Account> findByAltitude(Object altitude,
+	public List<Account> findByLatitude(Object latitude,
 			int... rowStartIdxAndCount) {
-		return findByProperty(ALTITUDE, altitude, rowStartIdxAndCount);
+		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
 	}
 
 	public List<Account> findByStatus(Object status, int... rowStartIdxAndCount) {

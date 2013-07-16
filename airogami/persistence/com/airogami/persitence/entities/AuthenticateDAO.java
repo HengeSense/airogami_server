@@ -19,6 +19,7 @@ import javax.persistence.Query;
 public class AuthenticateDAO {
 	// property constants
 	public static final String EMAIL = "email";
+	public static final String SCREEN_NAME = "screenName";
 	public static final String PASSWORD = "password";
 
 	private EntityManager getEntityManager() {
@@ -289,6 +290,11 @@ public class AuthenticateDAO {
 	public List<Authenticate> findByEmail(Object email,
 			int... rowStartIdxAndCount) {
 		return findByProperty(EMAIL, email, rowStartIdxAndCount);
+	}
+
+	public List<Authenticate> findByScreenName(Object screenName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(SCREEN_NAME, screenName, rowStartIdxAndCount);
 	}
 
 	public List<Authenticate> findByPassword(Object password,

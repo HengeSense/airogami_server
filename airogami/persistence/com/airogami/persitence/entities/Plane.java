@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 /**
@@ -38,11 +39,13 @@ public class Plane implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
+	private Timestamp updatedTime;
+
 	private Short status = 0;
 
 	private Double longitude;
 
-	private Double altitude;
+	private Double latitude;
 
 	private Timestamp ownerViewedTime;
 
@@ -54,7 +57,13 @@ public class Plane implements java.io.Serializable {
 
 	private String country;
 
+	private Short sex;
+
 	private Integer matchCount = 0;
+
+	private Integer maxMatchCount;
+
+	private Short likes;
 
 	private List<Message> messages = new ArrayList<Message>(0);
 
@@ -65,38 +74,47 @@ public class Plane implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Plane(Category category, Timestamp createdTime, Short status,
-			Double longitude, Double altitude, Timestamp ownerViewedTime,
-			Timestamp targetViewedTime, Integer matchCount) {
+	public Plane(Category category, Timestamp createdTime,
+			Timestamp updatedTime, Short status, Timestamp ownerViewedTime,
+			Timestamp targetViewedTime, Short sex, Integer matchCount,
+			Integer maxMatchCount, Short likes) {
 		this.category = category;
 		this.createdTime = createdTime;
+		this.updatedTime = updatedTime;
 		this.status = status;
-		this.longitude = longitude;
-		this.altitude = altitude;
 		this.ownerViewedTime = ownerViewedTime;
 		this.targetViewedTime = targetViewedTime;
+		this.sex = sex;
 		this.matchCount = matchCount;
+		this.maxMatchCount = maxMatchCount;
+		this.likes = likes;
 	}
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
-			Account accountByOwnerId, Timestamp createdTime, Short status,
-			Double longitude, Double altitude, Timestamp ownerViewedTime,
+			Account accountByOwnerId, Timestamp createdTime,
+			Timestamp updatedTime, Short status, Double longitude,
+			Double latitude, Timestamp ownerViewedTime,
 			Timestamp targetViewedTime, String city, String province,
-			String country, Integer matchCount, List<Message> messages) {
+			String country, Short sex, Integer matchCount,
+			Integer maxMatchCount, Short likes, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
 		this.createdTime = createdTime;
+		this.updatedTime = updatedTime;
 		this.status = status;
 		this.longitude = longitude;
-		this.altitude = altitude;
+		this.latitude = latitude;
 		this.ownerViewedTime = ownerViewedTime;
 		this.targetViewedTime = targetViewedTime;
 		this.city = city;
 		this.province = province;
 		this.country = country;
+		this.sex = sex;
 		this.matchCount = matchCount;
+		this.maxMatchCount = maxMatchCount;
+		this.likes = likes;
 		this.messages = messages;
 	}
 
@@ -151,6 +169,15 @@ public class Plane implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
+	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
+	public Timestamp getUpdatedTime() {
+		return this.updatedTime;
+	}
+
+	public void setUpdatedTime(Timestamp updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
 	@Column(name = "STATUS", nullable = false)
 	public Short getStatus() {
 		return this.status;
@@ -160,7 +187,7 @@ public class Plane implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "LONGITUDE", nullable = false, precision = 10, scale = 6)
+	@Column(name = "LONGITUDE", precision = 10, scale = 6)
 	public Double getLongitude() {
 		return this.longitude;
 	}
@@ -169,13 +196,13 @@ public class Plane implements java.io.Serializable {
 		this.longitude = longitude;
 	}
 
-	@Column(name = "ALTITUDE", nullable = false, precision = 10, scale = 6)
-	public Double getAltitude() {
-		return this.altitude;
+	@Column(name = "LATITUDE", precision = 10, scale = 6)
+	public Double getLatitude() {
+		return this.latitude;
 	}
 
-	public void setAltitude(Double altitude) {
-		this.altitude = altitude;
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 	@Column(name = "OWNER_VIEWED_TIME", nullable = false, length = 19)
@@ -223,6 +250,15 @@ public class Plane implements java.io.Serializable {
 		this.country = country;
 	}
 
+	@Column(name = "SEX", nullable = false)
+	public Short getSex() {
+		return this.sex;
+	}
+
+	public void setSex(Short sex) {
+		this.sex = sex;
+	}
+
 	@Column(name = "MATCH_COUNT", nullable = false, insertable = false, updatable = false)
 	public Integer getMatchCount() {
 		return this.matchCount;
@@ -230,6 +266,24 @@ public class Plane implements java.io.Serializable {
 
 	public void setMatchCount(Integer matchCount) {
 		this.matchCount = matchCount;
+	}
+
+	@Column(name = "MAX_MATCH_COUNT", nullable = false)
+	public Integer getMaxMatchCount() {
+		return this.maxMatchCount;
+	}
+
+	public void setMaxMatchCount(Integer maxMatchCount) {
+		this.maxMatchCount = maxMatchCount;
+	}
+
+	@Column(name = "LIKES", nullable = false)
+	public Short getLikes() {
+		return this.likes;
+	}
+
+	public void setLikes(Short likes) {
+		this.likes = likes;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")
@@ -244,10 +298,21 @@ public class Plane implements java.io.Serializable {
 	@PrePersist
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
 		setCreatedTime(timestamp);
+
+		setUpdatedTime(timestamp);
+
 		setOwnerViewedTime(timestamp);
+
 		setTargetViewedTime(timestamp);
 
+	}
+
+	@PreUpdate
+	protected void onPreUpdate() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setUpdatedTime(timestamp);
 	}
 
 }

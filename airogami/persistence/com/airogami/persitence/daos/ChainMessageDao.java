@@ -12,7 +12,8 @@ import com.airogami.persitence.entities.ChainMessageDAO;
 import com.airogami.persitence.entities.EntityManagerHelper;
 
 public class ChainMessageDao extends ChainMessageDAO {
-	private final String replyChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.content = ?5, chainMessage.createdTime = ?8, chainMessage.status = ?7, chainMessage.type = ?6 where (chainMessage.status = ?3 or chainMessage.status = ?4) and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+	private final String replyChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.content = ?4, chainMessage.updatedTime = ?7, chainMessage.status = ?6, chainMessage.type = ?5 where chainMessage.status = ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+	private final String replyChainResetMatchCountJPQL = "update Chain chain set chain.matchCount = 0, chain.updatedTime = ?2 where chain.chainId = ?1";
 
 	public boolean replyChainMessage(long accountId, long chainId, String content, int type){
 		EntityManagerHelper.log("replyChainMessaging", Level.INFO, null);
@@ -21,13 +22,19 @@ public class ChainMessageDao extends ChainMessageDAO {
 					replyChainMessageJPQL);
 			query.setParameter(1, chainId);
 			query.setParameter(2, accountId);
-			query.setParameter(3, ChainMessageConstants.StatusRead);
-			query.setParameter(4, ChainMessageConstants.StatusUnread);
-			query.setParameter(5, content);
-			query.setParameter(6, type);
-			query.setParameter(7, ChainMessageConstants.StatusReplied);
-			query.setParameter(8, new Timestamp(System.currentTimeMillis()));
+			query.setParameter(3, ChainMessageConstants.StatusNew);
+			query.setParameter(4, content);
+			query.setParameter(5, type);
+			query.setParameter(6, ChainMessageConstants.StatusReplied);
+			query.setParameter(7, new Timestamp(System.currentTimeMillis()));
 			int count = query.executeUpdate();
+			if(count == 1){
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						replyChainResetMatchCountJPQL);
+				query.setParameter(1, chainId);
+				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
+				query.executeUpdate();
+			}
 			EntityManagerHelper
 					.log("replyChainMessage successful", Level.INFO, null);
 			return count == 1;
@@ -37,7 +44,8 @@ public class ChainMessageDao extends ChainMessageDAO {
 		}
 	}
 	
-	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage, ChainMessage cm where cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.createdTime desc";
+	//no verify for whether replied here or deleted (verified in obtainChains)
+	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage, ChainMessage cm where chainMessage.updatedTime > cm.lastViewedTime and cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.updatedTime asc";
 
 	public List<ChainMessage> obtainChainMessages(long accountId, long chainId){
 		EntityManagerHelper.log("obtainChainMessagesing with accountId = " + accountId + "and chainId = " + chainId, Level.INFO, null);
@@ -57,7 +65,8 @@ public class ChainMessageDao extends ChainMessageDAO {
 		}
 	}
 	
-	private final String viewedChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.lastViewedTime = ?3 where chainMessage.lastViewedTime < ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+	//verified for whether replied or deleted here
+	private final String viewedChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.lastViewedTime = ?3 where chainMessage.lastViewedTime < ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2 and chainMessage.status = ?4";
 
 	public boolean viewedChainMessage(long accountId, long chainId, Timestamp lastTimestamp){
 		EntityManagerHelper.log("viewedChainMessaging with chainId = " + chainId, Level.INFO, null);		
@@ -67,6 +76,7 @@ public class ChainMessageDao extends ChainMessageDAO {
 			query.setParameter(1, chainId);
 			query.setParameter(2, accountId);
 			query.setParameter(3, lastTimestamp);
+			query.setParameter(4, ChainMessageConstants.StatusReplied);
 			int count = query.executeUpdate();
 			EntityManagerHelper
 					.log("viewedChainMessage successful", Level.INFO, null);

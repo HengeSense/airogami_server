@@ -2,6 +2,7 @@ package com.airogami;
 
 import static org.junit.Assert.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.constants.AccountConstants;
 import com.airogami.persitence.daos.DaoUtils;
 import com.airogami.persitence.entities.Account;
 import com.airogami.persitence.entities.Category;
@@ -32,14 +34,16 @@ public class TestPersistencePlane {
 	@Test
 	public void testRandAccount() {
 		try {
+			
+			for(int i = 0; i < 10; ++i){
+				System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(1L), (short)AccountConstants.SexType_Unknown));
+		        //System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(1L),(short)AccountConstants.SexType_Female, "China"));
+				//System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(2L), (short)AccountConstants.SexType_Female, "China", "Sichuan"));
+				//System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(2L), (short)AccountConstants.SexType_Female, "China", "Sichuan", "Chengdu"));
 
-//		    System.out.println(DaoUtils.accountDao.randAccount(1, "China"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1, "China", "shanghai"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1, "China", "shanghai", "shanghai"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1, "China", "shanghai", "shanghai"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1, "China", "shanghai", "shanghai"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1, "China", "shanghai", "shanghai"));
-//			System.out.println(DaoUtils.accountDao.randAccount(1));
+			}
+
+		    
 		} catch (RuntimeException re) {
 			re.printStackTrace();
 			fail();
@@ -63,14 +67,14 @@ public class TestPersistencePlane {
 	@Test
 	public void testSendPlane() {
 		Plane plane = new Plane();
-		plane.setCity("shanghai");
-		plane.setProvince("shanghai");
+		plane.setCity("chengdu");
+		plane.setProvince("sichuan");
 		plane.setCountry("China");
-		plane.setAltitude(0.0);
+		plane.setLatitude(0.0);
 		plane.setLongitude(0.0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
-		long ownerId = 4L;
+		long ownerId = 1L;
 		Message message = new Message();
 		message.setContent("hello!");
 		message.setType((short) 0);
@@ -99,7 +103,7 @@ public class TestPersistencePlane {
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();
-		}
+		} 
 	}
 	
 	@Ignore
@@ -131,13 +135,14 @@ public class TestPersistencePlane {
 	
 	@Ignore
 	@Test
-	public void testObtainPlane() {
+	public void testObtainPlanes() {
 		long accountId = 4;
 		String start = "2013-05-31 22:36:15";
+		Timestamp timestamp = Timestamp.valueOf(start);
 		int limit = 2;
 		boolean forward = true;
 		try {
-			Map<String, Object> result = ServiceUtils.planeService.obtainPlanes(accountId, start, limit, forward);
+			Map<String, Object> result = ServiceUtils.planeService.obtainPlanes(accountId, -1, null, null, limit, forward);
 			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -153,7 +158,7 @@ public class TestPersistencePlane {
 		String last = "2013-06-05 11:30:33";
 		boolean byOwner = false;
 		try {
-			ServiceUtils.planeService.viewedMessage(accountId, planeId, last, byOwner);
+			ServiceUtils.planeService.viewedMessages(accountId, planeId, Timestamp.valueOf(last), byOwner);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

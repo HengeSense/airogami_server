@@ -38,6 +38,10 @@ public class AirogamiException extends Exception implements AirogamiError{
 	}
 
 	
+	public AirogamiException(String string) {
+		status = AirogamiError.Others_Status;
+	}
+
 	public String toString(){
 		return status + ": "+ this.getMessage();
 	}	

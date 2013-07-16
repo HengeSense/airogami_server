@@ -19,3 +19,7 @@
     #elseif($field.columnIterator.next().defaultValue) = $field.columnIterator.next().defaultValue#end;
 #end
 #end
+
+#if($chainMessageLastViewedTime)
+   private static Timestamp baseTimestamp = Timestamp.valueOf("2013-01-01 00:00:00.0");
+#end
