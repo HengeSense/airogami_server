@@ -32,10 +32,10 @@ public interface IPlaneService {
 	
 	/*
 	 * @param planeId:(long) must exist
-	 * @return plane, plane.messages, plane.category, plane.accountByOwnerId if successful or null if (not exist or already matched)
+	 * @return plane, accountId if successful or plnae = null if (not exist or already matched or exceed maximum)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Plane matchPlane(long planeId) throws ApplicationException;
+	public Map<String, Object> matchPlane(long planeId) throws ApplicationException;
 
 	/*
 	 * @param planeId:(long) must be not null

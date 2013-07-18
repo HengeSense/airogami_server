@@ -280,7 +280,10 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	// set targetId = accountId for a plane
+	/*
+	 * set targetId = accountId for a plane
+	 * @return rematch
+	 */
 	public boolean match(long planeId, long accountId) {
 		EntityManagerHelper.log("matching plane with planeId = " + planeId + " and accountId = " + accountId, Level.INFO, null);
 		try {

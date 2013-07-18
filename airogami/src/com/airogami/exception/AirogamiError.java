@@ -25,10 +25,22 @@ public interface AirogamiError {
 	public static final String Account_Signin_Input_Message = "error.account.signin.input";
 	public static final String Account_Signin_Failure_Message = "error.account.signin.failure";
 	
-	public static final int Account_FollowAccount_Input_Status = 100102;
-	public static final int Account_FollowAccount_Failure_Status = 100103;
-	public static final String Account_FollowAccount_Input_Message = "error.account.followaccount.input";
-	public static final String Account_FollowAccount_Failure_Message = "error.account.followaccount.failure";
+	public static final int Account_EditAccount_Input_Status = 100102;
+	public static final int Account_EditAccount_Failure_Status = 100103;
+	public static final String Account_EditAccount_Input_Message = "error.account.editaccount.input";
+	public static final String Account_EditAccount_Failure_Message = "error.account.editaccount.failure";
+	
+	public static final int Account_ChangePassword_Input_Status = 100104;
+	public static final int Account_ChangePassword_Failure_Status = 100105;
+	public static final String Account_ChangePassword_Input_Message = "error.account.changepassword.input";
+	public static final String Account_ChangePassword_Failure_Message = "error.account.changepassword.failure";
+
+	public static final int Account_ChangeScreenName_Input_Status = 100106;
+	public static final int Account_ChangeScreenName_Failure_Status = 100107;
+	public static final String Account_ChangeScreenName_Input_Message = "error.account.changescreenname.input";
+	public static final String Account_ChangeScreenName_Failure_Message = "error.account.changescreenname.failure";
+
+	
 	/* 
 	 * account ends
 	 */

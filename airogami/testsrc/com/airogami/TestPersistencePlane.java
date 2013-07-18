@@ -55,8 +55,8 @@ public class TestPersistencePlane {
 	public void testMatchPlane() {
 		try {
 			long planeId = 2;
-			Plane plane = ServiceUtils.planeService.matchPlane(planeId);
-			ObjectUtils.printObject(plane);
+			Map<String, Object> result = ServiceUtils.planeService.matchPlane(planeId);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

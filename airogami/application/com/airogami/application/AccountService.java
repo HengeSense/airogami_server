@@ -1,5 +1,13 @@
 package com.airogami.application;
 
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.util.Map;
+
+import javax.persistence.EntityExistsException;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
 import com.airogami.common.constants.AccountConstants;
@@ -98,4 +106,120 @@ public class AccountService implements IAccountService {
 		//account.getAccountStat();
 		return account;
 	}
+	
+	@Override
+	public Account editAccount(Map<String, Object> properties) throws ApplicationException{
+		ApplicationException ae = null;
+		Account account = null;
+		try {
+			Long accountId = (Long)properties.get("accountId");
+			EntityManagerHelper.beginTransaction();
+			account = DaoUtils.accountDao.getReference(accountId);
+			try{
+			BeanUtils.populate(account, properties);		
+			}catch (IllegalAccessException e) {
+				throw new RuntimeException(e.getMessage());
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e.getMessage());
+			}
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			t.printStackTrace();
+			if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		
+		return account;
+	}
+	
+	@Override
+	public boolean changePassword(long accountId, String oldPassword, String newPassword) throws ApplicationException{
+		ApplicationException ae = null;
+		boolean succeed = false;
+		try {
+			EntityManagerHelper.beginTransaction();
+			succeed = DaoUtils.accountDao.changePassword(accountId, oldPassword, newPassword);								
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+			if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		
+		return succeed;
+	}
+	
+	@Override
+	public boolean changeScreenName(long accountId, String screenName) throws ApplicationException{
+		ApplicationException ae = null;
+		boolean succeed = false;
+		try {
+			EntityManagerHelper.beginTransaction();
+			succeed = DaoUtils.accountDao.changeScreenName(accountId, screenName);								
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+			if(t instanceof EntityExistsException){
+				succeed = false;
+			}
+			else if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		
+		return succeed;
+	}
+	
+	@Override
+	public Account obtainAccount(long accountId, Timestamp last) throws ApplicationException{
+		ApplicationException ae = null;
+		Account account = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			account = DaoUtils.accountDao.obtainAccount(accountId, last);								
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+            if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		
+		return account;
+	}
+
 }

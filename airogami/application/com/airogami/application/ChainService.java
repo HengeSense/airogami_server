@@ -127,7 +127,9 @@ public class ChainService implements IChainService {
 			EntityManagerHelper.beginTransaction();
 			chain = DaoUtils.chainDao.findById(chainId);
 			if(chain != null){ 
-				if(chain.getStatus() == ChainConstants.StatusUnmatched){					
+				if(chain.getStatus() == ChainConstants.StatusUnmatched 
+						&& chain.getMatchCount() < chain.getMaxMatchCount()
+						&& chain.getPassCount() < chain.getMaxPassCount()){					
 					String country = chain.getCountry(), province = chain.getProvince(), city = chain
 							.getCity();
 					if (city != null && city.length() > 0) {
@@ -146,7 +148,7 @@ public class ChainService implements IChainService {
 						DaoUtils.chainDao.increaseMatchCount(chainId, 1);
 					}
 					else{
-						//already matched
+						//already matched or exceed maximum
 						chain = null;
 					}	
 				}
@@ -160,7 +162,7 @@ public class ChainService implements IChainService {
 			EntityManagerHelper.commit(); 
 			
 		} catch (Throwable t) {
-			t.printStackTrace();
+			//t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
@@ -172,13 +174,15 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
+		Map<String, Object> result = new TreeMap<String, Object>();
 		if(chain != null){
 			chain.setMatchCount(chain.getMatchCount() + 1);
+			result.put("chain", chain);
 		}
+		if(accountId != null){
+			result.put("accountId", accountId);
+		}		
 		
-		Map<String, Object> result = new TreeMap<String, Object>();
-		result.put("chain", chain);
-		result.put("accountId", accountId);
 		return result;
 	}
 

@@ -1,5 +1,8 @@
 package com.airogami.presentation.logic;
 
+import java.sql.Timestamp;
+import java.util.Map;
+
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
@@ -34,8 +37,11 @@ public class AccountManager {
 				|| (authenticate.getPassword() == null || authenticate.getPassword().length() == 0)) {
 			throw new IllegalArgumentException("Illegal arguments in signup");
 		}
-		if(account.getSex() > 1){
-			account.setSex((short)1);
+		if(account.getSex() > AccountConstants.SexType_Female){
+			account.setSex((short)AccountConstants.SexType_Female);
+		}
+		else if(account.getSex() < AccountConstants.SexType_Male){
+			account.setSex((short)AccountConstants.SexType_Male);
 		}
 		account.setAccountId(null);	
 		account.setStatus((short)0);
@@ -102,5 +108,100 @@ public Account signinWithScreenName(String screenName, String password)
 		}
 		return account;
 	}
+	
+	/*
+	 * not check some data types
+	 * @param properties:((Map<String, Object>) no screenName, no status
+	 * @return account if successful
+	 * @throws ApplicationException if failed 
+	 */
+	public Account editAccount(Map<String, Object> properties) throws AirogamiException{
+		Long accountId = (Long)properties.get("accountId");
+		if (accountId == null){
+			throw new IllegalArgumentException("Illegal arguments in editAccount");
+		}
+		Account account = null;
+		Short sex = (Short)properties.get("sex");
+		if(sex != null){
+			if(sex > AccountConstants.SexType_Female){
+				properties.put("sex", AccountConstants.SexType_Female);
+			}
+			else if(sex < AccountConstants.SexType_Male){
+				properties.put("sex", AccountConstants.SexType_Male);
+			}
+		}
+		properties.remove("screenName");
+		properties.remove("status");
+		try {
+			account = ServiceUtils.accountService.editAccount(properties);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Account_EditAccount_Failure_Status,
+					AirogamiException.Account_EditAccount_Failure_Message);
+		}
+		return account;
+	}
+	
+	/*
+	 * @param accountId:(long)
+	 * @param oldPassword:(String) must not be empty
+	 * @param newPassword:(String) must not be empty
+	 * @return succeed
+	 * @throws ApplicationException if failed 
+	 */
+	public boolean changePassword(long accountId, String oldPassword, String newPassword) throws AirogamiException{
+		if (oldPassword == null || oldPassword.length() == 0
+				|| newPassword == null || newPassword.length() == 0){
+			throw new IllegalArgumentException("Illegal arguments in changePassword");
+		}
+		try {
+			return ServiceUtils.accountService.changePassword(accountId, oldPassword, newPassword);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Account_ChangePassword_Failure_Status,
+					AirogamiException.Account_ChangePassword_Failure_Message);
+		}
+	}
+	
+	/*
+	 * @param accountId:(long)
+	 * @param screenName:(String)
+	 * @return succeed
+	 * @throws ApplicationException if failed 
+	 */
+	public boolean changeScreenName(long accountId, String screenName) throws AirogamiException{
+		if (screenName == null || screenName.length() == 0){
+			throw new IllegalArgumentException("Illegal arguments in changeScreenName");
+		}
+		try {
+			return ServiceUtils.accountService.changeScreenName(accountId, screenName);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Account_ChangeScreenName_Failure_Status,
+					AirogamiException.Account_ChangeScreenName_Failure_Message);
+		}
+	}
+	
+	/*
+	 * @param accountId:(long)
+	 * @param last:(String) must not be empty
+	 * @return account, null if not updated
+	 * @throws AirogamiException if failed 
+	 */
+	public Account obtainAccount(long accountId, String last) throws AirogamiException{
+		if (last == null || last.length() == 0){
+			throw new IllegalArgumentException("Illegal arguments in obtainAccount");
+		}
+		//may throw IllegalArgumentException
+		Timestamp timestamp = Timestamp.valueOf(last);
+		try {
+			return ServiceUtils.accountService.obtainAccount(accountId, timestamp);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Account_ChangeScreenName_Failure_Status,
+					AirogamiException.Account_ChangeScreenName_Failure_Message);
+		}
+	}
+
 
 }

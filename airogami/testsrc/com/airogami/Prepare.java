@@ -110,7 +110,7 @@ public class Prepare {
 	
 	
 	
-    private void sendPlanes() throws AirogamiException{
+    public static void sendPlanes() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
     		for(int j = 0; j < 4; ++j){
     			Plane plane = new Plane();
@@ -139,7 +139,7 @@ public class Prepare {
     private void matchPlanes() throws AirogamiException{
     	try{
     		for(int i = 0; i < 20; ++i){
-    		    Plane plane = ServiceUtils.planeService.matchPlane(i + 1);
+    		    ServiceUtils.planeService.matchPlane(i + 1);
         	}
     	}
     	catch(ApplicationException e){
@@ -167,7 +167,7 @@ public class Prepare {
     	}
 	}
     
-    private void sendChains() throws AirogamiException{
+    public static void sendChains() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
     		for(int j = 0; j < 4; ++j){
     			Chain chain = new Chain();

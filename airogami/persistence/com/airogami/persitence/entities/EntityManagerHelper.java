@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 /**
  * @author MyEclipse Persistence Tools
@@ -20,7 +21,8 @@ public class EntityManagerHelper {
 		emf = Persistence.createEntityManagerFactory("airogami"); 		
 		threadLocal = new ThreadLocal<EntityManager>();
 		logger = Logger.getLogger("airogami");
-		logger.setLevel(Level.ALL);
+		//logger.setLevel(Level.ALL);
+		logger.setLevel(Level.SEVERE);
 	}
 		
 	public static EntityManager getEntityManager() {
@@ -35,6 +37,13 @@ public class EntityManagerHelper {
 	 public static void closeEntityManager() {
         EntityManager em = threadLocal.get();
         threadLocal.set(null);
+        if(em.getTransaction().isActive()){
+        	try{
+             	em.getTransaction().rollback();
+        	}catch(PersistenceException pe){
+        		pe.printStackTrace();
+        	}
+        }
         if (em != null) em.close();
     }
     

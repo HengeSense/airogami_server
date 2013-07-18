@@ -23,7 +23,7 @@ public final int MaxLimit = 50;
 	
 	/*
 	 * @param chainId:(long) must exist
-	 * @return chain, (matched) accountId if successful and chain = null if (not exist or already matched)
+	 * @return chain, (matched) accountId if successful and chain = null if (not exist or already matched or exceed maxMatchCount)
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> matchChain(long chainId) throws ApplicationException;

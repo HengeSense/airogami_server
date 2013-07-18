@@ -18,7 +18,7 @@ import com.airogami.persitence.entities.Message;
 
 public class PlaneManager {
 	
-	private Timestamp baseTimestamp = Timestamp.valueOf("2013-01-01 00:00:00");
+	//private Timestamp baseTimestamp = Timestamp.valueOf("2013-01-01 00:00:00");
 	
 	/*
 	 * @param category:(Category) must be not null, have name
@@ -71,6 +71,7 @@ public class PlaneManager {
 					AirogamiException.Plane_SendPlane_Failure_Status,
 					AirogamiException.Plane_SendPlane_Failure_Message);
 		}
+		ServiceUtils.airogamiService.appendPlane(plane.getPlaneId());
 		return plane;
 	}
 	
@@ -128,18 +129,22 @@ public class PlaneManager {
 	/*
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long) should = plane.accountByTarget.accountId
+	 * @return canMatchAgain
 	 * @throws ApplicationException if failed 
 	 */ 
-	public void throwPlane(long planeId,long accountId) throws AirogamiException{
+	public boolean throwPlane(long planeId,long accountId) throws AirogamiException{
+		boolean canMatchAgain = false;
 		try {
-			if(ServiceUtils.planeService.throwPlane(planeId, accountId)){
-				//match again
-			}
+			ServiceUtils.planeService.throwPlane(planeId, accountId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Plane_ThrowPlane_Failure_Status,
 					AirogamiException.Plane_ThrowPlane_Failure_Message);
 		}
+		if(canMatchAgain){
+			ServiceUtils.airogamiService.appendPlane(planeId);
+		}
+		return canMatchAgain;
 	}
 	
 	/*

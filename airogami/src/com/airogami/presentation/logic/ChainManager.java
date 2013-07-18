@@ -48,6 +48,7 @@ public class ChainManager {
 					AirogamiException.Chain_SendChain_Failure_Status,
 					AirogamiException.Chain_SendChain_Failure_Message);
 		}
+		ServiceUtils.airogamiService.appendPlane(chain.getChainId());
 		return chain;
 	}
 	
@@ -84,10 +85,14 @@ public class ChainManager {
 		boolean canMatchedAgain = false;
 		try {
 			canMatchedAgain = ServiceUtils.chainService.throwChain(chainId, accountId);
+			
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Chain_ThrowChain_Failure_Status,
 					AirogamiException.Chain_ThrowChain_Failure_Message);
+		}
+		if(canMatchedAgain){
+			ServiceUtils.airogamiService.appendChain(chainId);
 		}
 		return canMatchedAgain;
 	}

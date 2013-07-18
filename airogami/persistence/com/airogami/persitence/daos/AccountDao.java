@@ -1,5 +1,6 @@
 package com.airogami.persitence.daos;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -81,6 +82,82 @@ public class AccountDao extends AccountDAO {
 					re);
 			throw re;
 		}		
+	}
+	
+	
+	private final String changePasswordJPQL = "update Authenticate authenticate set authenticate.password = ?3 where authenticate.accountId = ?1 and authenticate.password = ?2";
+	
+	public boolean changePassword(long accountId, String oldPassword, String newPassword){
+		EntityManagerHelper.log("changePasswording", Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					changePasswordJPQL);
+			query.setParameter(1, accountId);
+			query.setParameter(2, oldPassword);
+			query.setParameter(3, newPassword);
+			int count = query.executeUpdate();
+			EntityManagerHelper.log("changePassword successful",
+					Level.INFO, null);
+			return count == 1;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("changePassword failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+	
+    private final String changeScreenNameJPQL = "update Authenticate authenticate set authenticate.screenName = ?2 where authenticate.accountId = ?1";
+	
+    private final String changeScreenNameSetJPQL = "update Account account set account.screenName = ?2, account.updatedTime = ?3 where account.accountId = ?1";
+	
+	public boolean changeScreenName(long accountId, String screenName){
+		EntityManagerHelper.log("changeScreenNameing", Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					changeScreenNameJPQL);
+			query.setParameter(1, accountId);
+			query.setParameter(2, screenName);
+			int count = query.executeUpdate();
+			if(count == 1){
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						changeScreenNameSetJPQL);
+				query.setParameter(1, accountId);
+				query.setParameter(2, screenName);
+				query.setParameter(3, new Timestamp(System.currentTimeMillis()));
+				query.executeUpdate();
+			}
+			EntityManagerHelper.log("changeScreenName successful",
+					Level.INFO, null);
+			return count == 1;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("changeScreenName failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+	
+    private final String obtainAccountJPQL = "select account from Account account where account.accountId = ?1 and account.updatedTime > ?2";
+	
+	public Account obtainAccount(long accountId, Timestamp last){
+		EntityManagerHelper.log("obtainAccounting", Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					obtainAccountJPQL);
+			query.setParameter(1, accountId);
+			query.setParameter(2, last);
+			List<Account> result = query.getResultList();
+			Account account = null;
+			if(result.size() > 0){
+				account = result.get(0);
+			}
+			EntityManagerHelper.log("obtainAccount successful",
+					Level.INFO, null);
+			return account;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("obtainAccount failed", Level.SEVERE,
+					re);
+			throw re;
+		}
 	}
 
 }

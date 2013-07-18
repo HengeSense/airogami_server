@@ -135,16 +135,18 @@ public class PlaneService implements IPlaneService {
 	}
 
 	@Override
-	public Plane matchPlane(long planeId) throws ApplicationException {
+	public Map<String, Object> matchPlane(long planeId) throws ApplicationException {
 		ApplicationException ae = null;
 		Plane plane = null;
+		Long accountId = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			plane = DaoUtils.planeDao.findById(planeId);
 			// may pickuped before this match
 			if(plane != null){
-				if(plane.getAccountByTargetId() == null && plane.getStatus() == PlaneConstants.StatusNew){
-					Long accountId;
+				if(plane.getAccountByTargetId() == null && plane.getStatus() == PlaneConstants.StatusNew 
+					&& plane.getMatchCount() < plane.getMaxMatchCount()){
+					
 					String country = plane.getCountry(), province = plane.getProvince(), city = plane
 							.getCity();
 					Short sex = plane.getSex();
@@ -190,11 +192,16 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
+		Map<String, Object> result = new TreeMap<String,Object>();
 		if(plane != null){
 		    plane.setMatchCount(plane.getMatchCount() + 1);
+		    result.put("plane", plane);
 		}
+		if(accountId != null){
+			result.put("accountId", accountId);
+		}		
 		
-		return plane;
+		return result;
 	}
 
 	@Override
