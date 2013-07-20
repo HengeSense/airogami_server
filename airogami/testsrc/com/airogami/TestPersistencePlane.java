@@ -50,7 +50,7 @@ public class TestPersistencePlane {
 		}
 	}
 	
-	@Ignore
+	
 	@Test
 	public void testMatchPlane() {
 		try {

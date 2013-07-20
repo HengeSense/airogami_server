@@ -23,6 +23,7 @@ import com.airogami.persitence.entities.Plane;
 
 public class ChainDao extends ChainDAO {
 	private final String throwChainJPQL = "delete from ChainMessage chainMessage where chainMessage.account.accountId = ?2 and chainMessage.status = ?3 and chainMessage.chain.chainId = ?1";
+	private final String throwChainSetJPQL = "update Chain chain set chain.status = ?2 where chain.chainId = ?1";
 
 	public boolean throwChain(long chainId, long accountId){
 		EntityManagerHelper.log("throwChaining with chainId = " + chainId + " and accountId = " + accountId, Level.INFO, null);
@@ -33,6 +34,13 @@ public class ChainDao extends ChainDAO {
 			query.setParameter(2, accountId);
 			query.setParameter(3, ChainMessageConstants.StatusNew);
 			int count = query.executeUpdate();
+			if(count == 1){
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						throwChainSetJPQL);
+				query.setParameter(1, chainId);
+				query.setParameter(2, ChainConstants.StatusUnmatched);
+				query.executeUpdate();
+			}
 			EntityManagerHelper
 					.log("throwChain successful", Level.INFO, null);
 			return count == 1;

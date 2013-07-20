@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/websocket-api-9.0.4.v20130625.jar"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/websocket-client-9.0.4.v20130625.jar"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/websocket-common-9.0.4.v20130625.jar"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/websocket-server-9.0.4.v20130625.jar"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/websocket-servlet-9.0.4.v20130625.jar"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/jetty-util-9.0.4.v20130625.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/WebSocketDemo/libs/jetty-io-9.0.4.v20130625.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

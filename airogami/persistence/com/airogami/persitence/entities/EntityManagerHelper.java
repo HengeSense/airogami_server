@@ -36,15 +36,17 @@ public class EntityManagerHelper {
 	
 	 public static void closeEntityManager() {
         EntityManager em = threadLocal.get();
-        threadLocal.set(null);
-        if(em.getTransaction().isActive()){
-        	try{
-             	em.getTransaction().rollback();
-        	}catch(PersistenceException pe){
-        		pe.printStackTrace();
-        	}
+        threadLocal.set(null);        
+        if (em != null){
+        	if(em.getTransaction().isActive()){
+            	try{
+                 	em.getTransaction().rollback();
+            	}catch(PersistenceException pe){
+            		pe.printStackTrace();
+            	}
+            }
+        	em.close();
         }
-        if (em != null) em.close();
     }
     
     public static void beginTransaction() {

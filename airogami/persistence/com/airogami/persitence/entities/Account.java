@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +28,7 @@ import javax.persistence.UniqueConstraint;
 /**
  * Account entity. @author MyEclipse Persistence Tools
  */
-@Entity
+@Entity 
 @Table(name = "ACCOUNT", catalog = "Airogami", uniqueConstraints = @UniqueConstraint(columnNames = "SCREEN_NAME"))
 public class Account implements java.io.Serializable {
 
@@ -133,6 +136,7 @@ public class Account implements java.io.Serializable {
 	}
 
 	// Property accessors
+	
 	@Id
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = false)
 	public Long getAccountId() {

@@ -135,7 +135,7 @@ public class PlaneManager {
 	public boolean throwPlane(long planeId,long accountId) throws AirogamiException{
 		boolean canMatchAgain = false;
 		try {
-			ServiceUtils.planeService.throwPlane(planeId, accountId);
+			canMatchAgain = ServiceUtils.planeService.throwPlane(planeId, accountId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Plane_ThrowPlane_Failure_Status,

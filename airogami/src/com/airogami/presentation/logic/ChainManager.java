@@ -48,7 +48,7 @@ public class ChainManager {
 					AirogamiException.Chain_SendChain_Failure_Status,
 					AirogamiException.Chain_SendChain_Failure_Message);
 		}
-		ServiceUtils.airogamiService.appendPlane(chain.getChainId());
+		ServiceUtils.airogamiService.appendChain(chain.getChainId());
 		return chain;
 	}
 	

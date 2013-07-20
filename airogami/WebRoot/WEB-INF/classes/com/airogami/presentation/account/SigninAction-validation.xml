@@ -1,0 +1,61 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="email">
+     	<field-validator type="fieldexpression">
+     	    <param name="expression"><![CDATA[!((email == null || email == "") && method == "emailSignin")]]></param>
+			<message key="error.account.signin.email.required">Please input an email</message>
+		</field-validator>
+		<field-validator type="email">
+			<message key="error.account.signin.email.invalid">The email seems invalid</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">256</param>
+			<message key="error.account.signin.email.long">The email should be less than ${maxLength}</message>
+		</field-validator>
+	</field>
+
+    <field name="screenName">
+		<field-validator type="fieldexpression">
+     	    <param name="expression"><![CDATA[!((screenName == null || screenName == "") && method == "screenNameSignin")]]></param>
+			<message key="error.account.signin.screenName.required">Please input a screenName</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">2</param>
+			<param name="maxLength">32</param>
+			<message key="error.account.signin.screenName.length">The screenName should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+
+	<field name="password">
+		<field-validator type="requiredstring">
+			<message key="error.account.signin.password.required">Please input a password</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">20</param>
+			<message key="error.account.signin.password.length">The password should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.deviceName">
+		<field-validator type="requiredstring">
+			<message key="error.account.signin.deviceName.required">Please input a deviceName</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<message key="error.account.signin.deviceName.long">The deviceName should have at most ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.clientVersion">
+		<field-validator type="requiredstring">
+			<message key="error.account.signin.clientVersion.required">Please input a clientVersion</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<message key="error.account.signin.clientVersion.long">The clientVersion should have at most ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+</validators>

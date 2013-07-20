@@ -5,7 +5,7 @@
 <struts>
 	<package name="authorization-interceptor" extends="json-default">
 		<interceptors>
-			<interceptor name="authorization" class="com.airogami.presentation.interceptor.AuthorizationInterceptor"/>
+			<interceptor name="authorization" class="com.airogami.presentation.AuthorizationInterceptor"/>
 			<interceptor-stack name="authorizationStack">
 				<interceptor-ref name="authorization"/>
 				<interceptor-ref name="defaultStack"/>

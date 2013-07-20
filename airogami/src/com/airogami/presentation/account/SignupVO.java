@@ -1,32 +1,28 @@
 package com.airogami.presentation.account;
 
 import java.io.File;
+import java.util.Date;
 
 public class SignupVO {
 
 	private String email;
-	private String phone;
 	private String password;
-	private String repassword;
 	private Short sex;
 	private String fullName;
-	public File file;
-	public String fileContentType;
-	public String fileFileName;
-	
-	private Integer locationId;
-	
+	private Date birthday;
+	private Double longitude;
+	private Double latitude;
+	private String city;
+	private String province;
+	private String country;	
+	private File file;
+	private String fileContentType;
+	private String fileFileName;
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 	public String getPassword() {
 		return password;
@@ -34,29 +30,53 @@ public class SignupVO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRepassword() {
-		return repassword;
-	}
-	public void setRepassword(String repassword) {
-		this.repassword = repassword;
-	}
-	public String getFullName() {
-		return fullName;
-	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
 	public Short getSex() {
 		return sex;
 	}
 	public void setSex(Short sex) {
 		this.sex = sex;
 	}
-	public Integer getLocationId() {
-		return locationId;
+	public String getFullName() {
+		return fullName;
 	}
-	public void setLocationId(Integer locationId) {
-		this.locationId = locationId;
+	public void setFullName(String fullName) {
+		this.fullName = fullName.replace("\n", "").replace("\r", "");
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city.replace("\n", "").replace("\r", "");
+	}
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province.replace("\n", "").replace("\r", "");
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country.replace("\n", "").replace("\r", "");
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 	public File getFile() {
 		return file;
@@ -76,4 +96,5 @@ public class SignupVO {
 	public void setFileFileName(String fileFileName) {
 		this.fileFileName = fileFileName;
 	}
+	
 }

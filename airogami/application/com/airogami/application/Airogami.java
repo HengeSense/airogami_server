@@ -12,7 +12,7 @@ public class Airogami implements Delayed{
 	public static final byte TypePlane = 0;
 	public static final byte TypeChain = 1;
 	public static final byte MaxExceptionCount = 3;
-	public static long wait = 5 * 1000;//60s
+	public static long wait = 20 * 1000;//60s
 	
 	private long id;
 	private byte type;

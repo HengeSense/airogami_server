@@ -10,7 +10,7 @@
 		<interceptors>
 			<interceptor-stack name="fileStack">
 			     <interceptor-ref name="fileUpload">
-					<param name="maximumSize">200000</param>
+					<param name="maximumSize">2000000</param>
 					<param name="allowedTypes">image/png, image/jpeg, image/jpg</param>
 				</interceptor-ref>
 				<interceptor-ref name="defaultStack" />			
@@ -28,9 +28,31 @@
 				<param name="excludeProperties">user.password</param>
 			</result>
 		</action>
-		<action name="phoneSignup" class="com.airogami.presentation.account.SignupAction"
-			method="phoneSignup">
-			<interceptor-ref name="fileStack" />
+		
+		<action name="emailSignin" class="com.airogami.presentation.account.SigninAction"
+			method="emailSignin">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="screenNameSignin" class="com.airogami.presentation.account.SigninAction"
+			method="screenNameSignin">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="signout" class="com.airogami.presentation.account.SignoutAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
 			<result type="json">
 				<param name="root">dataMap</param>
 			</result>

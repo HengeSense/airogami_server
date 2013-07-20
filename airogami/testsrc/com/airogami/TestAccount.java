@@ -164,7 +164,7 @@ public class TestAccount {
 			@Override
 			public void run() {
 				try {
-					sendPlanes();
+					if(true)sendPlanes();
 				} catch (AirogamiException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -183,6 +183,36 @@ public class TestAccount {
 				}
 			}			
 		}).start();
+		
+		
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					if(false){
+						ManagerUtils.planeManager.throwPlane(1, 5);
+					}
+				} catch (AirogamiException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}			
+		}).start();
+		
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					if(false){
+						ManagerUtils.chainManager.throwChain(1, 4);
+					}
+				} catch (AirogamiException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}			
+		}).start();
+		
 		try {
 			Thread.sleep(1000000);
 		} catch (InterruptedException e) {
@@ -192,12 +222,12 @@ public class TestAccount {
 	}
 	
 	public  void sendPlanes() throws AirogamiException{
-    	for(int i = 0; i < 1; ++i){
+    	for(int i = 0; i < 5; ++i){
     		for(int j = 0; j < 1; ++j){
     			Plane plane = new Plane();
         		//plane.setCity("chengdu");
         		//plane.setProvince("sichuan");
-        		plane.setCountry("Japan");
+        		//plane.setCountry("Japan");
         		plane.setLatitude(0.0);
         		plane.setLongitude(0.0);
         		plane.setCategory(new Category());
@@ -214,12 +244,12 @@ public class TestAccount {
 	}
 	
 	public  void sendChains() throws AirogamiException{
-    	for(int i = 0; i < 5; ++i){
-    		for(int j = 0; j < 4; ++j){
+    	for(int i = 0; i < 1; ++i){
+    		for(int j = 0; j < 1; ++j){
     			Chain chain = new Chain();
     			//chain.setCity("shanghai");
     			//chain.setProvince("shanghai");
-    			//chain.setCountry("China");
+    			chain.setCountry("Japan");
     			//chain.setMessageCount((short) 0);
     			long ownerId = i + 1;
     			ChainMessage chainMessage = new ChainMessage();

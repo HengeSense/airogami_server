@@ -164,8 +164,11 @@ public class PlaneService implements IPlaneService {
 								.getAccountByOwnerId(), sex);
 					}
 
-					if(accountId == null || DaoUtils.planeDao.match(planeId, accountId)){
+					if(accountId == null || DaoUtils.planeDao.match(planeId, accountId)){						
 						DaoUtils.planeDao.increaseMatchCount(planeId, 1);
+						if(accountId != null){//match succeed
+							plane = null;
+						}
 					}
 					else{
 						//already matched
@@ -180,7 +183,7 @@ public class PlaneService implements IPlaneService {
 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			
+			//t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
@@ -211,10 +214,7 @@ public class PlaneService implements IPlaneService {
 		boolean canMatchAgain = false;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.planeDao.throwPlane(planeId, accountId) == false) {
-				ae = new ApplicationException("throwPlane failed");
-			}
-			else{
+			if (DaoUtils.planeDao.throwPlane(planeId, accountId)) {
 				canMatchAgain = DaoUtils.planeDao.canPlaneMatch(planeId);
 			}
 			EntityManagerHelper.commit();

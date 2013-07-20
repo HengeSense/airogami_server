@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SigninAndOut.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=utf-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    Signin <br>
+    <form action="account/emailSignin.action"  method="GET">
+    <label>Email: </label>
+    <input type="text" name="email" value="tianhu@qq.com" /><br> 
+    <label>Password: </label>
+    <input type="text" name="password" value="12345678" /><br> 
+    <label>Device Name: </label>
+    <input type="text" name="clientAgent.deviceName" value="Android" /><br> 
+    <label>Client Version: </label>
+    <input type="text" name="clientAgent.clientVersion" value="1.0" /><br> 
+    <input type="submit" name="submit" value="submit" />
+    </form>
+    <form action="account/screenNameSignin.action"  method="GET">
+    <label>Email: </label>
+    <input type="text" name="screenName" value="tianhuyang" /><br> 
+    <label>Password: </label>
+    <input type="text" name="password" value="12345678" /><br> 
+    <label>Device Name: </label>
+    <input type="text" name="clientAgent.deviceName" value="Android" /><br> 
+    <label>Client Version: </label>
+    <input type="text" name="clientAgent.clientVersion" value="1.0" /><br> 
+    <input type="submit" name="submit" value="submit" />
+    </form>
+    Sign out<br>
+    <form action="account/signout.action"  method="GET">
+    <input type="submit" name="submit" value="submit" />
+    </form>
+  </body>
+</html>

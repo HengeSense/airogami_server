@@ -138,7 +138,7 @@ public class TestPlane {
 			fail(e.getMessage());
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void testReceivePlanes() {
 		long accountId = 4;

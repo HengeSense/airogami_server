@@ -18,7 +18,6 @@ public class UploadUtils {
 
 	public static String uploadImage(Long accountId, File file,
 			String fileName, String contentType){
-
 		try {
 			String ext = getFileExtension(fileName);
 			BufferedImage img = ImageIO.read(file);

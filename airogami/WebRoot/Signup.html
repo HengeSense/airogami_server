@@ -5,21 +5,39 @@
 	
     <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
     <meta http-equiv="description" content="this is my page">
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
 
   </head>
   <body>
-    This is my HTML page. <br>
+    Sign up for Airogami <br>
     <form action="account/emailSignup.action"  method="post" enctype="multipart/form-data">
-    <input type="text" name="email" value="tianhu@qq.com" /> 
-    <input type="text" name="password" value="12345678" /> 
-    <input type="text" name="repassword" value="12345678" />  
-    <input type="text" name="sex" value="0" /> 
-    <input type="text" name="fullName" value="tianhuyang" /> 
-    <input type="text" name="locationId" value="1" /> 
-    <input type="file" name="file" />
+    <label>Email: </label>
+    <input type="text" name="email" value="tianhu@qq.com" /><br> 
+    <label>Password: </label>
+    <input type="text" name="password" value="12345678" /><br> 
+    <label>Repassword: </label>
+    <input type="text" name="repassword" value="12345678" /><br> 
+    <label>Sex: </label> 
+    <input type="text" name="sex" value="0" /><br> 
+    <label>Fullname: </label>
+    <input type="text" name="fullName" value="tianhuyang" />
+    <!--  <textarea name="fullName" >tianhuyang 你好 </textarea>--><br> 
+    <label>Birthday: </label>
+    <input type="text" name="birthday" value="01/01/1900" /><br> 
+    <label>Longitude: </label>
+    <input type="text" name="longitude" value="0" /><br> 
+    <label>Latitude: </label>
+    <input type="text" name="latitude" value="0" /><br> 
+    <label>City: </label>
+    <input type="text" name="city" value="成都" /><br> 
+    <label>Province: </label>
+    <input type="text" name="province" value="四川" /><br> 
+    <label>Country: </label>
+    <input type="text" name="country" value="中国" /><br> 
+    <label>Icon: </label>
+    <input type="file" name="file" /><br>
     <input type="submit" name="submit" value="submit" />
     </form>
   </body>

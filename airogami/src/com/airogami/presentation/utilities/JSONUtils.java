@@ -22,6 +22,11 @@ public class JSONUtils implements JSONConstants {
 		map.put(JSONConstants.KEY_MESSAGE , message);
 	}
 	
+	public static void putStatus(Map<String,Object> map, String message){
+		map.put(JSONConstants.KEY_STATUS , AirogamiError.Others_Status);
+		map.put(JSONConstants.KEY_MESSAGE , message);
+	}
+	
 	public static void putOKStatus(Map<String,Object> map){
 		map.put(JSONConstants.KEY_STATUS , AirogamiError.OK_Status);
 		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.OK_Message);

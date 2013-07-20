@@ -146,6 +146,9 @@ public class ChainService implements IChainService {
 					}
 					if(accountId == null || DaoUtils.chainDao.match(chainId, accountId)){
 						DaoUtils.chainDao.increaseMatchCount(chainId, 1);
+						if(accountId != null){//match succeed
+							chain = null;
+						}
 					}
 					else{
 						//already matched or exceed maximum
@@ -193,10 +196,7 @@ public class ChainService implements IChainService {
 		boolean canMatchedAgain = false;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.chainDao.throwChain(chainId, accountId) == false) {
-				ae = new ApplicationException("throwChain failed");
-			}
-			else{
+			if (DaoUtils.chainDao.throwChain(chainId, accountId)) {
 				canMatchedAgain = DaoUtils.chainDao.canChainMatch(chainId);
 			}
 			EntityManagerHelper.commit();

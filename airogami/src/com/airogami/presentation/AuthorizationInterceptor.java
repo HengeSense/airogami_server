@@ -1,4 +1,4 @@
-package com.airogami.presentation.interceptor;
+package com.airogami.presentation;
 
 import java.util.Map;
 
