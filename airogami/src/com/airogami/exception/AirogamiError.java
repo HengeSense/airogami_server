@@ -18,7 +18,7 @@ public interface AirogamiError {
 	public static final String Account_Signup_Duplicate_Message = "error.account.signup.duplicate";
 	
 	public static final int Account_No_Signin_Status = 10007;
-	public static final String Account_No_Signin_Message = "error.account.signin.failure";
+	public static final String Account_No_Signin_Message = "error.account.notsignin";
 	
 	public static final int Account_Signin_Input_Status = 10100;
 	public static final int Account_Signin_Failure_Status = 100101;
@@ -39,6 +39,11 @@ public interface AirogamiError {
 	public static final int Account_ChangeScreenName_Failure_Status = 100107;
 	public static final String Account_ChangeScreenName_Input_Message = "error.account.changescreenname.input";
 	public static final String Account_ChangeScreenName_Failure_Message = "error.account.changescreenname.failure";
+
+	public static final int Account_ObtainAccount_Input_Status = 100108;
+	public static final int Account_ObtainAccount_Failure_Status = 100109;
+	public static final String Account_ObtainAccount_Input_Message = "error.account.obtainaccount.input";
+	public static final String Account_ObtainAccount_Failure_Message = "error.account.obtainaccount.failure";
 
 	
 	/* 

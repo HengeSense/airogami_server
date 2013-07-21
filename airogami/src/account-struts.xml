@@ -6,7 +6,7 @@
 <struts>
 
 	<!-- <package name="account" namespace="/account" extends="struts-default"> -->
-	<package name="account" namespace="/account" extends="json-default">
+	<package name="account" namespace="/account" extends="authorization-interceptor">
 		<interceptors>
 			<interceptor-stack name="fileStack">
 			     <interceptor-ref name="fileUpload">
@@ -51,6 +51,46 @@
 		
 		<action name="signout" class="com.airogami.presentation.account.SignoutAction">
 			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="editAccount" class="com.airogami.presentation.account.EditAccountAction">
+		    <interceptor-ref name="authorizationStack" />
+		    <result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="changePassword" class="com.airogami.presentation.account.ChangePasswordAction">
+		    <interceptor-ref name="authorizationStack" />
+		    <result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="changeScreenName" class="com.airogami.presentation.account.ChangeScreenNameAction">
+		    <interceptor-ref name="authorizationStack" />
+		    <result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="obtainAccountAction" class="com.airogami.presentation.account.ObtainAccountAction">
+		    <interceptor-ref name="authorizationStack" />
+		    <result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>
 			<result type="json">

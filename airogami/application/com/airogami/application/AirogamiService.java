@@ -11,11 +11,11 @@ public class AirogamiService extends Thread{
 		while(true){
 			try{
 				Airogami airogami = airogamiQueque.take();
-				System.out.println("Taking > " + airogami);
+				//System.out.println("Taking > " + airogami);
 				if(airogami.match()){
 					airogami.reset();
 					airogamiQueque.add(airogami);
-					System.out.println("Rematching > " + airogami);
+					//System.out.println("Rematching > " + airogami);
 				}
 			}
 			catch(Throwable t){
@@ -27,12 +27,12 @@ public class AirogamiService extends Thread{
 	public void appendPlane(long planeId){
 		Airogami airogami = new Airogami(planeId, Airogami.TypePlane);
 		airogamiQueque.add(airogami);
-		System.out.println("Appending > " + airogami);
+		//System.out.println("Appending > " + airogami);
 	}
 	
     public void appendChain(long chainId){
     	Airogami airogami = new Airogami(chainId, Airogami.TypeChain);
 		airogamiQueque.add(airogami);
-		System.out.println("Appending > " + airogami);
+		//System.out.println("Appending > " + airogami);
 	}
 }

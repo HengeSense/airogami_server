@@ -11,10 +11,10 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.Plane;
-import com.airogami.persitence.entities.Message;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 
 public class PlaneManager {
 	
@@ -25,7 +25,7 @@ public class PlaneManager {
 	 * @return category if successful
 	 * @throws AirogamiException if failed 
 	 */
-	public Category createCatrgory(Category category) throws AirogamiException{
+	public Category createCategory(Category category) throws AirogamiException{
 		if (category == null || category.getName() == null || category.getName().length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in createCatrgory");
 		}

@@ -14,13 +14,13 @@ import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.Authenticate;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
 public class Prepare {
@@ -33,12 +33,14 @@ public class Prepare {
 	public void tearDown() throws Exception {
 	}
 
-	private String[] names = {"Tianhu Yang", "Dana Li", "Alex Jiang", "Xiangyu Zhang", "Haolin Gu"};
-	private String[][] locations = { {"China", "Sichuan", "Chengdu"},
+	private String[] emails = {"tianhuyang@gmail.com",
+			"danali@gmail.com", "alexjiang@gmail.com", "xiangyuzhang@gmail.com", "linghaogu@gmail.com"};
+	private String[] names = {"杨天虎", "Dana Li", "Alex Jiang", "张翔宇", "顾凌浩"};
+	private String[][] locations = { {"中国", "四川", "成都"},
 			{"USA", "California", "Sandiego"},
 			{"USA", "California", "Los Angeles"},
-			{"China", "Zhejiang", "Hangzhou"},
-			{"China", "Jiangshu", "Xuzhou"},
+			{"中国", "浙江", "杭州"},
+			{"中国", "江苏", "徐州"},
 			};
 	private Short sexes[] = {AccountConstants.SexType_Female, AccountConstants.SexType_Male,
 			AccountConstants.SexType_Male,AccountConstants.SexType_Male,
@@ -48,14 +50,13 @@ public class Prepare {
 	@Test
 	public void test() {
 		try {
-//			this.createCategories();
-//			this.createAccount();
-//			this.sendPlanes();
-//			this.sendChains();
-//			this.matchPlanes();
-//			this.replyPlanes();
-//			this.sendChains();
-//			this.matchChains();
+			this.createCategories();
+			this.createAccount();
+			this.sendPlanes();
+			this.sendChains();
+			this.matchPlanes();
+			this.replyPlanes();
+			this.matchChains();
 			this.replyChains();
 			
 		} catch (AirogamiException e) {
@@ -65,14 +66,14 @@ public class Prepare {
 	}
 	
 	private void createCategories() throws AirogamiException{
-		Category category = new Category("feeling");
-		ManagerUtils.planeManager.createCatrgory(category);
+		Category category = new Category("feeling", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
 	}
 	
 	private void createAccount() throws AirogamiException{
 		for(int i=0; i < names.length; ++i){				
 			Authenticate authenticate = new Authenticate();				
-			authenticate.setEmail(names[i] + "@gmail.com");			
+			authenticate.setEmail(emails[i]);			
 			authenticate.setPassword("12345678");
 			Account account = new Account();
 			account.setFullName(names[i]);
@@ -110,7 +111,7 @@ public class Prepare {
 	
 	
 	
-    public static void sendPlanes() throws AirogamiException{
+    public  void sendPlanes() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
     		for(int j = 0; j < 4; ++j){
     			Plane plane = new Plane();
@@ -150,7 +151,7 @@ public class Prepare {
     
     private void replyPlanes() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
-    		Map<String, Object> result = ManagerUtils.planeManager.obtainPlanes(i + 1, -1, null, null, 1000, true);
+    		Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(i + 1, -1, null, null, 1000, true);
     		List<Plane> planes = (List<Plane>) result.get("planes");
     		Iterator<Plane> iter = planes.iterator();
     		while(iter.hasNext()){
@@ -167,7 +168,7 @@ public class Prepare {
     	}
 	}
     
-    public static void sendChains() throws AirogamiException{
+    public  void sendChains() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
     		for(int j = 0; j < 4; ++j){
     			Chain chain = new Chain();
@@ -199,7 +200,7 @@ public class Prepare {
     
     private void replyChains() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
-    		Map<String, Object> result = ManagerUtils.chainManager.obtainChains(i + 1, -1, null, null, 1000, true);
+    		Map<String, Object> result = ManagerUtils.chainManager.receiveChains(i + 1, -1, null, null, 1000, true);
     		List<Chain> chains = (List<Chain>) result.get("chains");
     		Iterator<Chain> iter = chains.iterator();
     		while(iter.hasNext()){

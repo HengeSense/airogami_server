@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.Plane;
 
 public class Airogami implements Delayed{
 

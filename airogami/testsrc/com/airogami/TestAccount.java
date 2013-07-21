@@ -13,13 +13,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.Authenticate;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
 public class TestAccount {
@@ -148,7 +148,7 @@ public class TestAccount {
 	@Test
 	public void testObtainAccount() {
 		long accountId = 0L;
-		String last = "2013-07-17 14:42:20";
+		Timestamp last = Timestamp.valueOf("2013-07-17 14:42:20");
 		try {
 			Account account = ManagerUtils.accountManager.obtainAccount(accountId, last);
 			ObjectUtils.printObject(account);

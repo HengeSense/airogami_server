@@ -10,45 +10,29 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.airogami.exception.AirogamiError;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Account;
+import com.airogami.persistence.entities.Account;
+import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class SigninAction extends ActionSupport implements ServletRequestAware, ModelDriven<SigninVO>{
+public class SigninAction extends AirogamiActionSupport implements ModelDriven<SigninVO>{
 	
 	private static final long serialVersionUID = 1L;
 	private String method;
-	private HttpServletRequest request;
 	private SigninVO signinVO;
-	private Map<String, Object> dataMap;
 	
 	public SigninAction() {
-		dataMap = new HashMap<String, Object>();
+		super();
 		signinVO = new SigninVO();
 	}
 	
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
-		this.request = request;
+		super.setServletRequest(request);
 		this.method = ActionContext.getContext().getName();
-	}
-	
-	public void validate(){	
-		if(this.hasActionErrors()){
-			JSONUtils.putStatus(dataMap, AirogamiError.Account_Signin_Input_Status, AirogamiError.Account_Signin_Input_Message);
-			dataMap.put("actionErrors", this.getActionErrors());
-		}
-		else{
-			super.validate();
-			if(this.hasFieldErrors()){
-				JSONUtils.putStatus(dataMap, AirogamiError.Account_Signin_Input_Status, AirogamiError.Account_Signin_Input_Message);
-				dataMap.put("fieldErrors", this.getFieldErrors());
-			}
-		}
-		
 	}
 	
 	private void signin(int type){
@@ -99,9 +83,15 @@ public class SigninAction extends ActionSupport implements ServletRequestAware, 
 		return method;
 	}	
 	
-	public Map<String, Object> getDataMap() {   
-        return dataMap;   
-    }
+    @Override
+	protected int getInputStatus() {
+		return AirogamiError.Account_Signin_Input_Status;
+	}
+
+	@Override
+	protected String getInputMessage() {
+		return AirogamiError.Account_Signin_Input_Message;
+	}
 	
 	@Override
 	public SigninVO getModel() {

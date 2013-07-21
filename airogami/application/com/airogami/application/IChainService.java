@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 
 public interface IChainService {
 public final int MaxLimit = 50;

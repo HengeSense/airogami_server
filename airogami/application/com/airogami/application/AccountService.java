@@ -11,11 +11,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
 import com.airogami.common.constants.AccountConstants;
-import com.airogami.persitence.daos.DaoUtils;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.AccountStat;
-import com.airogami.persitence.entities.Authenticate;
-import com.airogami.persitence.entities.EntityManagerHelper;
+import com.airogami.persistence.daos.DaoUtils;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.AccountStat;
+import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.EntityManagerHelper;
 
 public class AccountService implements IAccountService {
 
@@ -24,7 +24,7 @@ public class AccountService implements IAccountService {
 	 * com.airogami.application.IAccountService#signup(com.airogami.persitence
 	 * .entities.Account)
 	 */
-	public Account signup(Account account) throws ApplicationException {
+	public long signup(Account account) throws ApplicationException {
 
 		ApplicationException ae = null;
 		AccountStat accountStat = new AccountStat();
@@ -60,11 +60,9 @@ public class AccountService implements IAccountService {
 		}
 		if (ae != null) {
 			throw ae;
-		} 
-		
-		account.setAccountStat(accountStat);
-		
-		return account;
+		} 		
+		//account.setAccountStat(accountStat);
+		return account.getAccountId();
 	}
 
 	/*
@@ -116,7 +114,7 @@ public class AccountService implements IAccountService {
 			EntityManagerHelper.beginTransaction();
 			account = DaoUtils.accountDao.getReference(accountId);
 			try{
-			BeanUtils.populate(account, properties);		
+		    	BeanUtils.populate(account, properties);		
 			}catch (IllegalAccessException e) {
 				throw new RuntimeException(e.getMessage());
 			} catch (InvocationTargetException e) {

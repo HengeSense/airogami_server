@@ -4,15 +4,15 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.persitence.entities.Account;
+import com.airogami.persistence.entities.Account;
 
 public interface IAccountService {
 	/*
 	 * @param account:(Account) must be not null and have valid account.authenticate
-	 * @return account, accountStat if successful
+	 * @return accountId if successful
 	 * @throws ApplicationException or EmailExistsException if failed 
 	 */
-	public Account signup(Account account) throws ApplicationException;
+	public long signup(Account account) throws ApplicationException;
 	
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)

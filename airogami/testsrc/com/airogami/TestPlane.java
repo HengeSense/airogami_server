@@ -15,9 +15,9 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
 public class TestPlane {

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 
 public interface IPlaneService {
 	

@@ -10,15 +10,14 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
-import com.airogami.persitence.daos.DaoUtils;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.ChainMessageId;
-import com.airogami.persitence.entities.EntityManagerHelper;
-import com.airogami.persitence.entities.Message;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.Plane;
+import com.airogami.persistence.daos.DaoUtils;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
+import com.airogami.persistence.entities.ChainMessageId;
+import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.Plane;
 
 public class ChainService implements IChainService {
 

@@ -8,17 +8,17 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.Authenticate;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Authenticate;
 
 public class AccountManager {
 
 	/*
 	 * @param account:(Account) must be not null and have (fullName, sex, icon, longitude, altitude, country, province, city), account.authenticate (email, password)
-	 * @return account, accountStat if successful
+	 * @return accountId if successful
 	 * @throws AirogamiException if failed 
 	 */
-	public Account signup(Account account)
+	public long signup(Account account)
 			throws AirogamiException {	
 		Authenticate authenticate = account.getAuthenticate();
 		if (account == null || authenticate == null){
@@ -51,7 +51,7 @@ public class AccountManager {
 		//
 		authenticate.setAccount(null);
 		try {
-			account = ServiceUtils.accountService.signup(account);
+			return ServiceUtils.accountService.signup(account);
 		} catch (ApplicationException re) {
 			if(re instanceof EmailExistsException){
 				throw new AirogamiException(
@@ -64,7 +64,6 @@ public class AccountManager {
 					AirogamiException.Account_Signup_Failure_Message);
 			}
 		}
-		return account;
 	}
 
 	/*
@@ -188,18 +187,17 @@ public Account signinWithScreenName(String screenName, String password)
 	 * @return account, null if not updated
 	 * @throws AirogamiException if failed 
 	 */
-	public Account obtainAccount(long accountId, String last) throws AirogamiException{
-		if (last == null || last.length() == 0){
+	public Account obtainAccount(long accountId, Timestamp last) throws AirogamiException{
+		if (accountId < 1 || last == null){
 			throw new IllegalArgumentException("Illegal arguments in obtainAccount");
 		}
-		//may throw IllegalArgumentException
-		Timestamp timestamp = Timestamp.valueOf(last);
+
 		try {
-			return ServiceUtils.accountService.obtainAccount(accountId, timestamp);
+			return ServiceUtils.accountService.obtainAccount(accountId, last);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_ChangeScreenName_Failure_Status,
-					AirogamiException.Account_ChangeScreenName_Failure_Message);
+					AirogamiException.Account_ObtainAccount_Failure_Status,
+					AirogamiException.Account_ObtainAccount_Failure_Message);
 		}
 	}
 

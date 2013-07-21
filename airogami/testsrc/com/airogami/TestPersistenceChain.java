@@ -13,11 +13,11 @@ import org.junit.Test;
 
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.persitence.daos.DaoUtils;
-import com.airogami.persitence.entities.Account;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.Chain;
+import com.airogami.persistence.daos.DaoUtils;
+import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
 
 public class TestPersistenceChain {
 

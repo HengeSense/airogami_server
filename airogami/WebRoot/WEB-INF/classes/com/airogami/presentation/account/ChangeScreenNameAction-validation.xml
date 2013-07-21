@@ -1,0 +1,16 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+	<field name="screenName">
+		<field-validator type="requiredstring">
+     	   	<message key="error.account.changescreenname.screenName.required">Please input a screenName</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">2</param>
+			<param name="maxLength">32</param>
+			<message key="error.account.changescreenname.screenName.length">The screenName should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+</validators>

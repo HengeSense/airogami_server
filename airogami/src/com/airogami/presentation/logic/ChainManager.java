@@ -11,10 +11,10 @@ import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persitence.entities.Category;
-import com.airogami.persitence.entities.Chain;
-import com.airogami.persitence.entities.ChainMessage;
-import com.airogami.persitence.entities.Message;
+import com.airogami.persistence.entities.Category;
+import com.airogami.persistence.entities.Chain;
+import com.airogami.persistence.entities.ChainMessage;
+import com.airogami.persistence.entities.Message;
 
 public class ChainManager {
 	/*

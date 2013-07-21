@@ -8,36 +8,69 @@
     <meta name="content-type" content="text/html; charset=utf-8">
     
     <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-
+    <style type="text/css">
+    .container{
+    margin:auto;
+    width:300px;
+    }
+    </style>
   </head>
   
   <body>
-    Signin <br>
+   <div class = "container">
+    <h3>Signin </h3>
     <form action="account/emailSignin.action"  method="GET">
     <label>Email: </label>
-    <input type="text" name="email" value="tianhu@qq.com" /><br> 
+    <input type="text" name="email" value="tianhu@qq.com" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Password: </label>
-    <input type="text" name="password" value="12345678" /><br> 
+    <input type="text" name="password" value="12345678" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Name: </label>
-    <input type="text" name="clientAgent.deviceName" value="Android" /><br> 
+    <input type="text" name="clientAgent.deviceName" value="Android" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1.0" /><br> 
+    <input type="text" name="clientAgent.clientVersion" value="1.0" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <input type="submit" name="submit" value="submit" />
     </form>
+    <br>
     <form action="account/screenNameSignin.action"  method="GET">
-    <label>Email: </label>
-    <input type="text" name="screenName" value="tianhuyang" /><br> 
+    <label>Screen Name: </label>
+    <input type="text" name="screenName" value="tianhuyang" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Password: </label>
-    <input type="text" name="password" value="12345678" /><br> 
+    <input type="text" name="password" value="12345678" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Name: </label>
-    <input type="text" name="clientAgent.deviceName" value="Android" /><br> 
+    <input type="text" name="clientAgent.deviceName" value="Android" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1.0" /><br> 
+    <input type="text" name="clientAgent.clientVersion" value="1.0" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <input type="submit" name="submit" value="submit" />
     </form>
-    Sign out<br>
+    <h3>Sign out</h3>
     <form action="account/signout.action"  method="GET">
     <input type="submit" name="submit" value="submit" />
     </form>
+    </div>
+    <script type = "text/javascript">
+    function hide(the){
+       with(the.previousSibling.previousSibling){
+            var attr
+            if(name.substring(name.length - 1, 1) == "1" )
+               attr = name.substring(0, name.length - 1)
+            else attr = name
+            if(the.checked){
+                name = attr
+            }
+            else{
+                name = attr + "1"
+            }
+        }
+       
+    }
+    </script>
   </body>
 </html>

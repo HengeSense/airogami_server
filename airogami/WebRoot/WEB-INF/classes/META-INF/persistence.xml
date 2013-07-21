@@ -9,20 +9,20 @@
 		<provider>
 			org.apache.openjpa.persistence.PersistenceProviderImpl
 		</provider>
-		<class>com.airogami.persitence.entities.Chain</class>
-		<class>com.airogami.persitence.entities.Plane</class>
-		<class>com.airogami.persitence.entities.AccountStat</class>
-		<class>com.airogami.persitence.entities.Message</class>
-		<class>com.airogami.persitence.entities.Account</class>
-		<class>com.airogami.persitence.entities.Category</class>
-		<class>com.airogami.persitence.entities.ChainMessage</class>
-		<class>com.airogami.persitence.entities.Authenticate</class>
-		<class>com.airogami.persitence.entities.ChainMessageId</class>
+		<class>com.airogami.persistence.entities.Chain</class>
+		<class>com.airogami.persistence.entities.Plane</class>
+		<class>com.airogami.persistence.entities.AccountStat</class>
+		<class>com.airogami.persistence.entities.Message</class>
+		<class>com.airogami.persistence.entities.Account</class>
+		<class>com.airogami.persistence.entities.Category</class>
+		<class>com.airogami.persistence.entities.ChainMessage</class>
+		<class>com.airogami.persistence.entities.Authenticate</class>
+		<class>com.airogami.persistence.entities.ChainMessageId</class>
 		<properties>
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />
 			<property name="openjpa.ConnectionURL"
-				value="jdbc:mysql://ec2-54-244-195-174.us-west-2.compute.amazonaws.com/Airogami?autoCommit=true" />
+				value="jdbc:mysql://ec2-54-244-195-174.us-west-2.compute.amazonaws.com/Airogami?autoCommit=true&amp;characterEncoding=utf8"/>
 			<property name="openjpa.ConnectionUserName" value="Scoutin" />
 			<property name="openjpa.ConnectionPassword"
 				value="Scoutin12345!" />

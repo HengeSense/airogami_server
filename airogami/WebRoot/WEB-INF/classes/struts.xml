@@ -8,7 +8,7 @@
 	<constant name="struts.devMode" value="true"/>
 	<constant name="struts.multipart.maxSize" value="2097152"/>
 	
-	<include file="interceptor-struts.xml"/>
+	<include file="authorization-struts.xml"/>
 	<include file="account-struts.xml"/>
 	
 
