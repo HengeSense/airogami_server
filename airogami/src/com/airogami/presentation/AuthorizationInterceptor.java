@@ -29,7 +29,7 @@ public class AuthorizationInterceptor implements Interceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		Map<String, Object> session = ActionContext.getContext().getSession();		
-		if(session.containsKey("account")){
+		if(session.containsKey("user")){
 			return invocation.invoke();
 		}
 		else{

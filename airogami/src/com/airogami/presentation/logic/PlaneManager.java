@@ -77,20 +77,21 @@ public class PlaneManager {
 	
 	/*
 	 * @param planeId:(long) must exist
-	 * @param ownerId:(long) must be plane.accoutByOwnerId or plane.accountByTargetId
+	 * @param accountId:(long) must be plane.accoutByOwnerId or plane.accountByTargetId
 	 * @param message:(Message) must be not null, has type and content
 	 * @return message if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Message replyPlane(long planeId,long ownerId, Message message) throws AirogamiException
+	public Message replyPlane(long planeId,long accountId, Message message) throws AirogamiException
 	{
 		if(message == null || message.getType() == null
         		|| message.getContent() == null || message.getContent().length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in replyPlane");
 		}
 		try {
-			message = ServiceUtils.planeService.replyPlane(planeId, ownerId, message);
+			message = ServiceUtils.planeService.replyPlane(planeId, accountId, message);
 		} catch (ApplicationException re) {
+			///re.printStackTrace();
 			throw new AirogamiException(
 					AirogamiException.Plane_ReplyPlane_Failure_Status,
 					AirogamiException.Plane_ReplyPlane_Failure_Message);
@@ -117,8 +118,8 @@ public class PlaneManager {
 			}
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_Pickup_Failure_Status,
-					AirogamiException.Plane_Pickup_Failure_Message);
+					AirogamiException.Plane_PickupPlane_Failure_Status,
+					AirogamiException.Plane_PickupPlane_Failure_Message);
 		}
 		Map<String, Object> result = new TreeMap<String, Object>();
 		result.put("planes", planes);
@@ -168,12 +169,13 @@ public class PlaneManager {
 	 * @param planeId:(long)
 	 * @param accountId:(long)
 	 * @param byOwner:(boolean)
+	 * @return whether successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public void deletePlane(long planeId,long accountId, boolean byOwner) throws AirogamiException
+	public boolean deletePlane(long planeId,long accountId, boolean byOwner) throws AirogamiException
 	{
 		try {
-			ServiceUtils.planeService.deletePlane(planeId, accountId, byOwner);
+			return ServiceUtils.planeService.deletePlane(planeId, accountId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Plane_DeletePlane_Failure_Status,
@@ -184,30 +186,20 @@ public class PlaneManager {
 	/*
 	 * @param accountId:(long)
 	 * @param startIdx:(int) (inclusive)
-	 * @param start:(String) start datetime (exclusive), must be a valid date string, can be null or empty
-	 * @param end:(TimeStamp) end datetime (exclusive), must be a valid date string, can be null or empty
+	 * @param start:(Timestamp) start datetime (exclusive), can be null
+	 * @param end:(Timestamp) end datetime (exclusive), can be null
 	 * @param limit:(int) must > 0, max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planes if successful(may have more than one plane if more = true)
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> obtainPlanes(long accountId, int startIdx, String start, String end, int limit, boolean forward) throws AirogamiException{
-		Timestamp sTimestamp = null;
-		Timestamp eTimestamp = null;
-		if(start != null && start.length() > 0){
-			//may throw IllegalArgumentException
-			sTimestamp = Timestamp.valueOf(start);			
-		}
-		if(end != null && end.length() > 0){
-			//may throw IllegalArgumentException
-			eTimestamp = Timestamp.valueOf(end);			
-		}
+	public Map<String, Object> obtainPlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws AirogamiException{
 		if(startIdx < 0){
 			startIdx = 0;
 		}
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.planeService.obtainPlanes(accountId, startIdx, sTimestamp, eTimestamp, limit, forward);
+			result = ServiceUtils.planeService.obtainPlanes(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Plane_ObtainPlanes_Failure_Status,
@@ -219,30 +211,20 @@ public class PlaneManager {
 	/*
 	 * @param accountId:(long)
 	 * @param startIdx:(int) (inclusive)
-	 * @param start:(String) start datetime (exclusive), must be a valid date string, can be null or empty
-	 * @param end:(TimeStamp) end datetime (exclusive), must be a valid date string, can be null or empty
+	 * @param start:(Timestamp) start datetime (exclusive), can be null
+	 * @param end:(Timestamp) end datetime (exclusive), can be null
 	 * @param limit:(int) must > 0, max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planes if successful(may have more than one plane if more = true)
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> receivePlanes(long accountId, int startIdx, String start, String end, int limit, boolean forward) throws AirogamiException{
-		Timestamp sTimestamp = null;
-		Timestamp eTimestamp = null;
-		if(start != null && start.length() > 0){
-			//may throw IllegalArgumentException
-			sTimestamp = Timestamp.valueOf(start);			
-		}
-		if(end != null && end.length() > 0){
-			//may throw IllegalArgumentException
-			eTimestamp = Timestamp.valueOf(end);			
-		}
+	public Map<String, Object> receivePlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws AirogamiException{
 		if(startIdx < 0){
 			startIdx = 0;
 		}
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.planeService.receivePlanes(accountId, startIdx, sTimestamp, eTimestamp, limit, forward);
+			result = ServiceUtils.planeService.receivePlanes(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Plane_ReceivePlanes_Failure_Status,
@@ -287,7 +269,7 @@ public class PlaneManager {
 	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean  viewedMessages(long accountId, long planeId, String last, boolean byOwner) throws AirogamiException{
+	public boolean viewedMessages(long accountId, long planeId, String last, boolean byOwner) throws AirogamiException{
 		if(last == null || last.length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in viewedMessages");
 		}

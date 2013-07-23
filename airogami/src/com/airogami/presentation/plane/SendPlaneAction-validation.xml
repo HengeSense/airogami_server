@@ -1,0 +1,92 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="categoryVO.categoryId">
+     	<field-validator type="required">
+			<message key="error.plane.sendplane.categoryvo.categoryid.required">Please input a categoryVO.categoryId</message>
+		</field-validator>
+		<field-validator type="short">
+		    <param name="min">1</param>
+		    <param name="max">127</param>
+			<message key="error.plane.sendplane.categoryvo.categoryid.invalid">The categoryVO.categoryId must be between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+
+	<field name="messageVO.content">
+		<field-validator type="requiredstring">
+			<message key="error.plane.sendplane.messagevo.content.required">Please input a messageVO.content</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">1</param>
+			<param name="maxLength">255</param>
+			<message key="error.plane.sendplane.messagevo.content.length">The messageVO.content should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+	<field name="messageVO.type">
+		<field-validator type="required">
+			<message key="error.plane.sendplane.messagevo.type.required">Please input a messageVO.type</message>
+		</field-validator>
+		<field-validator type="short">
+		    <param name="min">0</param>
+		    <param name="max">127</param>
+			<message key="error.plane.sendplane.messagevo.type.length">The messageVO.type must be between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+	
+	<field name="longitude">
+		<field-validator type="double">
+		    <param name="minInclusive"><![CDATA[-180]]></param>
+			<param name="maxInclusive"><![CDATA[180]]></param>
+			<message key="error.plane.sendplane.longitude.invalid">The longitude seems invalid</message>
+		</field-validator>
+	</field>
+
+	<field name="latitude">
+		<field-validator type="double">
+		    <param name="minInclusive"><![CDATA[-90]]></param>
+			<param name="maxInclusive"><![CDATA[90]]></param>
+			<message key="error.plane.sendplane.latitude.invalid">The latitude seems invalid</message>
+		</field-validator>
+	</field>
+
+	<field name="city">
+	    <field-validator type="fieldexpression">
+			<param name="expression"><![CDATA[!((province == null || province.length() == 0) && (city != null && city.length() > 0))]]></param>
+			<message key="error.plane.sendplane.city.redundant">The city must coexist with the province</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">256</param>
+			<message key="error.plane.sendplane.city.long">The city is too long</message>
+		</field-validator>
+	</field>
+
+	<field name="province">
+	    <field-validator type="fieldexpression">
+			<param name="expression"><![CDATA[!((country == null || country.length() == 0) && (province != null && province.length() > 0))]]></param>
+			<message key="error.plane.sendplane.province.redundant">The province must coexist with the country</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">256</param>
+			<message key="error.plane.sendplane.province.long">The province is too long</message>
+		</field-validator>
+	</field>
+
+	<field name="country">
+		<field-validator type="stringlength">
+			<param name="maxLength">256</param>
+			<message key="error.plane.sendplane.country.long">The country is too long</message>
+		</field-validator>
+	</field>
+
+	<field name="sex">
+		<field-validator type="required">
+			<message key="error.plane.sendplane.sex.required">Please input a sex</message>
+		</field-validator>
+		<field-validator type="fieldexpression">
+			<param name="expression"><![CDATA[ sex == 0 || sex == 1 || sex == 2]]></param>
+			<message key="error.plane.sendplane.sex.invalid">The sex should be one of 0, 1, 2</message>
+		</field-validator>
+
+	</field>
+</validators>

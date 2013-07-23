@@ -7,6 +7,7 @@ import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -24,9 +25,9 @@ public class ChangePasswordAction extends AirogamiActionSupport implements Model
     	boolean succeed = false;
 		try {			
 			HttpSession session = request.getSession(true);
-			Account account = (Account)session.getAttribute("account");	
+			User user = (User)session.getAttribute("user");	
 			boolean result = ManagerUtils.accountManager.changePassword(
-					account.getAccountId(), changePasswordVO.getOldPassword(),
+					user.getAccountId(), changePasswordVO.getOldPassword(),
 					changePasswordVO.getNewPassword());
 			dataMap.put("result", result);
 			succeed = true;
@@ -35,7 +36,7 @@ public class ChangePasswordAction extends AirogamiActionSupport implements Model
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}
 		catch(Throwable t){
-			t.printStackTrace(System.out);
+			//t.printStackTrace(System.out);
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
 		//success

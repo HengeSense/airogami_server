@@ -171,9 +171,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String obtainPlanesForwardJPQL = "select plane from Plane plane where (plane.accountByOwnerId.accountId = ?1 or plane.accountByTargetId.accountId = ?1) and plane.status = ?2 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime asc";
+	private final String obtainPlanesForwardJPQL = "select plane from Plane plane join fetch plane.messages join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where (plane.accountByOwnerId.accountId = ?1 or plane.accountByTargetId.accountId = ?1) and plane.status = ?2 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime asc";
 
-	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane where (plane.accountByOwnerId.accountId = ?1 or plane.accountByTargetId.accountId = ?1) and plane.status = ?2 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime desc";
+	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane join fetch plane.messages join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where (plane.accountByOwnerId.accountId = ?1 or plane.accountByTargetId.accountId = ?1) and plane.status = ?2 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime desc";
 
 	public List<Plane> obtainPlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainPlanesing with accountId = " + accountId, Level.INFO, null);
@@ -205,9 +205,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String receivePlanesForwardJPQL = "select plane from Plane plane where plane.status = ?2 and plane.accountByTargetId.accountId = ?1 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime asc";
+	private final String receivePlanesForwardJPQL = "select plane from Plane plane join fetch plane.messages join fetch plane.category join fetch plane.accountByTargetId where plane.status = ?2 and plane.accountByTargetId.accountId = ?1 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime asc";
 
-	private final String receivePlanesBackwardJPQL = "select plane from Plane plane where plane.status = ?2 and plane.accountByTargetId.accountId = ?1 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime desc";
+	private final String receivePlanesBackwardJPQL = "select plane from Plane plane join fetch plane.messages join fetch plane.category join fetch plane.accountByTargetId where plane.status = ?2 and plane.accountByTargetId.accountId = ?1 and (?3 is null or plane.updatedTime >= ?3) and (?4 is null or plane.updatedTime <= ?4) order by plane.updatedTime desc";
 
 	public List<Plane> receivePlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward){
 		EntityManagerHelper.log("receivePlanesing with accountId = " + accountId, Level.INFO, null);

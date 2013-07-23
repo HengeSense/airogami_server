@@ -1,7 +1,6 @@
 package com.airogami.application;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -91,11 +90,12 @@ public class PlaneService implements IPlaneService {
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 			} else {
-				ae = new ApplicationException("verifyReply failed");
+				//ae = new ApplicationException("verifyReply failed");
+				message = null;
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			
+			//t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
@@ -244,11 +244,8 @@ public class PlaneService implements IPlaneService {
 		Long oppositeAccountId = null;
 		try {			
 			EntityManagerHelper.beginTransaction();
-			if ((oppositeAccountId = DaoUtils.planeDao.likePlane(planeId, accountId, byOwner)) == null) {
-				ae = new ApplicationException("likePlane failed");
-			}
-			else{
-				Plane plane = DaoUtils.planeDao.findById(planeId);
+			if ((oppositeAccountId = DaoUtils.planeDao.likePlane(planeId, accountId, byOwner)) != null) {
+				Plane plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
 				Account account = DaoUtils.accountDao.getReference(accountId);
 				message.setAccount(account);
@@ -271,20 +268,21 @@ public class PlaneService implements IPlaneService {
 			throw ae;
 		}
 		Map<String, Object> result = new TreeMap<String, Object>();
-		result.put("message", message);
+		if(oppositeAccountId != null){
+			result.put("message", message);
+		}		
 		result.put("oppositeAccountId", oppositeAccountId);
 		return result;	
 	}
 
 	@Override
-	public void deletePlane(long planeId, long accountId, boolean byOwner)
+	public boolean deletePlane(long planeId, long accountId, boolean byOwner)
 			throws ApplicationException {
 		ApplicationException ae = null;
+		boolean result = false;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner) == false) {
-				ae = new ApplicationException("deletePlane failed");
-			}
+			result = DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -299,6 +297,7 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}	
+		return result;
 	}
 
 	@Override

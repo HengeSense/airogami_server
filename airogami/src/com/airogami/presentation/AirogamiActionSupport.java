@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.airogami.presentation.utilities.JSONUtils;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public abstract class AirogamiActionSupport extends ActionSupport implements ServletRequestAware{
@@ -15,6 +16,7 @@ public abstract class AirogamiActionSupport extends ActionSupport implements Ser
 	private static final long serialVersionUID = 1L;
 	protected HttpServletRequest request;
 	protected Map<String, Object> dataMap;
+	protected String method;
 	
 	public AirogamiActionSupport() {
 		dataMap = new HashMap<String, Object>();
@@ -23,6 +25,7 @@ public abstract class AirogamiActionSupport extends ActionSupport implements Ser
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
+		this.method = ActionContext.getContext().getName();
 	}
 	
 	abstract protected int getInputStatus();
@@ -42,6 +45,10 @@ public abstract class AirogamiActionSupport extends ActionSupport implements Ser
 			}
 		}
 		
+	}
+	
+	 public String getMethod() {
+			return method;
 	}
 	
 	public Map<String, Object> getDataMap() {   

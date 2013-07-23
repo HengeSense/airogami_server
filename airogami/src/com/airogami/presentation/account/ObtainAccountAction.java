@@ -28,10 +28,8 @@ public class ObtainAccountAction extends AirogamiActionSupport{
 				this.addFieldError("last", "Invalid Timestamp");
 				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
 				dataMap.put("fieldErrors", this.getFieldErrors());
-			}
-			
-		}
-		
+			}			
+		}		
 	}
 	
     public String execute() throws Exception{

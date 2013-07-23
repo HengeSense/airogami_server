@@ -1,5 +1,4 @@
-#Wed May 22 16:33:04 PDT 2013
-detect.m2m=true
+detect.m2m=false
 detect.o2o=true
 eclipse.preferences.version=1
 generate.version=false

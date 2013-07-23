@@ -41,7 +41,7 @@ public interface IPlaneService {
 	 * @param planeId:(long) must be not null
 	 * @param ownerId:(long) must be plane.accoutByOwnerId or plane.accountByTargetId
 	 * @param message:(Message)
-	 * @return message if successful
+	 * @return message if successful or null if verified failed
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Message replyPlane(long planeId,long ownerId, Message message) throws ApplicationException;	
@@ -58,7 +58,7 @@ public interface IPlaneService {
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long)
 	 * @param byOwner:(boolean)
-	 * @return message, message.plane, oppositeAccountId
+	 * @return message, oppositeAccountId (null if not successful)
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> likePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
@@ -75,9 +75,10 @@ public interface IPlaneService {
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long)
 	 * @param byOwner:(boolean)
+	 * @return whether successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public void deletePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
+	public boolean deletePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
 	
 	/*
 	 * get received planes
@@ -87,7 +88,7 @@ public interface IPlaneService {
 	 * @param end:(TimeStamp) end datetime (inclusive) can be null
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
-	 * @return more, planes if successful (may have more than one plane if more = true)
+	 * @return more, planes (planes.messages, planes.category, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> receivePlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
@@ -99,7 +100,7 @@ public interface IPlaneService {
 	 * @param end:(TimeStamp) end datetime (inclusive) can be null
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
-	 * @return more, planes if successful (may have more than one plane if more = true)
+	 * @return more, planes(planes.messages, planes.category, planes.accountByTargetId, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> obtainPlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;

@@ -29,8 +29,7 @@ public class SignoutAction extends ActionSupport implements ServletRequestAware{
 	public String execute() throws Exception{
 		try{
 			HttpSession session = request.getSession(true);
-			session.setAttribute("account", null);
-			session.setAttribute("clientAgent", null);
+			session.setAttribute("user", null);
 			JSONUtils.putOKStatus(dataMap);
 		}catch(Throwable t){
 			//t.printStackTrace(System.out);

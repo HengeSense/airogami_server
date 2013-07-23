@@ -124,7 +124,7 @@ public class TestPlane {
 		int limit = 50;
 		boolean forward = true;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.obtainPlanes(accountId, startIdx, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.planeManager.obtainPlanes(accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
 			//ObjectUtils.printObject(result);
 			List<Plane> planes = (List<Plane>) result.get("planes");
 			Iterator<Plane> iter = planes.iterator();
@@ -148,7 +148,8 @@ public class TestPlane {
 		int limit = 50;
 		boolean forward = false;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(accountId, startIdx, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(
+					accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
 			//ObjectUtils.printObject(result);
 			List<Plane> planes = (List<Plane>) result.get("planes");
 			Iterator<Plane> iter = planes.iterator();

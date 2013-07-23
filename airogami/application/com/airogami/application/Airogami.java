@@ -12,11 +12,13 @@ public class Airogami implements Delayed{
 	public static final byte TypePlane = 0;
 	public static final byte TypeChain = 1;
 	public static final byte MaxExceptionCount = 3;
+	public static final byte MaxDismatchCount = 3;
 	public static long wait = 20 * 1000;//60s
 	
 	private long id;
 	private byte type;
 	private byte exceptionCount;// matched exception count 
+	private byte dismatchCount;// dismatch count 
 	private long end;
 	
 	public Airogami(long id, byte type){
@@ -54,13 +56,17 @@ public class Airogami implements Delayed{
 			try {
 				result = ServiceUtils.planeService.matchPlane(id);
 				Plane plane = (Plane)result.get("plane");
-				if(plane != null){
-					rematch = true;
+				accountId = (Long)result.get("accountId");
+				if(plane != null){					
+					if(dismatchCount < MaxDismatchCount){
+						rematch = true;
+					}
+					++dismatchCount;
 				}
 				else{
 					//match succeed
-					accountId = (Long)result.get("accountId");
-				}				
+					
+				}	
 			     exceptionCount = 0;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -76,7 +82,10 @@ public class Airogami implements Delayed{
 				result = ServiceUtils.chainService.matchChain(id);
 				Chain chain = (Chain)result.get("chain");
 				if(chain != null){
-					rematch = true;
+					if(dismatchCount < MaxDismatchCount){
+						rematch = true;
+					}
+					++dismatchCount;
 				}
 				else{
 					//match succeed

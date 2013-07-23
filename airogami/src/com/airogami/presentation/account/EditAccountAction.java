@@ -13,6 +13,7 @@ import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.AirogamiUtils;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ModelDriven;
@@ -33,10 +34,10 @@ public class EditAccountAction extends AirogamiActionSupport implements ModelDri
 			Map<String, Object> properties = AirogamiUtils.describe(editAccountVO);
 			if(properties.size() > 0){
 				HttpSession session = request.getSession(true);
-				Account account = (Account)session.getAttribute("account");	
-				properties.put("accountId", account.getAccountId());
-				account = ManagerUtils.accountManager.editAccount(properties);
-				session.setAttribute("account", account);				
+				User user = (User)session.getAttribute("user");	
+				properties.put("accountId", user.getAccountId());
+				//temporary
+				session.setAttribute("account", ManagerUtils.accountManager.editAccount(properties));				
 			}
 			succeed = true;
 		} catch (AirogamiException e) {

@@ -93,10 +93,10 @@ public interface AirogamiError {
 	public static final int Plane_CreateCategory_Failure_Status = 20015;
 	public static final String Plane_CreateCategory_Failure_Message = "error.plane.createcategory.failure";
 	
-	public static final int Plane_Pickup_Input_Status = 20016;
-	public static final String Plane_Pickup_Input_Message = "error.plane.pickup.input";
-	public static final int Plane_Pickup_Failure_Status = 20017;
-	public static final String Plane_Pickup_Failure_Message = "error.plane.pickup.failure";
+	public static final int Plane_PickupPlane_Input_Status = 20016;
+	public static final String Plane_PickupPlane_Input_Message = "error.plane.pickup.input";
+	public static final int Plane_PickupPlane_Failure_Status = 20017;
+	public static final String Plane_PickupPlane_Failure_Message = "error.plane.pickup.failure";
 	
 	public static final int Plane_LikePlane_Input_Status = 20018;
 	public static final String Plane_LikePlane_Input_Message = "error.plane.likeplane.input";

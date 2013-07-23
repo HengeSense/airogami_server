@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<style type="text/css">
     .container{
     margin:auto;
-    width:300px;
+    width:400px;
     }
     </style>
   </head>
@@ -41,9 +41,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
      %> </p>
      <% if(account != null) {%>
+     <h3>Account:</h3>
      <a href="EditAccount.jsp"><button>Edit Account</button></a>
      <a href="EditAuthenticate.jsp"><button>Edit Authenticate</button></a>
      <a href="ViewAccount.jsp"><button>View Account</button></a>
+     <h3>Plane:</h3>
+     <a href="SendPlane.jsp"><button>Send Plane</button></a>
+     <a href="ObtainPlanes.jsp"><button>Obtain Planes</button></a>
+     <a href="LikeDeletePlane.jsp"><button>Like Delete Plane</button></a>
+     <a href="PickupBothThrowPlane.jsp"><button>Pickup Both and Throw Plane</button></a>
      <%} %>
      </div>
   </body>

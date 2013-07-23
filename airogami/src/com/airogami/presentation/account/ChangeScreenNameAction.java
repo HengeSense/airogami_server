@@ -7,6 +7,7 @@ import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -24,10 +25,12 @@ public class ChangeScreenNameAction extends AirogamiActionSupport implements Mod
     	boolean succeed = false;
 		try {			
 			HttpSession session = request.getSession(true);
-			Account account = (Account)session.getAttribute("account");	
+			User user = (User)session.getAttribute("user");
 			boolean result = ManagerUtils.accountManager.changeScreenName(
-					account.getAccountId(), changeScreenNameVO.getScreenName());
+					user.getAccountId(), changeScreenNameVO.getScreenName());
+			//temporary
 			if(result){
+				Account account = (Account)session.getAttribute("account");
 				account.setScreenName(changeScreenNameVO.getScreenName());
 			}
 			dataMap.put("result", result);
