@@ -30,14 +30,15 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 			}else{
 				account =  ManagerUtils.accountManager.signinWithScreenName(signinVO.getScreenName(), signinVO.getPassword());
 			}
-			HttpSession session = request.getSession(true);			
-			User user = new User(account.getAccountId(), signinVO.getClientAgent());
-            //temporary
-			session.setAttribute("account", account);
-			session.setAttribute("user", user);
-			dataMap.put("user", user);
+			if(account != null){
+				HttpSession session = request.getSession(true);			
+				User user = new User(account.getAccountId(), signinVO.getClientAgent());
+				session.setAttribute("user", user);
+			}			
+			//dataMap.put("user", user);
+			dataMap.put("account", account);
 			succeed = true;
-		} catch (AirogamiException e) {
+		} catch (AirogamiException e) {			
 			String localizedMessage = getText(e.getMessage(),e.getMessage());
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}

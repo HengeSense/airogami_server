@@ -82,7 +82,7 @@
 			<message key="error.account.signup.city.required">Please input a city</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.account.signup.city.long">The city is too long</message>
 		</field-validator>
 	</field>
@@ -92,7 +92,7 @@
 			<message key="error.account.signup.province.required">Please input a province</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.account.signup.province.long">The province is too long</message>
 		</field-validator>
 	</field>
@@ -102,7 +102,7 @@
 			<message key="error.account.signup.country.required">Please input a country</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.account.signup.country.long">The country is too long</message>
 		</field-validator>
 	</field>

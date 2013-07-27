@@ -46,7 +46,7 @@
 			<message key="error.chain.sendchain.city.redundant">The city must coexist with the province</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.chain.sendchain.city.long">The city is too long</message>
 		</field-validator>
 	</field>
@@ -57,14 +57,14 @@
 			<message key="error.chain.sendchain.province.redundant">The province must coexist with the country</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.chain.sendchain.province.long">The province is too long</message>
 		</field-validator>
 	</field>
 
 	<field name="country">
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.chain.sendchain.country.long">The country is too long</message>
 		</field-validator>
 	</field>

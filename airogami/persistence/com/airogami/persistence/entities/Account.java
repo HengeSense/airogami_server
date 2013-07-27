@@ -62,9 +62,13 @@ public class Account implements java.io.Serializable {
 
 	private Long updateCount = 0L;
 
+	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
+
 	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
 
 	private List<Message> messages = new ArrayList<Message>(0);
+
+	private List<Report> reportsForReportId = new ArrayList<Report>(0);
 
 	private List<Plane> planesForTargetId = new ArrayList<Plane>(0);
 
@@ -105,7 +109,8 @@ public class Account implements java.io.Serializable {
 			String screenName, Short sex, String icon, Double longitude,
 			Double latitude, Short status, Timestamp createdTime, String city,
 			String province, String country, Date birthday, Long updateCount,
-			List<Plane> planesForOwnerId, List<Message> messages,
+			List<Report> reportsForReportedId, List<Plane> planesForOwnerId,
+			List<Message> messages, List<Report> reportsForReportId,
 			List<Plane> planesForTargetId, List<Chain> chains,
 			AccountStat accountStat, List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
@@ -123,8 +128,10 @@ public class Account implements java.io.Serializable {
 		this.country = country;
 		this.birthday = birthday;
 		this.updateCount = updateCount;
+		this.reportsForReportedId = reportsForReportedId;
 		this.planesForOwnerId = planesForOwnerId;
 		this.messages = messages;
+		this.reportsForReportId = reportsForReportId;
 		this.planesForTargetId = planesForTargetId;
 		this.chains = chains;
 		this.accountStat = accountStat;
@@ -179,7 +186,7 @@ public class Account implements java.io.Serializable {
 		this.sex = sex;
 	}
 
-	@Column(name = "ICON", nullable = false, length = 256)
+	@Column(name = "ICON", nullable = false)
 	public String getIcon() {
 		return this.icon;
 	}
@@ -225,7 +232,7 @@ public class Account implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "CITY", nullable = false, length = 256)
+	@Column(name = "CITY", nullable = false)
 	public String getCity() {
 		return this.city;
 	}
@@ -234,7 +241,7 @@ public class Account implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "PROVINCE", nullable = false, length = 256)
+	@Column(name = "PROVINCE", nullable = false)
 	public String getProvince() {
 		return this.province;
 	}
@@ -243,7 +250,7 @@ public class Account implements java.io.Serializable {
 		this.province = province;
 	}
 
-	@Column(name = "COUNTRY", nullable = false, length = 256)
+	@Column(name = "COUNTRY", nullable = false)
 	public String getCountry() {
 		return this.country;
 	}
@@ -272,6 +279,15 @@ public class Account implements java.io.Serializable {
 		this.updateCount = updateCount;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByReportedId")
+	public List<Report> getReportsForReportedId() {
+		return this.reportsForReportedId;
+	}
+
+	public void setReportsForReportedId(List<Report> reportsForReportedId) {
+		this.reportsForReportedId = reportsForReportedId;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByOwnerId")
 	public List<Plane> getPlanesForOwnerId() {
 		return this.planesForOwnerId;
@@ -288,6 +304,15 @@ public class Account implements java.io.Serializable {
 
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByReportId")
+	public List<Report> getReportsForReportId() {
+		return this.reportsForReportId;
+	}
+
+	public void setReportsForReportId(List<Report> reportsForReportId) {
+		this.reportsForReportId = reportsForReportId;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByTargetId")
@@ -318,7 +343,7 @@ public class Account implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
-	@OrderBy("updatedTime desc")
+	@OrderBy("createdTime desc")
 	public List<ChainMessage> getChainMessages() {
 		return this.chainMessages;
 	}

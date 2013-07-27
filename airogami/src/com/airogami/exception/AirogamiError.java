@@ -47,6 +47,11 @@ public interface AirogamiError {
 	public static final String Account_ObtainAccount_Input_Message = "error.account.obtainaccount.input";
 	public static final String Account_ObtainAccount_Failure_Message = "error.account.obtainaccount.failure";
 
+	public static final int Account_ReportAccount_Input_Status = 100110;
+	public static final int Account_ReportAccount_Failure_Status = 100111;
+	public static final String Account_ReportAccount_Input_Message = "error.account.reportaccount.input";
+	public static final String Account_ReportAccount_Failure_Message = "error.account.reportaccount.failure";
+
 	
 	/* 
 	 * account ends

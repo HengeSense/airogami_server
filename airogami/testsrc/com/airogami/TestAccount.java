@@ -20,6 +20,7 @@ import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.persistence.entities.Report;
 import com.airogami.presentation.logic.ManagerUtils;
 
 public class TestAccount {
@@ -79,7 +80,7 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testSigninWithEmail() {
-		String email = "tianhuyang0@gmail.com";
+		String email = "tianhuyang@gmail.com";
 		String password = "12345678";
 		try {
 			Account account = ManagerUtils.accountManager.signinWithEmail(email, password);
@@ -157,7 +158,7 @@ public class TestAccount {
 			Assert.fail();
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void testAirogamiServie(){
 		new Thread(new Runnable(){
@@ -260,5 +261,20 @@ public class TestAccount {
     		}
     	}
 	}
+	
+	
+	@Test
+	public void testReportAccount() {
+		long reportId = 10;
+		long reportedId = 2;
+		String reason = "Good 1 words";
+		try {			
+			Report report = ManagerUtils.accountManager.reportAccount(reportId, reportedId, reason);
+			ObjectUtils.printObject(report);		
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}	
 
 }

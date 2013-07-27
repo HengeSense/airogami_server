@@ -7,8 +7,8 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/common"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/application"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/testsrc"/>
-        <property name="context-root" value="/"/>
         <property name="java-output-path" value="/airogami/WebRoot/WEB-INF/classes"/>
         <property name="me-struts-base-pkg"/>
+        <property name="context-root" value="/"/>
     </wb-module>
 </project-modules>

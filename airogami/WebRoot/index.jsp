@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.presentation.logic.User" pageEncoding="UTF-8"%>
 
 <%
 String path = request.getContextPath();
@@ -32,15 +32,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <h2>Airogami Home Page</h2>
     <a href="Signup.html">Signup</a> <a href="SigninAndOut.html">SigninAndOut</a>
     <p><% 
-    Account account = (Account)request.getSession(true).getAttribute("account");
-    if(account != null){
-        out.print("Welcome " + account.getFullName());
+    User user = (User)request.getSession(true).getAttribute("user");
+    if(user != null){
+        out.print("Welcome " + user.getAccountId());
     }
     else{
         out.print("Please signin");
     }
      %> </p>
-     <% if(account != null) {%>
+     <% if(user != null) {%>
      <h3>Account:</h3>
      <a href="EditAccount.jsp"><button>Edit Account</button></a>
      <a href="EditAuthenticate.jsp"><button>Edit Authenticate</button></a>

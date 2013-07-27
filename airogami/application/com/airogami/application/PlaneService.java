@@ -183,7 +183,7 @@ public class PlaneService implements IPlaneService {
 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			//t.printStackTrace();
+			t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {

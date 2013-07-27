@@ -1,0 +1,26 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="reportedId">
+		<field-validator type="required">
+			<message key="error.account.reportaccount.reportedId.required">Please input a reportedId</message>
+		</field-validator>
+		<field-validator type="long">
+			<param name="min"><![CDATA[1]]></param>
+			<message key="error.account.reportaccount.reportedId.invalid">The reportedId should be greater than ${min}</message>
+		</field-validator>
+
+	</field>
+
+	<field name="reason">
+	    <field-validator type="requiredstring">
+			<message key="error.account.reportaccount.reason.required">Please input a reason</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.reportaccount.reason.length">The reason should have at most ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+</validators>

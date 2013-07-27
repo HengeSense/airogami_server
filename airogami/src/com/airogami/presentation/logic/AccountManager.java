@@ -10,6 +10,8 @@ import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Report;
+import com.airogami.persistence.entities.ReportId;
 
 public class AccountManager {
 
@@ -84,11 +86,11 @@ public Account signinWithScreenName(String screenName, String password)
 					AirogamiException.Account_Signin_Failure_Status,
 					AirogamiException.Account_Signin_Failure_Message);
 		}
-		if(account == null){
+		/*if(account == null){
 			throw new AirogamiException(
 					AirogamiException.Account_Signin_NotMatch_Status,
 					AirogamiException.Account_Signin_NotMatch_Message);
-		}
+		}*/
 		return account;
 	}
 	
@@ -106,15 +108,16 @@ public Account signinWithScreenName(String screenName, String password)
 		try {
 			account = ServiceUtils.accountService.signin(new String[]{email, password}, AccountConstants.AuthenticateTypeEmail);
 		} catch (Throwable re) {
+			//re.printStackTrace();
 			throw new AirogamiException(
 					AirogamiException.Account_Signin_Failure_Status,
 					AirogamiException.Account_Signin_Failure_Message);
 		}
-		if(account == null){
+		/*if(account == null){
 			throw new AirogamiException(
 					AirogamiException.Account_Signin_NotMatch_Status,
 					AirogamiException.Account_Signin_NotMatch_Message);
-		}
+		}*/
 		
 		return account;
 	}
@@ -209,6 +212,30 @@ public Account signinWithScreenName(String screenName, String password)
 			throw new AirogamiException(
 					AirogamiException.Account_ObtainAccount_Failure_Status,
 					AirogamiException.Account_ObtainAccount_Failure_Message);
+		}
+	}
+	
+	/*
+	 * @param reportId:(long)
+	 * @param reportedId:(long)
+	 * @param reason:(String)
+	 * @return report if successful or null if not
+	 * @throws AirogamiException or EmailExistsException if failed 
+	 */
+	public Report reportAccount(long reportId, long reportedId, String reason) throws AirogamiException{
+		if (reason == null || reason.length() == 0){
+			throw new IllegalArgumentException("Illegal arguments in reportAccount");
+		}
+		ReportId id = new ReportId(reportId, reportedId);
+		Report report = new Report();
+		report.setId(id);
+		report.setReason(reason);
+		try {
+			return ServiceUtils.accountService.reportAccount(report);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Account_ReportAccount_Failure_Status,
+					AirogamiException.Account_ReportAccount_Failure_Message);
 		}
 	}
 

@@ -108,7 +108,7 @@ public class ChainMessage implements java.io.Serializable {
 		this.account = account;
 	}
 
-	@Column(name = "CONTENT", length = 256)
+	@Column(name = "CONTENT")
 	public String getContent() {
 		return this.content;
 	}

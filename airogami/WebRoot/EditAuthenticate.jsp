@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account, com.airogami.presentation.logic.*, com.airogami.presentation.logic.User,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -20,16 +20,18 @@
   <body>
     <div class = "container">    
      <p><% 
-    Account account = (Account)request.getSession(true).getAttribute("account");
-    if(account != null){
-        out.print("Edit Authenticate for " + account.getFullName());
+   User user = (User)request.getSession(true).getAttribute("user");
+   Account account = null;
+    if(user != null){
+        account = ManagerUtils.accountManager.obtainAccount(user.getAccountId(), null);
+        out.print("Edit Authenticate for " + user.getAccountId());
     }
     else{
         out.print("Please signin");
     }
      %> </p>
      <%
-     if(account != null){ %>
+     if(user != null){ %>
     <h2>Edit Password</h2>
     <form action="account/changePassword.action"  method="get"> 
     <label>Old Password: </label>

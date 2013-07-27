@@ -157,7 +157,7 @@ public class Chain implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "CITY", length = 256)
+	@Column(name = "CITY")
 	public String getCity() {
 		return this.city;
 	}
@@ -166,7 +166,7 @@ public class Chain implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "PROVINCE", length = 256)
+	@Column(name = "PROVINCE")
 	public String getProvince() {
 		return this.province;
 	}
@@ -202,7 +202,7 @@ public class Chain implements java.io.Serializable {
 		this.sex = sex;
 	}
 
-	@Column(name = "COUNTRY", length = 256)
+	@Column(name = "COUNTRY")
 	public String getCountry() {
 		return this.country;
 	}
@@ -248,7 +248,7 @@ public class Chain implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chain")
-	@OrderBy("updatedTime desc")
+	@OrderBy("createdTime desc")
 	public List<ChainMessage> getChainMessages() {
 		return this.chainMessages;
 	}

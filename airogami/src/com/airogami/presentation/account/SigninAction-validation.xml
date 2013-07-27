@@ -10,7 +10,7 @@
 			<message key="error.account.signin.email.invalid">The email seems invalid</message>
 		</field-validator>
 		<field-validator type="stringlength">
-			<param name="maxLength">256</param>
+			<param name="maxLength">255</param>
 			<message key="error.account.signin.email.long">The email should be less than ${maxLength}</message>
 		</field-validator>
 	</field>

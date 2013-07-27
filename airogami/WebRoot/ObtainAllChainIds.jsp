@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.presentation.logic.User, java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -20,16 +20,16 @@
   <body>
     <div class = "container">    
      <p><% 
-    Account account = (Account)request.getSession(true).getAttribute("account");
-    if(account != null){
-        out.print("Obtain ChainIds for " + account.getFullName());
+    User user = (User)request.getSession(true).getAttribute("user");
+    if(user != null){
+        out.print("Obtain ChainIds for " + user.getAccountId());
     }
     else{
         out.print("Please signin");
     }
      %> </p>
      <%
-     if(account != null){ %>
+     if(user != null){ %>
     <h2>Receive ChainIds</h2>
     <form action="chain/receiveChainIds.action"  method="get"> 
     <label>StartId: </label>

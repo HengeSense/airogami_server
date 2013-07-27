@@ -85,7 +85,7 @@ public class Message implements java.io.Serializable {
 		this.plane = plane;
 	}
 
-	@Column(name = "CONTENT", nullable = false, length = 256)
+	@Column(name = "CONTENT", nullable = false)
 	public String getContent() {
 		return this.content;
 	}

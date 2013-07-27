@@ -28,11 +28,6 @@ public class ChangeScreenNameAction extends AirogamiActionSupport implements Mod
 			User user = (User)session.getAttribute("user");
 			boolean result = ManagerUtils.accountManager.changeScreenName(
 					user.getAccountId(), changeScreenNameVO.getScreenName());
-			//temporary
-			if(result){
-				Account account = (Account)session.getAttribute("account");
-				account.setScreenName(changeScreenNameVO.getScreenName());
-			}
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

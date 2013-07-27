@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Report;
 
 public interface IAccountService {
 	/*
@@ -54,4 +55,11 @@ public interface IAccountService {
 	 */
 	public Account obtainAccount(long accountId, Long updateCount) throws ApplicationException;
 
+	/*
+	 * @param report:(Report)
+	 * @return report if successful or null if not
+	 * @throws ApplicationException or EmailExistsException if failed 
+	 */
+	public Report reportAccount(Report report) throws ApplicationException;
+	
 }

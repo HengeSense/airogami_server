@@ -239,7 +239,7 @@ public class Plane implements java.io.Serializable {
 		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
 	}
 
-	@Column(name = "CITY", length = 256)
+	@Column(name = "CITY")
 	public String getCity() {
 		return this.city;
 	}
@@ -248,7 +248,7 @@ public class Plane implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "PROVINCE", length = 256)
+	@Column(name = "PROVINCE")
 	public String getProvince() {
 		return this.province;
 	}
@@ -257,7 +257,7 @@ public class Plane implements java.io.Serializable {
 		this.province = province;
 	}
 
-	@Column(name = "COUNTRY", length = 256)
+	@Column(name = "COUNTRY")
 	public String getCountry() {
 		return this.country;
 	}

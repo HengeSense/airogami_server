@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.presentation.logic.User,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -20,18 +20,18 @@
   <body>
     <div class = "container">    
      <p><% 
-    Account account = (Account)request.getSession(true).getAttribute("account");
-    if(account != null){
-        out.print("View Account from " + account.getFullName());
+    User user = (User)request.getSession(true).getAttribute("user");
+    if(user != null){
+        out.print("View Account from " + user.getAccountId());
     }
     else{
         out.print("Please signin");
     }
      %> </p>
      <%
-     if(account != null){ %>
+     if(user != null){ %>
     <h2>View Account</h2>
-    <form action="account/obtainAccountAction.action"  method="get"> 
+    <form action="account/obtainAccount.action"  method="get"> 
     <label>AccountId: </label>
     <input type="text" name="accountId" value="2" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
@@ -43,6 +43,20 @@
     <input type="submit" name="submit" value="submit" />
     <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
     </form>    
+    
+    <h2>Report Account</h2>
+    <form action="account/reportAccount.action"  method="get"> 
+    <label>ReportedId: </label>
+    <input type="text" name="reportedId" value="2" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Reason: </label>
+    <input type="text" name="reason"  value="Bad words"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
+    <button type="button" onclick="print(1)">print</button>
+    <input type="reset" name="submit" value="reset" />
+    <input type="submit" name="submit" value="submit" />
+    <input type="checkbox" checked="checked" onclick="hideAll(this, 1)">
+    </form> 
 
     <p id="print"></p>
     <%} %>

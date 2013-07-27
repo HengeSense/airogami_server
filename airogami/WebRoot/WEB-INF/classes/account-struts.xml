@@ -91,7 +91,18 @@
 			</result>
 		</action>
 		
-		<action name="obtainAccountAction" class="com.airogami.presentation.account.ObtainAccountAction">
+		<action name="obtainAccount" class="com.airogami.presentation.account.ObtainAccountAction">
+		    <interceptor-ref name="authorizationStack" />
+		    <result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="reportAccount" class="com.airogami.presentation.account.ReportAccountAction">
 		    <interceptor-ref name="authorizationStack" />
 		    <result type="json" name="input">
 				<param name="root">dataMap</param>

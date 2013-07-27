@@ -43,7 +43,7 @@ function obtainPlanes() {
 					planeRow.cells[6].innerHTML = plane.country;
 					planeRow.cells[7].innerHTML = plane.updatedTime;
 					planeRow.cells[8].innerHTML = 'plane';
-					planeRow.type=plane.type = 'plane';
+					planeRow.type = 'plane';
 					planeRow.data = plane;
 					collect.rows[1].parentNode.insertBefore(planeRow, collect.rows[1]);
 					//planeRow.style.display = '';
@@ -104,7 +104,7 @@ function obtainChains() {
 					chainRow.cells[8].innerHTML = 'chain';
 					chain.cell = chainRow.cells[1];
 					chainRow.data = chain;
-					chainRow.type= chain.type='chain';
+					chainRow.type = 'chain';
 					collect.rows[1].parentNode.insertBefore(chainRow, collect.rows[1]);
 					//chainRow.style.display = '';
 					if(collectChainStart == chain.updatedTime){
@@ -178,7 +178,7 @@ function view(the) {
 	var win = window.open('', "Reply planes or chains", 'width=400,height=400');
 	win.data = row.data;
 	row.win = win;
-	if(row.data.type == 'plane')
+	if(row.type == 'plane')
 	{
 		win.document.write(planeView.innerHTML);
 		win.document.close();

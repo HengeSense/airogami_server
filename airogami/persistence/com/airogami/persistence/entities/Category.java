@@ -64,7 +64,7 @@ public class Category implements java.io.Serializable {
 		this.categoryId = categoryId;
 	}
 
-	@Column(name = "NAME", nullable = false, length = 256)
+	@Column(name = "NAME", nullable = false)
 	public String getName() {
 		return this.name;
 	}
@@ -73,7 +73,7 @@ public class Category implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "DESCRIPTION", nullable = false, length = 256)
+	@Column(name = "DESCRIPTION", nullable = false)
 	public String getDescription() {
 		return this.description;
 	}

@@ -12,5 +12,6 @@ public class DaoUtils {
     public static final ChainDao chainDao = new ChainDao();
     public static final ChainMessageDao chainMessageDao = new ChainMessageDao();
     public static final CategoryDao categoryDao = new CategoryDao();
+    public static final ReportDao reportDao = new ReportDao();
     
 }

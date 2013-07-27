@@ -18,6 +18,8 @@
 		<class>com.airogami.persistence.entities.Message</class>
 		<class>com.airogami.persistence.entities.Plane</class>
 		<class>com.airogami.persistence.entities.ChainMessageId</class>
+		<class>com.airogami.persistence.entities.Report</class>
+		<class>com.airogami.persistence.entities.ReportId</class>
 		<properties>
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />

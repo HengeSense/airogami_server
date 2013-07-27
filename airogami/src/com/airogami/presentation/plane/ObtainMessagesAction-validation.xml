@@ -14,7 +14,7 @@
 	
 	<field name="startId">
      	<field-validator type="long">
-     	<param name="min">1</param>
+     	<param name="min">0</param>
 			<message key="error.plane.obtainmessages.startId.invalid">The startId should be over ${min}</message>
 		</field-validator>
 	</field>

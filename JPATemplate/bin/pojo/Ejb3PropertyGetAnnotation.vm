@@ -15,7 +15,7 @@ $pojo.generateAnnIdGenerator()
 #elseif($c2h.isCollection($property)) 
 $pojo.generateCollectionAnnotation($property,$cfg)
 #if($property.name.equals("chainMessages"))
-@$pojo.importType("javax.persistence.OrderBy")("updatedTime desc")
+@$pojo.importType("javax.persistence.OrderBy")("createdTime desc")
 #end
 #else
 $pojo.generateBasicAnnotation($property)

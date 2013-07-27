@@ -1,7 +1,6 @@
 package com.airogami.application;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Timestamp;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
@@ -16,6 +15,8 @@ import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.AccountStat;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Report;
+import com.airogami.persistence.entities.ReportId;
 
 public class AccountService implements IAccountService {
 
@@ -85,6 +86,7 @@ public class AccountService implements IAccountService {
 			}			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
+			t.printStackTrace();
 			if(t.getCause() == null){
 				ae = new ApplicationException();
 			}
@@ -226,6 +228,26 @@ public class AccountService implements IAccountService {
 		} 
 		
 		return account;
+	}
+	
+	public Report reportAccount(Report report) throws ApplicationException
+	{
+		ApplicationException ae = null;				
+		try {
+			report = DaoUtils.reportDao.createReport(report);								
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+            if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		}		
+		if (ae != null) {
+			throw ae;
+		} 		
+		return report;
 	}
 
 }

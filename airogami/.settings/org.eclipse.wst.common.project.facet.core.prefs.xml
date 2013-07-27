@@ -4,4 +4,9 @@
       <attribute name="provider-id" value="jpa-no-op-library-provider"/>
     </node>
   </facet>
+  <facet id="jst.web"/>
+  <facet id="web.struts2"/>
+  <facet id="java"/>
+  <facet id="wst.jsdt.web"/>
+  <facet id="jst.web.jstl"/>
 </root>
