@@ -1,0 +1,14 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="chainId">
+     	<field-validator type="required">
+			<message key="error.chain.deletechain.chainId.required">Please input a chainId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.chain.deletechain.chainId.invalid">The chainId must be over ${min}</message>
+		</field-validator>
+	</field>
+
+</validators>

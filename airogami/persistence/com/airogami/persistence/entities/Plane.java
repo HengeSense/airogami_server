@@ -16,8 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * Plane entity. @author MyEclipse Persistence Tools
@@ -47,9 +47,9 @@ public class Plane implements java.io.Serializable {
 
 	private Double latitude;
 
-	private Timestamp ownerViewedTime;
+	private Long lastMsgIdOfTarget = 0L;
 
-	private Timestamp targetViewedTime;
+	private Long lastMsgIdOfOwner = 0L;
 
 	private String city;
 
@@ -63,7 +63,13 @@ public class Plane implements java.io.Serializable {
 
 	private Integer maxMatchCount;
 
-	private Short likes;
+	private Short likedByOwner;
+
+	private Short likedByTarget;
+
+	private Short deletedByOwner;
+
+	private Short deletedByTarget;
 
 	private List<Message> messages = new ArrayList<Message>(0);
 
@@ -75,29 +81,34 @@ public class Plane implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Plane(Category category, Timestamp createdTime,
-			Timestamp updatedTime, Short status, Timestamp ownerViewedTime,
-			Timestamp targetViewedTime, Short sex, Integer matchCount,
-			Integer maxMatchCount, Short likes) {
+			Timestamp updatedTime, Short status, Long lastMsgIdOfTarget,
+			Long lastMsgIdOfOwner, Short sex, Integer matchCount,
+			Integer maxMatchCount, Short likedByOwner, Short likedByTarget,
+			Short deletedByOwner, Short deletedByTarget) {
 		this.category = category;
 		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
 		this.status = status;
-		this.ownerViewedTime = ownerViewedTime;
-		this.targetViewedTime = targetViewedTime;
+		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
+		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
-		this.likes = likes;
+		this.likedByOwner = likedByOwner;
+		this.likedByTarget = likedByTarget;
+		this.deletedByOwner = deletedByOwner;
+		this.deletedByTarget = deletedByTarget;
 	}
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
 			Account accountByOwnerId, Timestamp createdTime,
 			Timestamp updatedTime, Short status, Double longitude,
-			Double latitude, Timestamp ownerViewedTime,
-			Timestamp targetViewedTime, String city, String province,
-			String country, Short sex, Integer matchCount,
-			Integer maxMatchCount, Short likes, List<Message> messages) {
+			Double latitude, Long lastMsgIdOfTarget, Long lastMsgIdOfOwner,
+			String city, String province, String country, Short sex,
+			Integer matchCount, Integer maxMatchCount, Short likedByOwner,
+			Short likedByTarget, Short deletedByOwner, Short deletedByTarget,
+			List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
@@ -106,15 +117,18 @@ public class Plane implements java.io.Serializable {
 		this.status = status;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.ownerViewedTime = ownerViewedTime;
-		this.targetViewedTime = targetViewedTime;
+		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
+		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
 		this.city = city;
 		this.province = province;
 		this.country = country;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
-		this.likes = likes;
+		this.likedByOwner = likedByOwner;
+		this.likedByTarget = likedByTarget;
+		this.deletedByOwner = deletedByOwner;
+		this.deletedByTarget = deletedByTarget;
 		this.messages = messages;
 	}
 
@@ -161,6 +175,7 @@ public class Plane implements java.io.Serializable {
 	}
 
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
 		return this.createdTime;
 	}
@@ -169,7 +184,8 @@ public class Plane implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
+	@Column(name = "UPDATED_TIME", nullable = false, insertable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getUpdatedTime() {
 		return this.updatedTime;
 	}
@@ -205,22 +221,22 @@ public class Plane implements java.io.Serializable {
 		this.latitude = latitude;
 	}
 
-	@Column(name = "OWNER_VIEWED_TIME", nullable = false, length = 19)
-	public Timestamp getOwnerViewedTime() {
-		return this.ownerViewedTime;
+	@Column(name = "LAST_MSG_ID_OF_TARGET", nullable = false, updatable = false)
+	public Long getLastMsgIdOfTarget() {
+		return this.lastMsgIdOfTarget;
 	}
 
-	public void setOwnerViewedTime(Timestamp ownerViewedTime) {
-		this.ownerViewedTime = ownerViewedTime;
+	public void setLastMsgIdOfTarget(Long lastMsgIdOfTarget) {
+		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
 	}
 
-	@Column(name = "TARGET_VIEWED_TIME", nullable = false, length = 19)
-	public Timestamp getTargetViewedTime() {
-		return this.targetViewedTime;
+	@Column(name = "LAST_MSG_ID_OF_OWNER", nullable = false, updatable = false)
+	public Long getLastMsgIdOfOwner() {
+		return this.lastMsgIdOfOwner;
 	}
 
-	public void setTargetViewedTime(Timestamp targetViewedTime) {
-		this.targetViewedTime = targetViewedTime;
+	public void setLastMsgIdOfOwner(Long lastMsgIdOfOwner) {
+		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
 	}
 
 	@Column(name = "CITY", length = 256)
@@ -277,13 +293,40 @@ public class Plane implements java.io.Serializable {
 		this.maxMatchCount = maxMatchCount;
 	}
 
-	@Column(name = "LIKES", nullable = false)
-	public Short getLikes() {
-		return this.likes;
+	@Column(name = "LIKED_BY_OWNER", nullable = false)
+	public Short getLikedByOwner() {
+		return this.likedByOwner;
 	}
 
-	public void setLikes(Short likes) {
-		this.likes = likes;
+	public void setLikedByOwner(Short likedByOwner) {
+		this.likedByOwner = likedByOwner;
+	}
+
+	@Column(name = "LIKED_BY_TARGET", nullable = false)
+	public Short getLikedByTarget() {
+		return this.likedByTarget;
+	}
+
+	public void setLikedByTarget(Short likedByTarget) {
+		this.likedByTarget = likedByTarget;
+	}
+
+	@Column(name = "DELETED_BY_OWNER", nullable = false)
+	public Short getDeletedByOwner() {
+		return this.deletedByOwner;
+	}
+
+	public void setDeletedByOwner(Short deletedByOwner) {
+		this.deletedByOwner = deletedByOwner;
+	}
+
+	@Column(name = "DELETED_BY_TARGET", nullable = false)
+	public Short getDeletedByTarget() {
+		return this.deletedByTarget;
+	}
+
+	public void setDeletedByTarget(Short deletedByTarget) {
+		this.deletedByTarget = deletedByTarget;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")
@@ -301,18 +344,6 @@ public class Plane implements java.io.Serializable {
 
 		setCreatedTime(timestamp);
 
-		setUpdatedTime(timestamp);
-
-		setOwnerViewedTime(timestamp);
-
-		setTargetViewedTime(timestamp);
-
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
 	}
 
 }

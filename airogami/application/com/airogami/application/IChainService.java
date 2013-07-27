@@ -11,7 +11,9 @@ import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
 
 public interface IChainService {
-public final int MaxLimit = 50;
+public final int MaxChainLimit = 50;
+public final int MaxChainMessageLimit = 20;
+public final int MaxChainIdLimit = 1000;
 	
 	/*
 	 * @param chain:(Chain) must be not null, have chain.message
@@ -33,7 +35,7 @@ public final int MaxLimit = 50;
 	 * @param chainId:(long) must exist
 	 * @param content:(String) must not be empty
 	 * @param type:(int)
-	 * @return chainMessage if successful
+	 * @return chainMessage if successful otherwise null
 	 * @throws ApplicationException if failed 
 	 */ 
 	public ChainMessage replyChain(long accountId, long chainId, String content, int type) throws ApplicationException;
@@ -57,22 +59,48 @@ public final int MaxLimit = 50;
 	/*
 	 * @param chainId:(long)
 	 * @param accountId:(long)
+	 * @return whether successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public void deleteChain(long chainId,long accountId) throws ApplicationException;
+	public boolean deleteChain(long chainId,long accountId) throws ApplicationException;
 	
 	/* 
-	 * get replied chains
+	 * obtain replied chains
 	 * @param accountId:(long)
 	 * @param startIdx:(int) (inclusive)
 	 * @param start:(Timestamp) start datetime (inclusive)
 	 * @param end:(Timestamp) end datetime (inclusive)
-	 * @param limit:(int) max(limit) = MaxLimit
+	 * @param limit:(int) max(limit) = MaxChainLimit
 	 * @param forward:(boolean)
 	 * @return more:(boolean), chains (chain.chaiMessages) if successful
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> obtainChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
+	
+	/* 
+	 * obtain replied chains
+	 * @param accountId:(long)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(Timestamp) start datetime (inclusive)
+	 * @param end:(Timestamp) end datetime (inclusive)
+	 * @param limit:(int) max(limit) = MaxChainLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), chainIds if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> obtainChainIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
+	
+	
+	/* 
+	 * obtain replied chainIds for synchronization
+	 * @param accountId:(long)
+	 * @param startIdx:(long) start chainId (exclusive)
+	 * @param limit:(int) max(limit) = MaxChainIdLimit
+	 * @return more:(boolean), chainIds if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> obtainChainIds(long accountId, long startId, int limit) throws ApplicationException;	
+	
 	
 	/*
 	 * get newly received chains
@@ -80,21 +108,46 @@ public final int MaxLimit = 50;
 	 * @param startIdx:(int) (inclusive)
 	 * @param start:(Timestamp) start datetime (inclusive)
 	 * @param end:(Timestamp) end datetime (inclusive)
-	 * @param limit:(int) max(limit) = MaxLimit
+	 * @param limit:(int) max(limit) = MaxChainLimit
 	 * @param forward:(boolean)
-	 * @return more:(boolean), chains (chain.chaiMessages) if successful
+	 * @return more:(boolean), chains (chain.chaiMessages, chain.account) if successful
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> receiveChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
 	
+	/*
+	 * get newly received chains
+	 * @param accountId:(long)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(Timestamp) start datetime (inclusive)
+	 * @param end:(Timestamp) end datetime (inclusive)
+	 * @param limit:(int) max(limit) = MaxChainLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), chainIds if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> receiveChainIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;	
+	
+	/* 
+	 * get newly received chainIds for synchronization
+	 * @param accountId:(long)
+	 * @param startIdx:(long) start chainId (exclusive)
+	 * @param limit:(int) max(limit) = MaxChainIdLimit
+	 * @return more:(boolean), chainIds if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> receiveChainIds(long accountId, long startId, int limit) throws ApplicationException;	
+
 	
 	/*
 	 * @param accountId:(long)
 	 * @param chainId:(long) 
-	 * @return chainMessages
+	 * @param last:(Timestamp) null for (updateTime > lastViewedTime)
+	 * @param limit:(int) max(limit) = MaxChainMessageLimit
+	 * @return chainMessages, more
 	 * @throws ApplicationException if failed 
 	 */ 
-	public List<ChainMessage> obtainChainMessages(long accountId, long chainId) throws ApplicationException;
+	public Map<String, Object> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit) throws ApplicationException;
 	
 	/*
 	 * @param accountId:(long)

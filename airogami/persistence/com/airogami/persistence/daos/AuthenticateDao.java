@@ -1,5 +1,6 @@
 package com.airogami.persistence.daos;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +15,8 @@ import com.airogami.persistence.entities.EntityManagerHelper;
 public class AuthenticateDao extends AuthenticateDAO {
 	private final String emailAuthJPQL = "select account from Account account join fetch account.accountStat where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
 
+	private final String authUpdateJPQL = "update AccountStat accountStat set accountStat.lastSigninTime = ?2 where accountStat.accountId = ?1";
+
 	public Account authenticateWithEmail(String email, String password) {
 		EntityManagerHelper.log("authenticate with email", Level.INFO, null);
 		Account account = null;
@@ -26,6 +29,11 @@ public class AuthenticateDao extends AuthenticateDAO {
 			Iterator<Account> iter = result.iterator();
 			if(iter.hasNext()){
 				account = iter.next();
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						authUpdateJPQL);
+				query.setParameter(1, account.getAccountId());
+				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
+				query.executeUpdate();
 			}
 			EntityManagerHelper
 					.log("authenticate successful", Level.INFO, null);
@@ -50,6 +58,11 @@ public class AuthenticateDao extends AuthenticateDAO {
 			Iterator<Account> iter = result.iterator();
 			if(iter.hasNext()){
 				account = iter.next();
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						authUpdateJPQL);
+				query.setParameter(1, account.getAccountId());
+				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
+				query.executeUpdate();
 			}
 			EntityManagerHelper
 					.log("authenticate successful", Level.INFO, null);

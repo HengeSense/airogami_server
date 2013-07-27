@@ -19,6 +19,8 @@ public interface AirogamiError {
 	
 	public static final int Account_No_Signin_Status = 10007;
 	public static final String Account_No_Signin_Message = "error.account.notsignin";
+	public static final int Account_Signin_NotMatch_Status = 10008;
+	public static final String Account_Signin_NotMatch_Message = "error.account.signin.notmatch";
 	
 	public static final int Account_Signin_Input_Status = 10100;
 	public static final int Account_Signin_Failure_Status = 100101;
@@ -108,6 +110,16 @@ public interface AirogamiError {
 	public static final int Plane_ReceivePlanes_Failure_Status = 20021;
 	public static final String Plane_ReceivePlanes_Failure_Message = "error.plane.receiveplanes.failure";
 
+	public static final int Plane_ReceivePlaneIds_Input_Status = 20022;
+	public static final String Plane_ReceivePlaneIds_Input_Message = "error.plane.receiveplaneids.input";
+	public static final int Plane_ReceivePlaneIds_Failure_Status = 20023;
+	public static final String Plane_ReceivePlaneIds_Failure_Message = "error.plane.receiveplaneids.failure";
+
+	public static final int Plane_ObtainPlaneIds_Input_Status = 20024;
+	public static final String Plane_ObtainPlaneIds_Input_Message = "error.plane.Obtainplaneids.input";
+	public static final int Plane_ObtainPlaneIds_Failure_Status = 20025;
+	public static final String Plane_ObtainPlaneIds_Failure_Message = "error.plane.receiveplaneids.failure";
+
 	
 	//public static final int Card_EditCard_Modified_Status = 20010;
 	//public static final String Card_EditCard_Modified_Message = "error.card.modified.failure";
@@ -159,7 +171,17 @@ public interface AirogamiError {
 	public static final int Chain_ReceiveChains_Failure_Status = 30015;
 	public static final String Chain_ReceiveChains_Failure_Message = "error.chain.receivechains.failure";	
 
-		
+	public static final int Chain_ObtainChainIds_Input_Status = 30016;
+	public static final String Chain_ObtainChainIds_Input_Message = "error.chain.obtainchainids.input";
+	public static final int Chain_ObtainChainIds_Failure_Status = 30017;
+	public static final String Chain_ObtainChainIds_Failure_Message = "error.chain.obtainchainids.failure";	
+	
+	public static final int Chain_ReceiveChainIds_Input_Status = 30018;
+	public static final String Chain_ReceiveChainIds_Input_Message = "error.chain.receivechainids.input";
+	public static final int Chain_ReceiveChainIds_Failure_Status = 30019;
+	public static final String Chain_ReceiveChainIds_Failure_Message = "error.chain.receivechainids.failure";	
+
+	
 	/*  
 	 * chain ends
 	 */

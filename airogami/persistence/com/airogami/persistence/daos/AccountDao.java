@@ -108,7 +108,7 @@ public class AccountDao extends AccountDAO {
 	
     private final String changeScreenNameJPQL = "update Authenticate authenticate set authenticate.screenName = ?2 where authenticate.accountId = ?1";
 	
-    private final String changeScreenNameSetJPQL = "update Account account set account.screenName = ?2, account.updatedTime = ?3 where account.accountId = ?1";
+    private final String changeScreenNameSetJPQL = "update Account account set account.screenName = ?2, account.updateCount = account.updateCount + 1 where account.accountId = ?1";
 	
 	public boolean changeScreenName(long accountId, String screenName){
 		EntityManagerHelper.log("changeScreenNameing", Level.INFO, null);
@@ -123,7 +123,6 @@ public class AccountDao extends AccountDAO {
 						changeScreenNameSetJPQL);
 				query.setParameter(1, accountId);
 				query.setParameter(2, screenName);
-				query.setParameter(3, new Timestamp(System.currentTimeMillis()));
 				query.executeUpdate();
 			}
 			EntityManagerHelper.log("changeScreenName successful",
@@ -136,15 +135,15 @@ public class AccountDao extends AccountDAO {
 		}
 	}
 	
-    private final String obtainAccountJPQL = "select account from Account account where account.accountId = ?1 and account.updatedTime > ?2";
+    private final String obtainAccountJPQL = "select account from Account account where account.accountId = ?1 and (?2 is null or account.updateCount > ?2)";
 	
-	public Account obtainAccount(long accountId, Timestamp last){
+	public Account obtainAccount(long accountId, Long updateCount){
 		EntityManagerHelper.log("obtainAccounting", Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
 					obtainAccountJPQL);
 			query.setParameter(1, accountId);
-			query.setParameter(2, last);
+			query.setParameter(2, updateCount);
 			List<Account> result = query.getResultList();
 			Account account = null;
 			if(result.size() > 0){

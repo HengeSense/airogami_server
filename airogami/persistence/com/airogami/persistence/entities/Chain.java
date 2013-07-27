@@ -17,8 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * Chain entity. @author MyEclipse Persistence Tools
@@ -129,6 +129,7 @@ public class Chain implements java.io.Serializable {
 	}
 
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
 		return this.createdTime;
 	}
@@ -137,7 +138,8 @@ public class Chain implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
+	@Column(name = "UPDATED_TIME", nullable = false, insertable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getUpdatedTime() {
 		return this.updatedTime;
 	}
@@ -261,14 +263,6 @@ public class Chain implements java.io.Serializable {
 
 		setCreatedTime(timestamp);
 
-		setUpdatedTime(timestamp);
-
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
 	}
 
 }

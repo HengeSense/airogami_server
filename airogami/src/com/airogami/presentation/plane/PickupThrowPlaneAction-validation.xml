@@ -4,11 +4,11 @@
 	<field name="planeId">
      	<field-validator type="fieldexpression">
      	<param name="expression"><![CDATA[!(planeId == null && method == "throwPlane")]]></param>
-			<message key="error.plane.likedeleteplane.planeId.required">Please input a planeId</message>
+			<message key="error.plane.pickupthrowplane.planeId.required">Please input a planeId</message>
 		</field-validator>
 		<field-validator type="long">
 		    <param name="min">1</param>
-			<message key="error.plane.likedeleteplane.planeId.invalid">The planeId must be over ${min}</message>
+			<message key="error.plane.pickupthrowplane.planeId.invalid">The planeId must be over ${min}</message>
 		</field-validator>
 	</field>
 

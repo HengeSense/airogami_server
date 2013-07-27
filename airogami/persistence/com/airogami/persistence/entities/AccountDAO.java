@@ -31,6 +31,7 @@ public class AccountDAO {
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
+	public static final String UPDATE_COUNT = "updateCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -244,6 +245,26 @@ public class AccountDAO {
 		}
 	}
 
+	private static final String increaseUpdateCountJPQL = "update Account a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
+
+	public void increaseUpdateCount(java.lang.Long accountId, int count) {
+		EntityManagerHelper.log("increaseUpdateCount with accountId:"
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseUpdateCountJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			query.executeUpdate();
+			EntityManagerHelper.log("increaseUpdateCount successful",
+					Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseUpdateCount failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
 	/**
 	 * Find all Account entities with a specific property value.
 	 * 
@@ -333,6 +354,11 @@ public class AccountDAO {
 	public List<Account> findByCountry(Object country,
 			int... rowStartIdxAndCount) {
 		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
+	}
+
+	public List<Account> findByUpdateCount(Object updateCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	/**

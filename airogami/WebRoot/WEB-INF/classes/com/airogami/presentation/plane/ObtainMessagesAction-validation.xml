@@ -1,0 +1,28 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="planeId">
+     	<field-validator type="required">
+			<message key="error.plane.obtainmessages.planeId.required">Please input a planeId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.plane.obtainmessages.planeId.invalid">The planeId must be over ${min}</message>
+		</field-validator>
+	</field>
+	
+	<field name="startId">
+     	<field-validator type="long">
+     	<param name="min">1</param>
+			<message key="error.plane.obtainmessages.startId.invalid">The startId should be over ${min}</message>
+		</field-validator>
+	</field>
+
+	<field name="limit">
+     	<field-validator type="required">
+			<message key="error.plane.obtainmessages.limit.required">Please input a limit</message>
+		</field-validator>
+	</field>
+	
+</validators>

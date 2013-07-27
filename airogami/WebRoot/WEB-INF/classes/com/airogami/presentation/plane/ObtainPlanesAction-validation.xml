@@ -23,7 +23,7 @@
 
 	<field name="limit">
      	<field-validator type="required">
-			<message key="error.plane.obtainplanes.startIdx.required">Please input a startIdx</message>
+			<message key="error.plane.obtainplanes.limit.required">Please input a limit</message>
 		</field-validator>
 	</field>
 	

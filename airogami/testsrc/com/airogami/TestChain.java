@@ -39,7 +39,7 @@ public class TestChain {
 		//chain.setCity("shanghai");
 		//chain.setProvince("shanghai");
 		//chain.setCountry("China");
-		//chain.setMessageCount((short) 0);
+
 		long ownerId = 4L;
 		ChainMessage chainMessage = new ChainMessage();
 		chainMessage.setContent("hello!");
@@ -96,7 +96,7 @@ public class TestChain {
 		}
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testObtainChains() {
 		long accountId = 5;
@@ -106,7 +106,8 @@ public class TestChain {
 		int startIdx = -1;
 		boolean forward = false;
 		try {
-			Map<String, Object> result = ManagerUtils.chainManager.obtainChains(accountId, startIdx, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.chainManager.obtainChains(
+					accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
 			List<Chain> planes = (List<Chain>) result.get("chains");
 			Iterator<Chain> iter = planes.iterator();
 			while(iter.hasNext()){
@@ -122,6 +123,28 @@ public class TestChain {
 	}
 	@Ignore
 	@Test
+	public void testObtainChainIds() {
+		long accountId = 2;
+		int limit = 1;
+		int startId = 5;
+		try {
+			Map<String, Object> result = ManagerUtils.chainManager.obtainChainIds(accountId, startId, limit);
+			List<Long> planes = (List<Long>) result.get("chainIds");
+			Iterator<Long> iter = planes.iterator();
+			while(iter.hasNext()){
+				Long chainId = iter.next();
+				System.out.println(chainId);
+			}
+			System.out.println(result.get("more"));
+			//ObjectUtils.printObject(result);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Ignore
+	@Test
 	public void testReceiveChains() {
 		long accountId = 5;
 		String start = "2013-06-15 18:50:39.0";
@@ -130,7 +153,8 @@ public class TestChain {
 		int startIdx = -1;
 		boolean forward = true;
 		try {
-			Map<String, Object> result = ManagerUtils.chainManager.receiveChains(accountId, startIdx, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.chainManager.receiveChains(
+					accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
 			List<Chain> planes = (List<Chain>) result.get("chains");
 			Iterator<Chain> iter = planes.iterator();
 			while(iter.hasNext()){
@@ -138,6 +162,28 @@ public class TestChain {
 				System.out.print(chain.getChainId());
 				System.out.println(": " + chain.getUpdatedTime());
 			}
+			//ObjectUtils.printObject(result);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	
+	@Test
+	public void testReceiveChainIds() {
+		long accountId = 2;
+		int limit = 4;
+		int startId = 3;
+		try {
+			Map<String, Object> result = ManagerUtils.chainManager.receiveChainIds(accountId, startId, limit);
+			List<Long> planes = (List<Long>) result.get("chainIds");
+			Iterator<Long> iter = planes.iterator();
+			while(iter.hasNext()){
+				Long chainId = iter.next();
+				System.out.println(chainId);
+			}
+			System.out.println(result.get("more"));
 			//ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -150,9 +196,12 @@ public class TestChain {
 	public void testObtainChainMessages() {
 		long accountId = 2;
 		long chainId = 8;
+		String last = "2013-08-15 18:48:44";
+		int limit = 2;
 		try {
-			List<ChainMessage> chains = ManagerUtils.chainManager.obtainChainMessages(accountId, chainId);
-			ObjectUtils.printObject(chains);
+			Map<String, Object> result = ManagerUtils.chainManager.obtainChainMessages(
+					accountId, chainId, Timestamp.valueOf(last), limit);
+			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail();
@@ -166,7 +215,8 @@ public class TestChain {
 		String last = "2013-08-15 18:48:44";
 		boolean result;
 		try {
-			result = ManagerUtils.chainManager.viewedChainMessages(accountId, chainId, last);
+			result = ManagerUtils.chainManager.viewedChainMessages(
+					accountId, chainId, Timestamp.valueOf(last));
 			System.out.println(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

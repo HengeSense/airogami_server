@@ -15,29 +15,15 @@ import com.opensymphony.xwork2.ModelDriven;
 public class ObtainAccountAction extends AirogamiActionSupport{
 
 	private static final long serialVersionUID = 1L;
-	private String last;
+	private Long updateCount;
 	private Long accountId;
-	private Timestamp timestamp;
-	
-	public void validate(){	
-		super.validate();
-		if(this.hasActionErrors() == false && this.hasFieldErrors() == false){
-			try{
-			    timestamp = Timestamp.valueOf(last);
-			}catch(Throwable t){
-				this.addFieldError("last", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
-				dataMap.put("fieldErrors", this.getFieldErrors());
-			}			
-		}		
-	}
 	
     public String execute() throws Exception{
     	boolean succeed = false;
 		try {			
 			//HttpSession session = request.getSession(true);
 			//Account account = (Account)session.getAttribute("account");	
-			Account result = ManagerUtils.accountManager.obtainAccount(accountId, timestamp);
+			Account result = ManagerUtils.accountManager.obtainAccount(accountId, updateCount);
 			dataMap.put("account", result);
 			succeed = true;
 		} catch (AirogamiException e) {
@@ -64,14 +50,6 @@ public class ObtainAccountAction extends AirogamiActionSupport{
    	protected String getInputMessage() {
    		return AirogamiError.Account_ObtainAccount_Input_Message;
    	}
-	
-	public String getLast() {
-		return last;
-	}
-
-	public void setLast(String last) {
-		this.last = last;
-	}
 
 	public Long getAccountId() {
 		return accountId;
@@ -79,6 +57,14 @@ public class ObtainAccountAction extends AirogamiActionSupport{
 
 	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
+	}
+
+	public Long getUpdateCount() {
+		return updateCount;
+	}
+
+	public void setUpdateCount(Long updateCount) {
+		this.updateCount = updateCount;
 	}
 
 }

@@ -150,9 +150,11 @@ public class TestPersistenceChain {
 	public void testObtainChainMessages() {
 		long accountId = 5;
 		long chainId = 8;
+		Timestamp last = Timestamp.valueOf("2013-05-31 22:36:15");
+		int limit = 2;
 		try {
-			List<ChainMessage> chains = ServiceUtils.chainService.obtainChainMessages(accountId, chainId);
-			ObjectUtils.printObject(chains);
+			Map<String, Object> result = ServiceUtils.chainService.obtainChainMessages(accountId, chainId, last, limit);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

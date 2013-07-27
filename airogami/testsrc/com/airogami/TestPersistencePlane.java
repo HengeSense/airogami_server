@@ -155,10 +155,10 @@ public class TestPersistencePlane {
 	public void testViewedMessage() {
 		long accountId = 4;
 		long planeId = 4;
-		String last = "2013-06-05 11:30:33";
+		long lastMsgId = 0L;
 		boolean byOwner = false;
 		try {
-			ServiceUtils.planeService.viewedMessages(accountId, planeId, Timestamp.valueOf(last), byOwner);
+			ServiceUtils.planeService.viewedMessages(accountId, planeId, lastMsgId, byOwner);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

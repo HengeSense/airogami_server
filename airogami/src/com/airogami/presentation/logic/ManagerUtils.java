@@ -7,6 +7,7 @@ public class ManagerUtils {
 	public static final AccountManager accountManager = new AccountManager();
 	public static final PlaneManager planeManager = new PlaneManager();
 	public static final ChainManager chainManager = new ChainManager();
+	public static final NotificationManager notificationManager = new NotificationManager();
 	
 	private static final int rand[] = {3, 2, 2, 1, 1, 1};
     private static Random random = new Random(System.currentTimeMillis());

@@ -1,6 +1,7 @@
 #set($hasCreatedTime=false)
 #set($hasUpdatedTime=false)
 #set($hasTime=false)
+#set($lastViewedTime=false)
 #set($chainMessageLastViewedTime=false)
 #foreach($field in $pojo.getAllPropertiesIterator())
 #if($pojo.getMetaAttribAsBool($field, "gen-property", true))    
@@ -10,22 +11,38 @@
     #end    
     #if($field.name.endsWith("Time"))
        #set($hasTime=true)
+    #end    
+    
+    #if($field.name.endsWith("ViewedTime"))
+    #set($lastViewedTime=true)
+    #set($field.columnIterator.next().defaultValue = "baseTimestamp")
     #end
-    #if($field.name.equals("lastViewedTime") && $pojo.getDeclarationName().equals("ChainMessage"))
-    #set($chainMessageLastViewedTime=true)
-    #end
+    
     #if($field.name.equals("updatedTime"))
         #set($hasUpdatedTime=true)
+        #set($field.insertable=false)
+        #set($field.updateable=false)
     #end
     
     #if($field.name.equals("count") || ($field.name.endsWith("Count") && !$field.name.startsWith("max")))
         #set($field.insertable=false)
         #set($field.updateable=false)
         #set($column=$field.columnIterator.next())
+        #if($pojo.getJavaTypeName($field, $jdk5).equals("Long"))
+        #set($column.defaultValue="0L")
+        #else
         #set($column.defaultValue="0")
+        #end
+        
     #end
     
-    #if($field.name.equals("isViewed") || $field.name.equals("status"))
+    #if($field.name.startsWith("lastMsgId"))
+    #set($column=$field.columnIterator.next())
+    #set($column.defaultValue="0L")
+    #set($field.updateable=false)
+    #end
+    
+    #if($field.name.equals("status"))
         #set($column=$field.columnIterator.next())
         #set($column.defaultValue="0")
     #end
@@ -35,3 +52,4 @@
 
 #set($temp = $pojo.importType("java.util.List"))
 #set($temp = $pojo.importType("java.util.ArrayList"))
+#set($temp = $pojo.importType("org.apache.struts2.json.annotations.JSON"))

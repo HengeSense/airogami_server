@@ -1,0 +1,36 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="chainId">
+     	<field-validator type="required">
+			<message key="error.chain.replychain.chainId.required">Please input a chainId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.chain.replychain.chainId.invalid">The chainId must be over ${min}</message>
+		</field-validator>
+	</field>
+
+	<field name="chainMessageVO.content">
+		<field-validator type="requiredstring">
+			<message key="error.chain.replychain.chainmessagevo.content.required">Please input a chainMessageVO.content</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">1</param>
+			<param name="maxLength">255</param>
+			<message key="error.chain.replychain.chainmessagevo.content.length">The chainMessageVO.content should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+	<field name="chainMessageVO.type">
+		<field-validator type="required">
+			<message key="error.chain.replychain.chainmessagevo.type.required">Please input a chainMessageVO.type</message>
+		</field-validator>
+		<field-validator type="short">
+		    <param name="min">0</param>
+		    <param name="max">127</param>
+			<message key="error.chain.replychain.chainmessagevo.type.length">The chainMessageVO.type must be between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+
+</validators>

@@ -76,7 +76,7 @@ public class ObtainPlanesAction extends AirogamiActionSupport {
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}
 		catch(Throwable t){
-			//t.printStackTrace(System.out);
+			t.printStackTrace(System.out);
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
 		//success
@@ -142,7 +142,7 @@ public class ObtainPlanesAction extends AirogamiActionSupport {
 	}
 
 	public void setForward(boolean forward) {
-		this.forward = forward;System.out.println(forward);
+		this.forward = forward;
 	}
 
 }

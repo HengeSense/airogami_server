@@ -1,0 +1,25 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="chainId">
+     	<field-validator type="required">
+			<message key="error.chain.viewedchainmessages.chainId.required">Please input a chainId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.chain.viewedchainmessages.chainId.invalid">The chainId must be over ${min}</message>
+		</field-validator>
+	</field>
+	
+	<field name="last">
+     	<field-validator type="required">
+			<message key="error.chain.viewedchainmessages.last.required">Please input a last</message>
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression"><![CDATA[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(.\d{1,3})?]]></param>
+			<message key="error.chain.viewedchainmessages.last.invalid">The last seems invalid</message>
+		</field-validator>
+	</field>
+	
+</validators>

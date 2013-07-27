@@ -15,6 +15,8 @@ public interface IPlaneService {
 	
 	public final int MaxMessageLimit = 50;
 	
+	public final int MaxPlaneIdLimit = 1000;
+	
 	/*
 	 * @param category:(Category) must be not null, have name
 	 * @return category if successful
@@ -94,6 +96,53 @@ public interface IPlaneService {
 	public Map<String, Object> receivePlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
 	
 	/*
+	 * get all received planeIds for synchronization
+	 * @param accountId:(long)
+	 * @param startId:(long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
+	 * @return more, planeIds if successful (may have more than one planeId if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> receivePlaneIds(long accountId, long startId, int limit) throws ApplicationException;
+	
+	/*
+	 * get received planes
+	 * @param accountId:(long)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(TimeStamp) start datetime (inclusive) can be null
+	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param limit:(int) max(limit) = MaxPlaneLimit
+	 * @param forward:(boolean)
+	 * @return more, planeIds if successful (may have more than one planeId if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> receivePlaneIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+	
+	
+	/*
+	 * obtain all replied and undeleted planeIds for synchronization
+	 * @param accountId:(long)
+	 * @param startId:(long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
+	 * @return more, planeIds if successful (may have more than one planeId if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> obtainPlaneIds(long accountId, long startId, int limit) throws ApplicationException;
+
+	/*
+	 * @param accountId:(long)
+	 * @param startIdx:(int) (inclusive)
+	 * @param start:(TimeStamp) start datetime (inclusive) can be null
+	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param limit:(int) max(limit) = MaxPlaneLimit
+	 * @param forward:(boolean)
+	 * @return more, planeIds if successful (may have more than one planeId if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> obtainPlaneIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+
+	
+	/*
 	 * @param accountId:(long)
 	 * @param startIdx:(int) (inclusive)
 	 * @param start:(TimeStamp) start datetime (inclusive) can be null
@@ -109,22 +158,23 @@ public interface IPlaneService {
 	/*
 	 * @param accountId:(long)
 	 * @param planeId:(long)
-	 * @param start:(String) start datetime (inclusive)
+	 * @param startId:(Long) start messageId (can be null)
 	 * @param limit:(int) max(limit) = MaxMessageLimit
 	 * @param forward:(boolean)
 	 * @return more, messages if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainMessages(long accountId, long planeId, int startIdx, Timestamp start, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> obtainMessages(long accountId, long planeId, Long startId,
+			int limit, boolean forward) throws ApplicationException;
 	
 	
 	/*
 	 * @param accountId:(long)
 	 * @param planeId:(long)	 
-	 * @param last:(String)
+	 * @param lastMsgId:(long) (exclusive)
 	 * @param byOwner:(boolean)
 	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean viewedMessages(long accountId, long planeId, Timestamp last, boolean byOwner) throws ApplicationException;
+	public boolean viewedMessages(long accountId, long planeId, long lastMsgId, boolean byOwner) throws ApplicationException;
 }

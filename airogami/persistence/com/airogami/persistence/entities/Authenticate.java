@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * Authenticate entity. @author MyEclipse Persistence Tools

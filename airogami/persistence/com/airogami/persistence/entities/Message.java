@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * Message entity. @author MyEclipse Persistence Tools
@@ -84,7 +85,7 @@ public class Message implements java.io.Serializable {
 		this.plane = plane;
 	}
 
-	@Column(name = "CONTENT", nullable = false, length = 2048)
+	@Column(name = "CONTENT", nullable = false, length = 256)
 	public String getContent() {
 		return this.content;
 	}
@@ -103,6 +104,7 @@ public class Message implements java.io.Serializable {
 	}
 
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
 		return this.createdTime;
 	}

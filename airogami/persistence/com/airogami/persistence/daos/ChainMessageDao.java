@@ -12,9 +12,10 @@ import com.airogami.persistence.entities.ChainMessageDAO;
 import com.airogami.persistence.entities.EntityManagerHelper;
 
 public class ChainMessageDao extends ChainMessageDAO {
-	private final String replyChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.content = ?4, chainMessage.updatedTime = ?7, chainMessage.status = ?6, chainMessage.type = ?5 where chainMessage.status = ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
-	private final String replyChainResetMatchCountJPQL = "update Chain chain set chain.matchCount = 0, chain.updatedTime = ?2 where chain.chainId = ?1";
+	private final String replyChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.content = ?4, chainMessage.createdTime = CURRENT_TIMESTAMP, chainMessage.status = ?6, chainMessage.type = ?5 where chainMessage.status = ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+	private final String replyChainResetMatchCountJPQL = "update Chain chain set chain.matchCount = 0, chain.updatedTime = CURRENT_TIMESTAMP where chain.chainId = ?1";
 
+	// database time
 	public boolean replyChainMessage(long accountId, long chainId, String content, int type){
 		EntityManagerHelper.log("replyChainMessaging", Level.INFO, null);
 		try {
@@ -26,13 +27,12 @@ public class ChainMessageDao extends ChainMessageDAO {
 			query.setParameter(4, content);
 			query.setParameter(5, type);
 			query.setParameter(6, ChainMessageConstants.StatusReplied);
-			query.setParameter(7, new Timestamp(System.currentTimeMillis()));
+			//query.setParameter(7, new Timestamp(System.currentTimeMillis()));
 			int count = query.executeUpdate();
 			if(count == 1){
 				query = EntityManagerHelper.getEntityManager().createQuery(
 						replyChainResetMatchCountJPQL);
 				query.setParameter(1, chainId);
-				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
 				query.executeUpdate();
 			}
 			EntityManagerHelper
@@ -45,9 +45,9 @@ public class ChainMessageDao extends ChainMessageDAO {
 	}
 	
 	//no verify for whether replied here or deleted (verified in obtainChains)
-	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage, ChainMessage cm where chainMessage.updatedTime > cm.lastViewedTime and cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.updatedTime asc";
+	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage, ChainMessage cm where ((?4 is null and chainMessage.createdTime > cm.lastViewedTime) or (?4 is not null and chainMessage.createdTime > ?4))  and cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.createdTime asc";
 
-	public List<ChainMessage> obtainChainMessages(long accountId, long chainId){
+	public List<ChainMessage> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit){
 		EntityManagerHelper.log("obtainChainMessagesing with accountId = " + accountId + "and chainId = " + chainId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
@@ -55,6 +55,8 @@ public class ChainMessageDao extends ChainMessageDAO {
 			query.setParameter(1, accountId);
 			query.setParameter(2, chainId);
 			query.setParameter(3, ChainMessageConstants.StatusReplied);
+			query.setParameter(4, last);
+			query.setMaxResults(limit);
 			List<ChainMessage> chainMessages = query.getResultList();
 			EntityManagerHelper
 					.log("obtainChainMessages successful", Level.INFO, null);

@@ -73,9 +73,6 @@ public class ChainService implements IChainService {
 				DaoUtils.chainDao.increasePassCount(chainId, 1);
 				chainMessage = DaoUtils.chainMessageDao.findById(new ChainMessageId(chainId, accountId));
 			}
-			else{
-				ae = new ApplicationException("replyChain failed");
-			}
 			
 			EntityManagerHelper.commit(); 
 		} catch (Throwable t) {			
@@ -216,14 +213,13 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public void deleteChain(long chainId, long accountId)
+	public boolean deleteChain(long chainId, long accountId)
 			throws ApplicationException {
 		ApplicationException ae = null;
+		boolean result = false;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.chainDao.deleteChain(chainId, accountId) == false) {
-				ae = new ApplicationException("deleteChain failed");
-			}
+			result = DaoUtils.chainDao.deleteChain(chainId, accountId);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -238,14 +234,14 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		
+		return result;
 	}
 
 	@Override
 	public Map<String, Object> obtainChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit,
 			boolean forward) throws ApplicationException {
-		if(limit > IChainService.MaxLimit || limit < 1)
-			limit = IChainService.MaxLimit; 
+		if(limit > IChainService.MaxChainLimit || limit < 1)
+			limit = IChainService.MaxChainLimit; 
 		List<Chain> chains = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
@@ -274,10 +270,73 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
+	public Map<String, Object> obtainChainIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit,
+			boolean forward) throws ApplicationException {
+		if(limit > IChainService.MaxChainIdLimit || limit < 1)
+			limit = IChainService.MaxChainIdLimit; 
+		List<Long> chainIds = null;
+		ApplicationException ae = null;
+		Map<String, Object> result = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			chainIds = DaoUtils.chainDao.obtainChainIds(accountId, startIdx, start, end, limit + 1, forward); 			
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		boolean more = chainIds.size() > limit;
+		result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("chainIds", chainIds);
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> obtainChainIds(long accountId, long startId, int limit) throws ApplicationException {
+		if(limit > IChainService.MaxChainIdLimit || limit < 1)
+			limit = IChainService.MaxChainIdLimit; 
+		List<Long> chainIds = null;
+		ApplicationException ae = null;
+		Map<String, Object> result = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			chainIds = DaoUtils.chainDao.obtainChainIds(accountId, startId, limit + 1); 			
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		boolean more = chainIds.size() > limit;
+		result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("chainIds", chainIds);
+		return result;
+	}
+	
+	@Override
 	public Map<String, Object> receiveChains(long accountId, int startIdx, Timestamp start, Timestamp end, int limit,
 			boolean forward) throws ApplicationException {
-		if(limit > IChainService.MaxLimit || limit < 1)
-			limit = IChainService.MaxLimit; 
+		if(limit > IChainService.MaxChainLimit || limit < 1)
+			limit = IChainService.MaxChainLimit; 
 		List<Chain> chains = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
@@ -304,15 +363,18 @@ public class ChainService implements IChainService {
 		result.put("chains", chains);
 		return result;
 	}
-
+	
 	@Override
-	public List<ChainMessage> obtainChainMessages(long accountId, long chainId)
-			throws ApplicationException {
+	public Map<String, Object> receiveChainIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit,
+			boolean forward) throws ApplicationException {
+		if(limit > IChainService.MaxChainIdLimit || limit < 1)
+			limit = IChainService.MaxChainIdLimit; 
+		List<Long> chainIds = null;
 		ApplicationException ae = null;
-		List<ChainMessage> chainMessages = null;
+		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			chainMessages = DaoUtils.chainMessageDao.obtainChainMessages(accountId, chainId);			
+			chainIds = DaoUtils.chainDao.receiveChainIds(accountId, startIdx, start, end, limit + 1, forward); 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -327,7 +389,73 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		return chainMessages;
+		boolean more = chainIds.size() > limit;
+		result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("chainIds", chainIds);
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> receiveChainIds(long accountId, long startId, int limit) throws ApplicationException {
+		if(limit > IChainService.MaxChainIdLimit || limit < 1)
+			limit = IChainService.MaxChainIdLimit; 
+		List<Long> chainIds = null;
+		ApplicationException ae = null;
+		Map<String, Object> result = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			chainIds = DaoUtils.chainDao.receiveChainIds(accountId, startId, limit + 1); 			
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		boolean more = chainIds.size() > limit;
+		result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("chainIds", chainIds);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit)
+			throws ApplicationException {
+		if(limit > IChainService.MaxChainMessageLimit || limit < 1)
+			limit = IChainService.MaxChainMessageLimit; 
+		ApplicationException ae = null;
+		List<ChainMessage> chainMessages = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			chainMessages = DaoUtils.chainMessageDao.obtainChainMessages(accountId, chainId, last, limit + 1);			
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			//t.printStackTrace();
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		boolean more = chainMessages.size() > limit;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("chainMessages", chainMessages);
+		return result;
 	}
 
 	@Override

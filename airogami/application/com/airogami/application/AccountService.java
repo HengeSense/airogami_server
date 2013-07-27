@@ -97,11 +97,11 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		}
-		if(account == null)
+		if(account != null)
 		{
-			throw new ApplicationException("Account not found");
+		   account.getAccountStat();
 		}
-		//account.getAccountStat();
+		
 		return account;
 	}
 	
@@ -112,14 +112,19 @@ public class AccountService implements IAccountService {
 		try {
 			Long accountId = (Long)properties.get("accountId");
 			EntityManagerHelper.beginTransaction();
-			account = DaoUtils.accountDao.getReference(accountId);
-			try{
-		    	BeanUtils.populate(account, properties);		
-			}catch (IllegalAccessException e) {
-				throw new RuntimeException(e.getMessage());
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e.getMessage());
+			account = DaoUtils.accountDao.findById(accountId);
+			if(account != null){
+				try{
+			    	BeanUtils.populate(account, properties);	
+			    	DaoUtils.accountDao.flush();
+			    	DaoUtils.accountDao.increaseUpdateCount(accountId, 1);
+				}catch (IllegalAccessException e) {
+					throw new RuntimeException(e.getMessage());
+				} catch (InvocationTargetException e) {
+					throw new RuntimeException(e.getMessage());
+				}
 			}
+			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {		
 			t.printStackTrace();
@@ -135,6 +140,9 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		} 
+		if(account != null){
+			account.setUpdateCount(account.getUpdateCount() + 1);
+		}
 		
 		return account;
 	}
@@ -195,12 +203,12 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public Account obtainAccount(long accountId, Timestamp last) throws ApplicationException{
+	public Account obtainAccount(long accountId, Long updateCount) throws ApplicationException{
 		ApplicationException ae = null;
 		Account account = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			account = DaoUtils.accountDao.obtainAccount(accountId, last);								
+			account = DaoUtils.accountDao.obtainAccount(accountId, updateCount);								
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {		
 			//t.printStackTrace();

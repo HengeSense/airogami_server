@@ -2,6 +2,6 @@ detect.m2m=false
 detect.o2o=true
 eclipse.preferences.version=1
 generate.version=false
-re.settings=
+re.settings=/airogami/jpa.reveng.xml
 re.strategy=
 re.wizard=0

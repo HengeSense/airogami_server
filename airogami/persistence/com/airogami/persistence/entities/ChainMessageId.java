@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * ChainMessageId entity. @author MyEclipse Persistence Tools

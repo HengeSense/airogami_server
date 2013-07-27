@@ -48,8 +48,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <h3>Plane:</h3>
      <a href="SendPlane.jsp"><button>Send Plane</button></a>
      <a href="ObtainPlanes.jsp"><button>Obtain Planes</button></a>
+     <a href="ObtainPlaneIds.jsp"><button>Obtain PlaneIds</button></a>
      <a href="LikeDeletePlane.jsp"><button>Like Delete Plane</button></a>
      <a href="PickupBothThrowPlane.jsp"><button>Pickup Both and Throw Plane</button></a>
+     <a href="PlaneMessages.jsp"><button>Plane Messages</button></a>
+     <h3>Chain:</h3>
+     <a href="SendChain.jsp"><button>Send Chain</button></a>
+     <a href="ObtainChains.jsp"><button>Obtain Chains</button></a>
+     <a href="ObtainChainIds.jsp"><button>Obtain ChainIds</button></a>
+     <a href="DeleteChain.jsp"><button>Delete Chain</button></a>
+     <a href="ThrowChain.jsp"><button>Throw Chain</button></a>
+     <a href="ChainMessages.jsp"><button>Chain Messages</button></a>
+     <h3>Interaction:</h3>
+     <a href="Collect.jsp"><button>Collect</button></a>
+     <a href="Chats.jsp"><button>Chats</button></a>
      <%} %>
      </div>
   </body>

@@ -12,8 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * ChainMessage entity. @author MyEclipse Persistence Tools
@@ -35,13 +35,13 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Short type;
 
-	private Timestamp updatedTime;
+	private Timestamp createdTime;
 
 	private Short status = 0;
 
-	private Timestamp lastViewedTime;
+	private Timestamp lastViewedTime = baseTimestamp;
 
-	private static Timestamp baseTimestamp = Timestamp
+	private static final Timestamp baseTimestamp = Timestamp
 			.valueOf("2013-01-01 00:00:00.0");
 
 	// Constructors
@@ -52,25 +52,25 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Timestamp updatedTime, Short status, Timestamp lastViewedTime) {
+			Timestamp createdTime, Short status, Timestamp lastViewedTime) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
-		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
 	}
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			String content, Short type, Timestamp updatedTime, Short status,
+			String content, Short type, Timestamp createdTime, Short status,
 			Timestamp lastViewedTime) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
 		this.content = content;
 		this.type = type;
-		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
 	}
@@ -108,7 +108,7 @@ public class ChainMessage implements java.io.Serializable {
 		this.account = account;
 	}
 
-	@Column(name = "CONTENT", length = 2048)
+	@Column(name = "CONTENT", length = 256)
 	public String getContent() {
 		return this.content;
 	}
@@ -126,13 +126,14 @@ public class ChainMessage implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
-	public Timestamp getUpdatedTime() {
-		return this.updatedTime;
+	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Timestamp getCreatedTime() {
+		return this.createdTime;
 	}
 
-	public void setUpdatedTime(Timestamp updatedTime) {
-		this.updatedTime = updatedTime;
+	public void setCreatedTime(Timestamp createdTime) {
+		this.createdTime = createdTime;
 	}
 
 	@Column(name = "STATUS", nullable = false)
@@ -145,6 +146,7 @@ public class ChainMessage implements java.io.Serializable {
 	}
 
 	@Column(name = "LAST_VIEWED_TIME", nullable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getLastViewedTime() {
 		return this.lastViewedTime;
 	}
@@ -157,16 +159,10 @@ public class ChainMessage implements java.io.Serializable {
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-		setUpdatedTime(timestamp);
+		setCreatedTime(timestamp);
 
 		setLastViewedTime(baseTimestamp);
 
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
 	}
 
 }

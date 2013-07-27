@@ -54,10 +54,10 @@
     <input type="text" name="byOwner"  value="true"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <br>
-    <button type="button" onclick="print(0)">print</button>
+    <button type="button" onclick="print(1)">print</button>
     <input type="reset" name="submit" value="reset" />
     <input type="submit" name="submit" value="submit" />
-    <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
+    <input type="checkbox" checked="checked" onclick="hideAll(this, 1)">
     </form>
     
     <p id="print"></p>

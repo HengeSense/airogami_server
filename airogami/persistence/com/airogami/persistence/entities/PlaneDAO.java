@@ -22,13 +22,18 @@ public class PlaneDAO {
 	public static final String STATUS = "status";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
+	public static final String LAST_MSG_ID_OF_TARGET = "lastMsgIdOfTarget";
+	public static final String LAST_MSG_ID_OF_OWNER = "lastMsgIdOfOwner";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
 	public static final String SEX = "sex";
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String MAX_MATCH_COUNT = "maxMatchCount";
-	public static final String LIKES = "likes";
+	public static final String LIKED_BY_OWNER = "likedByOwner";
+	public static final String LIKED_BY_TARGET = "likedByTarget";
+	public static final String DELETED_BY_OWNER = "deletedByOwner";
+	public static final String DELETED_BY_TARGET = "deletedByTarget";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -399,6 +404,18 @@ public class PlaneDAO {
 		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
 	}
 
+	public List<Plane> findByLastMsgIdOfTarget(Object lastMsgIdOfTarget,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LAST_MSG_ID_OF_TARGET, lastMsgIdOfTarget,
+				rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLastMsgIdOfOwner(Object lastMsgIdOfOwner,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LAST_MSG_ID_OF_OWNER, lastMsgIdOfOwner,
+				rowStartIdxAndCount);
+	}
+
 	public List<Plane> findByCity(Object city, int... rowStartIdxAndCount) {
 		return findByProperty(CITY, city, rowStartIdxAndCount);
 	}
@@ -427,8 +444,27 @@ public class PlaneDAO {
 				rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLikes(Object likes, int... rowStartIdxAndCount) {
-		return findByProperty(LIKES, likes, rowStartIdxAndCount);
+	public List<Plane> findByLikedByOwner(Object likedByOwner,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LIKED_BY_OWNER, likedByOwner, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLikedByTarget(Object likedByTarget,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LIKED_BY_TARGET, likedByTarget,
+				rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByDeletedByOwner(Object deletedByOwner,
+			int... rowStartIdxAndCount) {
+		return findByProperty(DELETED_BY_OWNER, deletedByOwner,
+				rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByDeletedByTarget(Object deletedByTarget,
+			int... rowStartIdxAndCount) {
+		return findByProperty(DELETED_BY_TARGET, deletedByTarget,
+				rowStartIdxAndCount);
 	}
 
 	/**

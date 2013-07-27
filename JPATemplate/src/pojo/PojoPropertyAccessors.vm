@@ -9,6 +9,9 @@
 $templates.Ejb3PropertyGetAnnotation
     #set($typename=$pojo.getJavaTypeName($property, $jdk5))
     #set($typename=$typename.replaceAll("Set<","List<"))
+    #if($typename.equals("Date") || $typename.equals("Timestamp"))
+    @JSON(format="yyyy-MM-dd HH:mm:ss")
+    #end
     
     $pojo.getPropertyGetModifiers($property) $typename $pojo.getGetterSignature($property)() {
         return this.$property.name;

@@ -1,0 +1,31 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="planeId">
+     	<field-validator type="required">
+			<message key="error.plane.viewedmessages.planeId.required">Please input a planeId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.plane.viewedmessages.planeId.invalid">The planeId must be over ${min}</message>
+		</field-validator>
+	</field>
+	
+	<field name="lastMsgId">
+     	<field-validator type="required">
+			<message key="error.plane.viewedmessages.lastMsgId.required">Please input a lastMsgId</message>
+		</field-validator>
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.plane.viewedmessages.lastMsgId.invalid">The lastMsgId must be over ${min}</message>
+		</field-validator>
+	</field>
+
+	<field name="byOwner">
+     	<field-validator type="required">
+			<message key="error.plane.viewedmessages.byOwner.required">Please input a byOwner</message>
+		</field-validator>
+	</field>
+	
+</validators>

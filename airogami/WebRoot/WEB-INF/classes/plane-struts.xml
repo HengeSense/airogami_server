@@ -83,8 +83,50 @@
 			</result>
 		</action>
 		
+		<action name="receivePlaneIds" class="com.airogami.presentation.plane.ObtainPlaneIdsAction"
+		method="receivePlaneIds">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
 		<action name="obtainPlanes" class="com.airogami.presentation.plane.ObtainPlanesAction"
 		method="obtainPlanes">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="obtainPlaneIds" class="com.airogami.presentation.plane.ObtainPlaneIdsAction"
+		method="obtainPlaneIds">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="obtainMessages" class="com.airogami.presentation.plane.ObtainMessagesAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="viewedMessages" class="com.airogami.presentation.plane.ViewedMessagesAction">
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>

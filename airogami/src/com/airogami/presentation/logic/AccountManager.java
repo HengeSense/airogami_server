@@ -68,7 +68,7 @@ public class AccountManager {
 
 	/*
 	 * @param args:(String[]) must have two valid elements (screenName, password)
-	 * @return account, accountStat if successful
+	 * @return account, accountStat if successful or null if not matched
 	 * @throws AirogamiException if failed 
 	 */
 public Account signinWithScreenName(String screenName, String password)
@@ -84,12 +84,17 @@ public Account signinWithScreenName(String screenName, String password)
 					AirogamiException.Account_Signin_Failure_Status,
 					AirogamiException.Account_Signin_Failure_Message);
 		}
+		if(account == null){
+			throw new AirogamiException(
+					AirogamiException.Account_Signin_NotMatch_Status,
+					AirogamiException.Account_Signin_NotMatch_Message);
+		}
 		return account;
 	}
 	
 	/*
 	 * @param args:(String[]) must have two valid elements (email, password)
-	 * @return account, accountStat if successful
+	 * @return account, accountStat if successful or null if not matched
 	 * @throws AirogamiException if failed 
 	 */
 	public Account signinWithEmail(String email, String password)
@@ -105,6 +110,12 @@ public Account signinWithScreenName(String screenName, String password)
 					AirogamiException.Account_Signin_Failure_Status,
 					AirogamiException.Account_Signin_Failure_Message);
 		}
+		if(account == null){
+			throw new AirogamiException(
+					AirogamiException.Account_Signin_NotMatch_Status,
+					AirogamiException.Account_Signin_NotMatch_Message);
+		}
+		
 		return account;
 	}
 	
@@ -187,13 +198,13 @@ public Account signinWithScreenName(String screenName, String password)
 	 * @return account, null if not updated
 	 * @throws AirogamiException if failed 
 	 */
-	public Account obtainAccount(long accountId, Timestamp last) throws AirogamiException{
-		if (accountId < 1 || last == null){
+	public Account obtainAccount(long accountId, Long updateCount) throws AirogamiException{
+		if (accountId < 1){
 			throw new IllegalArgumentException("Illegal arguments in obtainAccount");
 		}
 
 		try {
-			return ServiceUtils.accountService.obtainAccount(accountId, last);
+			return ServiceUtils.accountService.obtainAccount(accountId, updateCount);
 		} catch (Throwable re) {
 			throw new AirogamiException(
 					AirogamiException.Account_ObtainAccount_Failure_Status,

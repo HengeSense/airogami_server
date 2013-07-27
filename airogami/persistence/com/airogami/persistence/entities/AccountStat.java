@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -7,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * AccountStat entity. @author MyEclipse Persistence Tools
@@ -26,7 +29,7 @@ public class AccountStat implements java.io.Serializable {
 
 	private Integer likesCount = 0;
 
-	private Integer unreadMessgeCount = 0;
+	private Timestamp lastSigninTime;
 
 	// Constructors
 
@@ -36,11 +39,11 @@ public class AccountStat implements java.io.Serializable {
 
 	/** full constructor */
 	public AccountStat(Long accountId, Account account, Integer likesCount,
-			Integer unreadMessgeCount) {
+			Timestamp lastSigninTime) {
 		this.accountId = accountId;
 		this.account = account;
 		this.likesCount = likesCount;
-		this.unreadMessgeCount = unreadMessgeCount;
+		this.lastSigninTime = lastSigninTime;
 	}
 
 	// Property accessors
@@ -73,13 +76,22 @@ public class AccountStat implements java.io.Serializable {
 		this.likesCount = likesCount;
 	}
 
-	@Column(name = "UNREAD_MESSGE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getUnreadMessgeCount() {
-		return this.unreadMessgeCount;
+	@Column(name = "LAST_SIGNIN_TIME", nullable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Timestamp getLastSigninTime() {
+		return this.lastSigninTime;
 	}
 
-	public void setUnreadMessgeCount(Integer unreadMessgeCount) {
-		this.unreadMessgeCount = unreadMessgeCount;
+	public void setLastSigninTime(Timestamp lastSigninTime) {
+		this.lastSigninTime = lastSigninTime;
+	}
+
+	@PrePersist
+	protected void onPrePersist() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+		setLastSigninTime(timestamp);
+
 	}
 
 }

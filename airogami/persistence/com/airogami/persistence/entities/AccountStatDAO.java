@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
@@ -19,7 +20,6 @@ import javax.persistence.Query;
 public class AccountStatDAO {
 	// property constants
 	public static final String LIKES_COUNT = "likesCount";
-	public static final String UNREAD_MESSGE_COUNT = "unreadMessgeCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -243,7 +243,7 @@ public class AccountStatDAO {
 	private static final String increaseLikesCountJPQL = "update AccountStat a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
 
 	public void increaseLikesCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseUnreadMessgeCount with accountId:"
+		EntityManagerHelper.log("increaseLikesCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager()
@@ -251,31 +251,11 @@ public class AccountStatDAO {
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			query.executeUpdate();
-			EntityManagerHelper.log("increaseUnreadMessgeCount successful",
+			EntityManagerHelper.log("increaseLikesCount successful",
 					Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseUnreadMessgeCount failed",
-					Level.SEVERE, re);
-			throw re;
-		}
-	}
-
-	private static final String increaseUnreadMessgeCountJPQL = "update AccountStat a set a.unreadMessgeCount = a.unreadMessgeCount + :count where a.accountId in (:accountId)";
-
-	public void increaseUnreadMessgeCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseUnreadMessgeCount with accountId:"
-				+ accountId, Level.INFO, null);
-		try {
-			Query query = getEntityManager().createQuery(
-					increaseUnreadMessgeCountJPQL);
-			query.setParameter("accountId", accountId);
-			query.setParameter("count", count);
-			query.executeUpdate();
-			EntityManagerHelper.log("increaseUnreadMessgeCount successful",
-					Level.INFO, null);
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseUnreadMessgeCount failed",
-					Level.SEVERE, re);
+			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
+					re);
 			throw re;
 		}
 	}
@@ -328,12 +308,6 @@ public class AccountStatDAO {
 	public List<AccountStat> findByLikesCount(Object likesCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
-	}
-
-	public List<AccountStat> findByUnreadMessgeCount(Object unreadMessgeCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(UNREAD_MESSGE_COUNT, unreadMessgeCount,
-				rowStartIdxAndCount);
 	}
 
 	/**

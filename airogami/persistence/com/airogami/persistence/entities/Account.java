@@ -15,12 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import org.apache.struts2.json.annotations.JSON;
 
 /**
  * Account entity. @author MyEclipse Persistence Tools
@@ -52,8 +52,6 @@ public class Account implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
-	private Timestamp updatedTime;
-
 	private String city;
 
 	private String province;
@@ -61,6 +59,8 @@ public class Account implements java.io.Serializable {
 	private String country;
 
 	private Date birthday;
+
+	private Long updateCount = 0L;
 
 	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
 
@@ -83,8 +83,8 @@ public class Account implements java.io.Serializable {
 	/** minimal constructor */
 	public Account(Long accountId, Authenticate authenticate, String fullName,
 			Short sex, String icon, Double longitude, Double latitude,
-			Short status, Timestamp createdTime, Timestamp updatedTime,
-			String city, String province, String country) {
+			Short status, Timestamp createdTime, String city, String province,
+			String country, Long updateCount) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.fullName = fullName;
@@ -94,21 +94,20 @@ public class Account implements java.io.Serializable {
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
-		this.updatedTime = updatedTime;
 		this.city = city;
 		this.province = province;
 		this.country = country;
+		this.updateCount = updateCount;
 	}
 
 	/** full constructor */
 	public Account(Long accountId, Authenticate authenticate, String fullName,
 			String screenName, Short sex, String icon, Double longitude,
-			Double latitude, Short status, Timestamp createdTime,
-			Timestamp updatedTime, String city, String province,
-			String country, Date birthday, List<Plane> planesForOwnerId,
-			List<Message> messages, List<Plane> planesForTargetId,
-			List<Chain> chains, AccountStat accountStat,
-			List<ChainMessage> chainMessages) {
+			Double latitude, Short status, Timestamp createdTime, String city,
+			String province, String country, Date birthday, Long updateCount,
+			List<Plane> planesForOwnerId, List<Message> messages,
+			List<Plane> planesForTargetId, List<Chain> chains,
+			AccountStat accountStat, List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.fullName = fullName;
@@ -119,11 +118,11 @@ public class Account implements java.io.Serializable {
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
-		this.updatedTime = updatedTime;
 		this.city = city;
 		this.province = province;
 		this.country = country;
 		this.birthday = birthday;
+		this.updateCount = updateCount;
 		this.planesForOwnerId = planesForOwnerId;
 		this.messages = messages;
 		this.planesForTargetId = planesForTargetId;
@@ -217,21 +216,13 @@ public class Account implements java.io.Serializable {
 	}
 
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
 		return this.createdTime;
 	}
 
 	public void setCreatedTime(Timestamp createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
-	public Timestamp getUpdatedTime() {
-		return this.updatedTime;
-	}
-
-	public void setUpdatedTime(Timestamp updatedTime) {
-		this.updatedTime = updatedTime;
 	}
 
 	@Column(name = "CITY", nullable = false, length = 256)
@@ -263,12 +254,22 @@ public class Account implements java.io.Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "BIRTHDAY", length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getBirthday() {
 		return this.birthday;
 	}
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
+	public Long getUpdateCount() {
+		return this.updateCount;
+	}
+
+	public void setUpdateCount(Long updateCount) {
+		this.updateCount = updateCount;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByOwnerId")
@@ -332,14 +333,6 @@ public class Account implements java.io.Serializable {
 
 		setCreatedTime(timestamp);
 
-		setUpdatedTime(timestamp);
-
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
 	}
 
 }

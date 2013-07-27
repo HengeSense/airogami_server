@@ -11,6 +11,7 @@
 	<include file="authorization-struts.xml"/>
 	<include file="account-struts.xml"/>
 	<include file="plane-struts.xml"/>
+	<include file="chain-struts.xml"/>
 	
 
 </struts>

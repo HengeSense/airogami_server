@@ -35,8 +35,8 @@
     <label>AccountId: </label>
     <input type="text" name="accountId" value="2" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Last: </label>
-    <input type="text" name="last"  value="2013-01-01 00:00:00"/>
+    <label>Update Count: </label>
+    <input type="text" name="updateCount"  value="-1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
     <button type="button" onclick="print(0)">print</button>
     <input type="reset" name="submit" value="reset" />

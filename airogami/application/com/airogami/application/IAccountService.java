@@ -17,7 +17,7 @@ public interface IAccountService {
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)
 	 * @param type:(int) must be a valid type
-	 * @return account, accountStat if successful
+	 * @return account, accountStat if successful or null if not matched
 	 * @throws ApplicationException if failed 
 	 */
 	public Account signin(String[]args, int type) throws ApplicationException;
@@ -52,6 +52,6 @@ public interface IAccountService {
 	 * @return account, null if not updated
 	 * @throws ApplicationException if failed 
 	 */
-	public Account obtainAccount(long accountId, Timestamp last) throws ApplicationException;
+	public Account obtainAccount(long accountId, Long updateCount) throws ApplicationException;
 
 }

@@ -148,9 +148,9 @@ public class TestAccount {
 	@Test
 	public void testObtainAccount() {
 		long accountId = 0L;
-		Timestamp last = Timestamp.valueOf("2013-07-17 14:42:20");
+		Long updateCount = null;
 		try {
-			Account account = ManagerUtils.accountManager.obtainAccount(accountId, last);
+			Account account = ManagerUtils.accountManager.obtainAccount(accountId, updateCount);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

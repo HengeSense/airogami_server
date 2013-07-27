@@ -1,6 +1,7 @@
 $pojo.getPackageDeclaration()
 
 $secondpassclassimports
+#set($temp = $pojo.importType("java.util.List"))
 
 /**
 $pojo.getClassJavaDoc($render.eval($ctx, "$pojo.getDeclarationName() entity. @author MyEclipse Persistence Tools"),0)
@@ -24,9 +25,9 @@ $pojo.getClassJavaDoc($render.eval($ctx, "$pojo.getDeclarationName() entity. @au
 #end
 #end
 $pojo.getClassModifiers() $pojo.getDeclarationType() $pojo.getDeclarationName() $pojo.getExtendsDeclaration() $pojo.getImplementsDeclaration() {
-
+    private static final long serialVersionUID = 1L;
     // Constructors
-
+   
     /** default constructor */
     public $pojo.getDeclarationName()() {
     }
@@ -42,7 +43,9 @@ $pojo.getClassModifiers() $pojo.getDeclarationType() $pojo.getDeclarationName() 
     
 #if ($pojo.needsFullConstructor())
     /** full constructor */
-    public $pojo.getDeclarationName()($c2j.asParameterList($pojo.getPropertyClosureForFullConstructor(),$jdk5,$pojo)) {
+    #set($parameterList = $c2j.asParameterList($pojo.getPropertyClosureForFullConstructor(),$jdk5,$pojo))
+    #set($parameterList = $parameterList.replaceAll("Set<","List<"))
+    public $pojo.getDeclarationName()($parameterList) {
 #if(!$pojo.getPropertyClosureForFullConstructor().isEmpty()) 
         super($c2j.asArgumentList($pojo.getPropertyClosureForFullConstructor()));        
 #end

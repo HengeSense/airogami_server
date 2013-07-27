@@ -138,15 +138,37 @@ public class TestPlane {
 			fail(e.getMessage());
 		}
 	}
+	
 	@Ignore
 	@Test
-	public void testReceivePlanes() {
+	public void testObtainPlaneIds() {
 		long accountId = 4;
+		int startId = 2;
+		int limit = -1;
+		try {
+			Map<String, Object> result = ManagerUtils.planeManager.obtainPlaneIds(accountId, startId, limit);
+			//ObjectUtils.printObject(result);
+			List<Long> planes = (List<Long>) result.get("planeIds");
+			Iterator<Long> iter = planes.iterator();
+			while(iter.hasNext()){
+				Long planeId = iter.next();
+				System.out.println(planeId);
+			}
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}	
+	
+	
+	@Test
+	public void testReceivePlanes() {
+		long accountId = 1;
 		String start = "2013-06-15 11:33:59.0";
 		String end = "2013-08-15 11:34:06.0";
-		int startIdx = 0;
-		int limit = 50;
-		boolean forward = false;
+		int startIdx = 4;
+		int limit = 1;
+		boolean forward = true;
 		try {
 			Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(
 					accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
@@ -163,6 +185,29 @@ public class TestPlane {
 			fail(e.getMessage());
 		}
 	}
+
+	@Ignore
+	@Test
+	public void testReceivePlaneIds() {
+		long accountId = 4;
+		int startId = 9;
+		int limit = 50;
+		try {
+			Map<String, Object> result = ManagerUtils.planeManager.receivePlaneIds(accountId, startId, limit);
+			//ObjectUtils.printObject(result);
+			List<Long> planes = (List<Long>) result.get("planeIds");
+			Iterator<Long> iter = planes.iterator();
+			while(iter.hasNext()){
+				Long planeId = iter.next();
+				System.out.println(planeId);
+			}
+			System.out.println(result.get("more"));
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
 	@Ignore
 	@Test
 	public void testPickupPlane() {
@@ -181,11 +226,11 @@ public class TestPlane {
 	@Test
 	public void testObtainMessages() {
 		long accountId = 4;
-		String start = "2013-07-15 11:33:04.0";
+		Long lastMsgId = null;
 		int limit = 2; 
 		long planeId = 14;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.obtainMessages(accountId, planeId, 0, start, limit);
+			Map<String, Object> result = ManagerUtils.planeManager.obtainMessages(accountId, planeId, lastMsgId, limit);
 			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -198,10 +243,10 @@ public class TestPlane {
 	public void testViewedMessage() {
 		long accountId = 1;
 		long planeId = 4;
-		String last = "2013-07-15 11:33:07";
+		long lastMsgId = 0;
 		boolean byOwner = true, succeed;
 		try {
-			succeed = ManagerUtils.planeManager.viewedMessages(accountId, planeId, last, byOwner);
+			succeed = ManagerUtils.planeManager.viewedMessages(accountId, planeId, lastMsgId, byOwner);
 		    System.out.println(succeed);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
