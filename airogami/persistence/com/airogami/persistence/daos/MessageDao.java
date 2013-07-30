@@ -12,9 +12,9 @@ import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.MessageDAO;
 
 public class MessageDao extends MessageDAO {
-	private final String obtainMessagesForwardJPQL = "select message from Message message where message.plane.planeId = ?2 and (message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget or message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner) and (?3 is null or message.messageId > ?3) order by message.createdTime asc";
+	private final String obtainMessagesForwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and (message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget or message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner) and (?3 is null or message.messageId > ?3) order by message.createdTime asc";
 
-	private final String obtainMessagesBackwardJPQL = "select message from Message message where message.plane.planeId = ?2 and (message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget or message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner) and (?3 is null or message.messageId < ?3) order by message.createdTime desc";
+	private final String obtainMessagesBackwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and (message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget or message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner) and (?3 is null or message.messageId < ?3) order by message.createdTime desc";
 
 	// not verify whether replied (verified in obtainPlanes)
 	public List<Message> obtainMessages(long accountId, long planeId, Long startId, int limit, boolean forward){

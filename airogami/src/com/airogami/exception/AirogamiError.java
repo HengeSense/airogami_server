@@ -7,6 +7,19 @@ public interface AirogamiError {
 	
 	public static final int OK_Status=0;
 	public static final String OK_Message = "success";
+	
+	/* 
+	 * display messages begins
+	 */
+	public static final int Account_No_Signin_Status = 1;
+	public static final String Account_No_Signin_Message = "error.account.notsignin";
+	public static final int Account_Signin_NotMatch_Status = 2;
+	public static final String Account_Signin_NotMatch_Message = "error.account.signin.notmatch";
+
+	/* 
+	 * display messages ends
+	 */
+	
 	/* 
 	 * account begins
 	 */
@@ -16,12 +29,7 @@ public interface AirogamiError {
 	public static final String Account_Signup_Failure_Message = "error.account.signup.failure";
 	public static final int Account_Signup_Duplicate_Status = 10003;		
 	public static final String Account_Signup_Duplicate_Message = "error.account.signup.duplicate";
-	
-	public static final int Account_No_Signin_Status = 10007;
-	public static final String Account_No_Signin_Message = "error.account.notsignin";
-	public static final int Account_Signin_NotMatch_Status = 10008;
-	public static final String Account_Signin_NotMatch_Message = "error.account.signin.notmatch";
-	
+		
 	public static final int Account_Signin_Input_Status = 10100;
 	public static final int Account_Signin_Failure_Status = 100101;
 	public static final String Account_Signin_Input_Message = "error.account.signin.input";
@@ -192,10 +200,12 @@ public interface AirogamiError {
 	 */
 	
 	/* 
-	 * image begins
+	 * Data begins
 	 */
-	public static final int Image_Upload_Failure_Status = 40000;
-	public static final String Image_Upload_Failure_Message = "error.image.upload.failure";
+	public static final int Data_ManageData_Input_Status = 40000;
+	public static final String Data_ManageData_Input_Message = "error.data.managedata.input";
+	public static final int Data_ManageData_Failure_Status = 40001;
+	public static final String Data_ManageData_Failure_Message = "error.data.managedata.failure";
 	/* 
 	 * image ends
 	 */

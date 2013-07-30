@@ -27,8 +27,6 @@ public class AccountStat implements java.io.Serializable {
 
 	private Account account;
 
-	private Integer likesCount = 0;
-
 	private Timestamp lastSigninTime;
 
 	// Constructors
@@ -38,11 +36,9 @@ public class AccountStat implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AccountStat(Long accountId, Account account, Integer likesCount,
-			Timestamp lastSigninTime) {
+	public AccountStat(Long accountId, Account account, Timestamp lastSigninTime) {
 		this.accountId = accountId;
 		this.account = account;
-		this.likesCount = likesCount;
 		this.lastSigninTime = lastSigninTime;
 	}
 
@@ -65,15 +61,6 @@ public class AccountStat implements java.io.Serializable {
 
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-
-	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getLikesCount() {
-		return this.likesCount;
-	}
-
-	public void setLikesCount(Integer likesCount) {
-		this.likesCount = likesCount;
 	}
 
 	@Column(name = "LAST_SIGNIN_TIME", nullable = false, length = 19)

@@ -62,6 +62,8 @@ public class Account implements java.io.Serializable {
 
 	private Long updateCount = 0L;
 
+	private Integer likesCount = 0;
+
 	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
 
 	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
@@ -88,7 +90,7 @@ public class Account implements java.io.Serializable {
 	public Account(Long accountId, Authenticate authenticate, String fullName,
 			Short sex, String icon, Double longitude, Double latitude,
 			Short status, Timestamp createdTime, String city, String province,
-			String country, Long updateCount) {
+			String country, Long updateCount, Integer likesCount) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.fullName = fullName;
@@ -102,6 +104,7 @@ public class Account implements java.io.Serializable {
 		this.province = province;
 		this.country = country;
 		this.updateCount = updateCount;
+		this.likesCount = likesCount;
 	}
 
 	/** full constructor */
@@ -109,10 +112,11 @@ public class Account implements java.io.Serializable {
 			String screenName, Short sex, String icon, Double longitude,
 			Double latitude, Short status, Timestamp createdTime, String city,
 			String province, String country, Date birthday, Long updateCount,
-			List<Report> reportsForReportedId, List<Plane> planesForOwnerId,
-			List<Message> messages, List<Report> reportsForReportId,
-			List<Plane> planesForTargetId, List<Chain> chains,
-			AccountStat accountStat, List<ChainMessage> chainMessages) {
+			Integer likesCount, List<Report> reportsForReportedId,
+			List<Plane> planesForOwnerId, List<Message> messages,
+			List<Report> reportsForReportId, List<Plane> planesForTargetId,
+			List<Chain> chains, AccountStat accountStat,
+			List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.fullName = fullName;
@@ -128,6 +132,7 @@ public class Account implements java.io.Serializable {
 		this.country = country;
 		this.birthday = birthday;
 		this.updateCount = updateCount;
+		this.likesCount = likesCount;
 		this.reportsForReportedId = reportsForReportedId;
 		this.planesForOwnerId = planesForOwnerId;
 		this.messages = messages;
@@ -277,6 +282,15 @@ public class Account implements java.io.Serializable {
 
 	public void setUpdateCount(Long updateCount) {
 		this.updateCount = updateCount;
+	}
+
+	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getLikesCount() {
+		return this.likesCount;
+	}
+
+	public void setLikesCount(Integer likesCount) {
+		this.likesCount = likesCount;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByReportedId")

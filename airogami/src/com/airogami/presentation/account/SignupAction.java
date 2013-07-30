@@ -1,6 +1,7 @@
 package com.airogami.presentation.account;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import com.airogami.exception.AirogamiError;
@@ -8,7 +9,9 @@ import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.presentation.AirogamiActionSupport;
+import com.airogami.presentation.logic.DataManager;
 import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.airogami.presentation.utilities.UploadUtils;
 import com.opensymphony.xwork2.ActionContext;
@@ -45,11 +48,12 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 			Authenticate authenticate = new Authenticate();
 			BeanUtils.copyProperties(account, user);
 			BeanUtils.copyProperties(authenticate, user);
-			account.setIcon("icon");
+			account.setIcon("account/icon.jpg");
 			account.setAuthenticate(authenticate);
 			long accountId = ManagerUtils.accountManager.signup(account);
-			UploadUtils.uploadImage(accountId, user.getFile(), user.getFileFileName(), user.getFileContentType());
-
+			//UploadUtils.uploadImage(accountId, user.getFile(), user.getFileFileName(), user.getFileContentType());
+			String result = ManagerUtils.dataManager.accountIcon(DataManager.Method_Upload, accountId);
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {			
 			String localizedMessage = getText(e.getMessage(),e.getMessage());

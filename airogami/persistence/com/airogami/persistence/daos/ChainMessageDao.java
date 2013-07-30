@@ -45,7 +45,7 @@ public class ChainMessageDao extends ChainMessageDAO {
 	}
 	
 	//no verify for whether replied here or deleted (verified in obtainChains)
-	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage, ChainMessage cm where ((?4 is null and chainMessage.createdTime > cm.lastViewedTime) or (?4 is not null and chainMessage.createdTime > ?4))  and cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.createdTime asc";
+	private final String obtainChainMessagesJPQL = "select chainMessage from ChainMessage chainMessage join fetch chainMessage.account, ChainMessage cm where ((?4 is null and chainMessage.createdTime > cm.lastViewedTime) or (?4 is not null and chainMessage.createdTime > ?4))  and cm.chain.chainId = chainMessage.chain.chainId and cm.account.accountId = ?1 and cm.chain.chainId = ?2 and (chainMessage.account.accountId = ?1 or chainMessage.status >= ?3) order by chainMessage.createdTime asc";
 
 	public List<ChainMessage> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit){
 		EntityManagerHelper.log("obtainChainMessagesing with accountId = " + accountId + "and chainId = " + chainId, Level.INFO, null);

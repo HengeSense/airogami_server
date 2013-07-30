@@ -19,7 +19,6 @@ import javax.persistence.Query;
 
 public class AccountStatDAO {
 	// property constants
-	public static final String LIKES_COUNT = "likesCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -240,26 +239,6 @@ public class AccountStatDAO {
 		}
 	}
 
-	private static final String increaseLikesCountJPQL = "update AccountStat a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
-
-	public void increaseLikesCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseLikesCount with accountId:"
-				+ accountId, Level.INFO, null);
-		try {
-			Query query = getEntityManager()
-					.createQuery(increaseLikesCountJPQL);
-			query.setParameter("accountId", accountId);
-			query.setParameter("count", count);
-			query.executeUpdate();
-			EntityManagerHelper.log("increaseLikesCount successful",
-					Level.INFO, null);
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
-					re);
-			throw re;
-		}
-	}
-
 	/**
 	 * Find all AccountStat entities with a specific property value.
 	 * 
@@ -303,11 +282,6 @@ public class AccountStatDAO {
 					Level.SEVERE, re);
 			throw re;
 		}
-	}
-
-	public List<AccountStat> findByLikesCount(Object likesCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
 	}
 
 	/**

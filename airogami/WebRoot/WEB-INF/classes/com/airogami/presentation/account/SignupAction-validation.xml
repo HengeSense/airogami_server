@@ -106,13 +106,6 @@
 			<message key="error.account.signup.country.long">The country is too long</message>
 		</field-validator>
 	</field>
-	
-	<field name="file">
-		<field-validator type="fieldexpression">
-		    <param name="expression"><![CDATA[file != null]]></param>
-			<message key="error.account.signup.file.required">Please upload the icon</message>
-		</field-validator>
-	</field>
 
 	<!-- <field name="bar"> <field-validator type="required"> <message>You must 
 		enter a value for bar.</message> </field-validator> <field-validator type="int"> 

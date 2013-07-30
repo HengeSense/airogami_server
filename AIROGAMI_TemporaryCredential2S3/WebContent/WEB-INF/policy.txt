@@ -1,0 +1,9 @@
+{ "expiration": "2013-07-26T12:00:00.000Z",
+  "conditions": [
+    {"acl": "private" },
+    {"bucket": "airogami-user-bucket" },
+    ["starts-with", "$key", "uploads/"],
+	{"success_action_redirect": "http://localhost:8080/"},
+	["starts-with", "$Content-Type", "image/jpeg"],
+  ]
+}

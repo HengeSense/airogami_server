@@ -22,16 +22,14 @@ function obtainPlanes() {
 				for ( var i = 0; i < ret.result.planes.length; ++i) {
 					var plane = ret.result.planes[i];
 					var rows = collect.rows;
-					var planeRow=null; 
-					for(var j=0;j<rows.length;++j){
-						if(rows[j].type == 'plane' && rows[j].data.planeId == plane.planeId){
-							rows[j].parentNode.removeChild(rows[j]);
-							planeRow = rows[j];
+					var planeRow = collectTemplate.cloneNode(true); 
+					for(var j=1;j<rows.length - 1;++j){
+						if(rows[j].data.type == 'plane' && rows[j].data.planeId == plane.planeId){
+							if(typeof(rows[j].win) != 'undefined')
+							   planeRow.win = rows[j].win;
+							rows[j].parentNode.removeChild(rows[j]);							
 							break;
 						}
-					}
-					if(planeRow == null){
-						planeRow = collectTemplate.cloneNode(true);	
 					}				
 					planeRow.id = '';
 					planeRow.cells[0].innerHTML = plane.planeId;
@@ -42,9 +40,9 @@ function obtainPlanes() {
 					planeRow.cells[5].innerHTML = plane.province;
 					planeRow.cells[6].innerHTML = plane.country;
 					planeRow.cells[7].innerHTML = plane.updatedTime;
-					planeRow.cells[8].innerHTML = 'plane';
-					planeRow.type = 'plane';
+					planeRow.cells[8].innerHTML = 'plane';					
 					planeRow.data = plane;
+					planeRow.data.type = 'plane';
 					collect.rows[1].parentNode.insertBefore(planeRow, collect.rows[1]);
 					//planeRow.style.display = '';
 					if(collectPlaneStart == plane.updatedTime){
@@ -81,16 +79,14 @@ function obtainChains() {
 				for ( var i = 0; i < chains.length; ++i) {
 					var chain = chains[i];
 					var rows = collect.rows;
-					var chainRow=null; 
-					for(var j=0;j<rows.length;++j){
-						if(rows[j].type == 'plane' && rows[j].data.chainId == chain.chainId){
+					var chainRow = collectTemplate.cloneNode(true);	
+					for(var j=1;j<rows.length-1;++j){
+						if(rows[j].data.type == 'chain' && rows[j].data.chainId == chain.chainId){
+							if(typeof(rows[j].win) != 'undefined')
+								chainRow.win = rows[j].win;
 							rows[j].parentNode.removeChild(rows[j]);
-							chainRow = rows[j];
 							break;
 						}
-					}
-					if(chainRow == null){
-						chainRow = collectTemplate.cloneNode(true);	
 					}				
 					chainRow.id = '';
 					chainRow.cells[0].innerHTML = chain.chainId;
@@ -104,7 +100,7 @@ function obtainChains() {
 					chainRow.cells[8].innerHTML = 'chain';
 					chain.cell = chainRow.cells[1];
 					chainRow.data = chain;
-					chainRow.type = 'chain';
+					chainRow.data.type = 'chain';
 					collect.rows[1].parentNode.insertBefore(chainRow, collect.rows[1]);
 					//chainRow.style.display = '';
 					if(collectChainStart == chain.updatedTime){
@@ -145,6 +141,8 @@ function receivePlaneMessages(planeRow) {
 						content += messages[i].content + "\n";
 					}
 					planeRow.win.document.forms[0].messages.value = content;
+					var textarea = planeRow.win.document.forms[0].messages;
+					textarea.scrollTop = textarea.scrollHeight;
 				}
 				
 			}
@@ -164,7 +162,19 @@ function receiveChainMessages(chainRow) {
 				collectError.innerHTML = ret.message;
 			} else {
 				chainRow.data.chainMessages = ret.result.chainMessages;
-				//chain.cell.innerHTML = chain.chainMessages[0].content;
+				if(typeof(chainRow.win)!='undefined'){
+					var chainMessages = chainRow.data.chainMessages;
+					var content = '';
+					for(var i = 0; i < chainMessages.length; ++i){
+						content += chainMessages[i].id.accountId + ": ";
+						content += chainMessages[i].updatedTime + "\n";
+						content += chainMessages[i].content + "\n";
+					}
+					chainRow.win.document.forms[0].messages.value = content;
+					var textarea = chainRow.win.document.forms[0].messages;
+					textarea.scrollTop = textarea.scrollHeight;
+				}
+				
 			}
 		}
 	};
@@ -178,7 +188,7 @@ function view(the) {
 	var win = window.open('', "Reply planes or chains", 'width=400,height=400');
 	win.data = row.data;
 	row.win = win;
-	if(row.type == 'plane')
+	if(row.data.type == 'plane')
 	{
 		win.document.write(planeView.innerHTML);
 		win.document.close();
@@ -192,7 +202,9 @@ function view(the) {
 		}
 		win.document.forms[0].reply.onclick = replyPlaneMessages;
 		win.document.forms[0].reply.win = win;
-		win.document.forms[0].messages.value = content;		
+		win.document.forms[0].messages.value = content;
+		var textarea = win.document.forms[0].messages;
+		textarea.scrollTop = textarea.scrollHeight;
 		}
 	else
 	{

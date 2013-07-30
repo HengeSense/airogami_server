@@ -62,6 +62,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <h3>Interaction:</h3>
      <a href="Collect.jsp"><button>Collect</button></a>
      <a href="Chats.jsp"><button>Chats</button></a>
+     <h3>Connection:</h3>
+     <a href="Connection.jsp"><button>Connection</button></a>
+     <h3>Data:</h3>
+     <a href="DataManager.jsp"><button>Data Manager</button></a>
      <%} %>
      </div>
   </body>

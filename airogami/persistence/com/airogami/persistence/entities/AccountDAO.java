@@ -32,6 +32,7 @@ public class AccountDAO {
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
 	public static final String UPDATE_COUNT = "updateCount";
+	public static final String LIKES_COUNT = "likesCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -248,7 +249,7 @@ public class AccountDAO {
 	private static final String increaseUpdateCountJPQL = "update Account a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
 
 	public void increaseUpdateCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseUpdateCount with accountId:"
+		EntityManagerHelper.log("increaseLikesCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
@@ -256,10 +257,30 @@ public class AccountDAO {
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			query.executeUpdate();
-			EntityManagerHelper.log("increaseUpdateCount successful",
+			EntityManagerHelper.log("increaseLikesCount successful",
 					Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseUpdateCount failed", Level.SEVERE,
+			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
+	private static final String increaseLikesCountJPQL = "update Account a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
+
+	public void increaseLikesCount(java.lang.Long accountId, int count) {
+		EntityManagerHelper.log("increaseLikesCount with accountId:"
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager()
+					.createQuery(increaseLikesCountJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			query.executeUpdate();
+			EntityManagerHelper.log("increaseLikesCount successful",
+					Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
 					re);
 			throw re;
 		}
@@ -359,6 +380,11 @@ public class AccountDAO {
 	public List<Account> findByUpdateCount(Object updateCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
+	}
+
+	public List<Account> findByLikesCount(Object likesCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
 	}
 
 	/**

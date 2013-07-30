@@ -1,0 +1,132 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="email">
+     	<field-validator type="requiredstring">
+			<message key="error.account.signup.email.required">Please input an email</message>
+		</field-validator>
+		<field-validator type="email">
+			<message key="error.account.signup.email.invalid">The email seems invalid</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.signup.email.long">The email should be less than ${maxLength}</message>
+		</field-validator>
+	</field>
+
+	<field name="password">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.password.required">Please input a password</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">20</param>
+			<message key="error.account.signup.password.length">The password should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+
+	<field name="sex">
+		<field-validator type="required">
+			<message key="error.account.signup.sex.required">Please input a sex</message>
+		</field-validator>
+		<field-validator type="fieldexpression">
+			<param name="expression"><![CDATA[ sex == 0 || sex == 1 || sex == 2]]></param>
+			<message key="error.account.signup.sex.invalid">The sex should be one of 0, 1, 2</message>
+		</field-validator>
+
+	</field>
+
+	<field name="fullName">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.fullName.required">Please input a fullName</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">2</param>
+			<param name="maxLength">70</param>
+			<message key="error.account.signup.fullName.length">The fullName should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+	</field>
+
+	<field name="birthday">
+		<field-validator type="date">
+			<param name="min"><![CDATA[01/01/1900]]></param>
+			<param name="max"><![CDATA[01/01/2100]]></param>
+			<message key="error.account.signup.birthday.invalid">The birthday must be between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+
+	<field name="longitude">
+	    <field-validator type="required">
+			<message key="error.account.signup.longitude.required">Please input a longitude</message>
+		</field-validator>
+		<field-validator type="double">
+		    <param name="minInclusive"><![CDATA[-180]]></param>
+			<param name="maxInclusive"><![CDATA[180]]></param>
+			<message key="error.account.signup.longitude.invalid">The longitude seems invalid</message>
+		</field-validator>
+	</field>
+
+	<field name="latitude">
+     	<field-validator type="required">
+			<message key="error.account.signup.latitude.required">Please input a latitude</message>
+		</field-validator>
+		<field-validator type="double">
+		    <param name="minInclusive"><![CDATA[-90]]></param>
+			<param name="maxInclusive"><![CDATA[90]]></param>
+			<message key="error.account.signup.latitude.invalid">The latitude seems invalid</message>
+		</field-validator>
+	</field>
+
+	<field name="city">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.city.required">Please input a city</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.signup.city.long">The city is too long</message>
+		</field-validator>
+	</field>
+
+	<field name="province">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.province.required">Please input a province</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.signup.province.long">The province is too long</message>
+		</field-validator>
+	</field>
+
+	<field name="country">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.country.required">Please input a country</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.signup.country.long">The country is too long</message>
+		</field-validator>
+	</field>
+	
+	<field name="file">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[file != null]]></param>
+			<message key="error.account.signup.file.required">Please upload the icon</message>
+		</field-validator>
+	</field>
+
+	<!-- <field name="bar"> <field-validator type="required"> <message>You must 
+		enter a value for bar.</message> </field-validator> <field-validator type="int"> 
+		<param name="min">6</param> <param name="max">10</param> <message>bar must 
+		be between ${min} and ${max}, current value is ${bar}.</message> </field-validator> 
+		</field> <field name="bar2"> <field-validator type="regex"> <param name="expression">[0-9],[0-9]</param> 
+		<message>The value of bar2 must be in the format "x, y", where x and y are 
+		between 0 and 9</message> </field-validator> </field> <field name="date"> 
+		<field-validator type="date"> <param name="min">12/22/2002</param> <param 
+		name="max">12/25/2002</param> <message>The date must be between 12-22-2002 
+		and 12-25-2002. </message> </field-validator> </field> <field name="foo"> 
+		<field-validator type="int"> <param name="min">0</param> <param name="max">100</param> 
+		<message key="foo.range">Could not find foo.range!</message> </field-validator> 
+		</field> <validator type="expression"> <param name="expression">foo lt bar 
+		</param> <message>Foo must be greater than Bar. Foo = ${foo}, Bar = ${bar}. 
+		</message> </validator> -->
+</validators>

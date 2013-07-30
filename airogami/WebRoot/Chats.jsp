@@ -16,7 +16,7 @@
 .CollectTemplate {
 }
 .container{
-  width:500px;
+  width:800px;
   margin:auto;
 }
 </style>

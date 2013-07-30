@@ -1,6 +1,5 @@
 package com.airogami.presentation.account;
 
-import java.io.File;
 import java.util.Date;
 
 public class SignupVO {
@@ -15,9 +14,7 @@ public class SignupVO {
 	private String city;
 	private String province;
 	private String country;	
-	private File file;
-	private String fileContentType;
-	private String fileFileName;
+	
 	public String getEmail() {
 		return email;
 	}
@@ -77,24 +74,5 @@ public class SignupVO {
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
-	}
-	public File getFile() {
-		return file;
-	}
-	public void setFile(File file) {
-		this.file = file;
-	}
-	public String getFileContentType() {
-		return fileContentType;
-	}
-	public void setFileContentType(String fileContentType) {
-		this.fileContentType = fileContentType;
-	}
-	public String getFileFileName() {
-		return fileFileName;
-	}
-	public void setFileFileName(String fileFileName) {
-		this.fileFileName = fileFileName;
-	}
-	
+	}	
 }

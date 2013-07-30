@@ -251,7 +251,7 @@ public class PlaneService implements IPlaneService {
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				DaoUtils.accountStatDao.increaseLikesCount(oppositeAccountId, 1);		
+				DaoUtils.accountDao.increaseLikesCount(oppositeAccountId, 1);		
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {

@@ -17,4 +17,15 @@
   <filter-mapping>
   	<filter-name>struts2</filter-name>
   	<url-pattern>*.action</url-pattern>
-  </filter-mapping></web-app>
+  </filter-mapping>
+  <servlet>
+    <description>This is the description of DataManager</description>
+    <display-name>DataManager</display-name>
+    <servlet-name>DataManager</servlet-name>
+    <servlet-class>com.airogami.presentation.data.DataServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DataManager</servlet-name>
+    <url-pattern>/Data/DataManager</url-pattern>
+  </servlet-mapping></web-app>
