@@ -106,6 +106,13 @@
 			<message key="error.account.signup.country.long">The country is too long</message>
 		</field-validator>
 	</field>
+	
+	<field name="shout">
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.account.signup.shout.long">The shout is too long</message>
+		</field-validator>
+	</field>
 
 	<!-- <field name="bar"> <field-validator type="required"> <message>You must 
 		enter a value for bar.</message> </field-validator> <field-validator type="int"> 

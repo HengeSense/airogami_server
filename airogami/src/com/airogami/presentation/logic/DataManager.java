@@ -17,18 +17,17 @@ public class DataManager {
 	
 	public final static String Method_Upload = "upload";
 	public final static String Method_Download = "download";
-	private String text;
+	private String accountIconPolicy;
 	private final int expiration = 100 * 3600 * 1000;// 1h
 	private final SimpleDateFormat sdf = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	private final String key = "+9/DARod2Gr8npmNqEAPY6UGjxLW5hcFUAH68DnK";
+			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");	
 	
 	public DataManager(){
-		String filename = "policy.txt";
+		String filename = "account_icon_policy.txt";
 		InputStream is = this.getClass().getResourceAsStream(filename);
 		Scanner scanner = new Scanner(is);  
 		scanner.useDelimiter("\\Z");
-		text = scanner.next();
+		accountIconPolicy = scanner.next();
 		scanner.close();
 		try {
 			is.close();
@@ -43,28 +42,16 @@ public class DataManager {
 		JSONObject json = new JSONObject();
 		JSONUtils.putOKStatus(json);
 		try {
-			JSONObject jsonObj = new JSONObject(text);
-			// generate a new timestamp with one extra hour(credential expirese
-			// in one hour...)
+			JSONObject jsonObj = new JSONObject(accountIconPolicy);
 			jsonObj.put("expiration", str);
-			// modify upload directory based on username
+			
 			JSONArray jsonArray = jsonObj.getJSONArray("conditions");
-			jsonArray.optJSONArray(0).put(2,
-					"accounts/" + accoutId + "/account/icon.jpg");
-			String[] result = SigGenerator.calculateRFC2104HMAC(
-					jsonObj.toString(), key);
-			for(int i = 0; i < jsonArray.length(); ++i){
-				Object obj = jsonArray.get(i);
-				if(obj instanceof JSONArray){
-					JSONObject jo = new JSONObject();
-					JSONArray ja = (JSONArray)obj;
-					jo.put((ja).getString(1).substring(1), ja.getString(2));
-					jsonArray.put(i, jo);
-				}
-			}			
+			jsonArray.optJSONObject(0).put("key", "accounts/" + accoutId + "/account/icon.jpg");
+			String[] result = SigGenerator.instance.calculateRFC2104HMAC(
+					jsonObj.toString());
 			json.put("policy", result[0]);
 			json.put("signature", result[1]);
-			json.put("conditions", jsonArray);
+			json.put("conditions",jsonArray);
 		} catch (SignatureException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {

@@ -14,6 +14,7 @@ public class SignupVO {
 	private String city;
 	private String province;
 	private String country;	
+	private String shout;
 	
 	public String getEmail() {
 		return email;
@@ -74,5 +75,11 @@ public class SignupVO {
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+	public String getShout() {
+		return shout;
+	}
+	public void setShout(String shout) {
+		this.shout = shout;
 	}	
 }

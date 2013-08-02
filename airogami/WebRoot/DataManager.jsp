@@ -41,6 +41,12 @@
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Signature: </label>
     <input type="text" name="signature"  value=""/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>  
+    <label>Key: </label>
+    <input type="text" name="key"  value=""/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+        <label>ACL: </label>
+    <input type="text" name="acl"  value="public-read"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <input type="file" name="file"  value=""/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
