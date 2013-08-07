@@ -7,12 +7,13 @@ import javax.servlet.http.HttpSession;
 import com.airogami.exception.AirogamiError;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class ObtainAccountAction extends AirogamiActionSupport{
+public class ObtainProfileAction extends AirogamiActionSupport{
 
 	private static final long serialVersionUID = 1L;
 	private Long updateCount;
@@ -23,8 +24,8 @@ public class ObtainAccountAction extends AirogamiActionSupport{
 		try {			
 			//HttpSession session = request.getSession(true);
 			//Account account = (Account)session.getAttribute("account");	
-			Account result = ManagerUtils.accountManager.obtainAccount(accountId, updateCount);
-			dataMap.put("account", result);
+			Profile result = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			String localizedMessage = getText(e.getMessage(),e.getMessage());
@@ -41,16 +42,6 @@ public class ObtainAccountAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 	
-    @Override
-   	protected int getInputStatus() {
-   		return AirogamiError.Account_ObtainAccount_Input_Status;
-   	}
-
-   	@Override
-   	protected String getInputMessage() {
-   		return AirogamiError.Account_ObtainAccount_Input_Message;
-   	}
-
 	public Long getAccountId() {
 		return accountId;
 	}

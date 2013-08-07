@@ -26,6 +26,7 @@ import com.amazonaws.util.json.JSONObject;
 public class DataServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	private static final String ActionAccountIcon = "account.icon";
 
 	/**
 	 * Constructor of the object.
@@ -68,24 +69,14 @@ public class DataServlet extends HttpServlet {
 					AirogamiError.Account_No_Signin_Message);
 			out.print(json);
 		} else {
-			String action = request.getParameter("action");
-			String method = request.getParameter("method");
-			// String path = request.getParameter("path");
-			if (DataManager.Method_Upload.equals(method) == false
-					&& DataManager.Method_Download.equals(method) == false) {
-				String json = JSONUtils.statusToJSONString(
-						AirogamiError.Data_ManageData_Input_Status,
-						AirogamiError.Data_ManageData_Input_Message);
-				out.print(json);
+			String action = request.getParameter("action");			
+			if (action == null || action.length() == 0 || ActionAccountIcon.equals(action)) {
+				out.print(ManagerUtils.dataManager.accountIcon(user.getAccountId()));
 			} else {
-				if (action == null || "account.icon".equals(action)) {
-					out.print(ManagerUtils.dataManager.accountIcon(method, user.getAccountId()));
-				} else {
-					String json = JSONUtils.statusToJSONString(
-							AirogamiError.Data_ManageData_Input_Status,
-							AirogamiError.Data_ManageData_Input_Message);
-					out.print(json);
-				}
+				String json = JSONUtils.statusToJSONString(
+						AirogamiError.Application_Input_Status,
+						AirogamiError.Application_Input_Message);
+				out.print(json);
 			}
 		}
 

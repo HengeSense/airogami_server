@@ -6,11 +6,11 @@ xmlhttp.onreadystatechange = function() {
 		if (ret.status != 0) {
 			info.innerHTML = ret.message;
 		} else {
-			info.innerHTML = ret.conditions;
+			info.innerHTML = xmlhttp.responseText;
 			with(document.forms[xmlhttp.index]){
-				policy.value = ret.policy;
-				signature.value = ret.signature;
-				key.value = ret.conditions[0].key;
+				policy.value = ret.result.policy;
+				signature.value = ret.result.signature;
+				key.value = ret.result.key;
 			}
 		}
 	}

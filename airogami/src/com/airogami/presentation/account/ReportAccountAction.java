@@ -42,16 +42,6 @@ public class ReportAccountAction extends AirogamiActionSupport{
 		}
 		return SUCCESS;
 	}
-	
-    @Override
-   	protected int getInputStatus() {
-   		return AirogamiError.Account_ReportAccount_Input_Status;
-   	}
-
-   	@Override
-   	protected String getInputMessage() {
-   		return AirogamiError.Account_ReportAccount_Input_Message;
-   	}
 
 	public Long getReportedId() {
 		return reportedId;

@@ -51,25 +51,6 @@ public class PickupThrowPlaneAction extends AirogamiActionSupport {
 			JSONUtils.putOKStatus(dataMap);
 		}
 	}
-	@Override
-	protected int getInputStatus() {
-		if("pickupPlane".equals(method)){
-			return AirogamiError.Plane_PickupPlane_Input_Status;
-		}
-		else{
-			return AirogamiError.Plane_ThrowPlane_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("pickupPlane".equals(method)){
-			return AirogamiError.Plane_PickupPlane_Input_Message;
-		}
-		else{
-			return AirogamiError.Plane_ThrowPlane_Input_Message;
-		}
-	}
 	
 	public Long getPlaneId() {
 		return planeId;

@@ -19,7 +19,7 @@
 		</interceptors>
 		<action name="emailSignup" class="com.airogami.presentation.account.SignupAction"
 			method="emailSignup">
-			<interceptor-ref name="fileStack" />
+			<!-- <interceptor-ref name="fileStack" /> -->
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>
@@ -60,7 +60,7 @@
 			</result>
 		</action>
 		
-		<action name="editAccount" class="com.airogami.presentation.account.EditAccountAction">
+		<action name="editProfile" class="com.airogami.presentation.account.EditProfileAction">
 		    <interceptor-ref name="authorizationStack" />
 		    <result type="json" name="input">
 				<param name="root">dataMap</param>
@@ -91,7 +91,7 @@
 			</result>
 		</action>
 		
-		<action name="obtainAccount" class="com.airogami.presentation.account.ObtainAccountAction">
+		<action name="obtainProfile" class="com.airogami.presentation.account.ObtainProfileAction">
 		    <interceptor-ref name="authorizationStack" />
 		    <result type="json" name="input">
 				<param name="root">dataMap</param>

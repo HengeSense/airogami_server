@@ -3,7 +3,7 @@ package com.airogami.presentation.account;
 import java.io.File;
 import java.util.Date;
 
-public class EditAccountVO {
+public class EditProfileVO {
 
 	private Short sex;
 	private String fullName;

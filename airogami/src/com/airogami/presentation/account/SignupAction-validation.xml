@@ -113,6 +113,26 @@
 			<message key="error.account.signup.shout.long">The shout is too long</message>
 		</field-validator>
 	</field>
+	
+	<field name="clientAgent.deviceName">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.deviceName.required">Please input a deviceName</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<message key="error.account.signup.deviceName.long">The deviceName should have at most ${maxLength} characters</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.clientVersion">
+		<field-validator type="requiredstring">
+			<message key="error.account.signup.clientVersion.required">Please input a clientVersion</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<message key="error.account.signup.clientVersion.long">The clientVersion should have at most ${maxLength} characters</message>
+		</field-validator>
+	</field>
 
 	<!-- <field name="bar"> <field-validator type="required"> <message>You must 
 		enter a value for bar.</message> </field-validator> <field-validator type="int"> 

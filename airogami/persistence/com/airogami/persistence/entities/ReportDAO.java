@@ -231,7 +231,7 @@ public class ReportDAO {
 
 	private static final String increaseReportCountJPQL = "update Report a set a.reportCount = a.reportCount + :count where a.id in (:id)";
 
-	public void increaseReportCount(
+	public boolean increaseReportCount(
 			com.airogami.persistence.entities.ReportId id, int count) {
 		EntityManagerHelper.log("increaseReportCount with id:" + id,
 				Level.INFO, null);
@@ -240,9 +240,10 @@ public class ReportDAO {
 					increaseReportCountJPQL);
 			query.setParameter("id", id);
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			EntityManagerHelper.log("increaseReportCount successful",
 					Level.INFO, null);
+			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseReportCount failed", Level.SEVERE,
 					re);

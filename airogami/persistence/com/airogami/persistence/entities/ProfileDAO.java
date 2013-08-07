@@ -1,32 +1,45 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Account entities. Transaction control of the save(), update() and delete()
+ * Profile entities. Transaction control of the save(), update() and delete()
  * operations must be handled externally by senders of these methods or must be
  * manually added to each of these methods for data to be persisted to the JPA
  * datastore.
  * 
- * @see com.airogami.persistence.entities.Account
+ * @see com.airogami.persistence.entities.Profile
  * @author MyEclipse Persistence Tools
  */
 
-public class AccountDAO {
+public class ProfileDAO {
 	// property constants
+	public static final String FULL_NAME = "fullName";
+	public static final String SCREEN_NAME = "screenName";
+	public static final String SEX = "sex";
+	public static final String ICON = "icon";
+	public static final String LONGITUDE = "longitude";
+	public static final String LATITUDE = "latitude";
+	public static final String STATUS = "status";
+	public static final String CITY = "city";
+	public static final String PROVINCE = "province";
+	public static final String COUNTRY = "country";
 	public static final String UPDATE_COUNT = "updateCount";
+	public static final String LIKES_COUNT = "likesCount";
+	public static final String SHOUT = "shout";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
 	}
 
 	/**
-	 * Perform an initial save of a previously unsaved Account entity. All
+	 * Perform an initial save of a previously unsaved Profile entity. All
 	 * subsequent persist actions of this entity should use the #update()
 	 * method. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
@@ -36,19 +49,19 @@ public class AccountDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * AccountDAO.save(account);
+	 * ProfileDAO.save(profile);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param account
-	 *            Account entity to persist
+	 * @param profile
+	 *            Profile entity to persist
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void save(Account account) {
-		EntityManagerHelper.log("saving Account instance", Level.INFO, null);
+	public void save(Profile profile) {
+		EntityManagerHelper.log("saving Profile instance", Level.INFO, null);
 		try {
-			getEntityManager().persist(account);
+			getEntityManager().persist(profile);
 			EntityManagerHelper.log("save successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("save failed", Level.SEVERE, re);
@@ -57,7 +70,7 @@ public class AccountDAO {
 	}
 
 	/**
-	 * Delete a persistent Account entity. This operation must be performed
+	 * Delete a persistent Profile entity. This operation must be performed
 	 * within the a database transaction context for the entity's data to be
 	 * permanently deleted from the persistence store, i.e., database. This
 	 * method uses the {@link javax.persistence.EntityManager#remove(Object)
@@ -65,22 +78,22 @@ public class AccountDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * AccountDAO.delete(account);
+	 * ProfileDAO.delete(profile);
 	 * EntityManagerHelper.commit();
-	 * account = null;
+	 * profile = null;
 	 * </pre>
 	 * 
-	 * @param account
-	 *            Account entity to delete
+	 * @param profile
+	 *            Profile entity to delete
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void delete(Account account) {
-		EntityManagerHelper.log("deleting Account instance", Level.INFO, null);
+	public void delete(Profile profile) {
+		EntityManagerHelper.log("deleting Profile instance", Level.INFO, null);
 		try {
-			account = getEntityManager().getReference(Account.class,
-					account.getAccountId());
-			getEntityManager().remove(account);
+			profile = getEntityManager().getReference(Profile.class,
+					profile.getAccountId());
+			getEntityManager().remove(profile);
 			EntityManagerHelper.log("delete successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("delete failed", Level.SEVERE, re);
@@ -89,8 +102,8 @@ public class AccountDAO {
 	}
 
 	/**
-	 * Persist a previously saved Account entity and return it or a copy of it
-	 * to the sender. A copy of the Account entity parameter is returned when
+	 * Persist a previously saved Profile entity and return it or a copy of it
+	 * to the sender. A copy of the Profile entity parameter is returned when
 	 * the JPA persistence mechanism has not previously been tracking the
 	 * updated entity. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
@@ -100,21 +113,21 @@ public class AccountDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * account = AccountDAO.update(account);
+	 * profile = ProfileDAO.update(profile);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param account
-	 *            Account entity to update
-	 * @return Account the persisted Account entity instance, may not be the
+	 * @param profile
+	 *            Profile entity to update
+	 * @return Profile the persisted Profile entity instance, may not be the
 	 *         same
 	 * @throws RuntimeException
 	 *             if the operation fails
 	 */
-	public Account update(Account account) {
-		EntityManagerHelper.log("updating Account instance", Level.INFO, null);
+	public Profile update(Profile profile) {
+		EntityManagerHelper.log("updating Profile instance", Level.INFO, null);
 		try {
-			Account result = getEntityManager().merge(account);
+			Profile result = getEntityManager().merge(profile);
 			EntityManagerHelper.log("update successful", Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
@@ -123,12 +136,12 @@ public class AccountDAO {
 		}
 	}
 
-	public Account findById(Long accountId) {
-		EntityManagerHelper.log("finding Account instance with id: "
+	public Profile findById(Long accountId) {
+		EntityManagerHelper.log("finding Profile instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
-			Account instance = getEntityManager()
-					.find(Account.class, accountId);
+			Profile instance = getEntityManager()
+					.find(Profile.class, accountId);
 			EntityManagerHelper.log("find successful", Level.INFO, null);
 			return instance;
 		} catch (RuntimeException re) {
@@ -137,11 +150,11 @@ public class AccountDAO {
 		}
 	}
 
-	public Account getReference(Long accountId) {
-		EntityManagerHelper.log("getReferencing Account instance with id: "
+	public Profile getReference(Long accountId) {
+		EntityManagerHelper.log("getReferencing Profile instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
-			Account instance = getEntityManager().getReference(Account.class,
+			Profile instance = getEntityManager().getReference(Profile.class,
 					accountId);
 			EntityManagerHelper
 					.log("getReference successful", Level.INFO, null);
@@ -152,10 +165,10 @@ public class AccountDAO {
 		}
 	}
 
-	public void detach(Account account) {
-		EntityManagerHelper.log("detaching Account instance", Level.INFO, null);
+	public void detach(Profile profile) {
+		EntityManagerHelper.log("detaching Profile instance", Level.INFO, null);
 		try {
-			getEntityManager().detach(account);
+			getEntityManager().detach(profile);
 			EntityManagerHelper.log("detach successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("detach failed", Level.SEVERE, re);
@@ -163,11 +176,11 @@ public class AccountDAO {
 		}
 	}
 
-	public void refresh(Account account) {
+	public void refresh(Profile profile) {
 		EntityManagerHelper
-				.log("refreshing Account instance", Level.INFO, null);
+				.log("refreshing Profile instance", Level.INFO, null);
 		try {
-			getEntityManager().refresh(account);
+			getEntityManager().refresh(profile);
 			EntityManagerHelper.log("refresh successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("refresh failed", Level.SEVERE, re);
@@ -181,10 +194,10 @@ public class AccountDAO {
 	 * @see delete
 	 */
 
-	public void remove(Account account) {
-		EntityManagerHelper.log("removing Account instance", Level.INFO, null);
+	public void remove(Profile profile) {
+		EntityManagerHelper.log("removing Profile instance", Level.INFO, null);
 		try {
-			getEntityManager().remove(account);
+			getEntityManager().remove(profile);
 			EntityManagerHelper.log("remove successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("remove failed", Level.SEVERE, re);
@@ -193,7 +206,7 @@ public class AccountDAO {
 	}
 
 	public void flush() {
-		EntityManagerHelper.log("flushing Account instance", Level.INFO, null);
+		EntityManagerHelper.log("flushing Profile instance", Level.INFO, null);
 		try {
 			getEntityManager().flush();
 			EntityManagerHelper.log("flush successful", Level.INFO, null);
@@ -204,7 +217,7 @@ public class AccountDAO {
 	}
 
 	public void clear() {
-		EntityManagerHelper.log("clearing Account instance", Level.INFO, null);
+		EntityManagerHelper.log("clearing Profile instance", Level.INFO, null);
 		try {
 			getEntityManager().clear();
 			EntityManagerHelper.log("clear successful", Level.INFO, null);
@@ -214,7 +227,7 @@ public class AccountDAO {
 		}
 	}
 
-	private static final String removeByAccountIdJPQL = "delete from Account a where a.accountId in (?1)";
+	private static final String removeByAccountIdJPQL = "delete from Profile a where a.accountId in (?1)";
 
 	public int removeByAccountId(Long accountId) {
 		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
@@ -233,10 +246,10 @@ public class AccountDAO {
 		}
 	}
 
-	private static final String increaseUpdateCountJPQL = "update Account a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
+	private static final String increaseUpdateCountJPQL = "update Profile a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseUpdateCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseUpdateCount with accountId:"
+		EntityManagerHelper.log("increaseLikesCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
@@ -244,21 +257,42 @@ public class AccountDAO {
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseUpdateCount successful",
+			EntityManagerHelper.log("increaseLikesCount successful",
 					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseUpdateCount failed", Level.SEVERE,
+			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
+	private static final String increaseLikesCountJPQL = "update Profile a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
+
+	public boolean increaseLikesCount(java.lang.Long accountId, int count) {
+		EntityManagerHelper.log("increaseLikesCount with accountId:"
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager()
+					.createQuery(increaseLikesCountJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseLikesCount successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseLikesCount failed", Level.SEVERE,
 					re);
 			throw re;
 		}
 	}
 
 	/**
-	 * Find all Account entities with a specific property value.
+	 * Find all Profile entities with a specific property value.
 	 * 
 	 * @param propertyName
-	 *            the name of the Account property to query
+	 *            the name of the Profile property to query
 	 * @param value
 	 *            the property value to match
 	 * @param rowStartIdxAndCount
@@ -266,15 +300,15 @@ public class AccountDAO {
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            number of results to return.
-	 * @return List<Account> found by query
+	 * @return List<Profile> found by query
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Account> findByProperty(String propertyName,
+	public List<Profile> findByProperty(String propertyName,
 			final Object value, final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding Account instance with property: "
+		EntityManagerHelper.log("finding Profile instance with property: "
 				+ propertyName + ", value: " + value, Level.INFO, null);
 		try {
-			final String queryString = "select model from Account model where model."
+			final String queryString = "select model from Profile model where model."
 					+ propertyName + "= :propertyValue";
 			Query query = getEntityManager().createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -299,27 +333,82 @@ public class AccountDAO {
 		}
 	}
 
-	public List<Account> findByUpdateCount(Object updateCount,
+	public List<Profile> findByFullName(Object fullName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(FULL_NAME, fullName, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByScreenName(Object screenName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(SCREEN_NAME, screenName, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findBySex(Object sex, int... rowStartIdxAndCount) {
+		return findByProperty(SEX, sex, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByIcon(Object icon, int... rowStartIdxAndCount) {
+		return findByProperty(ICON, icon, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByLongitude(Object longitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByLatitude(Object latitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByStatus(Object status, int... rowStartIdxAndCount) {
+		return findByProperty(STATUS, status, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByCity(Object city, int... rowStartIdxAndCount) {
+		return findByProperty(CITY, city, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByProvince(Object province,
+			int... rowStartIdxAndCount) {
+		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByCountry(Object country,
+			int... rowStartIdxAndCount) {
+		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByUpdateCount(Object updateCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
+	public List<Profile> findByLikesCount(Object likesCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByShout(Object shout, int... rowStartIdxAndCount) {
+		return findByProperty(SHOUT, shout, rowStartIdxAndCount);
+	}
+
 	/**
-	 * Find all Account entities.
+	 * Find all Profile entities.
 	 * 
 	 * @param rowStartIdxAndCount
 	 *            Optional int varargs. rowStartIdxAndCount[0] specifies the the
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            count of results to return.
-	 * @return List<Account> all Account entities
+	 * @return List<Profile> all Profile entities
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Account> findAll(final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding all Account instances", Level.INFO,
+	public List<Profile> findAll(final int... rowStartIdxAndCount) {
+		EntityManagerHelper.log("finding all Profile instances", Level.INFO,
 				null);
 		try {
-			final String queryString = "select model from Account model";
+			final String queryString = "select model from Profile model";
 			Query query = getEntityManager().createQuery(queryString);
 			if (rowStartIdxAndCount != null && rowStartIdxAndCount.length > 0) {
 				int rowStartIdx = Math.max(0, rowStartIdxAndCount[0]);

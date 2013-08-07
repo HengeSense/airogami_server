@@ -12,29 +12,27 @@ import javax.persistence.Query;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.AccountDAO;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Profile;
 
 public class AccountDao extends AccountDAO {
 
 	private Random random = new Random(System.currentTimeMillis());
-	private final String[] randPlaneAccountJPQLs = {
+	/*private final String[] randPlaneAccountJPQLs = {
 			"select account.accountId from Account account where account.accountId >= (select ?1 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account where account.status = 0 and account <> ?2 and (0 = ?3 or account.sex = ?3)) and account.status = 0 and account <> ?2 and (0 = ?3 or account.sex = ?3)",
 			"select account.accountId from Account account where account.accountId >= (select ?1 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account where account.status = 0 and account <> ?2 and (0 = ?4 or account.sex = ?4) and account.country = ?3) and account.status = 0 and account <> ?2 and (0 = ?4 or account.sex = ?4) and account.country = ?3",
 			"select account.accountId from Account account where account.accountId >= (select ?1 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account where account.status = 0 and account <> ?2 and (0 = ?5 or account.sex = ?5) and account.country = ?3 and account.province = ?4) and account.status = 0 and account <> ?2 and (0 = ?5 or account.sex = ?5) and account.country = ?3 and account.province = ?4",
 			"select account.accountId from Account account where account.accountId >= (select ?1 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account where account.status = 0 and account <> ?2 and (0 = ?6 or account.sex = ?6) and account.country = ?3 and account.province = ?4 and account.city = ?5) and account.status = 0 and account <> ?2 and (0 = ?6 or account.sex = ?6) and account.country = ?3 and account.province = ?4 and account.city = ?5" };
+     */
+   private final String randPlaneAccountJPQL = "select profile.accountId from Profile profile, Plane plane where profile.accountId >= (select ?1 * (1.0 + max(profile.accountId) - min(profile.accountId)) + min(profile.accountId) - 1 from Profile profile, Plane plane where plane.planeId = ?2 and profile.status = 0 and profile.accountId <> plane.accountByOwnerId.accountId and (0 = plane.sex or profile.sex = plane.sex) and (plane.country is null or plane.country = '' or profile.country = plane.country) and (plane.province is null or plane.province = '' or profile.province = plane.province) and (plane.city is null or plane.city = '' or profile.city = plane.city)) and plane.planeId = ?2 and profile.status = 0 and profile.accountId <> plane.accountByOwnerId.accountId and (0 = plane.sex or profile.sex = plane.sex) and (plane.country is null or plane.country = '' or profile.country = plane.country) and (plane.province is null or plane.province = '' or profile.province = plane.province) and (plane.city is null or plane.city = '' or profile.city = plane.city)";
 
 	// not equal (current) account
-	public Long randPlaneAccount(Account account, Short sex,
-			String... conditions) {
+	public Long randPlaneAccount(long planeId) {
 		EntityManagerHelper.log("randPlaneAccounting", Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					randPlaneAccountJPQLs[conditions.length]);
+					randPlaneAccountJPQL);
 			query.setParameter(1, random.nextDouble());
-			query.setParameter(2, account);
-			for (int i = 0; i < conditions.length; ++i) {
-				query.setParameter(i + 3, conditions[i]);
-			}
-			query.setParameter(3 + conditions.length, sex);
+			query.setParameter(2, planeId);
 			query.setMaxResults(1);
 			Long result = null;
 			Iterator<Long> iter = query.getResultList().iterator();
@@ -52,23 +50,22 @@ public class AccountDao extends AccountDAO {
 	}
 
 	// consider whether the account is blocked
-	private final String[] randChainAccountJPQLs = {
+	/*private final String[] randChainAccountJPQLs = {
 			"select account.accountId from Account account, Chain chain where chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and account.accountId >= (select ?2 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account, Chain chain where account.status = 0 and chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account)) and account.status = 0 and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account)",
 			"select account.accountId from Account account, Chain chain where chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and account.accountId >= (select ?2 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account, Chain chain where account.status = 0 and chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3) and account.status = 0 and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3",
 			"select account.accountId from Account account, Chain chain where chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and account.accountId >= (select ?2 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account, Chain chain where account.status = 0 and chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3 and account.province = ?4) and account.status = 0 and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3  and account.province = ?4",
 			"select account.accountId from Account account, Chain chain where chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and account.accountId >= (select ?2 * (1.0 + max(account.accountId) - min(account.accountId)) + min(account.accountId) - 1 from Account account, Chain chain where account.status = 0 and chain.chainId = ?1 and (chain.sex = 0 or chain.sex = account.sex) and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3 and account.province = ?4 and account.city = ?5) and account.status = 0 and  not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account = account) and account.country = ?3 and account.province = ?4 and account.city = ?5" };
+     */
 
+	private final String randChainAccountJPQL = "select profile.accountId from Profile profile, Chain chain where chain.chainId = ?1 and (chain.sex = 0 or chain.sex = profile.sex) and profile.accountId >= (select ?2 * (1.0 + max(profile.accountId) - min(profile.accountId)) + min(profile.accountId) - 1 from Profile profile, Chain chain where profile.status = 0 and chain.chainId = ?1 and (chain.sex = 0 or chain.sex = profile.sex) and not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = profile.accountId) and (chain.country is null or chain.country = '' or profile.country = chain.country) and (chain.province is null or chain.province = '' or profile.province = chain.province) and (chain.city is null or chain.city = '' or profile.city = chain.city)) and profile.status = 0 and not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = profile.accountId) and (chain.country is null or chain.country = '' or profile.country = chain.country) and (chain.province is null or chain.province = '' or profile.province = chain.province) and (chain.city is null or chain.city = '' or profile.city = chain.city)";
+	
 	public Long randChainAccount(long chainId, String... conditions) {
 		EntityManagerHelper.log("randChainAccounting", Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					randChainAccountJPQLs[conditions.length]);
+					randChainAccountJPQL);
 			query.setParameter(1, chainId);
 			query.setParameter(2, random.nextDouble());
-
-			for (int i = 0; i < conditions.length; ++i) {
-				query.setParameter(i + 3, conditions[i]);
-			}
 			query.setMaxResults(1);
 			Long result = null;
 			Iterator<Long> iter = query.getResultList().iterator();
@@ -108,7 +105,7 @@ public class AccountDao extends AccountDAO {
 
 	private final String changeScreenNameJPQL = "update Authenticate authenticate set authenticate.screenName = ?2 where authenticate.accountId = ?1";
 
-	private final String changeScreenNameSetJPQL = "update Account account set account.screenName = ?2, account.updateCount = account.updateCount + 1 where account.accountId = ?1";
+	private final String changeScreenNameSetJPQL = "update Profile profile set profile.screenName = ?2, profile.updateCount = profile.updateCount + 1 where profile.accountId = ?1";
 
 	public boolean changeScreenName(long accountId, String screenName) {
 		EntityManagerHelper.log("changeScreenNameing", Level.INFO, null);
@@ -124,6 +121,7 @@ public class AccountDao extends AccountDAO {
 				query.setParameter(1, accountId);
 				query.setParameter(2, screenName);
 				query.executeUpdate();
+				this.increaseUpdateCount(accountId, 1);
 			}
 			EntityManagerHelper.log("changeScreenName successful", Level.INFO,
 					null);
@@ -131,29 +129,6 @@ public class AccountDao extends AccountDAO {
 		} catch (RuntimeException re) {
 			EntityManagerHelper
 					.log("changeScreenName failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
-
-	private final String obtainAccountJPQL = "select account from Account account where account.accountId = ?1 and (?2 is null or account.updateCount > ?2)";
-
-	public Account obtainAccount(long accountId, Long updateCount) {
-		EntityManagerHelper.log("obtainAccounting", Level.INFO, null);
-		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					obtainAccountJPQL);
-			query.setParameter(1, accountId);
-			query.setParameter(2, updateCount);
-			List<Account> result = query.getResultList();
-			Account account = null;
-			if (result.size() > 0) {
-				account = result.get(0);
-			}
-			EntityManagerHelper.log("obtainAccount successful", Level.INFO,
-					null);
-			return account;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("obtainAccount failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

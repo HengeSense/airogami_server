@@ -9,6 +9,9 @@ public class User {
 		this.accountId = accountId;
 		this.clientAgent = clientAgent;
 	}
+	public User(){
+		clientAgent = new ClientAgent();
+	}
 	public long getAccountId() {
 		return accountId;
 	}

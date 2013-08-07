@@ -36,7 +36,7 @@ public class TestPersistencePlane {
 		try {
 			
 			for(int i = 0; i < 10; ++i){
-				System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(1L), (short)AccountConstants.SexType_Unknown));
+				System.out.println(DaoUtils.accountDao.randPlaneAccount(1L));
 		        //System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(1L),(short)AccountConstants.SexType_Female, "China"));
 				//System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(2L), (short)AccountConstants.SexType_Female, "China", "Sichuan"));
 				//System.out.println(DaoUtils.accountDao.randPlaneAccount(DaoUtils.accountDao.getReference(2L), (short)AccountConstants.SexType_Female, "China", "Sichuan", "Chengdu"));

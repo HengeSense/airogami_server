@@ -46,16 +46,6 @@ public class ChangePasswordAction extends AirogamiActionSupport implements Model
 		return SUCCESS;
 	}
 	
-    @Override
-   	protected int getInputStatus() {
-   		return AirogamiError.Account_ChangePassword_Input_Status;
-   	}
-
-   	@Override
-   	protected String getInputMessage() {
-   		return AirogamiError.Account_ChangePassword_Input_Message;
-   	}
-	
 	@Override
 	public ChangePasswordVO getModel() {
 		return changePasswordVO;

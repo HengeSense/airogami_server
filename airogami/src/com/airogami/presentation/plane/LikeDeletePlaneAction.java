@@ -52,26 +52,6 @@ public class LikeDeletePlaneAction  extends AirogamiActionSupport {
 			JSONUtils.putOKStatus(dataMap);
 		}
 	}
-	
-	@Override
-	protected int getInputStatus() {
-		if("likePlane".equals(method)){
-			return AirogamiError.Plane_LikePlane_Input_Status;
-		}
-		else{
-			return AirogamiError.Plane_DeletePlane_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("likePlane".equals(method)){
-			return AirogamiError.Plane_LikePlane_Input_Message;
-		}
-		else{
-			return AirogamiError.Plane_DeletePlane_Input_Message;
-		}
-	}
 
 	public Long getPlaneId() {
 		return planeId;

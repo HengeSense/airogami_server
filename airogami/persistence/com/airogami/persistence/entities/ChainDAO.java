@@ -260,7 +260,7 @@ public class ChainDAO {
 
 	private static final String increasePassCountJPQL = "update Chain a set a.passCount = a.passCount + :count where a.chainId in (:chainId)";
 
-	public void increasePassCount(java.lang.Long chainId, int count) {
+	public boolean increasePassCount(java.lang.Long chainId, int count) {
 		EntityManagerHelper.log(
 				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
 				null);
@@ -268,9 +268,10 @@ public class ChainDAO {
 			Query query = getEntityManager().createQuery(increasePassCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
+			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseMaxMatchCount failed",
 					Level.SEVERE, re);
@@ -280,7 +281,7 @@ public class ChainDAO {
 
 	private static final String increaseMatchCountJPQL = "update Chain a set a.matchCount = a.matchCount + :count where a.chainId in (:chainId)";
 
-	public void increaseMatchCount(java.lang.Long chainId, int count) {
+	public boolean increaseMatchCount(java.lang.Long chainId, int count) {
 		EntityManagerHelper.log(
 				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
 				null);
@@ -289,9 +290,10 @@ public class ChainDAO {
 					.createQuery(increaseMatchCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
+			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseMaxMatchCount failed",
 					Level.SEVERE, re);
@@ -301,7 +303,7 @@ public class ChainDAO {
 
 	private static final String increaseMaxPassCountJPQL = "update Chain a set a.maxPassCount = a.maxPassCount + :count where a.chainId in (:chainId)";
 
-	public void increaseMaxPassCount(java.lang.Long chainId, int count) {
+	public boolean increaseMaxPassCount(java.lang.Long chainId, int count) {
 		EntityManagerHelper.log(
 				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
 				null);
@@ -310,9 +312,10 @@ public class ChainDAO {
 					increaseMaxPassCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
+			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseMaxMatchCount failed",
 					Level.SEVERE, re);
@@ -322,7 +325,7 @@ public class ChainDAO {
 
 	private static final String increaseMaxMatchCountJPQL = "update Chain a set a.maxMatchCount = a.maxMatchCount + :count where a.chainId in (:chainId)";
 
-	public void increaseMaxMatchCount(java.lang.Long chainId, int count) {
+	public boolean increaseMaxMatchCount(java.lang.Long chainId, int count) {
 		EntityManagerHelper.log(
 				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
 				null);
@@ -331,9 +334,10 @@ public class ChainDAO {
 					increaseMaxMatchCountJPQL);
 			query.setParameter("chainId", chainId);
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			EntityManagerHelper.log("increaseMaxMatchCount successful",
 					Level.INFO, null);
+			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseMaxMatchCount failed",
 					Level.SEVERE, re);

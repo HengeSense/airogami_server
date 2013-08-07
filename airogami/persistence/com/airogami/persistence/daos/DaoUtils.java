@@ -1,7 +1,5 @@
 package com.airogami.persistence.daos;
 
-import java.util.Random;
-
 public class DaoUtils {
 
 	public static final AuthenticateDao authenticateDao = new AuthenticateDao();
@@ -13,5 +11,6 @@ public class DaoUtils {
     public static final ChainMessageDao chainMessageDao = new ChainMessageDao();
     public static final CategoryDao categoryDao = new CategoryDao();
     public static final ReportDao reportDao = new ReportDao();
+    public static final ProfileDao profileDao = new ProfileDao();
     
 }

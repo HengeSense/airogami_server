@@ -137,48 +137,24 @@ public class PlaneService implements IPlaneService {
 	@Override
 	public Map<String, Object> matchPlane(long planeId) throws ApplicationException {
 		ApplicationException ae = null;
-		Plane plane = null;
 		Long accountId = null;
+		Boolean rematch = true;
+		Boolean succeed = false;
 		try {
 			EntityManagerHelper.beginTransaction();
-			plane = DaoUtils.planeDao.findById(planeId);
-			// may pickuped before this match
-			if(plane != null){
-				if(plane.getAccountByTargetId() == null && plane.getStatus() == PlaneConstants.StatusNew 
-					&& plane.getMatchCount() < plane.getMaxMatchCount()){
-					
-					String country = plane.getCountry(), province = plane.getProvince(), city = plane
-							.getCity();
-					Short sex = plane.getSex();
-					if (city != null && city.length() > 0) {
-						accountId = DaoUtils.accountDao.randPlaneAccount(
-								plane.getAccountByOwnerId(), sex, country, province, city);
-					} else if (province != null && province.length() > 0) {
-						accountId = DaoUtils.accountDao.randPlaneAccount(
-								plane.getAccountByOwnerId(), sex, country, province);
-					} else if (country != null && country.length() > 0) {
-						accountId = DaoUtils.accountDao.randPlaneAccount(
-								plane.getAccountByOwnerId(), sex, country);
-					} else {
-						accountId = DaoUtils.accountDao.randPlaneAccount(plane
-								.getAccountByOwnerId(), sex);
-					}
-
-					if(accountId == null || DaoUtils.planeDao.match(planeId, accountId)){						
-						DaoUtils.planeDao.increaseMatchCount(planeId, 1);
-						if(accountId != null){//match succeed
-							plane = null;
-						}
-					}
-					else{
-						//already matched
-						plane = null;
-					}
+			accountId = DaoUtils.accountDao.randPlaneAccount(planeId);
+			//plane may not exist
+			if(accountId == null || DaoUtils.planeDao.match(planeId, accountId)){	
+				//check whether planeId exists
+				rematch = DaoUtils.planeDao.increaseMatchCount(planeId, 1);
+				if(accountId != null){//match succeed
+					rematch = false;
+					succeed = true;
 				}
-				else{
-					//already matched
-					plane = null;
-				}		
+			}
+			else{
+				//already matched or exceed maximum	 
+				rematch = false;
 			}
 			
 			EntityManagerHelper.commit();
@@ -196,11 +172,9 @@ public class PlaneService implements IPlaneService {
 			throw ae;
 		}
 		Map<String, Object> result = new TreeMap<String,Object>();
-		if(plane != null){
-		    plane.setMatchCount(plane.getMatchCount() + 1);
-		    result.put("plane", plane);
-		}
-		if(accountId != null){
+		result.put("rematch", rematch);
+		result.put("succeed", succeed);
+		if(succeed){
 			result.put("accountId", accountId);
 		}		
 		
@@ -251,7 +225,7 @@ public class PlaneService implements IPlaneService {
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				DaoUtils.accountDao.increaseLikesCount(oppositeAccountId, 1);		
+				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);		
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {

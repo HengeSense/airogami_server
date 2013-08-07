@@ -2,6 +2,8 @@ package com.airogami.presentation.account;
 
 import java.util.Date;
 
+import com.airogami.presentation.logic.ClientAgent;
+
 public class SignupVO {
 
 	private String email;
@@ -15,6 +17,7 @@ public class SignupVO {
 	private String province;
 	private String country;	
 	private String shout;
+	private ClientAgent clientAgent = new ClientAgent();
 	
 	public String getEmail() {
 		return email;
@@ -81,5 +84,11 @@ public class SignupVO {
 	}
 	public void setShout(String shout) {
 		this.shout = shout;
+	}
+	public ClientAgent getClientAgent() {
+		return clientAgent;
+	}
+	public void setClientAgent(ClientAgent clientAgent) {
+		this.clientAgent = clientAgent;
 	}	
 }

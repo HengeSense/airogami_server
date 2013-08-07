@@ -20,6 +20,7 @@ import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 import com.airogami.presentation.logic.ManagerUtils;
 
@@ -33,7 +34,7 @@ public class TestAccount {
 	public void tearDown() throws Exception {
 	}
 	
-	@Ignore
+	
 	@Test
 	public void testSignup() {		
 		try {
@@ -43,18 +44,20 @@ public class TestAccount {
 				
 				authenticate.setPassword("12345678");
 				Account account = new Account();
-				account.setFullName("yangtianhu");
-				account.setScreenName("tianhuyang" + i);
+				Profile profile = new Profile();
+				profile.setFullName("yangtianhu");
+				profile.setScreenName("tianhuyang" + i);				
+				profile.setSex((short)0);
+				profile.setStatus((short)0);
+				profile.setIcon("icon");
+				profile.setCity("shanghai");
+				profile.setProvince("shanghai");
+				profile.setCountry("China");
+				profile.setLatitude(0.0);
+				profile.setLongitude(0.0);
+				profile.setAccountId(null);
 				account.setAuthenticate(authenticate);
-				account.setSex((short)0);
-				account.setStatus((short)0);
-				account.setIcon("icon");
-				account.setCity("shanghai");
-				account.setProvince("shanghai");
-				account.setCountry("China");
-				account.setLatitude(0.0);
-				account.setLongitude(0.0);
-				account.setAccountId(null);
+				account.setProfile(profile);
 				ManagerUtils.accountManager.signup(account);
 				ObjectUtils.printObject(account);
 			}			
@@ -110,8 +113,8 @@ public class TestAccount {
 		    properties.put("createdTime", new Timestamp(System.currentTimeMillis()));
 		    properties.put("updatedTime", new Timestamp(0));
 		    properties.put("birthday", new Date(0));
-			Account account = ManagerUtils.accountManager.editAccount(properties);
-			ObjectUtils.printObject(account);		
+			Profile profile = ManagerUtils.accountManager.editProfile(properties);
+			ObjectUtils.printObject(profile);		
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -151,8 +154,8 @@ public class TestAccount {
 		long accountId = 0L;
 		Long updateCount = null;
 		try {
-			Account account = ManagerUtils.accountManager.obtainAccount(accountId, updateCount);
-			ObjectUtils.printObject(account);
+			Profile profile = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
+			ObjectUtils.printObject(profile);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -262,7 +265,7 @@ public class TestAccount {
     	}
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testReportAccount() {
 		long reportId = 10;

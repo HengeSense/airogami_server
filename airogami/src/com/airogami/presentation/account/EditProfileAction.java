@@ -13,26 +13,26 @@ import com.airogami.presentation.utilities.AirogamiUtils;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class EditAccountAction extends AirogamiActionSupport implements ModelDriven<EditAccountVO>{
+public class EditProfileAction extends AirogamiActionSupport implements ModelDriven<EditProfileVO>{
 	
 	private static final long serialVersionUID = 1L;
-	private EditAccountVO editAccountVO;
+	private EditProfileVO editProfileVO;
 	
-	public EditAccountAction() {
+	public EditProfileAction() {
 		super();
-		editAccountVO = new EditAccountVO();
+		editProfileVO = new EditProfileVO();
 	}
 	
     public String execute() throws Exception{
     	boolean succeed = false;
 		try {			
-			Map<String, Object> properties = AirogamiUtils.describe(editAccountVO);
+			Map<String, Object> properties = AirogamiUtils.describe(editProfileVO);
 			if(properties.size() > 0){
 				HttpSession session = request.getSession(true);
 				User user = (User)session.getAttribute("user");	
 				properties.put("accountId", user.getAccountId());
 				//temporary
-				session.setAttribute("account", ManagerUtils.accountManager.editAccount(properties));				
+				session.setAttribute("account", ManagerUtils.accountManager.editProfile(properties));				
 			}
 			succeed = true;
 		} catch (AirogamiException e) {
@@ -50,19 +50,9 @@ public class EditAccountAction extends AirogamiActionSupport implements ModelDri
 		return SUCCESS;
 	}
 	
-    @Override
-   	protected int getInputStatus() {
-   		return AirogamiError.Account_EditAccount_Input_Status;
-   	}
-
-   	@Override
-   	protected String getInputMessage() {
-   		return AirogamiError.Account_EditAccount_Input_Message;
-   	}
-	
 	@Override
-	public EditAccountVO getModel() {
-		return editAccountVO;
+	public EditProfileVO getModel() {
+		return editProfileVO;
 	}
 
 }

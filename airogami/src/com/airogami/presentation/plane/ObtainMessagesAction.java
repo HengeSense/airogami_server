@@ -45,16 +45,6 @@ public class ObtainMessagesAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 
-	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Plane_ObtainMessages_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Plane_ObtainMessages_Input_Message;
-	}
-
 	public Long getPlaneId() {
 		return planeId;
 	}

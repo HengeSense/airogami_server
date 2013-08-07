@@ -36,7 +36,7 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 				session.setAttribute("user", user);
 			}			
 			//dataMap.put("user", user);
-			dataMap.put("account", account);
+			dataMap.put("result", account);
 			succeed = true;
 		} catch (AirogamiException e) {			
 			String localizedMessage = getText(e.getMessage(),e.getMessage());
@@ -66,16 +66,6 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
     public String execute() throws Exception{
 		return emailSignin();
 	}	
-	
-    @Override
-	protected int getInputStatus() {
-		return AirogamiError.Account_Signin_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Account_Signin_Input_Message;
-	}
 	
 	@Override
 	public SigninVO getModel() {

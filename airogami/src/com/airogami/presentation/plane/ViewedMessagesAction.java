@@ -44,16 +44,6 @@ public class ViewedMessagesAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 
-	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Plane_ViewedMessages_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Plane_ViewedMessages_Input_Message;
-	}
-
 	public Long getPlaneId() {
 		return planeId;
 	}

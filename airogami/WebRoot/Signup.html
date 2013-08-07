@@ -56,7 +56,14 @@
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Icon: </label>
     <input type="file" name="file" />
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+         <label>Device Name: </label>
+    <input type="text" name="clientAgent.deviceName" value="Android" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Client Version: </label>
+    <input type="text" name="clientAgent.clientVersion" value="1.0" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <br>
     <button type="button" onclick="print()">print</button>
     <input type="reset" name="submit" value="reset" />
     <input type="submit" name="submit" value="submit" />

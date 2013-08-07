@@ -1,5 +1,8 @@
 package com.airogami.presentation.account;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,6 +11,7 @@ import com.airogami.exception.AirogamiError;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.DataManager;
 import com.airogami.presentation.logic.ManagerUtils;
@@ -46,13 +50,19 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 		try {
 			Account account = new Account();
 			Authenticate authenticate = new Authenticate();
-			BeanUtils.copyProperties(account, user);
+			Profile profile = new Profile();
+			BeanUtils.copyProperties(profile, user);
 			BeanUtils.copyProperties(authenticate, user);
-			account.setIcon("account/icon.jpg");
+			profile.setIcon("account/icon.jpg");
 			account.setAuthenticate(authenticate);
-			long accountId = ManagerUtils.accountManager.signup(account);
-			//UploadUtils.uploadImage(accountId, user.getFile(), user.getFileFileName(), user.getFileContentType());
-			String result = ManagerUtils.dataManager.accountIcon(DataManager.Method_Upload, accountId);
+			account.setProfile(profile);
+			account = ManagerUtils.accountManager.signup(account);
+			Map<String, Object> result = null;
+			if(account != null){
+				result = new TreeMap<String, Object>();
+				result.put("tokens", ManagerUtils.dataManager.accountIcon(account.getAccountId())); 
+				result.put("account", account);
+			}
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {			
@@ -77,14 +87,4 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 	public String getMethod() {
 		return method;
 	}	
-
-	@Override
-	protected int getInputStatus() {
-		return AirogamiError.Account_Signup_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Account_Signup_Input_Message;
-	}
 }

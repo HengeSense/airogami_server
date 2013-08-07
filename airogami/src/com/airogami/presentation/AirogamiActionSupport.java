@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 
+import com.airogami.exception.AirogamiError;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -28,19 +29,15 @@ public abstract class AirogamiActionSupport extends ActionSupport implements Ser
 		this.method = ActionContext.getContext().getName();
 	}
 	
-	abstract protected int getInputStatus();
-	
-	abstract protected String getInputMessage();
-	
 	public void validate(){	
 		if(this.hasActionErrors()){
-			JSONUtils.putStatus(dataMap, getInputStatus(), getInputMessage());
+			JSONUtils.putInputStatus(dataMap);
 			dataMap.put("actionErrors", this.getActionErrors());
 		}
 		else{
 			super.validate();
 			if(this.hasFieldErrors()){
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}
 		}

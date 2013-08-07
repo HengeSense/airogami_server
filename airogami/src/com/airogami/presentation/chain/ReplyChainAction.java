@@ -54,16 +54,6 @@ public class ReplyChainAction extends AirogamiActionSupport implements ModelDriv
 	}
 
 	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Chain_ReplyChain_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Chain_ReplyChain_Input_Message;
-	}
-
-	@Override
 	public ReplyChainVO getModel() {
 		return replyChainVO;
 	}

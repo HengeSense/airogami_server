@@ -40,15 +40,6 @@ public class ThrowChainAction extends AirogamiActionSupport {
 	public void chain(int type){
 		
 	}
-	@Override
-	protected int getInputStatus() {
-		return AirogamiError.Chain_ThrowChain_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Chain_ThrowChain_Input_Message;
-	}
 	
 	public Long getChainId() {
 		return chainId;

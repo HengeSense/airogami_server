@@ -32,7 +32,7 @@ public class ObtainPlanesAction extends AirogamiActionSupport {
 				    sTimestamp = Timestamp.valueOf(start);
 			}catch(Throwable t){
 				this.addFieldError("start", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}	
 			try{
@@ -40,7 +40,7 @@ public class ObtainPlanesAction extends AirogamiActionSupport {
 				eTimestamp = Timestamp.valueOf(end);
 			}catch(Throwable t){
 				this.addFieldError("end", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}
 		}		
@@ -86,25 +86,6 @@ public class ObtainPlanesAction extends AirogamiActionSupport {
 		}
 	}
 	
-	@Override
-	protected int getInputStatus() {
-		if("receivePlanes".equals(method)){
-			return AirogamiError.Plane_ReceivePlanes_Input_Status;
-		}
-		else{
-			return AirogamiError.Plane_ObtainPlanes_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("receivePlanes".equals(method)){
-			return AirogamiError.Plane_ReceivePlanes_Input_Message;
-		}
-		else{
-			return AirogamiError.Plane_ObtainPlanes_Input_Message;		
-     	}
-	}
 
 	public int getStartIdx() {
 		return startIdx;

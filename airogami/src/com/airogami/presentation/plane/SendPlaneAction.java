@@ -58,16 +58,6 @@ public class SendPlaneAction extends AirogamiActionSupport implements ModelDrive
 	}
 
 	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Plane_SendPlane_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Plane_SendPlane_Input_Message;
-	}
-
-	@Override
 	public SendPlaneVO getModel() {
 		return sendPlaneVO;
 	}

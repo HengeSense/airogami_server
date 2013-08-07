@@ -45,8 +45,8 @@ public class ChainManager {
 			chain = ServiceUtils.chainService.sendChain(chain, ownerId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_SendChain_Failure_Status,
-					AirogamiException.Chain_SendChain_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		ServiceUtils.airogamiService.appendChain(chain.getChainId());
 		return chain;
@@ -69,8 +69,8 @@ public class ChainManager {
 			chainMessage = ServiceUtils.chainService.replyChain(accountId, chainId, content, type);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ReplyChain_Failure_Status,
-					AirogamiException.Chain_ReplyChain_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		ServiceUtils.airogamiService.appendChain(chainId);
 		return chainMessage;
@@ -89,8 +89,8 @@ public class ChainManager {
 			
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ThrowChain_Failure_Status,
-					AirogamiException.Chain_ThrowChain_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		if(canMatchedAgain){
 			ServiceUtils.airogamiService.appendChain(chainId);
@@ -108,8 +108,8 @@ public class ChainManager {
 			return ServiceUtils.chainService.deleteChain(chainId, accountId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_DeleteChain_Failure_Status,
-					AirogamiException.Chain_DeleteChain_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
@@ -132,8 +132,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.obtainChains(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ObtainChains_Failure_Status,
-					AirogamiException.Chain_ObtainChains_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -157,8 +157,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.obtainChainIds(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ObtainChainIds_Failure_Status,
-					AirogamiException.Chain_ObtainChainIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -177,8 +177,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.obtainChainIds(accountId, startId, limit);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ObtainChainIds_Failure_Status,
-					AirogamiException.Chain_ObtainChainIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -203,8 +203,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.receiveChains(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ReceiveChains_Failure_Status,
-					AirogamiException.Chain_ReceiveChains_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -228,8 +228,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.receiveChainIds(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ReceiveChainIds_Failure_Status,
-					AirogamiException.Chain_ReceiveChainIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -248,8 +248,8 @@ public class ChainManager {
 			result = ServiceUtils.chainService.receiveChainIds(accountId, startId, limit);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ReceiveChainIds_Failure_Status,
-					AirogamiException.Chain_ReceiveChainIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -267,8 +267,8 @@ public class ChainManager {
 			    return ServiceUtils.chainService.obtainChainMessages(accountId, chainId, last, limit);
 			} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Chain_ObtainChainMessages_Failure_Status,
-					AirogamiException.Chain_ObtainChainMessages_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		
 	}
@@ -288,8 +288,8 @@ public class ChainManager {
 		    return ServiceUtils.chainService.viewedChainMessages(accountId, chainId, last);
 		} catch (ApplicationException re) {
 		throw new AirogamiException(
-				AirogamiException.Chain_ViewedChainMessages_Failure_Status,
-				AirogamiException.Chain_ViewedChainMessages_Failure_Message);
+				AirogamiException.Application_Exception_Status,
+				AirogamiException.Application_Exception_Message);
 	}
 	}
 	

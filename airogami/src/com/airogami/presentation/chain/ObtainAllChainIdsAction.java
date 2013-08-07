@@ -58,25 +58,6 @@ public class ObtainAllChainIdsAction extends AirogamiActionSupport {
 		}
 	}
 	
-	@Override
-	protected int getInputStatus() {
-		if("receiveChains".equals(method)){
-			return AirogamiError.Chain_ReceiveChainIds_Input_Status;
-		}
-		else{
-			return AirogamiError.Chain_ObtainChainIds_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("receiveChains".equals(method)){
-			return AirogamiError.Chain_ReceiveChainIds_Input_Message;
-		}
-		else{
-			return AirogamiError.Chain_ObtainChainIds_Input_Message;		
-     	}
-	}
 
 	public long getStartId() {
 		return startId;

@@ -28,7 +28,7 @@ public class ViewedChainMessagesAction extends AirogamiActionSupport{
 				}
 			}catch(Throwable t){
 				this.addFieldError("last", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}	
 		}		
@@ -59,15 +59,6 @@ public class ViewedChainMessagesAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 
-	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Chain_ViewedChainMessages_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Chain_ViewedChainMessages_Input_Message;
-	}
 
 	public Long getChainId() {
 		return chainId;

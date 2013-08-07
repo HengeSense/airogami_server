@@ -45,16 +45,6 @@ public class ChangeScreenNameAction extends AirogamiActionSupport implements Mod
 		return SUCCESS;
 	}
 	
-    @Override
-   	protected int getInputStatus() {
-   		return AirogamiError.Account_ChangeScreenName_Input_Status;
-   	}
-
-   	@Override
-   	protected String getInputMessage() {
-   		return AirogamiError.Account_ChangeScreenName_Input_Message;
-   	}
-	
 	@Override
 	public ChangeScreenNameVO getModel() {
 		return changeScreenNameVO;

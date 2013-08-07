@@ -51,17 +51,7 @@ public class SendChainAction extends AirogamiActionSupport implements ModelDrive
 		}
 		return SUCCESS;
 	}
-
-	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Chain_SendChain_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Chain_SendChain_Input_Message;
-	}
-
+	
 	@Override
 	public SendChainVO getModel() {
 		return sendChainVO;

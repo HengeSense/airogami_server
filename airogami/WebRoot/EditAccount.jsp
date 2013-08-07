@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account, com.airogami.presentation.logic.*, com.airogami.presentation.logic.User, java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.*, com.airogami.presentation.logic.*, com.airogami.presentation.logic.User, java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -22,9 +22,9 @@
     <h2>Edit Account</h2>
      <p><% 
    User user = (User)request.getSession(true).getAttribute("user");
-   Account account = null;
+   Profile profile = null;
     if(user != null){
-        account = ManagerUtils.accountManager.obtainAccount(user.getAccountId(), null);
+        profile = ManagerUtils.accountManager.obtainProfile(user.getAccountId(), null);
         out.print("Edit account for" + user.getAccountId());
     }
     else{
@@ -33,32 +33,32 @@
      %> </p>
      <%
      if(user != null){ %>
-    <form action="account/editAccount.action"  method="post" enctype="multipart/form-data"> 
+    <form action="account/editProfile.action"  method="post" enctype="multipart/form-data"> 
     <label>Sex: </label> 
-    <input type="text" name="sex" value="<%= account.getSex() %>" />
+    <input type="text" name="sex" value="<%= profile.getSex() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Fullname: </label>
-    <input type="text" name="fullName" value="<%= account.getFullName() %>" />
+    <input type="text" name="fullName" value="<%= profile.getFullName() %>" />
     <input type="checkbox" checked="checked" onchange="hide(this)">
     <!--  <textarea name="fullName" >tianhuyang ä½ å¥½ </textarea>-->
         <br> 
     <label>Birthday: </label>
-    <input type="text" name="birthday" value="<%= account.getBirthday() != null ? new SimpleDateFormat("MM/DD/yyyy").format(account.getBirthday()) : "" %>" />
+    <input type="text" name="birthday" value="<%= profile.getBirthday() != null ? new SimpleDateFormat("MM/DD/yyyy").format(profile.getBirthday()) : "" %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Longitude: </label>
-    <input type="text" name="longitude" value="<%= account.getLongitude() %>" />
+    <input type="text" name="longitude" value="<%= profile.getLongitude() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Latitude: </label>
-    <input type="text" name="latitude" value="<%= account.getLatitude() %>" />
+    <input type="text" name="latitude" value="<%= profile.getLatitude() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>City: </label>
-    <input type="text" name="city" value="<%= account.getCity() %>" />
+    <input type="text" name="city" value="<%= profile.getCity() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Province: </label>
-    <input type="text" name="province" value="<%= account.getProvince() %>" />
+    <input type="text" name="province" value="<%= profile.getProvince() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Country: </label>
-    <input type="text" name="country" value="<%= account.getCountry() %>" />
+    <input type="text" name="country" value="<%= profile.getCountry() %>" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Icon: </label>
     <input type="file" name="file" />

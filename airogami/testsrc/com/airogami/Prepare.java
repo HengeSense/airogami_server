@@ -21,6 +21,7 @@ import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.presentation.logic.ManagerUtils;
 
 public class Prepare {
@@ -76,17 +77,19 @@ public class Prepare {
 			authenticate.setEmail(emails[i]);			
 			authenticate.setPassword("12345678");
 			Account account = new Account();
-			account.setFullName(names[i]);
-			account.setScreenName(names[i]);
+			Profile profile = new Profile();
+			profile.setFullName(names[i]);
+			profile.setScreenName(names[i]);			
+			profile.setSex(sexes[i]);
+			profile.setStatus((short)0);
+			profile.setIcon("icon");
+			profile.setCity(locations[i][2]);
+			profile.setProvince(locations[i][1]);
+			profile.setCountry(locations[i][0]);
+			profile.setLatitude(0.0);
+			profile.setLongitude(0.0);
 			account.setAuthenticate(authenticate);
-			account.setSex(sexes[i]);
-			account.setStatus((short)0);
-			account.setIcon("icon");
-			account.setCity(locations[i][2]);
-			account.setProvince(locations[i][1]);
-			account.setCountry(locations[i][0]);
-			account.setLatitude(0.0);
-			account.setLongitude(0.0);
+			account.setProfile(profile);
 			ManagerUtils.accountManager.signup(account);
 			/*for(int j = 0; j < 2; ++j){
 				account.setFullName(names[i] + j);

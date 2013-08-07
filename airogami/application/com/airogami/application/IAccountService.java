@@ -5,15 +5,16 @@ import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 
 public interface IAccountService {
 	/*
-	 * @param account:(Account) must be not null and have valid account.authenticate
-	 * @return accountId if successful
+	 * @param account:(Account) must be not null and have valid account.authenticate, account.profile
+	 * @return account if successful
 	 * @throws ApplicationException or EmailExistsException if failed 
 	 */
-	public long signup(Account account) throws ApplicationException;
+	public Account signup(Account account) throws ApplicationException;
 	
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)
@@ -25,10 +26,10 @@ public interface IAccountService {
 	
 	/*
 	 * @param properties:((Map<String, Object>) no screenName
-	 * @return account if successful
+	 * @return profile if successful
 	 * @throws ApplicationException if failed 
 	 */
-	public Account editAccount(Map<String, Object> properties) throws ApplicationException;
+	public Profile editProfile(Map<String, Object> properties) throws ApplicationException;
 	
 	/*
 	 * @param accountId:(long)
@@ -50,10 +51,10 @@ public interface IAccountService {
 	/*
 	 * @param accountId:(long)
 	 * @param last:(Timestamp)
-	 * @return account, null if not updated
+	 * @return profile, null if not updated
 	 * @throws ApplicationException if failed 
 	 */
-	public Account obtainAccount(long accountId, Long updateCount) throws ApplicationException;
+	public Profile obtainProfile(long accountId, Long updateCount) throws ApplicationException;
 
 	/*
 	 * @param report:(Report)

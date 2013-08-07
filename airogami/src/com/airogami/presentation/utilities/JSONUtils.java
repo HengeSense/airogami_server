@@ -19,9 +19,20 @@ public class JSONUtils implements JSONConstants {
 				+ AirogamiError.OK_Message + '"';
 
 	}
+	
 	public static void putStatus(Map<String,Object> map,int status,String message){
 		map.put(JSONConstants.KEY_STATUS , status);
 		map.put(JSONConstants.KEY_MESSAGE , message);
+	}
+	
+	public static void putInputStatus(Map<String,Object> map){
+		map.put(JSONConstants.KEY_STATUS , AirogamiError.Application_Input_Status);
+		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.Application_Input_Message);
+	}
+	
+	public static void putExceptionStatus(Map<String,Object> map){
+		map.put(JSONConstants.KEY_STATUS , AirogamiError.Application_Exception_Status);
+		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.Application_Exception_Message);
 	}
 	
 	public static void putStatus(Map<String,Object> map, String message){

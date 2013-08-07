@@ -34,7 +34,7 @@ public interface IPlaneService {
 	
 	/*
 	 * @param planeId:(long) must exist
-	 * @return plane, accountId if successful or plnae = null if (not exist or already matched or exceed maximum)
+	 * @return succeed, rematch, accountId if successful
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> matchPlane(long planeId) throws ApplicationException;

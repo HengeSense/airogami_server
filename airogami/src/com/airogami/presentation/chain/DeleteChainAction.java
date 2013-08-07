@@ -36,16 +36,6 @@ public class DeleteChainAction extends AirogamiActionSupport {
 		}
 		return SUCCESS;
 	}
-	
-	@Override
-	protected int getInputStatus() {
-		return AirogamiError.Chain_DeleteChain_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Chain_DeleteChain_Input_Message;
-	}
 
 	public Long getChainId() {
 		return chainId;

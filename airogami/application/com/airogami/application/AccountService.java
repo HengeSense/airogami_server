@@ -15,6 +15,7 @@ import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.AccountStat;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 import com.airogami.persistence.entities.ReportId;
 
@@ -25,16 +26,17 @@ public class AccountService implements IAccountService {
 	 * com.airogami.application.IAccountService#signup(com.airogami.persitence
 	 * .entities.Account)
 	 */
-	public long signup(Account account) throws ApplicationException {
+	public Account signup(Account account) throws ApplicationException {
 
 		ApplicationException ae = null;
 		AccountStat accountStat = new AccountStat();
 		Authenticate authenticate = account.getAuthenticate();
+		Profile profile = account.getProfile();
 		account.setAuthenticate(null);
 		try {
 			EntityManagerHelper.beginTransaction();
 			authenticate = DaoUtils.authenticateDao.createAuthenticate(authenticate);
-			DaoUtils.authenticateDao.flush();
+			//DaoUtils.authenticateDao.flush();
 			if(authenticate == null){
 				//duplicate email
 				ae = new EmailExistsException();
@@ -42,8 +44,9 @@ public class AccountService implements IAccountService {
 			else{
 				account.setAccountId(authenticate.getAccountId());
 				DaoUtils.accountDao.save(account);
-				DaoUtils.accountDao.flush();
-				accountStat.setAccountId(account.getAccountId());
+				profile.setAccountId(authenticate.getAccountId());
+				DaoUtils.profileDao.save(profile);
+				accountStat.setAccountId(authenticate.getAccountId());
 				DaoUtils.accountStatDao.save(accountStat);
 			}
 								
@@ -62,8 +65,9 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		} 		
-		//account.setAccountStat(accountStat);
-		return account.getAccountId();
+		account.setAccountStat(accountStat);
+		account.setProfile(profile);
+		return account;
 	}
 
 	/*
@@ -108,17 +112,18 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public Account editAccount(Map<String, Object> properties) throws ApplicationException{
+	public Profile editProfile(Map<String, Object> properties) throws ApplicationException{
 		ApplicationException ae = null;
-		Account account = null;
+		Profile profile = null;
 		try {
 			Long accountId = (Long)properties.get("accountId");
 			EntityManagerHelper.beginTransaction();
-			account = DaoUtils.accountDao.findById(accountId);
-			if(account != null){
+			profile = DaoUtils.profileDao.findById(accountId);
+			if(profile != null){
 				try{
-			    	BeanUtils.populate(account, properties);	
+			    	BeanUtils.populate(profile, properties);	
 			    	DaoUtils.accountDao.flush();
+			    	DaoUtils.profileDao.increaseUpdateCount(accountId, 1);
 			    	DaoUtils.accountDao.increaseUpdateCount(accountId, 1);
 				}catch (IllegalAccessException e) {
 					throw new RuntimeException(e.getMessage());
@@ -142,11 +147,11 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		} 
-		if(account != null){
-			account.setUpdateCount(account.getUpdateCount() + 1);
+		if(profile != null){
+			profile.setUpdateCount(profile.getUpdateCount() + 1);
 		}
 		
-		return account;
+		return profile;
 	}
 	
 	@Override
@@ -205,12 +210,12 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public Account obtainAccount(long accountId, Long updateCount) throws ApplicationException{
+	public Profile obtainProfile(long accountId, Long updateCount) throws ApplicationException{
 		ApplicationException ae = null;
-		Account account = null;
+		Profile profile = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			account = DaoUtils.accountDao.obtainAccount(accountId, updateCount);								
+			profile = DaoUtils.profileDao.obtainProfile(accountId, updateCount);								
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {		
 			//t.printStackTrace();
@@ -227,7 +232,7 @@ public class AccountService implements IAccountService {
 			throw ae;
 		} 
 		
-		return account;
+		return profile;
 	}
 	
 	public Report reportAccount(Report report) throws ApplicationException

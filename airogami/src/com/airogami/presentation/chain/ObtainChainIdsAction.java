@@ -31,7 +31,7 @@ public class ObtainChainIdsAction extends AirogamiActionSupport {
 				    sTimestamp = Timestamp.valueOf(start);
 			}catch(Throwable t){
 				this.addFieldError("start", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}	
 			try{
@@ -39,7 +39,7 @@ public class ObtainChainIdsAction extends AirogamiActionSupport {
 				eTimestamp = Timestamp.valueOf(end);
 			}catch(Throwable t){
 				this.addFieldError("end", "Invalid Timestamp");
-				JSONUtils.putStatus(dataMap,  getInputStatus(), getInputMessage());
+				JSONUtils.putInputStatus(dataMap);
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}
 		}		
@@ -83,26 +83,6 @@ public class ObtainChainIdsAction extends AirogamiActionSupport {
 		if(succeed){
 			JSONUtils.putOKStatus(dataMap);
 		}
-	}
-	
-	@Override
-	protected int getInputStatus() {
-		if("receiveChains".equals(method)){
-			return AirogamiError.Chain_ReceiveChainIds_Input_Status;
-		}
-		else{
-			return AirogamiError.Chain_ObtainChainIds_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("receiveChains".equals(method)){
-			return AirogamiError.Chain_ReceiveChainIds_Input_Message;
-		}
-		else{
-			return AirogamiError.Chain_ObtainChainIds_Input_Message;		
-     	}
 	}
 
 	public int getStartIdx() {

@@ -53,16 +53,6 @@ public class ReplyPlaneAction extends AirogamiActionSupport implements ModelDriv
 	}
 
 	@Override
-	protected int getInputStatus() {		
-		return AirogamiError.Plane_ReplyPlane_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Plane_ReplyPlane_Input_Message;
-	}
-
-	@Override
 	public ReplyPlaneVO getModel() {
 		return replyPlaneVO;
 	}

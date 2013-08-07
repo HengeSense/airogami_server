@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.Account, com.airogami.presentation.logic.*, com.airogami.presentation.logic.User,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*, com.airogami.persistence.entities.*, com.airogami.presentation.logic.*, com.airogami.presentation.logic.User,java.text.SimpleDateFormat" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,9 +21,9 @@
     <div class = "container">    
      <p><% 
    User user = (User)request.getSession(true).getAttribute("user");
-   Account account = null;
+   Profile profile = null;
     if(user != null){
-        account = ManagerUtils.accountManager.obtainAccount(user.getAccountId(), null);
+        profile = ManagerUtils.accountManager.obtainProfile(user.getAccountId(), null);
         out.print("Edit Authenticate for " + user.getAccountId());
     }
     else{
@@ -48,7 +48,7 @@
     <h2>Edit Screen Name</h2>
     <form action="account/changeScreenName.action"  method="get"> 
     <label>New Screen Name: </label>
-    <input type="text" name="screenName"  value="<%= account.getScreenName() %>"/>
+    <input type="text" name="screenName"  value="<%= profile.getScreenName() %>"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
     <button type="button" onclick="print(1)">print</button>
     <input type="reset" name="submit" value="reset" />

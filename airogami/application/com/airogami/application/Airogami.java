@@ -55,17 +55,17 @@ public class Airogami implements Delayed{
 		if(type == TypePlane){
 			try {
 				result = ServiceUtils.planeService.matchPlane(id);
-				Plane plane = (Plane)result.get("plane");
-				accountId = (Long)result.get("accountId");
-				if(plane != null){					
-					if(dismatchCount < MaxDismatchCount){
-						rematch = true;
+				Boolean succeed = (Boolean)result.get("succeed");
+				rematch = (Boolean)result.get("rematch");
+				
+				if(rematch){					
+					if(++dismatchCount >= MaxDismatchCount){
+						rematch = false;
 					}
-					++dismatchCount;
 				}
-				else{
+				else if(succeed){
 					//match succeed
-					
+					accountId = (Long)result.get("accountId");
 				}	
 			     exceptionCount = 0;
 			} catch (Throwable t) {
@@ -80,14 +80,15 @@ public class Airogami implements Delayed{
 			
 			try {
 				result = ServiceUtils.chainService.matchChain(id);
-				Chain chain = (Chain)result.get("chain");
-				if(chain != null){
-					if(dismatchCount < MaxDismatchCount){
-						rematch = true;
+				Boolean succeed = (Boolean)result.get("succeed");
+				rematch = (Boolean)result.get("rematch");
+				
+				if(rematch){
+					if(++dismatchCount >= MaxDismatchCount){
+						rematch = false;
 					}
-					++dismatchCount;
 				}
-				else{
+				else if(succeed){
 					//match succeed
 					accountId = (Long)result.get("accountId");
 				}

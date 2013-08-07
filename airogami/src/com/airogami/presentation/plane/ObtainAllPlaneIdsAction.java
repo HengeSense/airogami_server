@@ -55,26 +55,6 @@ public class ObtainAllPlaneIdsAction extends AirogamiActionSupport {
 			JSONUtils.putOKStatus(dataMap);
 		}
 	}
-	
-	@Override
-	protected int getInputStatus() {
-		if("receivePlaneIds".equals(method)){
-			return AirogamiError.Plane_ReceivePlaneIds_Input_Status;
-		}
-		else{
-			return AirogamiError.Plane_ObtainPlaneIds_Input_Status;
-		}
-	}
-
-	@Override
-	protected String getInputMessage() {
-		if("receivePlaneIds".equals(method)){
-			return AirogamiError.Plane_ReceivePlaneIds_Input_Message;
-		}
-		else{
-			return AirogamiError.Plane_ObtainPlaneIds_Input_Message;		
-     	}
-	}
 
 	public long getStartId() {
 		return startId;

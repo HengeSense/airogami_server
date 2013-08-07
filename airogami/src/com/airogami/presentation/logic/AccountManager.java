@@ -10,6 +10,7 @@ import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 import com.airogami.persistence.entities.ReportId;
 
@@ -20,52 +21,57 @@ public class AccountManager {
 	 * @return accountId if successful
 	 * @throws AirogamiException if failed 
 	 */
-	public long signup(Account account)
-			throws AirogamiException {	
+	public Account signup(Account account)
+			throws AirogamiException {			
+		if (account == null){
+			throw new IllegalArgumentException("Illegal arguments in signup");
+		}
 		Authenticate authenticate = account.getAuthenticate();
-		if (account == null || authenticate == null){
+		Profile profile = account.getProfile();
+		Long accountId = null;
+		if (profile == null || authenticate == null){
 			throw new IllegalArgumentException("Illegal arguments in signup");
 		}
         
-		if ((account.getFullName() == null || account.getFullName().length() == 0)
-				|| account.getSex() == null
-			    || (account.getIcon() == null || account.getIcon().length() == 0)
-				|| account.getLongitude() == null
-				|| account.getLatitude() == null
-				|| (account.getCountry() == null || account.getCountry().length() == 0)
-				|| (account.getProvince() == null || account.getProvince().length() == 0)
-				|| (account.getCity() == null || account.getCity().length() == 0)
+		if ((profile.getFullName() == null || profile.getFullName().length() == 0)
+				|| profile.getSex() == null
+			    || (profile.getIcon() == null || profile.getIcon().length() == 0)
+				|| profile.getLongitude() == null
+				|| profile.getLatitude() == null
+				|| (profile.getCountry() == null || profile.getCountry().length() == 0)
+				|| (profile.getProvince() == null || profile.getProvince().length() == 0)
+				|| (profile.getCity() == null || profile.getCity().length() == 0)
 				|| (authenticate.getEmail() == null || authenticate.getEmail().length() == 0)
 				|| (authenticate.getPassword() == null || authenticate.getPassword().length() == 0)) {
 			throw new IllegalArgumentException("Illegal arguments in signup");
 		}
-		if(account.getSex() > AccountConstants.SexType_Female){
-			account.setSex((short)AccountConstants.SexType_Female);
+		//
+		if(profile.getSex() > AccountConstants.SexType_Female){
+			profile.setSex((short)AccountConstants.SexType_Female);
 		}
-		else if(account.getSex() < AccountConstants.SexType_Male){
-			account.setSex((short)AccountConstants.SexType_Male);
+		else if(profile.getSex() < AccountConstants.SexType_Male){
+			profile.setSex((short)AccountConstants.SexType_Male);
 		}
-		account.setAccountId(null);	
-		account.setStatus((short)0);
+		profile.setAccountId(null);	
+		profile.setStatus((short)0);
 		//no screen name		
 		authenticate.setScreenName(null);
-		account.setScreenName(null);
+		profile.setScreenName(null);
 		//
 		authenticate.setAccount(null);
 		try {
-			return ServiceUtils.accountService.signup(account);
+			account = ServiceUtils.accountService.signup(account);
 		} catch (ApplicationException re) {
 			if(re instanceof EmailExistsException){
-				throw new AirogamiException(
-						AirogamiException.Account_Signup_Duplicate_Status,
-						AirogamiException.Account_Signup_Duplicate_Message);
+				account = null;
 			}
 			else{
 				throw new AirogamiException(
-					AirogamiException.Account_Signup_Failure_Status,
-					AirogamiException.Account_Signup_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 			}
 		}
+		return account;
 	}
 
 	/*
@@ -83,8 +89,8 @@ public Account signinWithScreenName(String screenName, String password)
 			account = ServiceUtils.accountService.signin(new String[]{screenName, password}, AccountConstants.AuthenticateTypeScreenName);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_Signin_Failure_Status,
-					AirogamiException.Account_Signin_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		/*if(account == null){
 			throw new AirogamiException(
@@ -110,8 +116,8 @@ public Account signinWithScreenName(String screenName, String password)
 		} catch (Throwable re) {
 			//re.printStackTrace();
 			throw new AirogamiException(
-					AirogamiException.Account_Signin_Failure_Status,
-					AirogamiException.Account_Signin_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		/*if(account == null){
 			throw new AirogamiException(
@@ -125,15 +131,15 @@ public Account signinWithScreenName(String screenName, String password)
 	/*
 	 * not check some data types
 	 * @param properties:((Map<String, Object>) no screenName, no status
-	 * @return account if successful
+	 * @return profile if successful
 	 * @throws ApplicationException if failed 
 	 */
-	public Account editAccount(Map<String, Object> properties) throws AirogamiException{
+	public Profile editProfile(Map<String, Object> properties) throws AirogamiException{
 		Long accountId = (Long)properties.get("accountId");
 		if (accountId == null){
 			throw new IllegalArgumentException("Illegal arguments in editAccount");
 		}
-		Account account = null;
+		Profile profile = null;
 		Short sex = (Short)properties.get("sex");
 		if(sex != null){
 			if(sex > AccountConstants.SexType_Female){
@@ -146,13 +152,13 @@ public Account signinWithScreenName(String screenName, String password)
 		properties.remove("screenName");
 		properties.remove("status");
 		try {
-			account = ServiceUtils.accountService.editAccount(properties);
+			profile = ServiceUtils.accountService.editProfile(properties);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_EditAccount_Failure_Status,
-					AirogamiException.Account_EditAccount_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
-		return account;
+		return profile;
 	}
 	
 	/*
@@ -171,8 +177,8 @@ public Account signinWithScreenName(String screenName, String password)
 			return ServiceUtils.accountService.changePassword(accountId, oldPassword, newPassword);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_ChangePassword_Failure_Status,
-					AirogamiException.Account_ChangePassword_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
@@ -190,28 +196,28 @@ public Account signinWithScreenName(String screenName, String password)
 			return ServiceUtils.accountService.changeScreenName(accountId, screenName);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_ChangeScreenName_Failure_Status,
-					AirogamiException.Account_ChangeScreenName_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
 	/*
 	 * @param accountId:(long)
 	 * @param last:(String) must not be empty
-	 * @return account, null if not updated
+	 * @return profile, null if not updated
 	 * @throws AirogamiException if failed 
 	 */
-	public Account obtainAccount(long accountId, Long updateCount) throws AirogamiException{
+	public Profile obtainProfile(long accountId, Long updateCount) throws AirogamiException{
 		if (accountId < 1){
 			throw new IllegalArgumentException("Illegal arguments in obtainAccount");
 		}
 
 		try {
-			return ServiceUtils.accountService.obtainAccount(accountId, updateCount);
+			return ServiceUtils.accountService.obtainProfile(accountId, updateCount);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_ObtainAccount_Failure_Status,
-					AirogamiException.Account_ObtainAccount_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
@@ -234,8 +240,8 @@ public Account signinWithScreenName(String screenName, String password)
 			return ServiceUtils.accountService.reportAccount(report);
 		} catch (Throwable re) {
 			throw new AirogamiException(
-					AirogamiException.Account_ReportAccount_Failure_Status,
-					AirogamiException.Account_ReportAccount_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 

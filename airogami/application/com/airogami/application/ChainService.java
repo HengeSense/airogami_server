@@ -117,45 +117,22 @@ public class ChainService implements IChainService {
 	@Override
 	public Map<String, Object> matchChain(long chainId) throws ApplicationException {
 		ApplicationException ae = null;
-		Chain chain = null;
+		Boolean rematch = true;
+		Boolean succeed = false;
 		Long accountId = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			chain = DaoUtils.chainDao.findById(chainId);
-			if(chain != null){ 
-				if(chain.getStatus() == ChainConstants.StatusUnmatched 
-						&& chain.getMatchCount() < chain.getMaxMatchCount()
-						&& chain.getPassCount() < chain.getMaxPassCount()){					
-					String country = chain.getCountry(), province = chain.getProvince(), city = chain
-							.getCity();
-					if (city != null && city.length() > 0) {
-						accountId = DaoUtils.accountDao.randChainAccount(
-								chainId, country, province, city);
-					} else if (province != null && province.length() > 0) {
-						accountId = DaoUtils.accountDao.randChainAccount(
-								chainId, country, province);
-					} else if (country != null && country.length() > 0) {
-						accountId = DaoUtils.accountDao.randChainAccount(
-								chainId, country);
-					} else {
-						accountId = DaoUtils.accountDao.randChainAccount(chainId);
-					}
-					if(accountId == null || DaoUtils.chainDao.match(chainId, accountId)){
-						DaoUtils.chainDao.increaseMatchCount(chainId, 1);
-						if(accountId != null){//match succeed
-							chain = null;
-						}
-					}
-					else{
-						//already matched or exceed maximum
-						chain = null;
-					}	
+			accountId = DaoUtils.accountDao.randChainAccount(chainId);
+			if(accountId == null || DaoUtils.chainDao.match(chainId, accountId)){
+				rematch = DaoUtils.chainDao.increaseMatchCount(chainId, 1);
+				if(accountId != null){//match succeed
+					rematch = false;
+					succeed = true;
 				}
-				else
-				{
-					////already matched
-					chain = null;
-				}
+			}
+			else{
+				//already matched or exceed maximum
+				rematch = false;
 			}
 			
 			EntityManagerHelper.commit(); 
@@ -174,11 +151,9 @@ public class ChainService implements IChainService {
 			throw ae;
 		}
 		Map<String, Object> result = new TreeMap<String, Object>();
-		if(chain != null){
-			chain.setMatchCount(chain.getMatchCount() + 1);
-			result.put("chain", chain);
-		}
-		if(accountId != null){
+		result.put("rematch", rematch);
+		result.put("succeed", succeed);
+		if(succeed){
 			result.put("accountId", accountId);
 		}		
 		

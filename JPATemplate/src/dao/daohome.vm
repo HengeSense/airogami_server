@@ -366,14 +366,15 @@ public class $className #if ($daoExporter.getExtends())extends $pojo.importType(
 #set($className = $pojo.importType($clazz.getClassName()))
     private static  final String ${bbName}JPQL = "update ${className} a set a.${field.name} = a.${field.name} + :count where a.${idName} in (:${idName})";
 
-	public void ${bbName}(${idType} ${idName}, int count) {
+	public boolean ${bbName}(${idType} ${idName}, int count) {
 		#logInfo('"${bbName} with ${idName}:" + ${idName}')
 		try {
 			Query query = ${entityManager}.createQuery(${bbName}JPQL);
 			query.setParameter("${idName}", ${idName});
 			query.setParameter("count", count);
-			query.executeUpdate();
+			boolean result = query.executeUpdate() == 1;
 			#logInfo('"${bbName} successful"')
+			return result;
 		} catch (RuntimeException re) {
 		    #logError('"${bbName} failed"' "re")
 			throw re;

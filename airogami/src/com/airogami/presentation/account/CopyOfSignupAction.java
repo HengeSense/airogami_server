@@ -45,9 +45,9 @@ public class CopyOfSignupAction extends AirogamiActionSupport implements ModelDr
 			Authenticate authenticate = new Authenticate();
 			BeanUtils.copyProperties(account, user);
 			BeanUtils.copyProperties(authenticate, user);
-			account.setIcon("account/icon.jpg");
+			//account.setIcon("account/icon.jpg");
 			account.setAuthenticate(authenticate);
-			long accountId = ManagerUtils.accountManager.signup(account);
+			Object accountId = ManagerUtils.accountManager.signup(account);
 			//UploadUtils.uploadImage(accountId, user.getFile(), user.getFileFileName(), user.getFileContentType());
 
 			succeed = true;
@@ -73,14 +73,4 @@ public class CopyOfSignupAction extends AirogamiActionSupport implements ModelDr
 	public String getMethod() {
 		return method;
 	}	
-
-	@Override
-	protected int getInputStatus() {
-		return AirogamiError.Account_Signup_Input_Status;
-	}
-
-	@Override
-	protected String getInputMessage() {
-		return AirogamiError.Account_Signup_Input_Message;
-	}
 }

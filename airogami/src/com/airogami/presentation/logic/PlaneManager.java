@@ -33,8 +33,8 @@ public class PlaneManager {
 			category = ServiceUtils.planeService.createCatrgory(category);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_CreateCategory_Failure_Status,
-					AirogamiException.Plane_CreateCategory_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return category;
 	}
@@ -71,8 +71,8 @@ public class PlaneManager {
 			plane = ServiceUtils.planeService.sendPlane(plane, ownerId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_SendPlane_Failure_Status,
-					AirogamiException.Plane_SendPlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		ServiceUtils.airogamiService.appendPlane(plane.getPlaneId());
 		return plane;
@@ -96,8 +96,8 @@ public class PlaneManager {
 		} catch (ApplicationException re) {
 			///re.printStackTrace();
 			throw new AirogamiException(
-					AirogamiException.Plane_ReplyPlane_Failure_Status,
-					AirogamiException.Plane_ReplyPlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return message;
 	}
@@ -121,8 +121,8 @@ public class PlaneManager {
 			}
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_PickupPlane_Failure_Status,
-					AirogamiException.Plane_PickupPlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		Map<String, Object> result = new TreeMap<String, Object>();
 		result.put("planes", planes);
@@ -142,8 +142,8 @@ public class PlaneManager {
 			canMatchAgain = ServiceUtils.planeService.throwPlane(planeId, accountId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ThrowPlane_Failure_Status,
-					AirogamiException.Plane_ThrowPlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		if(canMatchAgain){
 			ServiceUtils.airogamiService.appendPlane(planeId);
@@ -163,8 +163,8 @@ public class PlaneManager {
 			return ServiceUtils.planeService.likePlane(planeId, accountId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_LikePlane_Failure_Status,
-					AirogamiException.Plane_LikePlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
@@ -181,8 +181,8 @@ public class PlaneManager {
 			return ServiceUtils.planeService.deletePlane(planeId, accountId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_DeletePlane_Failure_Status,
-					AirogamiException.Plane_DeletePlane_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 	
@@ -205,8 +205,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.obtainPlanes(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ObtainPlanes_Failure_Status,
-					AirogamiException.Plane_ObtainPlanes_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -230,8 +230,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.obtainPlaneIds(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ObtainPlaneIds_Failure_Status,
-					AirogamiException.Plane_ObtainPlaneIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -250,8 +250,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.obtainPlaneIds(accountId, startId, limit);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ObtainPlaneIds_Failure_Status,
-					AirogamiException.Plane_ObtainPlaneIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -276,8 +276,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.receivePlanes(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ReceivePlanes_Failure_Status,
-					AirogamiException.Plane_ReceivePlanes_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -301,8 +301,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.receivePlaneIds(accountId, startIdx, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ReceivePlaneIds_Failure_Status,
-					AirogamiException.Plane_ReceivePlaneIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -321,8 +321,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.receivePlaneIds(accountId, startId, limit);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ReceivePlaneIds_Failure_Status,
-					AirogamiException.Plane_ReceivePlaneIds_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -342,8 +342,8 @@ public class PlaneManager {
 			result = ServiceUtils.planeService.obtainMessages(accountId, planeId, startId, limit, true);
 			} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ObtainMessages_Failure_Status,
-					AirogamiException.Plane_ObtainMessages_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 		return result;
 	}
@@ -361,8 +361,8 @@ public class PlaneManager {
 			return ServiceUtils.planeService.viewedMessages(accountId, planeId, lastMsgId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
-					AirogamiException.Plane_ViewedMessages_Failure_Status,
-					AirogamiException.Plane_ViewedMessages_Failure_Message);
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
 		}
 	}
 
