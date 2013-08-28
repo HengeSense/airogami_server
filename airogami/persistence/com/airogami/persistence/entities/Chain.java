@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import org.apache.struts2.json.annotations.JSON;
 
@@ -34,9 +36,11 @@ public class Chain implements java.io.Serializable {
 
 	private Account account;
 
+	private Timestamp updatedTime;
+
 	private Timestamp createdTime;
 
-	private Timestamp updatedTime;
+	private Long updateInc = 0L;
 
 	private Short status = 0;
 
@@ -52,13 +56,21 @@ public class Chain implements java.io.Serializable {
 
 	private String country;
 
-	private Integer passCount = 0;
+	private Short passCount = 0;
 
-	private Integer matchCount = 0;
+	private Short matchCount = 0;
 
-	private Integer maxPassCount;
+	private Short maxPassCount;
 
-	private Integer maxMatchCount;
+	private Short maxMatchCount;
+
+	private Date birthdayLower;
+
+	private Date birthdayUpper;
+
+	private String language;
+
+	private List<ChainHist> chainHists = new ArrayList<ChainHist>(0);
 
 	private List<ChainMessage> chainMessages = new ArrayList<ChainMessage>(0);
 
@@ -69,12 +81,13 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Chain(Account account, Timestamp createdTime, Timestamp updatedTime,
-			Short status, Short sex, Integer passCount, Integer matchCount,
-			Integer maxPassCount, Integer maxMatchCount) {
+	public Chain(Account account, Timestamp updatedTime, Timestamp createdTime,
+			Long updateInc, Short status, Short sex, Short passCount,
+			Short matchCount, Short maxPassCount, Short maxMatchCount) {
 		this.account = account;
-		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.updateInc = updateInc;
 		this.status = status;
 		this.sex = sex;
 		this.passCount = passCount;
@@ -84,14 +97,17 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Chain(Account account, Timestamp createdTime, Timestamp updatedTime,
-			Short status, String city, String province, Double longitude,
-			Double latitude, Short sex, String country, Integer passCount,
-			Integer matchCount, Integer maxPassCount, Integer maxMatchCount,
+	public Chain(Account account, Timestamp updatedTime, Timestamp createdTime,
+			Long updateInc, Short status, String city, String province,
+			Double longitude, Double latitude, Short sex, String country,
+			Short passCount, Short matchCount, Short maxPassCount,
+			Short maxMatchCount, Date birthdayLower, Date birthdayUpper,
+			String language, List<ChainHist> chainHists,
 			List<ChainMessage> chainMessages) {
 		this.account = account;
-		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.updateInc = updateInc;
 		this.status = status;
 		this.city = city;
 		this.province = province;
@@ -103,6 +119,10 @@ public class Chain implements java.io.Serializable {
 		this.matchCount = matchCount;
 		this.maxPassCount = maxPassCount;
 		this.maxMatchCount = maxMatchCount;
+		this.birthdayLower = birthdayLower;
+		this.birthdayUpper = birthdayUpper;
+		this.language = language;
+		this.chainHists = chainHists;
 		this.chainMessages = chainMessages;
 	}
 
@@ -128,6 +148,16 @@ public class Chain implements java.io.Serializable {
 		this.account = account;
 	}
 
+	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Timestamp getUpdatedTime() {
+		return this.updatedTime;
+	}
+
+	public void setUpdatedTime(Timestamp updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
@@ -138,14 +168,13 @@ public class Chain implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, insertable = false, updatable = false, length = 19)
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
-	public Timestamp getUpdatedTime() {
-		return this.updatedTime;
+	@Column(name = "UPDATE_INC", nullable = false, insertable = false, updatable = false)
+	public Long getUpdateInc() {
+		return this.updateInc;
 	}
 
-	public void setUpdatedTime(Timestamp updatedTime) {
-		this.updatedTime = updatedTime;
+	public void setUpdateInc(Long updateInc) {
+		this.updateInc = updateInc;
 	}
 
 	@Column(name = "STATUS", nullable = false)
@@ -212,39 +241,77 @@ public class Chain implements java.io.Serializable {
 	}
 
 	@Column(name = "PASS_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getPassCount() {
+	public Short getPassCount() {
 		return this.passCount;
 	}
 
-	public void setPassCount(Integer passCount) {
+	public void setPassCount(Short passCount) {
 		this.passCount = passCount;
 	}
 
 	@Column(name = "MATCH_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getMatchCount() {
+	public Short getMatchCount() {
 		return this.matchCount;
 	}
 
-	public void setMatchCount(Integer matchCount) {
+	public void setMatchCount(Short matchCount) {
 		this.matchCount = matchCount;
 	}
 
 	@Column(name = "MAX_PASS_COUNT", nullable = false)
-	public Integer getMaxPassCount() {
+	public Short getMaxPassCount() {
 		return this.maxPassCount;
 	}
 
-	public void setMaxPassCount(Integer maxPassCount) {
+	public void setMaxPassCount(Short maxPassCount) {
 		this.maxPassCount = maxPassCount;
 	}
 
 	@Column(name = "MAX_MATCH_COUNT", nullable = false)
-	public Integer getMaxMatchCount() {
+	public Short getMaxMatchCount() {
 		return this.maxMatchCount;
 	}
 
-	public void setMaxMatchCount(Integer maxMatchCount) {
+	public void setMaxMatchCount(Short maxMatchCount) {
 		this.maxMatchCount = maxMatchCount;
+	}
+
+	@Column(name = "BIRTHDAY_LOWER", length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getBirthdayLower() {
+		return this.birthdayLower;
+	}
+
+	public void setBirthdayLower(Date birthdayLower) {
+		this.birthdayLower = birthdayLower;
+	}
+
+	@Column(name = "BIRTHDAY_UPPER", length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getBirthdayUpper() {
+		return this.birthdayUpper;
+	}
+
+	public void setBirthdayUpper(Date birthdayUpper) {
+		this.birthdayUpper = birthdayUpper;
+	}
+
+	@Column(name = "LANGUAGE")
+	public String getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chain")
+	public List<ChainHist> getChainHists() {
+		return this.chainHists;
+	}
+
+	public void setChainHists(List<ChainHist> chainHists) {
+		this.chainHists = chainHists;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chain")
@@ -261,8 +328,16 @@ public class Chain implements java.io.Serializable {
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
+		setUpdatedTime(timestamp);
+
 		setCreatedTime(timestamp);
 
+	}
+
+	@PreUpdate
+	protected void onPreUpdate() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setUpdatedTime(timestamp);
 	}
 
 }

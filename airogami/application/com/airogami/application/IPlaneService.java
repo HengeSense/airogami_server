@@ -1,6 +1,5 @@
 package com.airogami.application;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public interface IPlaneService {
 	/*
 	 * @param plane:(Plane) must be not null, have plane.message, plane.category
 	 * @param ownerId:(long) must exist
-	 * @return plane, plane.messages, plane.category if successful
+	 * @return plane, plane.messages, plane.category if successful or null if ownerId not exist
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Plane sendPlane(Plane plane, long ownerId) throws ApplicationException;
@@ -43,10 +42,10 @@ public interface IPlaneService {
 	 * @param planeId:(long) must be not null
 	 * @param ownerId:(long) must be plane.accoutByOwnerId or plane.accountByTargetId
 	 * @param message:(Message)
-	 * @return message if successful or null if verified failed
+	 * @return message if successful or error if failed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Message replyPlane(long planeId,long ownerId, Message message) throws ApplicationException;	
+	public Map<String, Object> replyPlane(long planeId,long ownerId, Message message) throws ApplicationException;	
 	
 	/*
 	 * @param accountId:(long)
@@ -60,7 +59,7 @@ public interface IPlaneService {
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long)
 	 * @param byOwner:(boolean)
-	 * @return message, oppositeAccountId (null if not successful)
+	 * @return message, oppositeAccountId if successful otherwise error, plane
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> likePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
@@ -68,32 +67,31 @@ public interface IPlaneService {
 	/*
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long)
-	 * @return canMatchedAgain if successful
+	 * @return canMatchedAgain if successful otherwise error or plane
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean throwPlane(long planeId,long accountId) throws ApplicationException;
+	public Map<String, Object> throwPlane(long planeId,long accountId) throws ApplicationException;
 	
 	/*
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(long)
 	 * @param byOwner:(boolean)
-	 * @return whether successful
+	 * @return succeed if successful otherwise error or plane
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean deletePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
+	public Map<String, Object> deletePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
 	
 	/*
 	 * get received planes
 	 * @param accountId:(long)
-	 * @param startIdx:(int) (inclusive)
-	 * @param start:(TimeStamp) start datetime (inclusive) can be null
-	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planes (planes.messages, planes.category, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> receivePlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> receivePlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 	
 	/*
 	 * get all received planeIds for synchronization
@@ -108,15 +106,14 @@ public interface IPlaneService {
 	/*
 	 * get received planes
 	 * @param accountId:(long)
-	 * @param startIdx:(int) (inclusive)
-	 * @param start:(TimeStamp) start datetime (inclusive) can be null
-	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> receivePlaneIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> receivePlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 	
 	
 	/*
@@ -131,28 +128,26 @@ public interface IPlaneService {
 
 	/*
 	 * @param accountId:(long)
-	 * @param startIdx:(int) (inclusive)
-	 * @param start:(TimeStamp) start datetime (inclusive) can be null
-	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainPlaneIds(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> obtainPlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*
 	 * @param accountId:(long)
-	 * @param startIdx:(int) (inclusive)
-	 * @param start:(TimeStamp) start datetime (inclusive) can be null
-	 * @param end:(TimeStamp) end datetime (inclusive) can be null
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
 	 * @return more, planes(planes.messages, planes.category, planes.accountByTargetId, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainPlanes(long accountId, int startIdx, Timestamp start, Timestamp end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> obtainPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*

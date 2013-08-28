@@ -7,7 +7,7 @@
 #if($pojo.getMetaAttribAsBool($property, "gen-property", true))
    #if($property.name.equals("lastViewedTime") && $pojo.getDeclarationName().equals("ChainMessage"))
    set$pojo.getPropertyName($property)(baseTimestamp);
-   #elseif($property.name.endsWith("Time") && !$property.name.equals("updatedTime"))
+   #elseif($property.name.endsWith("Time"))
       set$pojo.getPropertyName($property)(timestamp);
    #end
         
@@ -18,7 +18,7 @@
 #end
 
 
-#if(false && $hasUpdatedTime)
+#if($hasUpdatedTime)
 	@$pojo.importType("javax.persistence.PreUpdate")
 	protected void onPreUpdate(){
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());

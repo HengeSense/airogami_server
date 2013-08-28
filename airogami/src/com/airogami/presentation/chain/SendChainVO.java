@@ -1,5 +1,8 @@
 package com.airogami.presentation.chain;
 
+import java.sql.Date;
+import java.util.Calendar;
+
 public class SendChainVO {
 	
 	private ChainMessageVO chainMessageVO;
@@ -9,6 +12,11 @@ public class SendChainVO {
 	private String province;
 	private String country;
 	private Short sex;
+	private Date birthdayLower;
+	private Date birthdayUpper;
+	private String language;
+	private static int MinimumAge = 13;
+	private static int MaximumAge = 99;
 	
 	public SendChainVO(){
 		chainMessageVO = new ChainMessageVO();
@@ -57,5 +65,38 @@ public class SendChainVO {
 		this.sex = sex;
 	}
 	
-	
+	public Date getBirthdayLower() {
+		return birthdayLower;
+	}
+
+	public void setBirthdayLower(int maxAge) {
+		if(maxAge <= MaximumAge && maxAge >= MinimumAge){
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.YEAR, -(maxAge + 1));
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			this.birthdayLower = new Date(calendar.getTimeInMillis());
+		}
+		
+	}
+
+	public Date getBirthdayUpper() {
+		return birthdayUpper;
+	}
+
+	public void setBirthdayUpper(int minAge) {
+		if(minAge <= MaximumAge && minAge >= MinimumAge){
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.YEAR, -minAge);
+			this.birthdayUpper = new Date(calendar.getTimeInMillis());
+		}
+		
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 }

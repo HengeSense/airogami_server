@@ -89,4 +89,20 @@
 		</field-validator>
 
 	</field>
+	
+	<field name="birthdayUpper">
+		<field-validator type="fieldexpression">
+			<param name="expression"><![CDATA[(birthdayLower == null) || birthdayUpper == null || birthdayUpper.getTime() >= birthdayLower.getTime()]]></param>
+			<message key="error.plane.sendplane.birthdayUpper.invalid">birthdayUpper should greater than birthdayLower</message>
+		</field-validator>
+
+	</field>
+	
+	<field name="language">
+		<field-validator type="stringlength">
+			<param name="maxLength">255</param>
+			<message key="error.plane.sendplane.language.long">The language is too long</message>
+		</field-validator>
+	</field>
+	
 </validators>

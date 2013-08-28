@@ -32,15 +32,9 @@
      if(user != null){ %>
     <h2>Receive PlaneIds</h2>
     <form action="plane/receivePlaneIds.action"  method="get"> 
-    <label>StartIdx: </label>
-    <input type="text" name="startIdx" value="-1" />
+    <label>UpdateInc: </label>
+    <input type="text" name="updateInc" value="-9223372036854775808" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Start: </label>
-    <input type="text" name="start"  value="2013-01-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-    <label>End: </label>
-    <input type="text" name="end"  value="2013-10-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <label>Limit: </label>
     <input type="text" name="limit"  value="1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
@@ -56,15 +50,9 @@
     
     <h2>Obtain PlaneIds</h2>
     <form action="plane/obtainPlaneIds.action"  method="get"> 
-    <label>StartIdx: </label>
-    <input type="text" name="startIdx" value="-1" />
+    <label>UpdateInc: </label>
+    <input type="text" name="updateInc" value="-9223372036854775808" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Start: </label>
-    <input type="text" name="start"  value="2013-01-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-    <label>End: </label>
-    <input type="text" name="end"  value="2013-10-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <label>Limit: </label>
     <input type="text" name="limit"  value="1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>

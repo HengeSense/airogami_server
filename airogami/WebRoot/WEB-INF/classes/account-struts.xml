@@ -25,7 +25,7 @@
 			</result>
 			<result type="json" name="success">
 				<param name="root">dataMap</param>
-				<param name="excludeProperties">user.password</param>
+				<param name="excludeProperties"><![CDATA[result\.account\.authenticate\.password]]></param>
 			</result>
 		</action>
 		
@@ -35,8 +35,9 @@
 				<param name="root">dataMap</param>
 			</result>
 			<result type="json">
-			    <param name="excludeNullProperties">true</param>
 				<param name="root">dataMap</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties"><![CDATA[result\.account\.authenticate\.password]]></param>	
 			</result>
 		</action>
 		
@@ -48,6 +49,7 @@
 			<result type="json">
 			    <param name="excludeNullProperties">true</param>
 				<param name="root">dataMap</param>
+				<param name="excludeProperties"><![CDATA[result\.account\.authenticate\.password]]></param>		
 			</result>
 		</action>
 		
@@ -106,7 +108,7 @@
 		    <interceptor-ref name="authorizationStack" />
 		    <result type="json" name="input">
 				<param name="root">dataMap</param>
-			</result>
+			</result> 
 			<result type="json">
 			    <param name="excludeNullProperties">true</param>
 				<param name="root">dataMap</param>

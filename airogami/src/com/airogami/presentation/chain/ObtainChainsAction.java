@@ -15,35 +15,10 @@ import com.airogami.presentation.utilities.JSONUtils;
 public class ObtainChainsAction extends AirogamiActionSupport {
 
 	private static final long serialVersionUID = 1L;	
-	private int startIdx;
-	private String start;
-	private String end;
+	private Long start;
+	private Long end;
 	private int limit;
-	private boolean forward;
-	private Timestamp sTimestamp;
-	private Timestamp eTimestamp;
-	
-	public void validate(){	
-		super.validate();
-		if(this.hasActionErrors() == false && this.hasFieldErrors() == false){
-			try{
-				if(start != null && start.length() > 0)
-				    sTimestamp = Timestamp.valueOf(start);
-			}catch(Throwable t){
-				this.addFieldError("start", "Invalid Timestamp");
-				JSONUtils.putInputStatus(dataMap);
-				dataMap.put("fieldErrors", this.getFieldErrors());
-			}	
-			try{
-				if(end != null && end.length() > 0)
-				eTimestamp = Timestamp.valueOf(end);
-			}catch(Throwable t){
-				this.addFieldError("end", "Invalid Timestamp");
-				JSONUtils.putInputStatus(dataMap);
-				dataMap.put("fieldErrors", this.getFieldErrors());
-			}
-		}		
-	}
+	private boolean forward = true;
 
 	public String receiveChains() throws Exception{
 		chains(1);
@@ -63,11 +38,11 @@ public class ObtainChainsAction extends AirogamiActionSupport {
 			Map<String, Object> result;
 			if(type == 1){
 			    result = ManagerUtils.chainManager.receiveChains(
-					user.getAccountId(), startIdx, sTimestamp, eTimestamp, limit, forward);
+					user.getAccountId(), start, end, limit, forward);
 			}
 			else{
 				result = ManagerUtils.chainManager.obtainChains(
-						user.getAccountId(), startIdx, sTimestamp, eTimestamp, limit, forward);
+						user.getAccountId(), start, end, limit, forward);
 			}
             dataMap.put("result", result);
 			succeed = true;
@@ -85,30 +60,6 @@ public class ObtainChainsAction extends AirogamiActionSupport {
 		}
 	}
 
-	public int getStartIdx() {
-		return startIdx;
-	}
-
-	public void setStartIdx(int startIdx) {
-		this.startIdx = startIdx;
-	}
-
-	public String getStart() {
-		return start;
-	}
-
-	public void setStart(String start) {
-		this.start = start;
-	}
-
-	public String getEnd() {
-		return end;
-	}
-
-	public void setEnd(String end) {
-		this.end = end;
-	}
-
 	public int getLimit() {
 		return limit;
 	}
@@ -123,6 +74,22 @@ public class ObtainChainsAction extends AirogamiActionSupport {
 
 	public void setForward(boolean forward) {
 		this.forward = forward;
+	}
+
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public Long getEnd() {
+		return end;
+	}
+
+	public void setEnd(Long end) {
+		this.end = end;
 	}
 
 }

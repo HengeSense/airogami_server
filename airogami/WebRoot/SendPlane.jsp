@@ -58,6 +58,15 @@
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <label>Sex: </label>
     <input type="text" name="sex"  value="0"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>birthdayLower: </label>
+    <input type="text" name="birthdayLower"  value="99"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>birthdayUpper: </label>
+    <input type="text" name="birthdayUpper"  value="13"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>language: </label>
+    <input type="text" name="language"  value="Chinese"/>
         <input type="checkbox" checked="checked" onchange="hide(this)">
     <br><br>
     <button type="button" onclick="print(0)">print</button>

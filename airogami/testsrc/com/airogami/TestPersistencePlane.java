@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.AccountConstants;
+import com.airogami.common.constants.PlaneConstants;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Category;
@@ -50,7 +51,7 @@ public class TestPersistencePlane {
 		}
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testMatchPlane() {
 		try {
@@ -67,11 +68,21 @@ public class TestPersistencePlane {
 	@Test
 	public void testSendPlane() {
 		Plane plane = new Plane();
+		plane.setMaxMatchCount(PlaneConstants.MaxMatchCount);
+        plane.setMatchCount((short)0);
+        plane.setStatus((short)PlaneConstants.StatusNew);
+        if(plane.getSex() == null){
+        	plane.setSex((short)AccountConstants.SexType_Unknown);
+        }
 		plane.setCity("chengdu");
 		plane.setProvince("sichuan");
 		plane.setCountry("China");
 		plane.setLatitude(0.0);
 		plane.setLongitude(0.0);
+		plane.setLikedByOwner((short)0);
+        plane.setLikedByTarget((short)0);
+        plane.setDeletedByOwner((short)0);
+        plane.setDeletedByTarget((short)0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
 		long ownerId = 1L;
@@ -98,8 +109,8 @@ public class TestPersistencePlane {
 		long ownerId = 4;
 		long planeId = 2;
 		try {
-			message = ServiceUtils.planeService.replyPlane(planeId, ownerId, message);
-			ObjectUtils.printObject(message);
+			Map<String, Object> result = ServiceUtils.planeService.replyPlane(planeId, ownerId, message);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();
@@ -137,13 +148,26 @@ public class TestPersistencePlane {
 	@Test
 	public void testObtainPlanes() {
 		long accountId = 4;
-		String start = "2013-05-31 22:36:15";
-		Timestamp timestamp = Timestamp.valueOf(start);
 		int limit = 2;
 		boolean forward = true;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
 		try {
-			Map<String, Object> result = ServiceUtils.planeService.obtainPlanes(accountId, -1, null, null, limit, forward);
+			Map<String, Object> result = ServiceUtils.planeService.obtainPlanes(accountId, start, end, limit, forward);
 			ObjectUtils.printObject(result);
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testPickupPlanes() {
+		long accountId = 5;
+		try {
+			List<Plane> planes = ServiceUtils.planeService.pickupPlane(accountId, 2);
+			ObjectUtils.printObject(planes);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

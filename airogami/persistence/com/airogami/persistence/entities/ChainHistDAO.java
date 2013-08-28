@@ -7,25 +7,24 @@ import javax.persistence.Query;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * AccountStat entities. Transaction control of the save(), update() and
- * delete() operations must be handled externally by senders of these methods or
- * must be manually added to each of these methods for data to be persisted to
- * the JPA datastore.
+ * ChainHist entities. Transaction control of the save(), update() and delete()
+ * operations must be handled externally by senders of these methods or must be
+ * manually added to each of these methods for data to be persisted to the JPA
+ * datastore.
  * 
- * @see com.airogami.persistence.entities.AccountStat
+ * @see com.airogami.persistence.entities.ChainHist
  * @author MyEclipse Persistence Tools
  */
 
-public class AccountStatDAO {
+public class ChainHistDAO {
 	// property constants
-	public static final String SIGNIN_COUNT = "signinCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
 	}
 
 	/**
-	 * Perform an initial save of a previously unsaved AccountStat entity. All
+	 * Perform an initial save of a previously unsaved ChainHist entity. All
 	 * subsequent persist actions of this entity should use the #update()
 	 * method. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
@@ -35,20 +34,19 @@ public class AccountStatDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * AccountStatDAO.save(accountStat);
+	 * ChainHistDAO.save(chainHist);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param accountStat
-	 *            AccountStat entity to persist
+	 * @param chainHist
+	 *            ChainHist entity to persist
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void save(AccountStat accountStat) {
-		EntityManagerHelper
-				.log("saving AccountStat instance", Level.INFO, null);
+	public void save(ChainHist chainHist) {
+		EntityManagerHelper.log("saving ChainHist instance", Level.INFO, null);
 		try {
-			getEntityManager().persist(accountStat);
+			getEntityManager().persist(chainHist);
 			EntityManagerHelper.log("save successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("save failed", Level.SEVERE, re);
@@ -57,7 +55,7 @@ public class AccountStatDAO {
 	}
 
 	/**
-	 * Delete a persistent AccountStat entity. This operation must be performed
+	 * Delete a persistent ChainHist entity. This operation must be performed
 	 * within the a database transaction context for the entity's data to be
 	 * permanently deleted from the persistence store, i.e., database. This
 	 * method uses the {@link javax.persistence.EntityManager#remove(Object)
@@ -65,23 +63,23 @@ public class AccountStatDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * AccountStatDAO.delete(accountStat);
+	 * ChainHistDAO.delete(chainHist);
 	 * EntityManagerHelper.commit();
-	 * accountStat = null;
+	 * chainHist = null;
 	 * </pre>
 	 * 
-	 * @param accountStat
-	 *            AccountStat entity to delete
+	 * @param chainHist
+	 *            ChainHist entity to delete
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void delete(AccountStat accountStat) {
-		EntityManagerHelper.log("deleting AccountStat instance", Level.INFO,
-				null);
+	public void delete(ChainHist chainHist) {
+		EntityManagerHelper
+				.log("deleting ChainHist instance", Level.INFO, null);
 		try {
-			accountStat = getEntityManager().getReference(AccountStat.class,
-					accountStat.getAccountId());
-			getEntityManager().remove(accountStat);
+			chainHist = getEntityManager().getReference(ChainHist.class,
+					chainHist.getId());
+			getEntityManager().remove(chainHist);
 			EntityManagerHelper.log("delete successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("delete failed", Level.SEVERE, re);
@@ -90,9 +88,9 @@ public class AccountStatDAO {
 	}
 
 	/**
-	 * Persist a previously saved AccountStat entity and return it or a copy of
-	 * it to the sender. A copy of the AccountStat entity parameter is returned
-	 * when the JPA persistence mechanism has not previously been tracking the
+	 * Persist a previously saved ChainHist entity and return it or a copy of it
+	 * to the sender. A copy of the ChainHist entity parameter is returned when
+	 * the JPA persistence mechanism has not previously been tracking the
 	 * updated entity. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
 	 * persistence store, i.e., database. This method uses the
@@ -101,22 +99,22 @@ public class AccountStatDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * accountStat = AccountStatDAO.update(accountStat);
+	 * chainHist = ChainHistDAO.update(chainHist);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param accountStat
-	 *            AccountStat entity to update
-	 * @return AccountStat the persisted AccountStat entity instance, may not be
-	 *         the same
+	 * @param chainHist
+	 *            ChainHist entity to update
+	 * @return ChainHist the persisted ChainHist entity instance, may not be the
+	 *         same
 	 * @throws RuntimeException
 	 *             if the operation fails
 	 */
-	public AccountStat update(AccountStat accountStat) {
-		EntityManagerHelper.log("updating AccountStat instance", Level.INFO,
-				null);
+	public ChainHist update(ChainHist chainHist) {
+		EntityManagerHelper
+				.log("updating ChainHist instance", Level.INFO, null);
 		try {
-			AccountStat result = getEntityManager().merge(accountStat);
+			ChainHist result = getEntityManager().merge(chainHist);
 			EntityManagerHelper.log("update successful", Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
@@ -125,12 +123,11 @@ public class AccountStatDAO {
 		}
 	}
 
-	public AccountStat findById(Long accountId) {
-		EntityManagerHelper.log("finding AccountStat instance with id: "
-				+ accountId, Level.INFO, null);
+	public ChainHist findById(ChainHistId id) {
+		EntityManagerHelper.log("finding ChainHist instance with id: " + id,
+				Level.INFO, null);
 		try {
-			AccountStat instance = getEntityManager().find(AccountStat.class,
-					accountId);
+			ChainHist instance = getEntityManager().find(ChainHist.class, id);
 			EntityManagerHelper.log("find successful", Level.INFO, null);
 			return instance;
 		} catch (RuntimeException re) {
@@ -139,12 +136,12 @@ public class AccountStatDAO {
 		}
 	}
 
-	public AccountStat getReference(Long accountId) {
-		EntityManagerHelper.log("getReferencing AccountStat instance with id: "
-				+ accountId, Level.INFO, null);
+	public ChainHist getReference(ChainHistId id) {
+		EntityManagerHelper.log("getReferencing ChainHist instance with id: "
+				+ id, Level.INFO, null);
 		try {
-			AccountStat instance = getEntityManager().getReference(
-					AccountStat.class, accountId);
+			ChainHist instance = getEntityManager().getReference(
+					ChainHist.class, id);
 			EntityManagerHelper
 					.log("getReference successful", Level.INFO, null);
 			return instance;
@@ -154,11 +151,11 @@ public class AccountStatDAO {
 		}
 	}
 
-	public void detach(AccountStat accountStat) {
-		EntityManagerHelper.log("detaching AccountStat instance", Level.INFO,
+	public void detach(ChainHist chainHist) {
+		EntityManagerHelper.log("detaching ChainHist instance", Level.INFO,
 				null);
 		try {
-			getEntityManager().detach(accountStat);
+			getEntityManager().detach(chainHist);
 			EntityManagerHelper.log("detach successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("detach failed", Level.SEVERE, re);
@@ -166,11 +163,11 @@ public class AccountStatDAO {
 		}
 	}
 
-	public void refresh(AccountStat accountStat) {
-		EntityManagerHelper.log("refreshing AccountStat instance", Level.INFO,
+	public void refresh(ChainHist chainHist) {
+		EntityManagerHelper.log("refreshing ChainHist instance", Level.INFO,
 				null);
 		try {
-			getEntityManager().refresh(accountStat);
+			getEntityManager().refresh(chainHist);
 			EntityManagerHelper.log("refresh successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("refresh failed", Level.SEVERE, re);
@@ -184,11 +181,11 @@ public class AccountStatDAO {
 	 * @see delete
 	 */
 
-	public void remove(AccountStat accountStat) {
-		EntityManagerHelper.log("removing AccountStat instance", Level.INFO,
-				null);
+	public void remove(ChainHist chainHist) {
+		EntityManagerHelper
+				.log("removing ChainHist instance", Level.INFO, null);
 		try {
-			getEntityManager().remove(accountStat);
+			getEntityManager().remove(chainHist);
 			EntityManagerHelper.log("remove successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("remove failed", Level.SEVERE, re);
@@ -197,8 +194,8 @@ public class AccountStatDAO {
 	}
 
 	public void flush() {
-		EntityManagerHelper.log("flushing AccountStat instance", Level.INFO,
-				null);
+		EntityManagerHelper
+				.log("flushing ChainHist instance", Level.INFO, null);
 		try {
 			getEntityManager().flush();
 			EntityManagerHelper.log("flush successful", Level.INFO, null);
@@ -209,8 +206,8 @@ public class AccountStatDAO {
 	}
 
 	public void clear() {
-		EntityManagerHelper.log("clearing AccountStat instance", Level.INFO,
-				null);
+		EntityManagerHelper
+				.log("clearing ChainHist instance", Level.INFO, null);
 		try {
 			getEntityManager().clear();
 			EntityManagerHelper.log("clear successful", Level.INFO, null);
@@ -220,51 +217,28 @@ public class AccountStatDAO {
 		}
 	}
 
-	private static final String removeByAccountIdJPQL = "delete from AccountStat a where a.accountId in (?1)";
+	private static final String removeByIdJPQL = "delete from ChainHist a where a.id in (?1)";
 
-	public int removeByAccountId(Long accountId) {
-		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
+	public int removeById(ChainHistId id) {
+		EntityManagerHelper.log("removeById", Level.INFO, null);
 		int ret = 0;
 		try {
-			Query query = getEntityManager().createQuery(removeByAccountIdJPQL);
-			query.setParameter(1, accountId);
+			Query query = getEntityManager().createQuery(removeByIdJPQL);
+			query.setParameter(1, id);
 			ret = query.executeUpdate();
-			EntityManagerHelper.log("removeByAccountId successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("removeById successful", Level.INFO, null);
 			return ret;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("removeByAccountId failed", Level.SEVERE,
-					re);
-			throw re;
-		}
-	}
-
-	private static final String increaseSigninCountJPQL = "update AccountStat a set a.signinCount = a.signinCount + :count where a.accountId in (:accountId)";
-
-	public boolean increaseSigninCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseSigninCount with accountId:"
-				+ accountId, Level.INFO, null);
-		try {
-			Query query = getEntityManager().createQuery(
-					increaseSigninCountJPQL);
-			query.setParameter("accountId", accountId);
-			query.setParameter("count", count);
-			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSigninCount successful",
-					Level.INFO, null);
-			return result;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSigninCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("removeById failed", Level.SEVERE, re);
 			throw re;
 		}
 	}
 
 	/**
-	 * Find all AccountStat entities with a specific property value.
+	 * Find all ChainHist entities with a specific property value.
 	 * 
 	 * @param propertyName
-	 *            the name of the AccountStat property to query
+	 *            the name of the ChainHist property to query
 	 * @param value
 	 *            the property value to match
 	 * @param rowStartIdxAndCount
@@ -272,15 +246,15 @@ public class AccountStatDAO {
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            number of results to return.
-	 * @return List<AccountStat> found by query
+	 * @return List<ChainHist> found by query
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AccountStat> findByProperty(String propertyName,
+	public List<ChainHist> findByProperty(String propertyName,
 			final Object value, final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding AccountStat instance with property: "
+		EntityManagerHelper.log("finding ChainHist instance with property: "
 				+ propertyName + ", value: " + value, Level.INFO, null);
 		try {
-			final String queryString = "select model from AccountStat model where model."
+			final String queryString = "select model from ChainHist model where model."
 					+ propertyName + "= :propertyValue";
 			Query query = getEntityManager().createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -305,27 +279,22 @@ public class AccountStatDAO {
 		}
 	}
 
-	public List<AccountStat> findBySigninCount(Object signinCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(SIGNIN_COUNT, signinCount, rowStartIdxAndCount);
-	}
-
 	/**
-	 * Find all AccountStat entities.
+	 * Find all ChainHist entities.
 	 * 
 	 * @param rowStartIdxAndCount
 	 *            Optional int varargs. rowStartIdxAndCount[0] specifies the the
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            count of results to return.
-	 * @return List<AccountStat> all AccountStat entities
+	 * @return List<ChainHist> all ChainHist entities
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AccountStat> findAll(final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding all AccountStat instances",
-				Level.INFO, null);
+	public List<ChainHist> findAll(final int... rowStartIdxAndCount) {
+		EntityManagerHelper.log("finding all ChainHist instances", Level.INFO,
+				null);
 		try {
-			final String queryString = "select model from AccountStat model";
+			final String queryString = "select model from ChainHist model";
 			Query query = getEntityManager().createQuery(queryString);
 			if (rowStartIdxAndCount != null && rowStartIdxAndCount.length > 0) {
 				int rowStartIdx = Math.max(0, rowStartIdxAndCount[0]);

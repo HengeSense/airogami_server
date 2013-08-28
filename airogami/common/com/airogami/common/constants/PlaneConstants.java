@@ -4,5 +4,5 @@ public interface PlaneConstants {
 
 	public final int StatusNew = 0;
 	public final int StatusReplied = 1;
-	public final int MaxMatchCount = 20;
+	public final short MaxMatchCount = 20;
 }

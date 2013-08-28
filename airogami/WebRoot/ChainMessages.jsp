@@ -48,20 +48,7 @@
     <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
     </form>  
     
-    <h2>Viewed Chain Messages</h2>
-    <form action="chain/viewedChainMessages.action"  method="get"> 
-    <label>ChainId: </label>
-    <input type="text" name="chainId" value="1" />
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Last: </label>
-    <input type="text" name="last"  value="2013-01-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-    <br>
-    <button type="button" onclick="print(1)">print</button>
-    <input type="reset" name="submit" value="reset" />
-    <input type="submit" name="submit" value="submit" />
-    <input type="checkbox" checked="checked" onclick="hideAll(this, 1)">
-    </form>      
+         
     <p id="print"></p>
     <%} %>
     </div>

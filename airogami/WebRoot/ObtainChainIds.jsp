@@ -32,15 +32,12 @@
      if(user != null){ %>
     <h2>Receive ChainIds</h2>
     <form action="chain/receiveChainIds.action"  method="get"> 
-    <label>StartIdx: </label>
-    <input type="text" name="startIdx" value="-1" />
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Start: </label>
-    <input type="text" name="start"  value="2013-01-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-    <label>End: </label>
-    <input type="text" name="end"  value="2013-10-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <input type="text" name="start" value="-9223372036854775808" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+     <label>End: </label>
+    <input type="text" name="end" value="0" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Limit: </label>
     <input type="text" name="limit"  value="1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
@@ -56,15 +53,12 @@
     
     <h2>Obtain ChainIds</h2>
     <form action="chain/obtainChainIds.action"  method="get"> 
-    <label>StartIdx: </label>
-    <input type="text" name="startIdx" value="-1" />
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Start: </label>
-    <input type="text" name="start"  value="2013-01-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-    <label>End: </label>
-    <input type="text" name="end"  value="2013-10-01 00:00:00"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <input type="text" name="start" value="-9223372036854775808" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+     <label>End: </label>
+    <input type="text" name="end" value="0" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Limit: </label>
     <input type="text" name="limit"  value="1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>

@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import org.apache.struts2.json.annotations.JSON;
 
@@ -37,9 +39,11 @@ public class Plane implements java.io.Serializable {
 
 	private Account accountByOwnerId;
 
+	private Timestamp updatedTime;
+
 	private Timestamp createdTime;
 
-	private Timestamp updatedTime;
+	private Long updateInc = 0L;
 
 	private Short status = 0;
 
@@ -59,9 +63,9 @@ public class Plane implements java.io.Serializable {
 
 	private Short sex;
 
-	private Integer matchCount = 0;
+	private Short matchCount = 0;
 
-	private Integer maxMatchCount;
+	private Short maxMatchCount;
 
 	private Short likedByOwner;
 
@@ -70,6 +74,14 @@ public class Plane implements java.io.Serializable {
 	private Short deletedByOwner;
 
 	private Short deletedByTarget;
+
+	private Date birthdayLower;
+
+	private Date birthdayUpper;
+
+	private String language;
+
+	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
 
 	private List<Message> messages = new ArrayList<Message>(0);
 
@@ -80,14 +92,15 @@ public class Plane implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Plane(Category category, Timestamp createdTime,
-			Timestamp updatedTime, Short status, Long lastMsgIdOfTarget,
-			Long lastMsgIdOfOwner, Short sex, Integer matchCount,
-			Integer maxMatchCount, Short likedByOwner, Short likedByTarget,
-			Short deletedByOwner, Short deletedByTarget) {
+	public Plane(Category category, Timestamp updatedTime,
+			Timestamp createdTime, Long updateInc, Short status,
+			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, Short sex,
+			Short matchCount, Short maxMatchCount, Short likedByOwner,
+			Short likedByTarget, Short deletedByOwner, Short deletedByTarget) {
 		this.category = category;
-		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.updateInc = updateInc;
 		this.status = status;
 		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
 		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
@@ -102,18 +115,20 @@ public class Plane implements java.io.Serializable {
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
-			Account accountByOwnerId, Timestamp createdTime,
-			Timestamp updatedTime, Short status, Double longitude,
-			Double latitude, Long lastMsgIdOfTarget, Long lastMsgIdOfOwner,
-			String city, String province, String country, Short sex,
-			Integer matchCount, Integer maxMatchCount, Short likedByOwner,
-			Short likedByTarget, Short deletedByOwner, Short deletedByTarget,
-			List<Message> messages) {
+			Account accountByOwnerId, Timestamp updatedTime,
+			Timestamp createdTime, Long updateInc, Short status,
+			Double longitude, Double latitude, Long lastMsgIdOfTarget,
+			Long lastMsgIdOfOwner, String city, String province,
+			String country, Short sex, Short matchCount, Short maxMatchCount,
+			Short likedByOwner, Short likedByTarget, Short deletedByOwner,
+			Short deletedByTarget, Date birthdayLower, Date birthdayUpper,
+			String language, List<PlaneHist> planeHists, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
-		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.updateInc = updateInc;
 		this.status = status;
 		this.longitude = longitude;
 		this.latitude = latitude;
@@ -129,6 +144,10 @@ public class Plane implements java.io.Serializable {
 		this.likedByTarget = likedByTarget;
 		this.deletedByOwner = deletedByOwner;
 		this.deletedByTarget = deletedByTarget;
+		this.birthdayLower = birthdayLower;
+		this.birthdayUpper = birthdayUpper;
+		this.language = language;
+		this.planeHists = planeHists;
 		this.messages = messages;
 	}
 
@@ -174,6 +193,16 @@ public class Plane implements java.io.Serializable {
 		this.accountByOwnerId = accountByOwnerId;
 	}
 
+	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Timestamp getUpdatedTime() {
+		return this.updatedTime;
+	}
+
+	public void setUpdatedTime(Timestamp updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getCreatedTime() {
@@ -184,14 +213,13 @@ public class Plane implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, insertable = false, updatable = false, length = 19)
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
-	public Timestamp getUpdatedTime() {
-		return this.updatedTime;
+	@Column(name = "UPDATE_INC", nullable = false, insertable = false, updatable = false)
+	public Long getUpdateInc() {
+		return this.updateInc;
 	}
 
-	public void setUpdatedTime(Timestamp updatedTime) {
-		this.updatedTime = updatedTime;
+	public void setUpdateInc(Long updateInc) {
+		this.updateInc = updateInc;
 	}
 
 	@Column(name = "STATUS", nullable = false)
@@ -276,20 +304,20 @@ public class Plane implements java.io.Serializable {
 	}
 
 	@Column(name = "MATCH_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getMatchCount() {
+	public Short getMatchCount() {
 		return this.matchCount;
 	}
 
-	public void setMatchCount(Integer matchCount) {
+	public void setMatchCount(Short matchCount) {
 		this.matchCount = matchCount;
 	}
 
 	@Column(name = "MAX_MATCH_COUNT", nullable = false)
-	public Integer getMaxMatchCount() {
+	public Short getMaxMatchCount() {
 		return this.maxMatchCount;
 	}
 
-	public void setMaxMatchCount(Integer maxMatchCount) {
+	public void setMaxMatchCount(Short maxMatchCount) {
 		this.maxMatchCount = maxMatchCount;
 	}
 
@@ -329,6 +357,44 @@ public class Plane implements java.io.Serializable {
 		this.deletedByTarget = deletedByTarget;
 	}
 
+	@Column(name = "BIRTHDAY_LOWER", length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getBirthdayLower() {
+		return this.birthdayLower;
+	}
+
+	public void setBirthdayLower(Date birthdayLower) {
+		this.birthdayLower = birthdayLower;
+	}
+
+	@Column(name = "BIRTHDAY_UPPER", length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getBirthdayUpper() {
+		return this.birthdayUpper;
+	}
+
+	public void setBirthdayUpper(Date birthdayUpper) {
+		this.birthdayUpper = birthdayUpper;
+	}
+
+	@Column(name = "LANGUAGE")
+	public String getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")
+	public List<PlaneHist> getPlaneHists() {
+		return this.planeHists;
+	}
+
+	public void setPlaneHists(List<PlaneHist> planeHists) {
+		this.planeHists = planeHists;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")
 	public List<Message> getMessages() {
 		return this.messages;
@@ -342,8 +408,16 @@ public class Plane implements java.io.Serializable {
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
+		setUpdatedTime(timestamp);
+
 		setCreatedTime(timestamp);
 
+	}
+
+	@PreUpdate
+	protected void onPreUpdate() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setUpdatedTime(timestamp);
 	}
 
 }

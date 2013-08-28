@@ -2,4 +2,7 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
+<type-mapping>
+	<sql-type jdbc-type="DATE" hibernate-type="java.sql.Date"></sql-type>
+</type-mapping>
 </hibernate-reverse-engineering>

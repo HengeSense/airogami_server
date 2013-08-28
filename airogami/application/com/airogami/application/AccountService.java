@@ -67,6 +67,7 @@ public class AccountService implements IAccountService {
 		} 		
 		account.setAccountStat(accountStat);
 		account.setProfile(profile);
+		account.setAuthenticate(authenticate);
 		return account;
 	}
 
@@ -75,7 +76,7 @@ public class AccountService implements IAccountService {
 	 * int)
 	 */
 	@Override
-	public Account signin(String[] args, int type) throws ApplicationException {
+	public Account signin(String[]args, int type) throws ApplicationException {
 		Account account = null;
 		ApplicationException ae = null;
 		try {
@@ -90,7 +91,7 @@ public class AccountService implements IAccountService {
 			}			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			t.printStackTrace();
+			//t.printStackTrace();
 			if(t.getCause() == null){
 				ae = new ApplicationException();
 			}
@@ -103,9 +104,10 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		}
-		if(account != null)
-		{
-		   account.getAccountStat();
+		if(account != null){
+			account.getAuthenticate();
+			account.getAccountStat();
+			account.getProfile();
 		}
 		
 		return account;

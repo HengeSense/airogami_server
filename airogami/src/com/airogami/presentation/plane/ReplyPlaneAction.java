@@ -1,14 +1,14 @@
 package com.airogami.presentation.plane;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-import com.airogami.exception.AirogamiError;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Message;
-import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
@@ -33,8 +33,8 @@ public class ReplyPlaneAction extends AirogamiActionSupport implements ModelDriv
 			User user = (User)session.getAttribute("user");	
 			Message message = new Message();
 			PropertyUtils.copyProperties(message, replyPlaneVO.getMessageVO());
-			message = ManagerUtils.planeManager.replyPlane(replyPlaneVO.getPlaneId(), user.getAccountId(), message);
-			dataMap.put("result", message);
+			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(replyPlaneVO.getPlaneId(), user.getAccountId(), message);
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			//e.printStackTrace();

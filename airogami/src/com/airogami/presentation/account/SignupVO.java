@@ -1,6 +1,6 @@
 package com.airogami.presentation.account;
 
-import java.util.Date;
+import java.sql.Date;
 
 import com.airogami.presentation.logic.ClientAgent;
 
@@ -76,8 +76,13 @@ public class SignupVO {
 	public Date getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public void setBirthday(String birthday) {
+		if(birthday != null && birthday.length() > 0){
+			try{
+				this.birthday = Date.valueOf(birthday.substring(0, 10));
+			}
+			catch(IllegalArgumentException lae){}	
+		}	
 	}
 	public String getShout() {
 		return shout;

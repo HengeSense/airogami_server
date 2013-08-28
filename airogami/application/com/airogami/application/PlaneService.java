@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.persistence.EntityExistsException;
+
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
@@ -14,6 +16,8 @@ import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.persistence.entities.PlaneHist;
+import com.airogami.persistence.entities.PlaneHistId;
 
 public class PlaneService implements IPlaneService {
 	
@@ -24,7 +28,7 @@ public class PlaneService implements IPlaneService {
 			DaoUtils.categoryDao.save(category);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			t.printStackTrace();
+			//t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
@@ -58,11 +62,16 @@ public class PlaneService implements IPlaneService {
 			DaoUtils.planeDao.save(plane);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
-			t.printStackTrace();
+			//t.printStackTrace();
 			if (t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
-				ae = new ApplicationException(t.getCause().getMessage());
+				if(t.getCause().getCause() instanceof EntityExistsException){
+					plane = null;
+				}
+				else{
+					ae = new ApplicationException(t.getCause().getMessage());
+				}
 			}
 		} finally {
 			EntityManagerHelper.closeEntityManager();
@@ -78,9 +87,10 @@ public class PlaneService implements IPlaneService {
 	 * com.airogami.persitence.entities.Message)
 	 */
 	@Override
-	public Message replyPlane(long planeId, long ownerId, Message message)
+	public Map<String, Object> replyPlane(long planeId, long ownerId, Message message)
 			throws ApplicationException {
 		ApplicationException ae = null;
+		String error = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			if (DaoUtils.planeDao.verifyReply(planeId, ownerId)) {
@@ -89,9 +99,10 @@ public class PlaneService implements IPlaneService {
 				Account account = DaoUtils.accountDao.getReference(ownerId);
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
+				DaoUtils.messageDao.flush();
+				DaoUtils.planeDao.updateInc(planeId);
 			} else {
-				//ae = new ApplicationException("verifyReply failed");
-				message = null;
+				error = "none";
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
@@ -107,7 +118,14 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		return message;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		if(error != null){
+		    result.put("error", error);
+		}
+		else{
+			result.put("message", message);
+		}
+		return result;
 	}
 	
 	@Override
@@ -182,19 +200,35 @@ public class PlaneService implements IPlaneService {
 	}
 
 	@Override
-	public boolean throwPlane(long planeId, long accountId)
+	public Map<String, Object> throwPlane(long planeId, long accountId)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		boolean canMatchAgain = false;
+		String error = null;
+		Plane plane = null;
+		PlaneHistId id = new PlaneHistId(planeId, accountId);
+		PlaneHist planeHist = new PlaneHist();
+		planeHist.setId(id);
 		try {
 			EntityManagerHelper.beginTransaction();
 			if (DaoUtils.planeDao.throwPlane(planeId, accountId)) {
 				canMatchAgain = DaoUtils.planeDao.canPlaneMatch(planeId);
+				DaoUtils.planeHistDao.save(planeHist);
+			}
+			else{
+				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
+				if(plane == null){
+					error = "none";
+				}
+				else{
+					error =  "others";
+				}
+				
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
-			if (t.getCause() == null) {
+			if(t.getCause() == null) {
 				ae = new ApplicationException();
 			} else {
 				ae = new ApplicationException(t.getCause().getMessage());
@@ -205,7 +239,18 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		return canMatchAgain;
+		Map<String, Object> result = new TreeMap<String,Object>();
+		if(error != null){
+			result.put("error", error);
+			if(plane != null){
+				result.put("plane", plane);
+			}
+		}
+		else{
+			result.put("canMatchAgain", canMatchAgain);
+		}
+		
+		return result;
 		
 	}
 	
@@ -216,16 +261,28 @@ public class PlaneService implements IPlaneService {
 		message.setContent(MessageConstants.LikeContent);
 		message.setType(MessageConstants.MessageTypeLike);
 		Long oppositeAccountId = null;
+		String error = null;
+		Plane plane = null;
 		try {			
 			EntityManagerHelper.beginTransaction();
 			if ((oppositeAccountId = DaoUtils.planeDao.likePlane(planeId, accountId, byOwner)) != null) {
-				Plane plane = DaoUtils.planeDao.getReference(planeId);
+				plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
 				Account account = DaoUtils.accountDao.getReference(accountId);
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);		
+				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);	
+				DaoUtils.planeDao.updateInc(planeId);
+			}
+			else{
+				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
+				if(plane == null){
+					error = "none";
+				}
+				else{
+					error =  "others";
+				}
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
@@ -242,21 +299,42 @@ public class PlaneService implements IPlaneService {
 			throw ae;
 		}
 		Map<String, Object> result = new TreeMap<String, Object>();
-		if(oppositeAccountId != null){
+			
+		if(error != null){
+			result.put("error", error);
+			if(plane != null){
+				result.put("plane", plane);
+			}
+		}
+		else{
 			result.put("message", message);
-		}		
-		result.put("oppositeAccountId", oppositeAccountId);
+			result.put("oppositeAccountId", oppositeAccountId);
+		}
+		
 		return result;	
 	}
 
 	@Override
-	public boolean deletePlane(long planeId, long accountId, boolean byOwner)
+	public Map<String, Object> deletePlane(long planeId, long accountId, boolean byOwner)
 			throws ApplicationException {
 		ApplicationException ae = null;
-		boolean result = false;
+		boolean succeed = false;
+		String error = null;
+		Plane plane = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			result = DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner);
+			if(succeed = DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner)){
+				
+			}
+			else{
+				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
+				if(plane == null){
+					error = "none";
+				}
+				else{
+					error =  "others";
+				}
+			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -271,11 +349,22 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}	
+		Map<String, Object> result = new TreeMap<String,Object>();
+		if(error != null){
+			result.put("error", error);
+			if(plane != null){
+				result.put("plane", plane);
+			}
+		}
+		else{
+			result.put("succeed", succeed);
+		}
+		
 		return result;
 	}
 
 	@Override
-	public Map<String, Object> obtainPlanes(long accountId, int startIdx, Timestamp start,Timestamp end, int limit,
+	public Map<String, Object> obtainPlanes(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IPlaneService.MaxPlaneLimit || limit < 1)
 			limit = IPlaneService.MaxPlaneLimit;
@@ -284,7 +373,7 @@ public class PlaneService implements IPlaneService {
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			planes = DaoUtils.planeDao.obtainPlanes(accountId, startIdx, start, end, limit + 1, forward);
+			planes = DaoUtils.planeDao.obtainPlanes(accountId, start, end, limit + 1, forward);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -338,7 +427,7 @@ public class PlaneService implements IPlaneService {
 	}
 	
 	@Override
-	public Map<String, Object> obtainPlaneIds(long accountId, int startIdx, Timestamp start,Timestamp end, int limit,
+	public Map<String, Object> obtainPlaneIds(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException{
 		if(limit > IPlaneService.MaxPlaneIdLimit || limit < 1)
 			limit = IPlaneService.MaxPlaneIdLimit;
@@ -347,7 +436,7 @@ public class PlaneService implements IPlaneService {
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			planeIds = DaoUtils.planeDao.obtainPlaneIds(accountId, startIdx, start, end, limit + 1, forward);
+			planeIds = DaoUtils.planeDao.obtainPlaneIds(accountId, start, end, limit + 1, forward);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -370,7 +459,7 @@ public class PlaneService implements IPlaneService {
 	}
 	
 	@Override
-	public Map<String, Object> receivePlanes(long accountId, int startIdx, Timestamp start,Timestamp end, int limit,
+	public Map<String, Object> receivePlanes(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IPlaneService.MaxPlaneLimit || limit < 1)
 			limit = IPlaneService.MaxPlaneLimit;
@@ -379,7 +468,7 @@ public class PlaneService implements IPlaneService {
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			planes = DaoUtils.planeDao.receivePlanes(accountId, startIdx, start, end, limit + 1, forward);
+			planes = DaoUtils.planeDao.receivePlanes(accountId, start, end, limit + 1, forward);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -433,7 +522,7 @@ public class PlaneService implements IPlaneService {
 	}	
 	
 	@Override
-	public Map<String, Object> receivePlaneIds(long accountId, int startIdx, Timestamp start,Timestamp end, int limit,
+	public Map<String, Object> receivePlaneIds(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException{
 		if(limit > IPlaneService.MaxPlaneIdLimit || limit < 1)
 			limit = IPlaneService.MaxPlaneIdLimit;
@@ -442,7 +531,7 @@ public class PlaneService implements IPlaneService {
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			planeIds = DaoUtils.planeDao.receivePlaneIds(accountId, startIdx, start, end, limit + 1, forward);
+			planeIds = DaoUtils.planeDao.receivePlaneIds(accountId, start, end, limit + 1, forward);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			

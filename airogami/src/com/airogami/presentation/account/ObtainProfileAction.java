@@ -1,6 +1,8 @@
 package com.airogami.presentation.account;
 
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +26,9 @@ public class ObtainProfileAction extends AirogamiActionSupport{
 		try {			
 			//HttpSession session = request.getSession(true);
 			//Account account = (Account)session.getAttribute("account");	
-			Profile result = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
+			Profile profile = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
+			Map<String, Object> result = new TreeMap<String, Object>();
+		    result.put("profile", profile);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

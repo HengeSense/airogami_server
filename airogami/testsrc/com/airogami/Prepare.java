@@ -2,6 +2,8 @@ package com.airogami;
 
 import static org.junit.Assert.*;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,7 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.AccountConstants;
+import com.airogami.common.constants.MessageConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
@@ -48,17 +51,20 @@ public class Prepare {
 			AccountConstants.SexType_Male
 			};
 	
+	private int ages[] ={24, 25, 24, 23, 22};
+	private String languages[] = {"Chinese", "English", "English", "Chinese", "English"};
+	
 	@Test
 	public void test() {
 		try {
 			this.createCategories();
 			this.createAccount();
-			this.sendPlanes();
+		    this.sendPlanes();
 			this.sendChains();
-			this.matchPlanes();
-			this.replyPlanes();
-			this.matchChains();
-			this.replyChains();
+			//this.matchPlanes();
+			//this.replyPlanes();
+			//this.matchChains();
+			//this.replyChains();
 			
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -67,7 +73,19 @@ public class Prepare {
 	}
 	
 	private void createCategories() throws AirogamiException{
-		Category category = new Category("feeling", "What's on your mind?");
+		Category category = new Category("feeling1", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling2", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling3", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling4", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling5", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling6", "What's on your mind?");
+		ManagerUtils.planeManager.createCategory(category);
+		category = new Category("feeling7", "What's on your mind?");
 		ManagerUtils.planeManager.createCategory(category);
 	}
 	
@@ -82,12 +100,15 @@ public class Prepare {
 			profile.setScreenName(names[i]);			
 			profile.setSex(sexes[i]);
 			profile.setStatus((short)0);
-			profile.setIcon("icon");
 			profile.setCity(locations[i][2]);
 			profile.setProvince(locations[i][1]);
 			profile.setCountry(locations[i][0]);
 			profile.setLatitude(0.0);
 			profile.setLongitude(0.0);
+			Calendar calendar = Calendar.getInstance();
+    		calendar.add(Calendar.YEAR, -ages[i]);
+    		profile.setBirthday(new Date(calendar.getTimeInMillis()));
+    		profile.setLanguage(this.languages[i]);
 			account.setAuthenticate(authenticate);
 			account.setProfile(profile);
 			ManagerUtils.accountManager.signup(account);
@@ -115,7 +136,7 @@ public class Prepare {
 	
 	
     public  void sendPlanes() throws AirogamiException{
-    	for(int i = 0; i < 5; ++i){
+    	for(int i = 0; i < names.length; ++i){
     		for(int j = 0; j < 4; ++j){
     			Plane plane = new Plane();
         		//plane.setCity("chengdu");
@@ -125,12 +146,21 @@ public class Prepare {
         		plane.setLongitude(0.0);
         		plane.setCategory(new Category());
         		plane.getCategory().setCategoryId((short)1);
+        		Calendar calendar = Calendar.getInstance();
+        		calendar.add(Calendar.YEAR, -21);
+        		Date ageLower = new Date(calendar.getTimeInMillis());
+        		calendar.add(Calendar.YEAR, 4);
+        		Date ageUpper = new Date(calendar.getTimeInMillis());
+        	
+        		plane.setBirthdayLower(ageLower);
+        		plane.setBirthdayUpper(ageUpper);
+        		plane.setLanguage("English");
         		long ownerId = i + 1;
         		Message message = new Message();
         		message.setContent("hello" + i);
-                message.setType((short) 0);
+                message.setType(MessageConstants.MessageTypeText);
         		plane.getMessages().add(message);
-        		plane = ManagerUtils.planeManager.sendPlane(plane, ownerId);
+        		ManagerUtils.planeManager.sendPlane(plane, ownerId);
     		}
     		
     		//ObjectUtils.printObject(plane);
@@ -154,7 +184,7 @@ public class Prepare {
     
     private void replyPlanes() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
-    		Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(i + 1, -1, null, null, 1000, true);
+    		Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(i + 1, Long.MIN_VALUE, null, 1000, true);
     		List<Plane> planes = (List<Plane>) result.get("planes");
     		Iterator<Plane> iter = planes.iterator();
     		while(iter.hasNext()){
@@ -164,7 +194,7 @@ public class Prepare {
         		message.setType((short) 0);
         		long ownerId = i + 1;
         		long planeId = plane.getPlaneId();
-        		message = ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
+        		 ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
     		}
     		
     		//ObjectUtils.printObject(message);
@@ -182,9 +212,9 @@ public class Prepare {
     			long ownerId = i + 1;
     			ChainMessage chainMessage = new ChainMessage();
     			chainMessage.setContent("hello! " + j);
-    			chainMessage.setType((short) 0);
+    			chainMessage.setType(MessageConstants.MessageTypeText);
     			chain.getChainMessages().add(chainMessage);
-                chain = ManagerUtils.chainManager.sendChain(chain, ownerId);
+                ManagerUtils.chainManager.sendChain(chain, ownerId);
     		}
     		
     		//ObjectUtils.printObject(plane);
@@ -203,7 +233,7 @@ public class Prepare {
     
     private void replyChains() throws AirogamiException{
     	for(int i = 0; i < 5; ++i){
-    		Map<String, Object> result = ManagerUtils.chainManager.receiveChains(i + 1, -1, null, null, 1000, true);
+    		Map<String, Object> result = ManagerUtils.chainManager.receiveChains(i + 1,  null, null, 1000, true);
     		List<Chain> chains = (List<Chain>) result.get("chains");
     		Iterator<Chain> iter = chains.iterator();
     		while(iter.hasNext()){
@@ -212,7 +242,7 @@ public class Prepare {
     			int type = 0;
     			long ownerId = i + 1;
     			long chainId = chain.getChainId();
-    			ChainMessage chainMessage = ManagerUtils.chainManager.replyChain(ownerId, chainId, content, type);
+    			ManagerUtils.chainManager.replyChain(ownerId, chainId, content, type);
     		}
     		
     		//ObjectUtils.printObject(message);

@@ -1,6 +1,7 @@
 package com.airogami.presentation.account;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,8 +32,15 @@ public class EditProfileAction extends AirogamiActionSupport implements ModelDri
 				HttpSession session = request.getSession(true);
 				User user = (User)session.getAttribute("user");	
 				properties.put("accountId", user.getAccountId());
-				//temporary
-				session.setAttribute("account", ManagerUtils.accountManager.editProfile(properties));				
+				ManagerUtils.accountManager.editProfile(properties);			
+			}
+			//System.out.println("EditProfile property size: " + properties.size());
+			if(request.getParameter("tokens") != null){
+				HttpSession session = request.getSession(true);
+				User user = (User)session.getAttribute("user");	
+				Map<String, Object> result = new TreeMap<String, Object>();
+				result.put("tokens", ManagerUtils.dataManager.accountIcon(user.getAccountId())); 
+				dataMap.put("result", result);
 			}
 			succeed = true;
 		} catch (AirogamiException e) {

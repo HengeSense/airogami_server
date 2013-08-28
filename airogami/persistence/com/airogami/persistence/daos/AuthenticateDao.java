@@ -13,9 +13,9 @@ import com.airogami.persistence.entities.AuthenticateDAO;
 import com.airogami.persistence.entities.EntityManagerHelper;
 
 public class AuthenticateDao extends AuthenticateDAO {
-	private final String emailAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
+	private final String emailAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile join fetch account.authenticate where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
 
-	private final String authUpdateJPQL = "update AccountStat accountStat set accountStat.lastSigninTime = ?2 where accountStat.accountId = ?1";
+	private final String authUpdateJPQL = "update AccountStat accountStat set accountStat.signinCount = accountStat.signinCount + 1  where accountStat.accountId = ?1";
 
 	public Account authenticateWithEmail(String email, String password) {
 		EntityManagerHelper.log("authenticate with email", Level.INFO, null);
@@ -32,7 +32,6 @@ public class AuthenticateDao extends AuthenticateDAO {
 				query = EntityManagerHelper.getEntityManager().createQuery(
 						authUpdateJPQL);
 				query.setParameter(1, account.getAccountId());
-				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
 				query.executeUpdate();
 			}
 			EntityManagerHelper
@@ -44,7 +43,7 @@ public class AuthenticateDao extends AuthenticateDAO {
 		return account;
 	}
 	
-	private final String screenNameAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
+	private final String screenNameAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
 
 	public Account authenticateWithScreenName(String screenName, String password) {
 		EntityManagerHelper.log("authenticate with screen name", Level.INFO, null);
@@ -61,7 +60,6 @@ public class AuthenticateDao extends AuthenticateDAO {
 				query = EntityManagerHelper.getEntityManager().createQuery(
 						authUpdateJPQL);
 				query.setParameter(1, account.getAccountId());
-				query.setParameter(2, new Timestamp(System.currentTimeMillis()));
 				query.executeUpdate();
 			}
 			EntityManagerHelper

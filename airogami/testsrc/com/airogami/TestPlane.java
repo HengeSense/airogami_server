@@ -41,15 +41,15 @@ public class TestPlane {
 		//plane.setLongitude(0.0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
-		long ownerId = 2L;
+		long ownerId = 20L;
 		Message message = new Message();
 		message.setContent("hello!");
         message.setType((short) 0);
 		plane.getMessages().add(message);
 
 		try {
-			plane = ManagerUtils.planeManager.sendPlane(plane, ownerId);
-			ObjectUtils.printObject(plane);
+			Map<String, Object> result = ManagerUtils.planeManager.sendPlane(plane, ownerId);
+			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -62,23 +62,24 @@ public class TestPlane {
 		Message message = new Message();
 		message.setContent("hello!");
 		message.setType((short) 0);
-		long ownerId = 3;
+		long ownerId = 2;
 		long planeId = 3;
 		try {
-			message = ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
-			ObjectUtils.printObject(message);
+			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
+			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
-	@Ignore
+	//@Ignore
 	@Test
 	public void testThrowPlane() {
-		long accountId = 3;
-		long planeId = 3;
+		long accountId = 5;
+		long planeId = 2;
 		try {
-			ManagerUtils.planeManager.throwPlane(planeId, accountId);
+			Map<String, Object> result = ManagerUtils.planeManager.throwPlane(planeId, accountId);
+			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail();
@@ -87,8 +88,8 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testLikePlane() {
-		long accountId = 2;
-		long planeId = 5;
+		long accountId = 3;
+		long planeId = 3;
 		boolean byOwner = true;
 		try {
 			Map<String, Object> result = ManagerUtils.planeManager.likePlane(planeId, accountId, byOwner);
@@ -105,9 +106,10 @@ public class TestPlane {
 	public void testDeletePlane() {
 		long accountId = 3;
 		long planeId = 3;
-		boolean byOwner = false;
+		boolean byOwner = true;
 		try {
-			ManagerUtils.planeManager.deletePlane(planeId, accountId, byOwner);
+			Map<String, Object> result = ManagerUtils.planeManager.deletePlane(planeId, accountId, byOwner);
+			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -118,20 +120,19 @@ public class TestPlane {
 	@Test
 	public void testObtainPlanes() {
 		long accountId = 4;
-		String start = "2013-07-15 11:33:59.0";
-		String end = "2013-07-15 11:34:06.0";
-		int startIdx = 0;
 		int limit = 50;
-		boolean forward = true;
+		boolean forward = false;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.obtainPlanes(accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
+			Map<String, Object> result = ManagerUtils.planeManager.obtainPlanes(accountId, start, end, limit, forward);
 			//ObjectUtils.printObject(result);
 			List<Plane> planes = (List<Plane>) result.get("planes");
 			Iterator<Plane> iter = planes.iterator();
 			while(iter.hasNext()){
 				Plane plane = iter.next();
 				System.out.print(plane.getPlaneId());
-				System.out.println(": " + plane.getUpdatedTime());
+				System.out.println(": " + plane.getUpdateInc());
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -160,25 +161,24 @@ public class TestPlane {
 		}
 	}	
 	
-	
+	@Ignore
 	@Test
 	public void testReceivePlanes() {
 		long accountId = 1;
-		String start = "2013-06-15 11:33:59.0";
-		String end = "2013-08-15 11:34:06.0";
-		int startIdx = 4;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
 		int limit = 1;
 		boolean forward = true;
 		try {
 			Map<String, Object> result = ManagerUtils.planeManager.receivePlanes(
-					accountId, startIdx, Timestamp.valueOf(start), Timestamp.valueOf(end), limit, forward);
+					accountId, start, end, limit, forward);
 			//ObjectUtils.printObject(result);
 			List<Plane> planes = (List<Plane>) result.get("planes");
 			Iterator<Plane> iter = planes.iterator();
 			while(iter.hasNext()){
 				Plane plane = iter.next();
 				System.out.print(plane.getPlaneId());
-				System.out.println(": " + plane.getUpdatedTime());
+				System.out.println(": " + plane.getUpdateInc());
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();

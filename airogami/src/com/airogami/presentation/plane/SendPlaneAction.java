@@ -1,5 +1,8 @@
 package com.airogami.presentation.plane;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -39,8 +42,8 @@ public class SendPlaneAction extends AirogamiActionSupport implements ModelDrive
 			plane.getMessages().add(message);
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
-			ManagerUtils.planeManager.sendPlane(plane, user.getAccountId());
-			dataMap.put("plane", plane);
+			Map<String, Object> result = ManagerUtils.planeManager.sendPlane(plane, user.getAccountId());
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			String localizedMessage = getText(e.getMessage(),e.getMessage());

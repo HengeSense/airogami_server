@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ import javax.persistence.Query;
 
 public class PlaneDAO {
 	// property constants
+	public static final String UPDATE_INC = "updateInc";
 	public static final String STATUS = "status";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
@@ -34,6 +36,7 @@ public class PlaneDAO {
 	public static final String LIKED_BY_TARGET = "likedByTarget";
 	public static final String DELETED_BY_OWNER = "deletedByOwner";
 	public static final String DELETED_BY_TARGET = "deletedByTarget";
+	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -392,6 +395,11 @@ public class PlaneDAO {
 		}
 	}
 
+	public List<Plane> findByUpdateInc(Object updateInc,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_INC, updateInc, rowStartIdxAndCount);
+	}
+
 	public List<Plane> findByStatus(Object status, int... rowStartIdxAndCount) {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
@@ -467,6 +475,11 @@ public class PlaneDAO {
 			int... rowStartIdxAndCount) {
 		return findByProperty(DELETED_BY_TARGET, deletedByTarget,
 				rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLanguage(Object language,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
 	}
 
 	/**

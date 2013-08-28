@@ -1,5 +1,8 @@
 package com.airogami.presentation.chain;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -34,8 +37,8 @@ public class SendChainAction extends AirogamiActionSupport implements ModelDrive
 			chain.getChainMessages().add(chainMessage);
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
-			chain = ManagerUtils.chainManager.sendChain(chain, user.getAccountId());
-			dataMap.put("chain", chain);
+			Map<String, Object> result = ManagerUtils.chainManager.sendChain(chain, user.getAccountId());
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			String localizedMessage = getText(e.getMessage(),e.getMessage());
@@ -45,6 +48,7 @@ public class SendChainAction extends AirogamiActionSupport implements ModelDrive
 			t.printStackTrace(System.out);
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
+
 		//success
 		if(succeed){
 			JSONUtils.putOKStatus(dataMap);

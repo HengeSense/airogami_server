@@ -34,7 +34,7 @@ public class TestAccount {
 	public void tearDown() throws Exception {
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testSignup() {		
 		try {
@@ -49,7 +49,6 @@ public class TestAccount {
 				profile.setScreenName("tianhuyang" + i);				
 				profile.setSex((short)0);
 				profile.setStatus((short)0);
-				profile.setIcon("icon");
 				profile.setCity("shanghai");
 				profile.setProvince("shanghai");
 				profile.setCountry("China");
@@ -72,8 +71,9 @@ public class TestAccount {
 	public void testSigninWithScreenName() {
 		String screenName = "tianhuyang5";
 		String password = "12345678";
+		Long uuid = 0L;
 		try {
-			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password);
+			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password, null);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -83,10 +83,11 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testSigninWithEmail() {
-		String email = "tianhuyang@gmail.com";
+		String email = "tianhu@qq.com";
 		String password = "12345678";
+		Long uuid = 0L;
 		try {
-			Account account = ManagerUtils.accountManager.signinWithEmail(email, password);
+			Account account = ManagerUtils.accountManager.signinWithEmail(email, password, null);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -241,7 +242,7 @@ public class TestAccount {
         		message.setContent("hello" + i);
                 message.setType((short) 0);
         		plane.getMessages().add(message);
-        		plane = ManagerUtils.planeManager.sendPlane(plane, ownerId);
+        		ManagerUtils.planeManager.sendPlane(plane, ownerId);
     		}
     	}		
     	
@@ -260,7 +261,7 @@ public class TestAccount {
     			chainMessage.setContent("hello! " + j);
     			chainMessage.setType((short) 0);
     			chain.getChainMessages().add(chainMessage);
-                chain = ManagerUtils.chainManager.sendChain(chain, ownerId);
+                ManagerUtils.chainManager.sendChain(chain, ownerId);
     		}
     	}
 	}

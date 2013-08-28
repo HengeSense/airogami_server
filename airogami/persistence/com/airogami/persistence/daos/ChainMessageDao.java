@@ -13,7 +13,7 @@ import com.airogami.persistence.entities.EntityManagerHelper;
 
 public class ChainMessageDao extends ChainMessageDAO {
 	private final String replyChainMessageJPQL = "update ChainMessage chainMessage set chainMessage.content = ?4, chainMessage.createdTime = CURRENT_TIMESTAMP, chainMessage.status = ?6, chainMessage.type = ?5 where chainMessage.status = ?3 and chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
-	private final String replyChainResetMatchCountJPQL = "update Chain chain set chain.matchCount = 0, chain.updatedTime = CURRENT_TIMESTAMP where chain.chainId = ?1";
+	private final String replyChainResetMatchCountJPQL = "update Chain chain set chain.matchCount = 0 where chain.chainId = ?1";
 
 	// database time
 	public boolean replyChainMessage(long accountId, long chainId, String content, int type){

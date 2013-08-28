@@ -31,7 +31,7 @@
      <%
      if(user != null){ %>
     <h2>View Account</h2>
-    <form action="account/obtainAccount.action"  method="get"> 
+    <form action="account/obtainProfile.action"  method="get"> 
     <label>AccountId: </label>
     <input type="text" name="accountId" value="2" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 

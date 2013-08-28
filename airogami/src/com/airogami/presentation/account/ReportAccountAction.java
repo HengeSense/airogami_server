@@ -1,6 +1,8 @@
 package com.airogami.presentation.account;
 
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,7 +28,9 @@ public class ReportAccountAction extends AirogamiActionSupport{
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
 			Report report = ManagerUtils.accountManager.reportAccount(user.getAccountId(), reportedId, reason);
-			dataMap.put("report", report);
+			Map<String, Object> result = new TreeMap<String, Object>();
+		    result.put("report", report);
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			String localizedMessage = getText(e.getMessage(),e.getMessage());

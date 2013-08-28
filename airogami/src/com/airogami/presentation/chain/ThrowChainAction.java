@@ -1,5 +1,8 @@
 package com.airogami.presentation.chain;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import com.airogami.exception.AirogamiError;
@@ -19,8 +22,8 @@ public class ThrowChainAction extends AirogamiActionSupport {
 		try {
 			HttpSession session = request.getSession(true);			
 			User user = (User)session.getAttribute("user");	
-			Object result = ManagerUtils.chainManager.throwChain(chainId, user.getAccountId());
-            dataMap.put("result", result);
+			Map<String, Object> result = ManagerUtils.chainManager.throwChain(chainId, user.getAccountId());
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			String localizedMessage = getText(e.getMessage(),e.getMessage());

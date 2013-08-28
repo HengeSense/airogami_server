@@ -121,7 +121,7 @@
 				<param name="root">dataMap</param>
 			</result>
 			<result type="json" name="success">			    		    
-			    <param name="excludeProperties">result\.messages\[\d+\]\.account\.(?!accountId).+</param>				    	    
+			    <!--  <param name="excludeProperties">result\.messages\[\d+\]\.account\.(?!accountId).+</param>	-->			    	    
 			    <param name="excludeNullProperties">true</param>
 				<param name="root">dataMap</param>
 			</result>

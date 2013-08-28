@@ -1,5 +1,8 @@
 package com.airogami.presentation.plane;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import com.airogami.exception.AirogamiError;
@@ -29,7 +32,7 @@ public class PickupThrowPlaneAction extends AirogamiActionSupport {
 		try {
 			HttpSession session = request.getSession(true);			
 			User user = (User)session.getAttribute("user");	
-			Object result;
+			Map<String, Object> result;
 			if(type == 1){
 				result = ManagerUtils.planeManager.pickup(user.getAccountId());
 			}

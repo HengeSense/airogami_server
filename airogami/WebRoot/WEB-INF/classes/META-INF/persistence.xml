@@ -21,6 +21,10 @@
 		<class>com.airogami.persistence.entities.Report</class>
 		<class>com.airogami.persistence.entities.ReportId</class>
 		<class>com.airogami.persistence.entities.Profile</class>
+		<class>com.airogami.persistence.entities.PlaneHist</class>
+		<class>com.airogami.persistence.entities.ChainHist</class>
+		<class>com.airogami.persistence.entities.ChainHistId</class>
+		<class>com.airogami.persistence.entities.PlaneHistId</class>
 		<properties>
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />

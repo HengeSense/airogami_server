@@ -43,6 +43,7 @@ public class TestPersistenceChain {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testrandChainAccount() {
 		try {
@@ -52,7 +53,7 @@ public class TestPersistenceChain {
 			   //System.out.println(DaoUtils.accountDao.randChainAccount(21, "China"));
 				//System.out.println(DaoUtils.accountDao.randChainAccount(21, "China"));
 				//System.out.println(DaoUtils.accountDao.randChainAccount(21, "China", "Zhejiang"));
-				System.out.println(DaoUtils.accountDao.randChainAccount(21, "China", "Zhejiang", "Hangzhou"));
+				System.out.println(DaoUtils.accountDao.randChainAccount(1L));
 				
 			}
 			
@@ -93,8 +94,8 @@ public class TestPersistenceChain {
 		long ownerId = 5;
 		long chainId = 8;
 		try {
-			chainMessage = ServiceUtils.chainService.replyChain(ownerId, chainId, content, type);
-			ObjectUtils.printObject(chainMessage);
+			Map<String, Object> result = ServiceUtils.chainService.replyChain(ownerId, chainId, content, type);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();
@@ -131,13 +132,12 @@ public class TestPersistenceChain {
 	@Test
 	public void testObtainChains() {
 		long accountId = 5;
-		Timestamp start = Timestamp.valueOf("2013-05-31 22:36:15");
-		Timestamp end = Timestamp.valueOf("2013-05-31 22:36:15");
 		int limit = 2;
-		int startIdx = 0;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
 		boolean forward = true;
 		try {
-			Map<String, Object> result = ServiceUtils.chainService.obtainChains(accountId, startIdx, start, end, limit, forward);
+			Map<String, Object> result = ServiceUtils.chainService.obtainChains(accountId, start, end, limit, forward);
 			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -155,6 +155,19 @@ public class TestPersistenceChain {
 		try {
 			Map<String, Object> result = ServiceUtils.chainService.obtainChainMessages(accountId, chainId, last, limit);
 			ObjectUtils.printObject(result);
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testPickupChain() {
+		long accountId = 2;
+		try {
+			List<Chain> chains = ServiceUtils.chainService.pickupChain(accountId, 2);
+			ObjectUtils.printObject(chains);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

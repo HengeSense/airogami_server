@@ -1,7 +1,8 @@
 package com.airogami.presentation.account;
 
 import java.io.File;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.sql.Date;
 
 public class EditProfileVO {
 
@@ -13,9 +14,7 @@ public class EditProfileVO {
 	private String city;
 	private String province;
 	private String country;	
-	private File file;
-	private String fileContentType;
-	private String fileFileName;
+	private String shout;
 	
 	public Short getSex() {
 		return sex;
@@ -62,26 +61,20 @@ public class EditProfileVO {
 	public Date getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public void setBirthday(String birthday) { 
+		if(birthday != null && birthday.length() > 0){
+			try{
+				this.birthday = Date.valueOf(birthday.substring(0, 10));
+			}
+			catch(IllegalArgumentException lae){}	
+		}
 	}
-	public File getFile() {
-		return file;
+	
+	public String getShout() {
+		return shout;
 	}
-	public void setFile(File file) {
-		this.file = file;
-	}
-	public String getFileContentType() {
-		return fileContentType;
-	}
-	public void setFileContentType(String fileContentType) {
-		this.fileContentType = fileContentType;
-	}
-	public String getFileFileName() {
-		return fileFileName;
-	}
-	public void setFileFileName(String fileFileName) {
-		this.fileFileName = fileFileName;
+	public void setShout(String shout) {
+		this.shout = shout;
 	}
 	
 }

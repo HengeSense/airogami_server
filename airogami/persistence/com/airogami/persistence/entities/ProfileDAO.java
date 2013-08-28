@@ -1,7 +1,7 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
@@ -23,7 +23,6 @@ public class ProfileDAO {
 	public static final String FULL_NAME = "fullName";
 	public static final String SCREEN_NAME = "screenName";
 	public static final String SEX = "sex";
-	public static final String ICON = "icon";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
 	public static final String STATUS = "status";
@@ -33,6 +32,7 @@ public class ProfileDAO {
 	public static final String UPDATE_COUNT = "updateCount";
 	public static final String LIKES_COUNT = "likesCount";
 	public static final String SHOUT = "shout";
+	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -347,10 +347,6 @@ public class ProfileDAO {
 		return findByProperty(SEX, sex, rowStartIdxAndCount);
 	}
 
-	public List<Profile> findByIcon(Object icon, int... rowStartIdxAndCount) {
-		return findByProperty(ICON, icon, rowStartIdxAndCount);
-	}
-
 	public List<Profile> findByLongitude(Object longitude,
 			int... rowStartIdxAndCount) {
 		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
@@ -391,6 +387,11 @@ public class ProfileDAO {
 
 	public List<Profile> findByShout(Object shout, int... rowStartIdxAndCount) {
 		return findByProperty(SHOUT, shout, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByLanguage(Object language,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
 	}
 
 	/**

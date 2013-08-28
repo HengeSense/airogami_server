@@ -39,11 +39,6 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Short status = 0;
 
-	private Timestamp lastViewedTime = baseTimestamp;
-
-	private static final Timestamp baseTimestamp = Timestamp
-			.valueOf("2013-01-01 00:00:00.0");
-
 	// Constructors
 
 	/** default constructor */
@@ -52,19 +47,17 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Timestamp createdTime, Short status, Timestamp lastViewedTime) {
+			Timestamp createdTime, Short status) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
 		this.createdTime = createdTime;
 		this.status = status;
-		this.lastViewedTime = lastViewedTime;
 	}
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			String content, Short type, Timestamp createdTime, Short status,
-			Timestamp lastViewedTime) {
+			String content, Short type, Timestamp createdTime, Short status) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
@@ -72,7 +65,6 @@ public class ChainMessage implements java.io.Serializable {
 		this.type = type;
 		this.createdTime = createdTime;
 		this.status = status;
-		this.lastViewedTime = lastViewedTime;
 	}
 
 	// Property accessors
@@ -145,23 +137,11 @@ public class ChainMessage implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "LAST_VIEWED_TIME", nullable = false, length = 19)
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
-	public Timestamp getLastViewedTime() {
-		return this.lastViewedTime;
-	}
-
-	public void setLastViewedTime(Timestamp lastViewedTime) {
-		this.lastViewedTime = lastViewedTime;
-	}
-
 	@PrePersist
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 		setCreatedTime(timestamp);
-
-		setLastViewedTime(baseTimestamp);
 
 	}
 

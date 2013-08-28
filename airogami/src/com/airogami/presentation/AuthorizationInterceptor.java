@@ -34,6 +34,7 @@ public class AuthorizationInterceptor implements Interceptor {
 		}
 		else{
 			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("application/json");
 			String json = JSONUtils.statusToJSONString(AirogamiError.Account_No_Signin_Status, AirogamiError.Account_No_Signin_Message);
 			response.getWriter().print(json);
 			return null;

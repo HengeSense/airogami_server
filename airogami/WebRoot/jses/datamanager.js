@@ -21,7 +21,7 @@ function getToken(idx) {
 	var method = idx == 0 ? 'upload' : "download";
 	var params = 'method=' + method + "&random=" + Math.random();
 	xmlhttp.index = idx;
-	xmlhttp.open("GET", "/Data/DataManager?" + params, true);
+	xmlhttp.open("GET", "/data/dataManager?" + params, true);
 	xmlhttp.setRequestHeader("Cache-Control", "no-cache");
 	xmlhttp.send();
 }

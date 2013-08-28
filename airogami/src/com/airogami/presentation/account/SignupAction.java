@@ -7,17 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
-import com.airogami.exception.AirogamiError;
+import org.apache.commons.beanutils.PropertyUtils;
+
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.presentation.AirogamiActionSupport;
-import com.airogami.presentation.logic.DataManager;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
-import com.airogami.presentation.utilities.UploadUtils;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -27,11 +26,11 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 	private static final long serialVersionUID = -3591049023437005414L;
 
 	private String method;
-	private SignupVO user;
+	private SignupVO signupVO;
 	
 	public SignupAction() {
 		super();
-		user = new SignupVO();
+		signupVO = new SignupVO();
 	}
 	
 	@Override
@@ -42,7 +41,7 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 	
 	@Override
 	public SignupVO getModel() {
-		return user;
+		return signupVO;
 	}
 	
 	public String emailSignup() throws Exception{
@@ -51,9 +50,8 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 			Account account = new Account();
 			Authenticate authenticate = new Authenticate();
 			Profile profile = new Profile();
-			BeanUtils.copyProperties(profile, user);
-			BeanUtils.copyProperties(authenticate, user);
-			profile.setIcon("account/icon.jpg");
+			PropertyUtils.copyProperties(profile, signupVO);
+			PropertyUtils.copyProperties(authenticate, signupVO);
 			account.setAuthenticate(authenticate);
 			account.setProfile(profile);
 			account = ManagerUtils.accountManager.signup(account);
@@ -62,6 +60,10 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 				result = new TreeMap<String, Object>();
 				result.put("tokens", ManagerUtils.dataManager.accountIcon(account.getAccountId())); 
 				result.put("account", account);
+				//session
+				HttpSession session = request.getSession(true);			
+				User user = new User(account.getAccountId(), signupVO.getClientAgent());
+				session.setAttribute("user", user);
 			}
 			dataMap.put("result", result);
 			succeed = true;
@@ -70,7 +72,7 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}
 		catch(Throwable t){
-			//t.printStackTrace(System.out);
+			t.printStackTrace();
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
 		//success

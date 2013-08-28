@@ -1,5 +1,8 @@
 package com.airogami.presentation.chain;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -32,10 +35,10 @@ public class ReplyChainAction extends AirogamiActionSupport implements ModelDriv
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
 			ChainMessageVO chainMessageVO = replyChainVO.getChainMessageVO();
-			ChainMessage chainMessage = ManagerUtils.chainManager.replyChain(
+			Map<String, Object> result = ManagerUtils.chainManager.replyChain(
 					user.getAccountId(),replyChainVO.getChainId(),
-					chainMessageVO.getContent(), chainMessageVO.getType());
-			dataMap.put("result", chainMessage);
+					chainMessageVO.getContent(), chainMessageVO.getType());;
+			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
 			//e.printStackTrace();

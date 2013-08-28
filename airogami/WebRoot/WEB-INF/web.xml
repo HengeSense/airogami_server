@@ -27,5 +27,5 @@
 
   <servlet-mapping>
     <servlet-name>DataManager</servlet-name>
-    <url-pattern>/Data/DataManager</url-pattern>
+    <url-pattern>/data/dataManager</url-pattern>
   </servlet-mapping></web-app>

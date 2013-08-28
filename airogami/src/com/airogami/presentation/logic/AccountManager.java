@@ -35,7 +35,6 @@ public class AccountManager {
         
 		if ((profile.getFullName() == null || profile.getFullName().length() == 0)
 				|| profile.getSex() == null
-			    || (profile.getIcon() == null || profile.getIcon().length() == 0)
 				|| profile.getLongitude() == null
 				|| profile.getLatitude() == null
 				|| (profile.getCountry() == null || profile.getCountry().length() == 0)
@@ -62,6 +61,7 @@ public class AccountManager {
 		try {
 			account = ServiceUtils.accountService.signup(account);
 		} catch (ApplicationException re) {
+			//re.printStackTrace();
 			if(re instanceof EmailExistsException){
 				account = null;
 			}
@@ -79,7 +79,7 @@ public class AccountManager {
 	 * @return account, accountStat if successful or null if not matched
 	 * @throws AirogamiException if failed 
 	 */
-public Account signinWithScreenName(String screenName, String password)
+public Account signinWithScreenName(String screenName, String password, ClientAgent clientAgent)
 			throws AirogamiException {
 		if (screenName == null || screenName.length() == 0 || password == null || password.length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in signinWithScreenName");
@@ -90,7 +90,7 @@ public Account signinWithScreenName(String screenName, String password)
 		} catch (Throwable re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
-					AirogamiException.Application_Exception_Message);
+					AirogamiException.Application_Exception_Message); 
 		}
 		/*if(account == null){
 			throw new AirogamiException(
@@ -105,7 +105,7 @@ public Account signinWithScreenName(String screenName, String password)
 	 * @return account, accountStat if successful or null if not matched
 	 * @throws AirogamiException if failed 
 	 */
-	public Account signinWithEmail(String email, String password)
+	public Account signinWithEmail(String email, String password, ClientAgent clientAgent)
 			throws AirogamiException {
 		if (email == null || email.length() == 0 || password == null || password.length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in signinWithEmail");
@@ -114,7 +114,7 @@ public Account signinWithScreenName(String screenName, String password)
 		try {
 			account = ServiceUtils.accountService.signin(new String[]{email, password}, AccountConstants.AuthenticateTypeEmail);
 		} catch (Throwable re) {
-			//re.printStackTrace();
+			re.printStackTrace();
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);

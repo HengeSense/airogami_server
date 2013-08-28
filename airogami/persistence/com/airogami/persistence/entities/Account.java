@@ -34,6 +34,8 @@ public class Account implements java.io.Serializable {
 
 	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
 
+	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
+
 	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
 
 	private List<Message> messages = new ArrayList<Message>(0);
@@ -45,6 +47,8 @@ public class Account implements java.io.Serializable {
 	private List<Plane> planesForTargetId = new ArrayList<Plane>(0);
 
 	private List<Chain> chains = new ArrayList<Chain>(0);
+
+	private List<ChainHist> chainHists = new ArrayList<ChainHist>(0);
 
 	private AccountStat accountStat;
 
@@ -65,21 +69,24 @@ public class Account implements java.io.Serializable {
 
 	/** full constructor */
 	public Account(Long accountId, Authenticate authenticate, Long updateCount,
-			List<Report> reportsForReportedId, List<Plane> planesForOwnerId,
-			List<Message> messages, Profile profile,
-			List<Report> reportsForReportId, List<Plane> planesForTargetId,
-			List<Chain> chains, AccountStat accountStat,
+			List<Report> reportsForReportedId, List<PlaneHist> planeHists,
+			List<Plane> planesForOwnerId, List<Message> messages,
+			Profile profile, List<Report> reportsForReportId,
+			List<Plane> planesForTargetId, List<Chain> chains,
+			List<ChainHist> chainHists, AccountStat accountStat,
 			List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.updateCount = updateCount;
 		this.reportsForReportedId = reportsForReportedId;
+		this.planeHists = planeHists;
 		this.planesForOwnerId = planesForOwnerId;
 		this.messages = messages;
 		this.profile = profile;
 		this.reportsForReportId = reportsForReportId;
 		this.planesForTargetId = planesForTargetId;
 		this.chains = chains;
+		this.chainHists = chainHists;
 		this.accountStat = accountStat;
 		this.chainMessages = chainMessages;
 	}
@@ -121,6 +128,15 @@ public class Account implements java.io.Serializable {
 
 	public void setReportsForReportedId(List<Report> reportsForReportedId) {
 		this.reportsForReportedId = reportsForReportedId;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+	public List<PlaneHist> getPlaneHists() {
+		return this.planeHists;
+	}
+
+	public void setPlaneHists(List<PlaneHist> planeHists) {
+		this.planeHists = planeHists;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByOwnerId")
@@ -175,6 +191,15 @@ public class Account implements java.io.Serializable {
 
 	public void setChains(List<Chain> chains) {
 		this.chains = chains;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+	public List<ChainHist> getChainHists() {
+		return this.chainHists;
+	}
+
+	public void setChainHists(List<ChainHist> chainHists) {
+		this.chainHists = chainHists;
 	}
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")

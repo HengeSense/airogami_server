@@ -1,5 +1,8 @@
 package com.airogami.presentation.account;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import com.airogami.exception.AirogamiError;
@@ -26,9 +29,11 @@ public class ChangePasswordAction extends AirogamiActionSupport implements Model
 		try {			
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
-			boolean result = ManagerUtils.accountManager.changePassword(
+			boolean succeeded = ManagerUtils.accountManager.changePassword(
 					user.getAccountId(), changePasswordVO.getOldPassword(),
 					changePasswordVO.getNewPassword());
+			Map<String, Object> result = new TreeMap<String, Object>();
+		    result.put("succeed", succeeded);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

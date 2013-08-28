@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ import javax.persistence.Query;
 
 public class ChainDAO {
 	// property constants
+	public static final String UPDATE_INC = "updateInc";
 	public static final String STATUS = "status";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
@@ -30,6 +32,7 @@ public class ChainDAO {
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String MAX_PASS_COUNT = "maxPassCount";
 	public static final String MAX_MATCH_COUNT = "maxMatchCount";
+	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -390,6 +393,11 @@ public class ChainDAO {
 		}
 	}
 
+	public List<Chain> findByUpdateInc(Object updateInc,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_INC, updateInc, rowStartIdxAndCount);
+	}
+
 	public List<Chain> findByStatus(Object status, int... rowStartIdxAndCount) {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
@@ -440,6 +448,11 @@ public class ChainDAO {
 			int... rowStartIdxAndCount) {
 		return findByProperty(MAX_MATCH_COUNT, maxMatchCount,
 				rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByLanguage(Object language,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
 	}
 
 	/**

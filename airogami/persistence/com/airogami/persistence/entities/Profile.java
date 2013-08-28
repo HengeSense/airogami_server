@@ -1,8 +1,8 @@
 package com.airogami.persistence.entities;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import org.apache.struts2.json.annotations.JSON;
 
@@ -37,8 +35,6 @@ public class Profile implements java.io.Serializable {
 
 	private Short sex;
 
-	private String icon;
-
 	private Double longitude;
 
 	private Double latitude;
@@ -61,6 +57,8 @@ public class Profile implements java.io.Serializable {
 
 	private String shout;
 
+	private String language;
+
 	// Constructors
 
 	/** default constructor */
@@ -69,14 +67,13 @@ public class Profile implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Profile(Long accountId, Account account, String fullName, Short sex,
-			String icon, Double longitude, Double latitude, Short status,
+			Double longitude, Double latitude, Short status,
 			Timestamp createdTime, String city, String province,
 			String country, Long updateCount, Integer likesCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.fullName = fullName;
 		this.sex = sex;
-		this.icon = icon;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.status = status;
@@ -90,16 +87,15 @@ public class Profile implements java.io.Serializable {
 
 	/** full constructor */
 	public Profile(Long accountId, Account account, String fullName,
-			String screenName, Short sex, String icon, Double longitude,
-			Double latitude, Short status, Timestamp createdTime, String city,
-			String province, String country, Date birthday, Long updateCount,
-			Integer likesCount, String shout) {
+			String screenName, Short sex, Double longitude, Double latitude,
+			Short status, Timestamp createdTime, String city, String province,
+			String country, Date birthday, Long updateCount,
+			Integer likesCount, String shout, String language) {
 		this.accountId = accountId;
 		this.account = account;
 		this.fullName = fullName;
 		this.screenName = screenName;
 		this.sex = sex;
-		this.icon = icon;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.status = status;
@@ -111,6 +107,7 @@ public class Profile implements java.io.Serializable {
 		this.updateCount = updateCount;
 		this.likesCount = likesCount;
 		this.shout = shout;
+		this.language = language;
 	}
 
 	// Property accessors
@@ -159,15 +156,6 @@ public class Profile implements java.io.Serializable {
 
 	public void setSex(Short sex) {
 		this.sex = sex;
-	}
-
-	@Column(name = "ICON", nullable = false)
-	public String getIcon() {
-		return this.icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
 	}
 
 	@Column(name = "LONGITUDE", nullable = false, precision = 10, scale = 6)
@@ -234,7 +222,6 @@ public class Profile implements java.io.Serializable {
 		this.country = country;
 	}
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "BIRTHDAY", length = 10)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getBirthday() {
@@ -270,6 +257,15 @@ public class Profile implements java.io.Serializable {
 
 	public void setShout(String shout) {
 		this.shout = shout;
+	}
+
+	@Column(name = "LANGUAGE")
+	public String getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	@PrePersist

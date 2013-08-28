@@ -107,7 +107,7 @@
 				<param name="root">dataMap</param>
 			</result>
 			<result type="json" name="success">
-			    <param name="excludeNullProperties">true</param>
+			      
 				<param name="root">dataMap</param>
 			</result>
 		</action> -->

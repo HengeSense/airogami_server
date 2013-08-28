@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import org.apache.struts2.json.annotations.JSON;
 
@@ -88,7 +89,7 @@ public class Report implements java.io.Serializable {
 		this.accountByReportedId = accountByReportedId;
 	}
 
-	@Column(name = "UPDATED_TIME", nullable = false, insertable = false, updatable = false, length = 19)
+	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getUpdatedTime() {
 		return this.updatedTime;
@@ -120,6 +121,14 @@ public class Report implements java.io.Serializable {
 	protected void onPrePersist() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
+		setUpdatedTime(timestamp);
+
+	}
+
+	@PreUpdate
+	protected void onPreUpdate() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setUpdatedTime(timestamp);
 	}
 
 }
