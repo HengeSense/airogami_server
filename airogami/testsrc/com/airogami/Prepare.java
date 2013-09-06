@@ -58,9 +58,9 @@ public class Prepare {
 	public void test() {
 		try {
 			this.createCategories();
-			this.createAccount();
-		    this.sendPlanes();
-			this.sendChains();
+			//this.createAccount();
+		   // this.sendPlanes();
+			//this.sendChains();
 			//this.matchPlanes();
 			//this.replyPlanes();
 			//this.matchChains();

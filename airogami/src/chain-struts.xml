@@ -102,7 +102,7 @@
 			</result>
 		</action>
 		
-		<!-- <action name="viewedChainMessages" class="com.airogami.presentation.chain.ViewedChainMessagesAction">
+		<action name="viewedChainMessages" class="com.airogami.presentation.chain.ViewedChainMessagesAction">
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>
@@ -110,7 +110,7 @@
 			      
 				<param name="root">dataMap</param>
 			</result>
-		</action> -->
+		</action>
 		
 	</package>
 

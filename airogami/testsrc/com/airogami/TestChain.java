@@ -32,7 +32,7 @@ public class TestChain {
 	public void tearDown() throws Exception {
 	}
 	
-	@Ignore
+	//@Ignore
 	@Test
 	public void testSendChain() {
 		Chain chain = new Chain();
@@ -40,7 +40,7 @@ public class TestChain {
 		//chain.setProvince("shanghai");
 		//chain.setCountry("China");
 
-		long ownerId = 40L;
+		long ownerId = 4L;
 		ChainMessage chainMessage = new ChainMessage();
 		chainMessage.setContent("hello!");
 		chainMessage.setType((short) 0);

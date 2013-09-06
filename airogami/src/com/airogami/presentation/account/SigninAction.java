@@ -27,37 +27,52 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 	private void signin(int type){
 		boolean succeed = false;
 		try {
-			Account account;
-			if(type == 1){
-				account =  ManagerUtils.accountManager.signinWithEmail(signinVO.getEmail(), signinVO.getPassword(), signinVO.getClientAgent());
-			}else{
-				account =  ManagerUtils.accountManager.signinWithScreenName(signinVO.getScreenName(), signinVO.getPassword(), signinVO.getClientAgent());
-			}
-			Map<String, Object> result = new TreeMap<String, Object>();
-			if(account != null){
-				//test
-				if(account.getAuthenticate() == null){
-					System.err.println("Wrong signin");
-				}
-				int status = account.getProfile().getStatus();
-				HttpSession session; 
-				if(status == 0){
-					session = request.getSession(true);			
-					User user = new User(account.getAccountId(), signinVO.getClientAgent());
-					session.setAttribute("user", user);
-				}
-				else{
-					session = request.getSession();	
-					if(session != null){
-						session.invalidate();
+			HttpSession session;
+			boolean shouldSignin = true;
+			if(signinVO.getIfInvalid()){
+				session = request.getSession(false);
+				if(session != null){
+					User user = (User)session.getAttribute("user");
+					if(user != null){
+						shouldSignin = false;
 					}
-					//need localization
-					result.put("error", "banned");
 				}
 				
-			}			
-			//dataMap.put("user", user);
-			result.put("account", account);
+			}
+			Map<String, Object> result = new TreeMap<String, Object>();
+			if(shouldSignin){
+				Account account;
+				if(type == 1){
+					account =  ManagerUtils.accountManager.signinWithEmail(signinVO.getEmail(), signinVO.getPassword(), signinVO.getClientAgent());
+				}else{
+					account =  ManagerUtils.accountManager.signinWithScreenName(signinVO.getScreenName(), signinVO.getPassword(), signinVO.getClientAgent());
+				}
+				if(account != null){
+					//test
+					if(account.getAuthenticate() == null){
+						System.err.println("Wrong signin");
+					}
+					int status = account.getProfile().getStatus();
+					if(status == 0){
+						session = request.getSession(true);			
+						User user = new User(account.getAccountId(), signinVO.getClientAgent());
+						session.setAttribute("user", user);
+						result.put("account", account);
+					}
+					else{
+						session = request.getSession(false);	
+						if(session != null){
+							session.invalidate();
+						}
+						result.put("error", "banned");
+					}
+					
+				}
+				else{
+					result.put("error", "none");
+				}
+			}
+			
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {			

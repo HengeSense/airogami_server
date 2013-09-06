@@ -11,7 +11,7 @@ public class AirogamiService extends Thread{
 		while(true){
 			try{
 				Airogami airogami = airogamiQueque.take();
-				//System.out.println("Taking > " + airogami);
+				System.out.println("Taking > " + airogami);
 				if(airogami.match()){
 					airogami.reset();
 					airogamiQueque.add(airogami);

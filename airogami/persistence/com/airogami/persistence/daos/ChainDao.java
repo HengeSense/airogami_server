@@ -231,9 +231,9 @@ public class ChainDao extends ChainDAO {
 		}
 	}	
 	
-	private final String receiveChainsForwardJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.chainMessages, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
+	private final String receiveChainsForwardJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.account.profile, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
 
-	private final String receiveChainsBackwardJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.chainMessages , ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
+	private final String receiveChainsBackwardJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.account.profile, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
 	public List<Chain> receiveChains(long accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("receiveChainsing with accountId = " + accountId, Level.INFO, null);

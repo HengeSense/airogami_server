@@ -1,9 +1,0 @@
-{ "expiration": "2013-07-27T15:13:01.364Z",
-  "conditions": [
-    {"acl": "private" },
-    {"bucket": "airogami-user-bucket" },
-    ["starts-with", "$key", "uploads/"],
-	{"success_action_redirect": "http://www.google.com/"},
-	["starts-with", "$Content-Type", "image/jpeg"]
-  ]
-}

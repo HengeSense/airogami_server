@@ -73,7 +73,6 @@ public class ChainManager {
 		if(content == null || content.length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in replyChain");
 		}
-		ChainMessage chainMessage = null;
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.replyChain(accountId, chainId, content, type);

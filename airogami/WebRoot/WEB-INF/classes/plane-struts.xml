@@ -90,6 +90,7 @@
 			</result>
 			<result type="json" name="success">
 			    <param name="excludeNullProperties">true</param>
+			    <!--  <param name="excludeProperties">result\.planes\[\d+\]\.lastMsgIdOfTarget, result\.planes\[\d+\]\.lastMsgIdOfOwner</param> -->
 				<param name="root">dataMap</param>
 			</result>
 		</action>
@@ -100,6 +101,7 @@
 				<param name="root">dataMap</param>
 			</result>
 			<result type="json" name="success">
+			    <!-- <param name="excludeProperties">result\.planes\[\d+\]\.lastMsgIdOfTarget, result\.planes\[\d+\]\.lastMsgIdOfOwner</param> -->
 			    <param name="excludeNullProperties">true</param>
 				<param name="root">dataMap</param>
 			</result>

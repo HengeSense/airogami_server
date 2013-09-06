@@ -1,5 +1,6 @@
 package com.airogami.persistence.daos;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -59,7 +60,8 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String verifyReplyJPQL = "update Plane plane set plane.status = ?3 where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0))";
+	//CURRENT_TIMESTAMP
+	private final String verifyReplyJPQL = "update Plane plane set plane.status = ?3, plane.updatedTime = ?4 where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0))";
 
 	public boolean verifyReply(long planeId, long ownerId) {
 		EntityManagerHelper.log("verifyReplying with planeId = " + planeId + " and ownerId = " + ownerId, Level.INFO, null);
@@ -69,7 +71,7 @@ public class PlaneDao extends PlaneDAO {
 			query.setParameter(1, planeId);
 			query.setParameter(2, ownerId);
 			query.setParameter(3, PlaneConstants.StatusReplied);
-			//query.setParameter(4, new Timestamp(System.currentTimeMillis()));
+			query.setParameter(4, new Timestamp(System.currentTimeMillis()));
 			int count = query.executeUpdate();
 			EntityManagerHelper
 					.log("verifyReply successful", Level.INFO, null);
@@ -400,7 +402,7 @@ public class PlaneDao extends PlaneDAO {
 	}
 	
 	private final String pickupFindJPQL = "select plane.planeId from Plane plane, Profile profile where profile.accountId = ?1 and plane.status = ?2 and plane.accountByTargetId is null and plane.matchCount < plane.maxMatchCount and plane.accountByOwnerId.accountId <> ?1 and (plane.sex = 0 or plane.sex = profile.sex) and (plane.city is null or plane.city = '' or plane.city = profile.city) and (plane.province is null or plane.province = '' or plane.province = profile.province) and (plane.country is null or plane.country = '' or plane.country = profile.country)  and (plane.birthdayLower is null or plane.birthdayLower <= profile.birthday) and (plane.birthdayUpper is null or plane.birthdayUpper >= profile.birthday) and (plane.language is null or plane.language = '' or profile.language = plane.language) and  not exists (select planeHist from PlaneHist planeHist where planeHist.id.planeId = plane.planeId and profile.accountId = planeHist.id.accountId)";
-	private final String matchJPQL = "update Plane plane set plane.accountByTargetId = ?1 where plane.planeId in (?2) and plane.status = ?3 and plane.accountByTargetId is null and plane.matchCount < plane.maxMatchCount and not exists (select planeHist from PlaneHist planeHist where planeHist.id.planeId = plane.planeId and ?1 = planeHist.id.accountId)";
+	private final String matchJPQL = "update Plane plane set plane.accountByTargetId = ?1, plane.updatedTime = ?4 where plane.planeId in (?2) and plane.status = ?3 and plane.accountByTargetId is null and plane.matchCount < plane.maxMatchCount and not exists (select planeHist from PlaneHist planeHist where planeHist.id.planeId = plane.planeId and ?1 = planeHist.account)";
 	private final String pickupQueryJPQL = "select plane from Plane plane join fetch plane.messages join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId join fetch plane.accountByOwnerId.profile where plane.accountByTargetId.accountId = ?1 and plane.planeId in (?2)";
 	
 	public List<Plane> pickup(long accountId, int count){
@@ -421,6 +423,7 @@ public class PlaneDao extends PlaneDAO {
 				query.setParameter(1, DaoUtils.accountDao.getReference(accountId));
 				query.setParameter(2, planeIds);
 				query.setParameter(3, PlaneConstants.StatusNew);
+				query.setParameter(4, new Timestamp(System.currentTimeMillis()));
 				if(query.executeUpdate() > 0){
 					//query
 					query = EntityManagerHelper.getEntityManager().createQuery(
@@ -457,6 +460,7 @@ public class PlaneDao extends PlaneDAO {
 			query.setParameter(1, DaoUtils.accountDao.getReference(accountId));
 			query.setParameter(2, planeId);
 			query.setParameter(3, PlaneConstants.StatusNew);
+			query.setParameter(4, new Timestamp(System.currentTimeMillis()));
 			int count = query.executeUpdate();
 			if(count == 1){
 				this.updateInc(planeId);

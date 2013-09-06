@@ -161,13 +161,16 @@ public class TestPersistenceChain {
 		}
 	}
 	
-	@Ignore
+	//@Ignore
 	@Test
 	public void testPickupChain() {
 		long accountId = 2;
 		try {
 			List<Chain> chains = ServiceUtils.chainService.pickupChain(accountId, 2);
 			ObjectUtils.printObject(chains);
+			if(chains.size() > 0){
+				ObjectUtils.printObject(chains.get(0).getChainMessages());
+			}
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

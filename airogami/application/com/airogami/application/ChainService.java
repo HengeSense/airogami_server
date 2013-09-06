@@ -127,7 +127,7 @@ public class ChainService implements IChainService {
 		List<Chain> chains = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			chains = DaoUtils.chainDao.pickup(accountId, count);
+			chains = DaoUtils.chainDao.pickup(accountId, count);			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -491,7 +491,17 @@ public class ChainService implements IChainService {
 		List<ChainMessage> chainMessages = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			chainMessages = DaoUtils.chainMessageDao.obtainChainMessages(accountId, chainId, last, limit + 1);			
+			chainMessages = DaoUtils.chainMessageDao.obtainChainMessages(accountId, chainId, last, limit + 1);
+			//test
+			for(int i = 0; i < chainMessages.size(); ++i){
+				ChainMessage chainMessage = chainMessages.get(i);
+				if(chainMessage.getAccount() == null){
+					System.err.println("Wrong ObtainChainMessages");
+					break;
+				}
+			}
+			//test
+			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			//t.printStackTrace();

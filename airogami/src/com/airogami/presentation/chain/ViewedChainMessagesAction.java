@@ -1,6 +1,9 @@
 package com.airogami.presentation.chain;
 
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import com.airogami.exception.AirogamiError;
@@ -40,7 +43,9 @@ public class ViewedChainMessagesAction extends AirogamiActionSupport{
 		try {
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
-			Object result = ManagerUtils.chainManager.viewedChainMessages(user.getAccountId(), chainId, timestamp);
+			boolean succeeded = ManagerUtils.chainManager.viewedChainMessages(user.getAccountId(), chainId, timestamp);
+			Map<String, Object> result = new TreeMap<String, Object>(); 
+			result.put("succeed", succeeded);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

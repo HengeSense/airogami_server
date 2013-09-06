@@ -72,7 +72,7 @@ public class TestPlane {
 			fail(e.getMessage());
 		}
 	}
-	//@Ignore
+	@Ignore
 	@Test
 	public void testThrowPlane() {
 		long accountId = 5;

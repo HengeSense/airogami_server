@@ -1,12 +1,14 @@
 package com.airogami.presentation.chain;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import com.airogami.exception.AirogamiError;
 import com.airogami.exception.AirogamiException;
+import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.presentation.AirogamiActionSupport;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
@@ -40,7 +42,7 @@ public class ObtainChainMessagesAction extends AirogamiActionSupport{
 		try {
 			HttpSession session = request.getSession(true);
 			User user = (User)session.getAttribute("user");	
-			Object result = ManagerUtils.chainManager.obtainChainMessages(
+			Map<String, Object> result = ManagerUtils.chainManager.obtainChainMessages(
 					user.getAccountId(), chainId, timestamp, limit);
 			dataMap.put("result", result);
 			succeed = true;

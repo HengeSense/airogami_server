@@ -7,6 +7,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/common"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/application"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/testsrc"/>
+        <dependent-module archiveName="openjpa-all-2.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/airogami/jpa_lib/openjpa-all-2.2.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/airogami/WebRoot/WEB-INF/classes"/>
         <property name="me-struts-base-pkg"/>
         <property name="context-root" value="/"/>

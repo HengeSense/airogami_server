@@ -7,6 +7,7 @@ public class SigninVO {
 	private String email;
 	private String password;
 	private String screenName;	
+	private boolean ifInvalid;//if session not valid
 	private ClientAgent clientAgent = new ClientAgent();
 	
 	public String getEmail() {
@@ -32,6 +33,12 @@ public class SigninVO {
 	}
 	public void setClientAgent(ClientAgent clientAgent) {
 		this.clientAgent = clientAgent;
+	}
+	public boolean getIfInvalid() {
+		return ifInvalid;
+	}
+	public void setIfInvalid(boolean ifInvalid) {
+		this.ifInvalid = ifInvalid;
 	}
 	
 }
