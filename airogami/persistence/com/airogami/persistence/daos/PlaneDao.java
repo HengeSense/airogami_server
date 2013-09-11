@@ -235,9 +235,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String obtainPlanesForwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByTargetId.profile join fetch plane.accountByOwnerId join fetch plane.accountByOwnerId.profile where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
+	private final String obtainPlanesForwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
 
-	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByTargetId.profile join fetch plane.accountByOwnerId join fetch plane.accountByOwnerId.profile where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
 
 	public List<Plane> obtainPlanes(long accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainPlanesing with accountId = " + accountId, Level.INFO, null);

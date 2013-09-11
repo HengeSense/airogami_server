@@ -38,23 +38,25 @@
 		</field-validator>
 	</field>
 	
-	<field name="clientAgent.deviceName">
-		<field-validator type="requiredstring">
-			<message key="error.account.signin.deviceName.required">Please input a deviceName</message>
-		</field-validator>
-		<field-validator type="stringlength">
-			<param name="maxLength">20</param>
-			<message key="error.account.signin.deviceName.long">The deviceName should have at most ${maxLength} characters</message>
+	<field name="clientAgent.deviceType">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[clientAgent.deviceType > 0 && clientAgent.deviceType < 3]]> </param>
+			<message key="error.account.signup.deviceType.range">The deviceType should be between 1 and 2</message>
 		</field-validator>
 	</field>
 	
 	<field name="clientAgent.clientVersion">
-		<field-validator type="requiredstring">
-			<message key="error.account.signin.clientVersion.required">Please input a clientVersion</message>
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[clientAgent.clientVersion > 0]]> </param>
+			<message key="error.account.signup.clientVersion.min">The clientVersion should be over 0</message>
 		</field-validator>
+	</field>
+	
+	<field name="clientAgent.deviceToken">
 		<field-validator type="stringlength">
-			<param name="maxLength">20</param>
-			<message key="error.account.signin.clientVersion.long">The clientVersion should have at most ${maxLength} characters</message>
+		    <param name="minLength"><![CDATA[64]]> </param>
+		    <param name="maxLength"><![CDATA[64]]> </param>
+			<message key="error.account.signup.deviceToken.length">The deviceToken should be ${minLength}</message>
 		</field-validator>
 	</field>
 	

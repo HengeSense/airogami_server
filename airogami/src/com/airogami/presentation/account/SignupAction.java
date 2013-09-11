@@ -55,15 +55,17 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 			account.setAuthenticate(authenticate);
 			account.setProfile(profile);
 			account = ManagerUtils.accountManager.signup(account);
-			Map<String, Object> result = null;
+			Map<String, Object> result = new TreeMap<String, Object>();
 			if(account != null){
-				result = new TreeMap<String, Object>();
 				result.put("tokens", ManagerUtils.dataManager.accountIcon(account.getAccountId())); 
 				result.put("account", account);
 				//session
 				HttpSession session = request.getSession(true);			
 				User user = new User(account.getAccountId(), signupVO.getClientAgent());
 				session.setAttribute("user", user);
+			}
+			else{
+				result.put("error", "duplicate");
 			}
 			dataMap.put("result", result);
 			succeed = true;

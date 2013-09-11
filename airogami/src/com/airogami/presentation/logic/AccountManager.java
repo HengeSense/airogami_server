@@ -28,7 +28,6 @@ public class AccountManager {
 		}
 		Authenticate authenticate = account.getAuthenticate();
 		Profile profile = account.getProfile();
-		Long accountId = null;
 		if (profile == null || authenticate == null){
 			throw new IllegalArgumentException("Illegal arguments in signup");
 		}

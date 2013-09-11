@@ -90,6 +90,26 @@ public class ChainDao extends ChainDAO {
 		}
 	}
 	
+	 private final String getChainAccountIdsJPQL = "select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+	
+	public List<Long> getChainAccountIds(long chainId, long accountId) {
+		EntityManagerHelper.log("getChainAccountIdsing with chainId = " + chainId, Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					getChainAccountIdsJPQL);
+			query.setParameter(1, chainId);
+			query.setParameter(2, ChainMessageConstants.StatusReplied);
+			query.setParameter(3, accountId);
+			List<Long> accountIds = query.getResultList();
+			EntityManagerHelper
+					.log("getChainAccountIds successful", Level.INFO, null);
+			return accountIds;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getChainAccountIds failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
 	private final String getChainMatchCountJPQL = "select chain.matchCount from Chain chain where chain.chainId = ?1";
 
 	public int getChainMatchCount(long chainId){

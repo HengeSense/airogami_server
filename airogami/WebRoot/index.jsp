@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   <div class="container">
     <h2>Airogami Home Page</h2>
-    <a href="Signup.html">Signup</a> <a href="SigninAndOut.html">SigninAndOut</a>
+    <a href="Signup.html">Signup</a> <a href="SigninAndOut.jsp">SigninAndOut</a>
     <p><% 
     User user = (User)request.getSession(true).getAttribute("user");
     if(user != null){

@@ -26,15 +26,16 @@
     <label>Password: </label>
     <input type="text" name="password" value="12345678" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Uuid: </label>
-    <input type="text" name="uuid" value="324343343" />
-    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Device Name: </label>
-    <input type="text" name="clientAgent.deviceName" value="Android" />
+    <label>Device Type: </label>
+    <input type="text" name="clientAgent.deviceType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1.0" />
+    <input type="text" name="clientAgent.clientVersion" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Device Token: </label>
+    <input type="text" name="clientAgent.deviceToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <br> 
     <input type="submit" name="submit" value="submit" />
     </form>
     <br>
@@ -45,15 +46,16 @@
     <label>Password: </label>
     <input type="text" name="password" value="12345678" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Uuid: </label>
-    <input type="text" name="uuid" value="324343343" />
-    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Device Name: </label>
-    <input type="text" name="clientAgent.deviceName" value="Android" />
+   <label>Device Type: </label>
+    <input type="text" name="clientAgent.deviceType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1.0" />
+    <input type="text" name="clientAgent.clientVersion" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Device Token: </label>
+    <input type="text" name="clientAgent.deviceToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <br> 
     <input type="submit" name="submit" value="submit" />
     </form>
     <h3>Sign out</h3>

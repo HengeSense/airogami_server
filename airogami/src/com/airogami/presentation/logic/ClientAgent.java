@@ -1,21 +1,30 @@
 package com.airogami.presentation.logic;
 
 public class ClientAgent {
-
-	private String deviceName;
-	private String clientVersion;
 	
-	public String getDeviceName() {
-		return deviceName;
+	public static final byte DeviceTypeIOS = 1;
+	public static final byte DeviceTypeAndroid = 2;
+	private byte deviceType;
+	private byte clientVersion;
+	private String deviceToken;
+	
+	public byte getDeviceType() {
+		return deviceType;
 	}
-	public void setDeviceName(String deviceName) {
-		this.deviceName = deviceName;
+	public void setDeviceType(byte deviceType) {
+		this.deviceType = deviceType;
 	}
-	public String getClientVersion() {
+	public byte getClientVersion() {
 		return clientVersion;
 	}
-	public void setClientVersion(String clientVersion) {
+	public void setClientVersion(byte clientVersion) {
 		this.clientVersion = clientVersion;
+	}
+	public String getDeviceToken() {
+		return deviceToken;
+	}
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 	
 }
