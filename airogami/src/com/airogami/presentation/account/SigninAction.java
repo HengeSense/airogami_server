@@ -28,13 +28,15 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 		boolean succeed = false;
 		try {
 			HttpSession session;
+			User user = null;
 			boolean shouldSignin = true;
 			if(signinVO.getIfInvalid()){
 				session = request.getSession(false);
 				if(session != null){
-					User user = (User)session.getAttribute("user");
+					user = (User)session.getAttribute("user");
 					if(user != null){
 						shouldSignin = false;
+						user.setClientAgent(signinVO.getClientAgent());
 					}
 				}
 				
@@ -52,10 +54,11 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 					if(account.getAuthenticate() == null){
 						System.err.println("Wrong signin");
 					}
+					//
 					int status = account.getProfile().getStatus();
 					if(status == 0){
 						session = request.getSession(true);			
-						User user = new User(account.getAccountId(), signinVO.getClientAgent());
+						user = ManagerUtils.notificationManager.updateUser(account.getAccountId(), signinVO.getClientAgent());
 						session.setAttribute("user", user);
 						result.put("account", account);
 					}
@@ -80,7 +83,7 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}
 		catch(Throwable t){
-			//t.printStackTrace(System.out);
+			t.printStackTrace(System.out);
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
 		//success

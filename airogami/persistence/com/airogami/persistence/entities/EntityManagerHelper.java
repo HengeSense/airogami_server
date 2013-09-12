@@ -20,7 +20,7 @@ public class EntityManagerHelper {
 		emf = Persistence.createEntityManagerFactory("airogami"); 		
 		threadLocal = new ThreadLocal<EntityManager>();
 		logger = Logger.getLogger("airogami");
-		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.SEVERE);
 	}
 		
 	public static EntityManager getEntityManager() {

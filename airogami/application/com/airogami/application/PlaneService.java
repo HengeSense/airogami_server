@@ -87,20 +87,22 @@ public class PlaneService implements IPlaneService {
 	 * com.airogami.persitence.entities.Message)
 	 */
 	@Override
-	public Map<String, Object> replyPlane(long planeId, long ownerId, Message message)
+	public Map<String, Object> replyPlane(long planeId, long accountId, Message message)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		String error = null;
+		Long oppositeAccountId = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.planeDao.verifyReply(planeId, ownerId)) {
+			if (DaoUtils.planeDao.verifyReply(planeId, accountId)) {
 				Plane plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
-				Account account = DaoUtils.accountDao.getReference(ownerId);
+				Account account = DaoUtils.accountDao.getReference(accountId);
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
 				DaoUtils.planeDao.updateInc(planeId);
+				oppositeAccountId = DaoUtils.planeDao.getOppositeAccountId(planeId, accountId);
 			} else {
 				error = "none";
 			}
@@ -124,6 +126,7 @@ public class PlaneService implements IPlaneService {
 		}
 		else{
 			result.put("message", message);
+			result.put("oppositeAccountId", oppositeAccountId);
 		}
 		return result;
 	}

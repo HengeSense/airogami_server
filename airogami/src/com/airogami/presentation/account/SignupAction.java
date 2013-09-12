@@ -61,7 +61,7 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 				result.put("account", account);
 				//session
 				HttpSession session = request.getSession(true);			
-				User user = new User(account.getAccountId(), signupVO.getClientAgent());
+				User user = ManagerUtils.notificationManager.updateUser(account.getAccountId(), signupVO.getClientAgent());
 				session.setAttribute("user", user);
 			}
 			else{

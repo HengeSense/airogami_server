@@ -81,6 +81,30 @@ public class PlaneDao extends PlaneDAO {
 			throw re;
 		}
 	}
+	
+	private final String getAccountIdsSQL = "select OWNER_ID from PLANE where PLANE_ID = ?1 and DELETED_BY_OWNER = 0 and OWNER_ID <> ?2 union select TARGET_ID from PLANE where PLANE_ID = ?1 and DELETED_BY_TARGET = 0 and TARGET_ID <> ?2";
+
+	public Long getOppositeAccountId(long planeId, long accountId) {
+		EntityManagerHelper.log("getAccountIdsing with planeId = " + planeId, Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
+					getAccountIdsSQL);
+			query.setParameter(1, planeId);
+			query.setParameter(2, accountId);
+			List<Object> result = query.getResultList();
+			Long oppositeAccountId = null;
+			if(result.size() == 1){
+				oppositeAccountId = (Long)result.get(0);
+			}
+			EntityManagerHelper
+					.log("getAccountIds successful", Level.INFO, null);
+			return oppositeAccountId;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getAccountIds failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
 	//private final String updateIncJPQL = "update Plane plane set (select max(plane.updateInc) + 1 from Plane plane) where plane.planeId = ?1";
 	private final String updateIncSQL = "update PLANE  set UPDATE_INC = (select max_value from (select max(UPDATE_INC) + 1 as max_value from PLANE) as tmp) WHERE PLANE_ID = ?";
 

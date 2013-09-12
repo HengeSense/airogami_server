@@ -109,6 +109,11 @@ public class PlaneManager {
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
+		Long oppositeAccountId = (Long)result.get("oppositeAccountId");
+		if(oppositeAccountId != null){
+			ManagerUtils.notificationManager.addNotification(oppositeAccountId);
+		}
+		
 		return result;
 	}
 	

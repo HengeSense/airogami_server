@@ -36,8 +36,8 @@
 			<property name="openjpa.jdbc.TransactionIsolation"
 				value="read-committed" />
 
-			<property name="openjpa.Log"
-				value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE" />
+			<!-- <property name="openjpa.Log"
+				value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE" /> -->
 			<property name="openjpa.LockManager" value="version" />
 			<property name="openjpa.Optimistic" value="true" />
 
