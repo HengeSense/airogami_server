@@ -109,9 +109,11 @@ public class PlaneManager {
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Long oppositeAccountId = (Long)result.get("oppositeAccountId");
-		if(oppositeAccountId != null){
-			ManagerUtils.notificationManager.addNotification(oppositeAccountId);
+		Long notifiedAccountId = (Long)result.remove("accountId");
+		if(notifiedAccountId != null){
+			String name = (String)result.remove("name");
+			Notification notification = Notification.receivedPlaneMessage(notifiedAccountId, name, message.getContent());
+			ManagerUtils.notificationManager.addNotification(notification);
 		}
 		
 		return result;
@@ -175,13 +177,21 @@ public class PlaneManager {
 	 * @throws AirogamiException if failed 
 	 */ 
 	public Map<String, Object> likePlane(long planeId,long accountId, boolean byOwner) throws AirogamiException{
+		Map <String, Object> result = null;
 		try {
-			return ServiceUtils.planeService.likePlane(planeId, accountId, byOwner);
+			result = ServiceUtils.planeService.likePlane(planeId, accountId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
+		Long notifiedAccountId = (Long)result.remove("accountId");
+		if(notifiedAccountId != null){
+			String name = (String)result.remove("name");
+			Notification notification = Notification.likedPlaneMessage(notifiedAccountId, name);
+			ManagerUtils.notificationManager.addNotification(notification);
+		}
+		return result;
 	}
 	
 	/*

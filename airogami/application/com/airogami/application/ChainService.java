@@ -79,6 +79,7 @@ public class ChainService implements IChainService {
 		ChainMessage chainMessage = null;
 		String error = null;
 		List<Long> accountIds = null;
+		String name = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			if(DaoUtils.chainMessageDao.replyChainMessage(accountId, chainId, content, type)){
@@ -86,6 +87,7 @@ public class ChainService implements IChainService {
 				chainMessage = DaoUtils.chainMessageDao.findById(new ChainMessageId(chainId, accountId));
 				DaoUtils.chainDao.updateInc(chainId);
 				accountIds = DaoUtils.chainDao.getChainAccountIds(chainId, accountId);
+				name = DaoUtils.profileDao.getFullName(accountId);
 			}
 			else{
 				chainMessage = DaoUtils.chainDao.getChainMessage(accountId, chainId);
@@ -120,6 +122,7 @@ public class ChainService implements IChainService {
 		else{
 			result.put("chainMessage", chainMessage);
 			result.put("accountIds", accountIds);
+			result.put("name", name);
 		}
 		return result;
 	}

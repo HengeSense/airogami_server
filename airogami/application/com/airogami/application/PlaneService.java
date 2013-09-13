@@ -91,7 +91,7 @@ public class PlaneService implements IPlaneService {
 			throws ApplicationException {
 		ApplicationException ae = null;
 		String error = null;
-		Long oppositeAccountId = null;
+		Object[] notifidInfo = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			if (DaoUtils.planeDao.verifyReply(planeId, accountId)) {
@@ -102,7 +102,7 @@ public class PlaneService implements IPlaneService {
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
 				DaoUtils.planeDao.updateInc(planeId);
-				oppositeAccountId = DaoUtils.planeDao.getOppositeAccountId(planeId, accountId);
+				notifidInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
 			} else {
 				error = "none";
 			}
@@ -126,7 +126,10 @@ public class PlaneService implements IPlaneService {
 		}
 		else{
 			result.put("message", message);
-			result.put("oppositeAccountId", oppositeAccountId);
+			if(notifidInfo != null){
+				result.put("accountId", notifidInfo[0]);
+				result.put("name", notifidInfo[1]);
+			}
 		}
 		return result;
 	}
@@ -263,11 +266,12 @@ public class PlaneService implements IPlaneService {
 		Message message = new Message();
 		message.setContent(MessageConstants.LikeContent);
 		message.setType(MessageConstants.MessageTypeLike);
-		Long oppositeAccountId = null;
 		String error = null;
 		Plane plane = null;
+		Object[] notifidInfo = null;
 		try {			
 			EntityManagerHelper.beginTransaction();
+			Long oppositeAccountId;
 			if ((oppositeAccountId = DaoUtils.planeDao.likePlane(planeId, accountId, byOwner)) != null) {
 				plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
@@ -277,6 +281,7 @@ public class PlaneService implements IPlaneService {
 				DaoUtils.messageDao.flush();
 				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);	
 				DaoUtils.planeDao.updateInc(planeId);
+				notifidInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
 			}
 			else{
 				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
@@ -311,7 +316,10 @@ public class PlaneService implements IPlaneService {
 		}
 		else{
 			result.put("message", message);
-			result.put("oppositeAccountId", oppositeAccountId);
+			if(notifidInfo != null){
+				result.put("accountId", notifidInfo[0]);
+				result.put("name", notifidInfo[1]);
+			}
 		}
 		
 		return result;	

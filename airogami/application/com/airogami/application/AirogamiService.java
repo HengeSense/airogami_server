@@ -19,7 +19,7 @@ public class AirogamiService extends Thread{
 				}
 			}
 			catch(Throwable t){
-				
+				t.printStackTrace();
 			}
 		}		
 	}

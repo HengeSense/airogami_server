@@ -83,6 +83,13 @@ public class ChainManager {
 		}
 		if(result.get("error") == null){
 			ServiceUtils.airogamiService.appendChain(chainId);
+			List<Long> accountIds = (List<Long>)result.remove("accountIds");
+			if(accountIds != null && accountIds.size() > 0){
+				ChainMessage chainMessage = (ChainMessage)result.get("chainMessage");
+				String name = (String)result.remove("name");
+				Notification notification = Notification.receivedChainMessage(accountIds, name, chainMessage.getContent());
+				ManagerUtils.notificationManager.addNotification(notification);
+			}
 		}
 		
 		return result;

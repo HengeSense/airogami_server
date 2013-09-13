@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.Notification;
 
 public class Airogami implements Delayed{
 
@@ -66,6 +68,8 @@ public class Airogami implements Delayed{
 				else if(succeed){
 					//match succeed
 					accountId = (Long)result.get("accountId");
+					Notification notification = Notification.receivedPlane(accountId);
+					ManagerUtils.notificationManager.addNotification(notification);
 				}	
 			     exceptionCount = 0;
 			} catch (Throwable t) {
@@ -91,6 +95,8 @@ public class Airogami implements Delayed{
 				else if(succeed){
 					//match succeed
 					accountId = (Long)result.get("accountId");
+					Notification notification = Notification.receivedChain(accountId);
+					ManagerUtils.notificationManager.addNotification(notification);
 				}
 				exceptionCount = 0;
 			} catch (Throwable t) {

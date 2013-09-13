@@ -33,4 +33,26 @@ public class ProfileDao extends ProfileDAO {
 			throw re;
 		}
 	}
+	
+	private final String getFullNameJPQL = "select profile.fullName from Profile profile where profile.accountId = ?1";
+
+	public String getFullName(long accountId) {
+		EntityManagerHelper.log("getFullNameing", Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					getFullNameJPQL);
+			query.setParameter(1, accountId);
+			List<String> result = query.getResultList();
+			String fullName = null;
+			if (result.size() > 0) {
+				fullName = result.get(0);
+			}
+			EntityManagerHelper.log("getFullName successful", Level.INFO,
+					null);
+			return fullName;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getFullName failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
 }

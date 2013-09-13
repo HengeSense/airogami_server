@@ -9,7 +9,7 @@ public class MessageVO {
 		return content;
 	}
 	public void setContent(String content) {
-		this.content = content;
+		this.content = content.replace("\r", "").replace("\n", "");
 	}
 	public Short getType() {
 		return type;

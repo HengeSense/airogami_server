@@ -82,23 +82,23 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String getAccountIdsSQL = "select OWNER_ID from PLANE where PLANE_ID = ?1 and DELETED_BY_OWNER = 0 and OWNER_ID <> ?2 union select TARGET_ID from PLANE where PLANE_ID = ?1 and DELETED_BY_TARGET = 0 and TARGET_ID <> ?2";
+	private final String getNotifiedInfoSQL = "select OWNER_ID, FULL_NAME from PLANE, PROFILE  where PLANE_ID = ?1 and DELETED_BY_OWNER = 0 and OWNER_ID <> ?2 and ACCOUNT_ID = ?2 union select TARGET_ID, FULL_NAME from PLANE, PROFILE where PLANE_ID = ?1 and DELETED_BY_TARGET = 0 and TARGET_ID <> ?2 and ACCOUNT_ID = ?2";
 
-	public Long getOppositeAccountId(long planeId, long accountId) {
+	public Object[] getNotifiedInfo(long planeId, long accountId) {
 		EntityManagerHelper.log("getAccountIdsing with planeId = " + planeId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
-					getAccountIdsSQL);
+					getNotifiedInfoSQL);
 			query.setParameter(1, planeId);
 			query.setParameter(2, accountId);
-			List<Object> result = query.getResultList();
-			Long oppositeAccountId = null;
+			List<Object[]> result = query.getResultList();
+			Object[] notifiedInfo = null;
 			if(result.size() == 1){
-				oppositeAccountId = (Long)result.get(0);
+				notifiedInfo = result.get(0);
 			}
 			EntityManagerHelper
 					.log("getAccountIds successful", Level.INFO, null);
-			return oppositeAccountId;
+			return notifiedInfo;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("getAccountIds failed", Level.SEVERE, re);
 			throw re;
