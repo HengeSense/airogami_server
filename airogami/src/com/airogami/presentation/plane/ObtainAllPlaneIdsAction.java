@@ -31,7 +31,7 @@ public class ObtainAllPlaneIdsAction extends AirogamiActionSupport {
 	private void planeIds(int type){
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(true);			
+			HttpSession session = request.getSession(false);			
 			User user = (User)session.getAttribute("user");
 			Map<String, Object> result;
 			if(type == 1){

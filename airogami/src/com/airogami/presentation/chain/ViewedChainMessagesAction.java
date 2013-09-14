@@ -41,7 +41,7 @@ public class ViewedChainMessagesAction extends AirogamiActionSupport{
 	public String execute() throws Exception {
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession(false);
 			User user = (User)session.getAttribute("user");	
 			boolean succeeded = ManagerUtils.chainManager.viewedChainMessages(user.getAccountId(), chainId, timestamp);
 			Map<String, Object> result = new TreeMap<String, Object>(); 

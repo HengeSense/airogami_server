@@ -15,11 +15,13 @@ public class Notification {
 	public static final int TypeReceivedChainMessage = 4;
 	public static final int TypeLikedPlaneMessage = 5;
 	
-	public static final String LocKeyReceivedPlane = "LKRP";
-	public static final String LocKeyReceivedChain = "LKRC";
-	public static final String LocKeyReceivedPlaneMessage = "LKRPM";
-	public static final String LocKeyReceivedChainMessage = "LKRCM";
-	public static final String LocKeyLikedPlaneMessage = "LKLPM";
+	private static final String LocKeyReceivedPlane = "LKRP";
+	private static final String LocKeyReceivedChain = "LKRC";
+	private static final String LocKeyReceivedPlaneMessage = "LKRPM";
+	private static final String LocKeyReceivedChainMessage = "LKRCM";
+	private static final String LocKeyLikedPlaneMessage = "LKLPM";
+	
+	private static final int MessageLength = 50;
 
 	private int type;
 	private Object accountIds;
@@ -63,6 +65,13 @@ public class Notification {
 		Notification notification = new Notification();
 		notification.type = TypeReceivedPlaneMessage;
 		notification.accountIds = accountId;
+		if(content.length() > MessageLength){
+			StringBuffer stringBuffer = new StringBuffer(MessageLength);
+			stringBuffer.append(content.substring(0, MessageLength - 3));
+			stringBuffer.append("...");
+			content = stringBuffer.toString();
+		}
+		
 		try {
 			notification.payload.addCustomDictionary("type", TypeReceivedPlaneMessage);
 			notification.payload.addCustomAlertLocKey(LocKeyReceivedPlaneMessage);

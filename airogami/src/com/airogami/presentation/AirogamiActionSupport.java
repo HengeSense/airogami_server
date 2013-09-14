@@ -41,10 +41,9 @@ public abstract class AirogamiActionSupport extends ActionSupport implements Ser
 				dataMap.put("fieldErrors", this.getFieldErrors());
 			}
 		}
-		
 	}
 	
-	 public String getMethod() {
+	public String getMethod() {
 			return method;
 	}
 	

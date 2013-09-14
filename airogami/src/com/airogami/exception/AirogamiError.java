@@ -13,6 +13,8 @@ public interface AirogamiError {
 	 */
 	public static final int Account_No_Signin_Status = 1;
 	public static final String Account_No_Signin_Message = "error.account.notsignin";
+	public static final int Account_Signin_ElseWhere_Status = 2;
+	public static final String Account_Signin_ElseWhere_Message = "error.account.signin.elsewhere";
 	
 	public static final int Application_Input_Status = 101;
 	public static final String Application_Input_Message = "error.application.input";

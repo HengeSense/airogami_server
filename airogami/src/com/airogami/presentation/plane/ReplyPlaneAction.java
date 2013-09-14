@@ -29,7 +29,7 @@ public class ReplyPlaneAction extends AirogamiActionSupport implements ModelDriv
 		boolean succeed = false;
 		try {			
 
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession(false);
 			User user = (User)session.getAttribute("user");	
 			Message message = new Message();
 			PropertyUtils.copyProperties(message, replyPlaneVO.getMessageVO());

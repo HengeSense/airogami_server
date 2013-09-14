@@ -17,6 +17,8 @@ import javapns.devices.Device;
 import javapns.devices.exceptions.InvalidDeviceTokenFormatException;
 import javapns.notification.Payload;
 import javapns.notification.PushNotificationPayload;
+import javapns.notification.PushedNotification;
+import javapns.notification.PushedNotifications;
 import javapns.notification.transmission.PushQueue;
 
 public class NotificationManager implements Runnable {
@@ -26,13 +28,10 @@ public class NotificationManager implements Runnable {
 	private final String password = "$Airogami2013";
 	private final boolean production = false;
 	private long internal = 60 * 1000;//60s
-	private final int initCapacity = 100000;
-	private final int incCapacity = 10000;
-	//private final long period = 24 * 3600 * 1000;
-	private final long period = 10000;
+	private final long period = 24 * 3600 * 1000;
 	
 	private PushQueue queue;
-	private User[] users = new User[initCapacity];
+	
 	
 	private Timer timer = new Timer(true);
 	private TimerTask timerTask;
@@ -56,7 +55,7 @@ public class NotificationManager implements Runnable {
 						hashSet.add(device.getToken());
 						//System.out.println("Inactive device: " + device.getToken());
 					}
-					User[] uu = users;
+					User[] uu = ManagerUtils.userManager.getUsers();
 				    for(User user : uu){
 				    	if(user != null){
 				    		String token = user.getClientAgent().getDeviceToken();
@@ -64,7 +63,6 @@ public class NotificationManager implements Runnable {
 					    		user.getClientAgent().setDeviceToken(null);
 					    	}
 				    	}
-				    	
 				    }
 				} catch (CommunicationException e) {
 					e.printStackTrace();
@@ -93,7 +91,7 @@ public class NotificationManager implements Runnable {
 	}
 	
 	private void sendNotification(long accountId, PushNotificationPayload payload){
-		User user = getUser(accountId);
+		User user = ManagerUtils.userManager.getUser(accountId);
 		if(user != null){
 			String token = user.getClientAgent().getDeviceToken();
 			if(token != null){
@@ -110,45 +108,9 @@ public class NotificationManager implements Runnable {
 		}
 	}
 	
-	public User updateUser(long accountId, ClientAgent clientAgent){
-		int index = (int) accountId;
-		if(index >= users.length){
-			adjust(index);
-		}
-		if(users[index] == null){
-			synchronized(this){
-				users[index] = new User(accountId, clientAgent);
-			}
-		}
-		else{
-			users[index].setClientAgent(clientAgent);
-		}
-		System.out.println("addUser: " +accountId);
-		return users[index];
-	}
 	
-	
-	private User getUser(long accountId){
-		User[] uu = users;
-		if(accountId >= uu.length){
-			return null;
-		}
-		else{
-			return uu[(int)accountId];
-		}
-	}
-	
-	//accountId >= users.length
-	private synchronized void adjust(int index){
-		if(index >= users.length){
-			int length = incCapacity + index;
-			User[] uu = new User[length];
-			System.arraycopy(users, 0, uu, 0, users.length);
-			users = uu;
-		}
-		
-	}
 
+	//digest PushedNotification
 	@Override
 	public void run() {
 		while(true){
@@ -156,11 +118,24 @@ public class NotificationManager implements Runnable {
 				Thread.sleep(internal);
 				List<Exception> exceptions = queue.getCriticalExceptions();
 				if(exceptions != null && exceptions.size() > 0){
-					System.err.println("CriticalExceptions in PushQueue");
+					for(Exception e : exceptions){
+						System.err.println("CriticalExceptions: " + e.getLocalizedMessage());
+					}
+					
 				}
-				queue.getPushedNotifications();
+				PushedNotifications pushedNotifications = queue.getPushedNotifications();
+				pushedNotifications = pushedNotifications.getFailedNotifications();
+				for(PushedNotification pushedNotification : pushedNotifications){
+					Exception e = pushedNotification.getException();
+					if(e != null){
+						e.printStackTrace();
+					}
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			}
+			catch(Throwable t){
+				t.printStackTrace();
 			}
 		}
 	}

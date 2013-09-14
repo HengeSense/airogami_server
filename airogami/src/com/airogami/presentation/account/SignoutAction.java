@@ -28,8 +28,16 @@ public class SignoutAction extends ActionSupport implements ServletRequestAware{
 	
 	public String execute() throws Exception{
 		try{
-			HttpSession session = request.getSession(true);
-			session.invalidate();
+			HttpSession session = request.getSession(false);
+			try{
+				if(session != null){
+					session.invalidate();
+				}
+			}
+			catch(IllegalStateException lse){
+				lse.printStackTrace();
+			}
+			
 			JSONUtils.putOKStatus(dataMap);
 		}catch(Throwable t){
 			//t.printStackTrace(System.out);

@@ -31,7 +31,7 @@ public class LikeDeletePlaneAction  extends AirogamiActionSupport {
 	public void plane(int type){
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(true);			
+			HttpSession session = request.getSession(false);			
 			User user = (User)session.getAttribute("user");	
 			Map<String, Object>  result;
 			if(type == 1){

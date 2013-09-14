@@ -30,7 +30,7 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 			HttpSession session;
 			User user = null;
 			boolean shouldSignin = true;
-			if(signinVO.getIfInvalid()){
+			if(signinVO.getAutomatic()){
 				session = request.getSession(false);
 				if(session != null){
 					user = (User)session.getAttribute("user");
@@ -39,7 +39,6 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 						user.setClientAgent(signinVO.getClientAgent());
 					}
 				}
-				
 			}
 			Map<String, Object> result = new TreeMap<String, Object>();
 			if(shouldSignin){
@@ -58,7 +57,7 @@ public class SigninAction extends AirogamiActionSupport implements ModelDriven<S
 					int status = account.getProfile().getStatus();
 					if(status == 0){
 						session = request.getSession(true);			
-						user = ManagerUtils.notificationManager.updateUser(account.getAccountId(), signinVO.getClientAgent());
+						user = ManagerUtils.userManager.updateUser(account.getAccountId(), signinVO.getClientAgent());
 						session.setAttribute("user", user);
 						result.put("account", account);
 					}

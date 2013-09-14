@@ -24,7 +24,7 @@ public class ViewedMessagesAction extends AirogamiActionSupport{
 	public String execute() throws Exception {
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession(false);
 			User user = (User)session.getAttribute("user");	
 			boolean succeeded = ManagerUtils.planeManager.viewedMessages(user.getAccountId(), planeId, lastMsgId, byOwner);
 			Map<String, Object> result = new TreeMap<String, Object>();

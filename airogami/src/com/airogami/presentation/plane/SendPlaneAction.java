@@ -40,7 +40,7 @@ public class SendPlaneAction extends AirogamiActionSupport implements ModelDrive
 			PropertyUtils.copyProperties(category, sendPlaneVO.getCategoryVO());
 			plane.setCategory(category);
 			plane.getMessages().add(message);
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession(false);
 			User user = (User)session.getAttribute("user");	
 			Map<String, Object> result = ManagerUtils.planeManager.sendPlane(plane, user.getAccountId());
 			dataMap.put("result", result);

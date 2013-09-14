@@ -30,6 +30,11 @@ public class JSONUtils implements JSONConstants {
 		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.Application_Input_Message);
 	}
 	
+	public static void putElseWhereStatus(Map<String,Object> map){
+		map.put(JSONConstants.KEY_STATUS , AirogamiError.Account_Signin_ElseWhere_Status);
+		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.Account_Signin_ElseWhere_Message);
+	}
+	
 	public static void putExceptionStatus(Map<String,Object> map){
 		map.put(JSONConstants.KEY_STATUS , AirogamiError.Application_Exception_Status);
 		map.put(JSONConstants.KEY_MESSAGE , AirogamiError.Application_Exception_Message);

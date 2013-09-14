@@ -33,7 +33,7 @@ public class ObtainChainIdsAction extends AirogamiActionSupport {
 	private void chainIds(int type){
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(true);			
+			HttpSession session = request.getSession(false);			
 			User user = (User)session.getAttribute("user");
 			Map<String, Object> result;
 			if(type == 1){
