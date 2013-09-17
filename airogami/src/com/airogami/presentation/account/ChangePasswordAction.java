@@ -27,8 +27,7 @@ public class ChangePasswordAction extends AirogamiActionSupport implements Model
     public String execute() throws Exception{
     	boolean succeed = false;
 		try {			
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");	
+			User user = (User)request.getAttribute("user");	
 			boolean succeeded = ManagerUtils.accountManager.changePassword(
 					user.getAccountId(), changePasswordVO.getOldPassword(),
 					changePasswordVO.getNewPassword());

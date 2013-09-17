@@ -31,8 +31,7 @@ public class EditProfileAction extends AirogamiActionSupport implements ModelDri
 			Map<String, Object> properties = AirogamiUtils.describe(editProfileVO);
 			Map<String, Object> result = new TreeMap<String, Object>();
 			if(properties.size() > 0){
-				HttpSession session = request.getSession(false);
-				User user = (User)session.getAttribute("user");	
+				User user = (User)request.getAttribute("user");	
 				properties.put("accountId", user.getAccountId());
 				Profile profile = ManagerUtils.accountManager.editProfile(properties);	
 				result.put("profile", profile);

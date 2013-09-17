@@ -35,8 +35,7 @@ public class SendChainAction extends AirogamiActionSupport implements ModelDrive
 			ChainMessage chainMessage = new ChainMessage();
 			PropertyUtils.copyProperties(chainMessage, sendChainVO.getChainMessageVO());
 			chain.getChainMessages().add(chainMessage);
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");	
+			User user = (User)request.getAttribute("user");	
 			Map<String, Object> result = ManagerUtils.chainManager.sendChain(chain, user.getAccountId());
 			dataMap.put("result", result);
 			succeed = true;

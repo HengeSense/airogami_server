@@ -11,6 +11,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.AccountStat;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.presentation.AirogamiActionSupport;
@@ -60,9 +61,11 @@ public class SignupAction extends AirogamiActionSupport implements ModelDriven<S
 				result.put("tokens", ManagerUtils.dataManager.accountIcon(account.getAccountId())); 
 				result.put("account", account);
 				//session
-				HttpSession session = request.getSession(true);			
-				User user = ManagerUtils.userManager.updateUser(account.getAccountId(), signupVO.getClientAgent());
+				HttpSession session = request.getSession(true);	
+				AccountStat accountStat = account.getAccountStat();
+				User user = ManagerUtils.userManager.updateUser(account.getAccountId(), signupVO.getClientAgent(), accountStat);
 				session.setAttribute("user", user);
+				session.setAttribute("signinCount", accountStat.getSigninCount());
 			}
 			else{
 				result.put("error", "duplicate");

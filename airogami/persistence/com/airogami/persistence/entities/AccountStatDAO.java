@@ -19,6 +19,9 @@ import javax.persistence.Query;
 public class AccountStatDAO {
 	// property constants
 	public static final String SIGNIN_COUNT = "signinCount";
+	public static final String STATUS = "status";
+	public static final String NEW_MSG_COUNT = "newMsgCount";
+	public static final String NEW_CHAIN_MSG_COUNT = "newChainMsgCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -242,7 +245,7 @@ public class AccountStatDAO {
 	private static final String increaseSigninCountJPQL = "update AccountStat a set a.signinCount = a.signinCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseSigninCount(java.lang.Long accountId, int count) {
-		EntityManagerHelper.log("increaseSigninCount with accountId:"
+		EntityManagerHelper.log("increaseNewChainMsgCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
@@ -250,12 +253,54 @@ public class AccountStatDAO {
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSigninCount successful",
+			EntityManagerHelper.log("increaseNewChainMsgCount successful",
 					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSigninCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseNewChainMsgCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
+	private static final String increaseNewMsgCountJPQL = "update AccountStat a set a.newMsgCount = a.newMsgCount + :count where a.accountId in (:accountId)";
+
+	public boolean increaseNewMsgCount(java.lang.Long accountId, int count) {
+		EntityManagerHelper.log("increaseNewChainMsgCount with accountId:"
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseNewMsgCountJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseNewChainMsgCount successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseNewChainMsgCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
+	private static final String increaseNewChainMsgCountJPQL = "update AccountStat a set a.newChainMsgCount = a.newChainMsgCount + :count where a.accountId in (:accountId)";
+
+	public boolean increaseNewChainMsgCount(java.lang.Long accountId, int count) {
+		EntityManagerHelper.log("increaseNewChainMsgCount with accountId:"
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseNewChainMsgCountJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseNewChainMsgCount successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseNewChainMsgCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -308,6 +353,22 @@ public class AccountStatDAO {
 	public List<AccountStat> findBySigninCount(Object signinCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(SIGNIN_COUNT, signinCount, rowStartIdxAndCount);
+	}
+
+	public List<AccountStat> findByStatus(Object status,
+			int... rowStartIdxAndCount) {
+		return findByProperty(STATUS, status, rowStartIdxAndCount);
+	}
+
+	public List<AccountStat> findByNewMsgCount(Object newMsgCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(NEW_MSG_COUNT, newMsgCount, rowStartIdxAndCount);
+	}
+
+	public List<AccountStat> findByNewChainMsgCount(Object newChainMsgCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(NEW_CHAIN_MSG_COUNT, newChainMsgCount,
+				rowStartIdxAndCount);
 	}
 
 	/**

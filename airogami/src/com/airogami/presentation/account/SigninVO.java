@@ -9,6 +9,7 @@ public class SigninVO {
 	private String screenName;	
 	private boolean automatic;
 	private ClientAgent clientAgent = new ClientAgent();
+	private long signinCount = -1;
 	
 	public String getEmail() {
 		return email;
@@ -39,6 +40,12 @@ public class SigninVO {
 	}
 	public void setAutomatic(boolean ifInvalid) {
 		this.automatic = ifInvalid;
+	}
+	public long getSigninCount() {
+		return signinCount;
+	}
+	public void setSigninCount(long signinCount) {
+		this.signinCount = signinCount;
 	}
 	
 }

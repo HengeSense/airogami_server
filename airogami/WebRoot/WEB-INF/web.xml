@@ -28,4 +28,11 @@
   <servlet-mapping>
     <servlet-name>DataManager</servlet-name>
     <url-pattern>/data/dataManager</url-pattern>
-  </servlet-mapping></web-app>
+  </servlet-mapping>
+  
+  <!-- <listener> 
+      <description>sessionListener</description>
+      <listener-class>com.airogami.presentation.logic.UserManager</listener-class>
+ </listener> -->
+ 
+  </web-app>

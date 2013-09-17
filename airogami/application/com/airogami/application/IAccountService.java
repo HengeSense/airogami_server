@@ -19,10 +19,11 @@ public interface IAccountService {
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)
 	 * @param type:(int) must be a valid type
-	 * @return account, accountStat if successful or null if not matched
+	 * @param automatic:(boolean) whether signed in automatically
+	 * @return account, accountStat, [profile], [authenticate] if successful or null if not matched
 	 * @throws ApplicationException if failed 
 	 */
-	public Account signin(String[]args, int type) throws ApplicationException;
+	public Account signin(String[]args, int type, boolean automatic) throws ApplicationException;
 	
 	/*
 	 * @param properties:((Map<String, Object>) no screenName

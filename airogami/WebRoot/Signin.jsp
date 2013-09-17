@@ -20,9 +20,9 @@
   <body>
     <div class = "container">    
      <p><% 
-     User user = new User(1, null);
-     user.setAccountId(1);
-     request.getSession(true).setAttribute("user", user);
+     //User user = new User();
+     //user.setAccountId(1);
+     //request.getSession(true).setAttribute("user", user);
      out.print("setting user successfully!" );
      %> </p>
    

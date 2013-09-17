@@ -8,6 +8,7 @@ public class ClientAgent {
 	private byte clientVersion;
 	private String deviceToken;
 	
+	
 	public byte getDeviceType() {
 		return deviceType;
 	}

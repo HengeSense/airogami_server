@@ -135,6 +135,17 @@
 			<message key="error.account.signup.deviceToken.length">The deviceToken should be ${minLength}</message>
 		</field-validator>
 	</field>
+	
+	<!-- <field name="clientAgent.guid">
+	    <field-validator type="requiredstring">
+			<message key="error.account.signup.guid.required">Please input a guid</message>
+		</field-validator>
+		<field-validator type="stringlength">
+		    <param name="minLength"><![CDATA[64]]> </param>
+		    <param name="maxLength"><![CDATA[64]]> </param>
+			<message key="error.account.signup.deviceToken.length">The deviceToken should be ${minLength}</message>
+		</field-validator>
+	</field> -->
 
 	<!-- <field name="bar"> <field-validator type="required"> <message>You must 
 		enter a value for bar.</message> </field-validator> <field-validator type="int"> 

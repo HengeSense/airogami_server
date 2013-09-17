@@ -26,6 +26,12 @@
     <label>Password: </label>
     <input type="text" name="password" value="12345678" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Automatic: </label>
+    <input type="text" name="automatic" value="false" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Signin Count: </label>
+    <input type="text" name="signinCount" value="0" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Type: </label>
     <input type="text" name="clientAgent.deviceType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
@@ -45,6 +51,12 @@
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Password: </label>
     <input type="text" name="password" value="12345678" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Automatic: </label>
+    <input type="text" name="automatic" value="false" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Signin Count: </label>
+    <input type="text" name="signinCount" value="0" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
    <label>Device Type: </label>
     <input type="text" name="clientAgent.deviceType" value="1" />

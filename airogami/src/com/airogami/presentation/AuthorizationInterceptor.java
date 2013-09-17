@@ -36,14 +36,14 @@ public class AuthorizationInterceptor implements Interceptor {
 		HttpSession session = request.getSession(false);
 		User user = null;
 		String result = null;
-		//should save user and clientAgent simultaneously in session
+		//should save user and signinCount simultaneously in session
 		if(session != null && (user = (User)session.getAttribute("user")) != null){
-			Object clientAgent = session.getAttribute("clientAgent");
-			if(user.getClientAgent().equals(clientAgent)){
+			Long signinCount = (Long)session.getAttribute("signinCount");
+			if(user.getSigninCount() == signinCount){
 				request.setAttribute("user", user);
 				result = invocation.invoke();
 			}
-			else{// signin elsewhere
+			else{// signin elsewhere or changed confidential
 				try{
 					session.invalidate();
 				}

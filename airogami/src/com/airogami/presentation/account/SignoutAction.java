@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 
+import com.airogami.presentation.logic.ManagerUtils;
+import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -31,6 +33,10 @@ public class SignoutAction extends ActionSupport implements ServletRequestAware{
 			HttpSession session = request.getSession(false);
 			try{
 				if(session != null){
+					User user = (User)session.getAttribute("user");
+					if(user != null){
+						ManagerUtils.userManager.removeUser(user.getAccountId());
+					}
 					session.invalidate();
 				}
 			}

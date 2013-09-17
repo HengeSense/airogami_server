@@ -25,8 +25,7 @@ public class ReportAccountAction extends AirogamiActionSupport{
     public String execute() throws Exception{
     	boolean succeed = false;
 		try {			
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");	
+			User user = (User)request.getAttribute("user");	
 			Report report = ManagerUtils.accountManager.reportAccount(user.getAccountId(), reportedId, reason);
 			Map<String, Object> result = new TreeMap<String, Object>();
 		    result.put("report", report);

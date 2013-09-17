@@ -27,8 +27,7 @@ public class ChangeScreenNameAction extends AirogamiActionSupport implements Mod
     public String execute() throws Exception{
     	boolean succeed = false;
 		try {			
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");
+			User user = (User)request.getAttribute("user");
 			boolean succeeded = ManagerUtils.accountManager.changeScreenName(
 					user.getAccountId(), changeScreenNameVO.getScreenName());
 			Map<String, Object> result = new TreeMap<String, Object>();

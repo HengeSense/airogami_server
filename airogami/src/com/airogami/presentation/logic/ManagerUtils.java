@@ -9,6 +9,7 @@ public class ManagerUtils {
 	public static final ChainManager chainManager = new ChainManager();
 	public static final DataManager dataManager = new DataManager();
 	public static final NotificationManager notificationManager = new NotificationManager();
+	//public static final NotificationManager notificationManager = null;
 	public static final UserManager userManager = new UserManager();
 	
 	private static final int rand[] = {3, 2, 2, 1, 1, 1};

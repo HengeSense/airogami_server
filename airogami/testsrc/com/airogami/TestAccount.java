@@ -71,9 +71,9 @@ public class TestAccount {
 	public void testSigninWithScreenName() {
 		String screenName = "tianhuyang5";
 		String password = "12345678";
-		Long uuid = 0L;
+		boolean automatic = true;
 		try {
-			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password, null);
+			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password, automatic);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -86,8 +86,9 @@ public class TestAccount {
 		String email = "tianhu@qq.com";
 		String password = "12345678";
 		Long uuid = 0L;
+		boolean automatic = true;
 		try {
-			Account account = ManagerUtils.accountManager.signinWithEmail(email, password, null);
+			Account account = ManagerUtils.accountManager.signinWithEmail(email, password, automatic);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

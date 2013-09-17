@@ -32,8 +32,7 @@ public class ReplyChainAction extends AirogamiActionSupport implements ModelDriv
 	public String execute() throws Exception {
 		boolean succeed = false;
 		try {	
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");	
+			User user = (User)request.getAttribute("user");	
 			ChainMessageVO chainMessageVO = replyChainVO.getChainMessageVO();
 			Map<String, Object> result = ManagerUtils.chainManager.replyChain(
 					user.getAccountId(),replyChainVO.getChainId(),

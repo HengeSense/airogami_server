@@ -23,8 +23,7 @@ public class ObtainMessagesAction extends AirogamiActionSupport{
 	public String execute() throws Exception {
 		boolean succeed = false;
 		try {
-			HttpSession session = request.getSession(false);
-			User user = (User)session.getAttribute("user");	
+			User user = (User)request.getAttribute("user");	
 			Map<String, Object> result = ManagerUtils.planeManager.obtainMessages(
 					user.getAccountId(), planeId, startId, limit);
 			dataMap.put("result", result);

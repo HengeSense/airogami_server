@@ -17,7 +17,6 @@ import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
-import com.airogami.persistence.entities.ReportId;
 
 public class AccountService implements IAccountService {
 
@@ -76,19 +75,22 @@ public class AccountService implements IAccountService {
 	 * int)
 	 */
 	@Override
-	public Account signin(String[]args, int type) throws ApplicationException {
+	public Account signin(String[]args, int type, boolean automatic) throws ApplicationException {
 		Account account = null;
 		ApplicationException ae = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			switch (type) {
 			case AccountConstants.AuthenticateTypeScreenName:
-				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1]);
+				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1], automatic);
 				break;
 			case AccountConstants.AuthenticateTypeEmail:
-				account = DaoUtils.authenticateDao.authenticateWithEmail(args[0], args[1]);
+				account = DaoUtils.authenticateDao.authenticateWithEmail(args[0], args[1], automatic);
 				break;
-			}			
+			}		
+			if(account != null && automatic == false){
+				DaoUtils.accountStatDao.increaseSigninCount(account.getAccountId(), 1);
+			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			//t.printStackTrace();
@@ -104,10 +106,9 @@ public class AccountService implements IAccountService {
 		if (ae != null) {
 			throw ae;
 		}
-		if(account != null){
-			account.getAuthenticate();
-			account.getAccountStat();
-			account.getProfile();
+		if(account != null && automatic == false){
+			AccountStat accountStat = account.getAccountStat();
+			accountStat.setSigninCount(accountStat.getSigninCount() + 1);
 		}
 		
 		return account;

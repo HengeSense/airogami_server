@@ -41,14 +41,21 @@
 	<field name="clientAgent.deviceType">
 		<field-validator type="fieldexpression">
 		    <param name="expression"><![CDATA[clientAgent.deviceType > 0 && clientAgent.deviceType < 3]]> </param>
-			<message key="error.account.signup.deviceType.range">The deviceType should be between 1 and 2</message>
+			<message key="error.account.signin.deviceType.range">The deviceType should be between 1 and 2</message>
+		</field-validator>
+	</field>
+	
+	<field name="signinCount">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[!(automatic == true && signinCount < 0)]]> </param>
+			<message key="error.account.signin.signinCount.required">Please input a valid signinCount</message>
 		</field-validator>
 	</field>
 	
 	<field name="clientAgent.clientVersion">
 		<field-validator type="fieldexpression">
 		    <param name="expression"><![CDATA[clientAgent.clientVersion > 0]]> </param>
-			<message key="error.account.signup.clientVersion.min">The clientVersion should be over 0</message>
+			<message key="error.account.signin.clientVersion.min">The clientVersion should be over 0</message>
 		</field-validator>
 	</field>
 	
@@ -56,7 +63,7 @@
 		<field-validator type="stringlength">
 		    <param name="minLength"><![CDATA[64]]> </param>
 		    <param name="maxLength"><![CDATA[64]]> </param>
-			<message key="error.account.signup.deviceToken.length">The deviceToken should be ${minLength}</message>
+			<message key="error.account.signin.deviceToken.length">The deviceToken should be ${minLength}</message>
 		</field-validator>
 	</field>
 	

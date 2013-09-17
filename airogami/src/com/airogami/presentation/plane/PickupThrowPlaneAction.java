@@ -29,9 +29,8 @@ public class PickupThrowPlaneAction extends AirogamiActionSupport {
 	
 	public void plane(int type){
 		boolean succeed = false;
-		try {
-			HttpSession session = request.getSession(false);			
-			User user = (User)session.getAttribute("user");	
+		try {			
+			User user = (User)request.getAttribute("user");	
 			Map<String, Object> result;
 			if(type == 1){
 				result = ManagerUtils.planeManager.pickup(user.getAccountId());
