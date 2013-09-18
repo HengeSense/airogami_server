@@ -1,0 +1,41 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="accountId">
+		<field-validator type="long">
+		    <param name="min"><![CDATA[1]]> </param>
+			<message key="error.account.signout.accountId.required">Please input a valid accountId</message>
+		</field-validator>
+	</field>
+
+    <field name="signinCount">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[signinCount > -1]]> </param>
+			<message key="error.account.signout.signinCount.required">Please input a valid signinCount</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.deviceType">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[clientAgent.deviceType > 0 && clientAgent.deviceType < 3]]> </param>
+			<message key="error.account.signout.deviceType.range">The deviceType should be between 1 and 2</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.clientVersion">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[clientAgent.clientVersion > 0]]> </param>
+			<message key="error.account.signout.clientVersion.min">The clientVersion should be over 0</message>
+		</field-validator>
+	</field>
+	
+	<field name="clientAgent.deviceToken">
+		<field-validator type="stringlength">
+		    <param name="minLength"><![CDATA[64]]> </param>
+		    <param name="maxLength"><![CDATA[64]]> </param>
+			<message key="error.account.signout.deviceToken.length">The deviceToken should be ${minLength}</message>
+		</field-validator>
+	</field>
+	
+</validators>

@@ -1,3 +1,2 @@
 bug #1: remove duplicate device token when an accountId use the same token
-bug #2: signout should be authenticated
-bug #3: receive and obtain need merging
+bug #2: signout should be authenticated  [solved]

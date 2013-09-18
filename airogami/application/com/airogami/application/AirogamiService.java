@@ -4,8 +4,12 @@ import java.util.concurrent.DelayQueue;
 
 public class AirogamiService extends Thread{
 
-	DelayQueue<Airogami> airogamiQueque = new DelayQueue<Airogami>();
+	private DelayQueue<Airogami> airogamiQueque = new DelayQueue<Airogami>();
 
+	public AirogamiService(){
+		this.start();
+	}
+	
 	@Override
 	public void run() {
 		while(true){

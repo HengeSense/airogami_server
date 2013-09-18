@@ -147,6 +147,31 @@ public class AccountManager {
 
 		return account;
 	}
+	
+	/*
+	 * @param args:(String[]) must have two valid elements (screenName,
+	 * password)
+	 * 
+	 * @return accountId if successful or null if not matched
+	 * 
+	 * @throws AirogamiException if failed
+	 */
+	public Long signout(String account, String password, short type) throws AirogamiException {
+		if (account == null || account.length() == 0 || password == null
+				|| password.length() == 0) {
+			throw new IllegalArgumentException(
+					"Illegal arguments in signout");
+		}
+		try {
+			return ServiceUtils.accountService.signout(new String[] {
+					account, password},
+					type);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+	}
 
 	/*
 	 * not check some data types

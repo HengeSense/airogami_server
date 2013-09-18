@@ -81,11 +81,11 @@ public class AccountService implements IAccountService {
 		try {
 			EntityManagerHelper.beginTransaction();
 			switch (type) {
-			case AccountConstants.AuthenticateTypeScreenName:
-				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1], automatic);
-				break;
 			case AccountConstants.AuthenticateTypeEmail:
 				account = DaoUtils.authenticateDao.authenticateWithEmail(args[0], args[1], automatic);
+				break;
+			case AccountConstants.AuthenticateTypeScreenName:
+				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1], automatic);
 				break;
 			}		
 			if(account != null && automatic == false){
@@ -112,6 +112,43 @@ public class AccountService implements IAccountService {
 		}
 		
 		return account;
+	}
+	
+	/*
+	 * @see com.airogami.application.IAccountService#signout(java.lang.String[],
+	 * int)
+	 */
+	@Override
+	public Long signout(String[]args, int type) throws ApplicationException {
+		Long accountId = null;
+		ApplicationException ae = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			switch (type) {
+			case AccountConstants.AuthenticateTypeEmail:
+				accountId = DaoUtils.authenticateDao.signoutWithEmail(args[0], args[1]);
+				break;
+			case AccountConstants.AuthenticateTypeScreenName:
+				accountId = DaoUtils.authenticateDao.signoutWithScreenName(args[0], args[1]);
+				break;
+			}		
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			//t.printStackTrace();
+			if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		
+		return accountId;
 	}
 	
 	@Override

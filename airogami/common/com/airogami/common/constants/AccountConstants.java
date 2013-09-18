@@ -2,8 +2,8 @@ package com.airogami.common.constants;
 
 public interface AccountConstants {
 	
-	public static final int AuthenticateTypeScreenName=0;
-	public static final int AuthenticateTypeEmail=1;
+	public static final int AuthenticateTypeEmail=0;
+	public static final int AuthenticateTypeScreenName=1;
 	public static final int AuthenticateTypeFacebook=2;
 	public static final int AuthenticateTypeTwitter=3;
 	public static final int AuthenticateTypePhone=4;

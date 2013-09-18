@@ -6,7 +6,4 @@ public class ServiceUtils {
 	public static final IPlaneService planeService = new PlaneService();
 	public static final IChainService chainService = new ChainService();
 	public static final AirogamiService airogamiService = new AirogamiService();
-	static {
-		airogamiService.start();
-	}
 }

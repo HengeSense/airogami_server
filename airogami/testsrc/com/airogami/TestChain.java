@@ -121,6 +121,32 @@ public class TestChain {
 			fail();
 		}
 	}
+	
+	//@Ignore
+	@Test
+	public void testGetNewChains() {
+		long accountId = 5;
+		int limit = 4;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
+		boolean forward = false;
+		try {
+			Map<String, Object> result = ManagerUtils.chainManager.getNewChains(
+					accountId, start, end, limit, forward);
+			List<Chain> planes = (List<Chain>) result.get("chains");
+			Iterator<Chain> iter = planes.iterator();
+			while(iter.hasNext()){
+				Chain chain = iter.next();
+				System.out.print(chain.getChainId());
+				System.out.println(": " + chain.getUpdateInc());
+			}
+			//ObjectUtils.printObject(result);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
 	@Ignore
 	@Test
 	public void testObtainChainIds() {

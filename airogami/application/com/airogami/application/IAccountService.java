@@ -26,6 +26,14 @@ public interface IAccountService {
 	public Account signin(String[]args, int type, boolean automatic) throws ApplicationException;
 	
 	/*
+	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)
+	 * @param type:(int) must be a valid type
+	 * @return accountId if successful or null if not matched
+	 * @throws ApplicationException if failed 
+	 */
+	public Long signout(String[]args, int type) throws ApplicationException;
+	
+	/*
 	 * @param properties:((Map<String, Object>) no screenName
 	 * @return profile if successful
 	 * @throws ApplicationException if failed 

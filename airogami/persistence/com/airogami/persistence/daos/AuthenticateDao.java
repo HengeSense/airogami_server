@@ -47,6 +47,30 @@ public class AuthenticateDao extends AuthenticateDAO {
 		return account;
 	}
 	
+	private final String signoutEmailAuthJPQL = "select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2";
+
+	public Long signoutWithEmail(String email, String password) {
+		EntityManagerHelper.log("signoutWithEmailing", Level.INFO, null);
+		Long accountId = null;
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					signoutEmailAuthJPQL);
+			query.setParameter(1, email);
+			query.setParameter(2, password);
+			List<Long> result = query.getResultList();
+			Iterator<Long> iter = result.iterator();
+			if(iter.hasNext()){
+				accountId = iter.next();
+			}
+			EntityManagerHelper
+					.log("signoutWithEmail successful", Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("signoutWithEmail failed", Level.SEVERE, re);
+			throw re;
+		}
+		return accountId;
+	}
+	
 	private final String screenNameAutoAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
 
 	private final String screenNameAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
@@ -79,6 +103,30 @@ public class AuthenticateDao extends AuthenticateDAO {
 			throw re;
 		}
 		return account;
+	}
+	
+	private final String signoutScreenNameAuthJPQL = "select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2";
+
+	public Long signoutWithScreenName(String screeName, String password) {
+		EntityManagerHelper.log("signoutWithScreenNaming", Level.INFO, null);
+		Long accountId = null;
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					signoutScreenNameAuthJPQL);
+			query.setParameter(1, screeName);
+			query.setParameter(2, password);
+			List<Long> result = query.getResultList();
+			Iterator<Long> iter = result.iterator();
+			if(iter.hasNext()){
+				accountId = iter.next();
+			}
+			EntityManagerHelper
+					.log("signoutWithScreenName successful", Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("signoutWithScreenName failed", Level.SEVERE, re);
+			throw re;
+		}
+		return accountId;
 	}
 	
 	private final String createAuthenticateSQL = "insert into AUTHENTICATE (EMAIL, PASSWORD) select * from (select ?, ?) as tmp where not exists (select * from AUTHENTICATE  where EMAIL = ?)";

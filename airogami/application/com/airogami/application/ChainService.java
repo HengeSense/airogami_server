@@ -21,6 +21,7 @@ import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.NewChain;
 import com.airogami.persistence.entities.Plane;
 
 public class ChainService implements IChainService {
@@ -327,6 +328,38 @@ public class ChainService implements IChainService {
 		result = new TreeMap<String, Object>();
 		result.put("more", more);
 		result.put("chains", chains);
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> getNewChains(long accountId, Long start, Long end, int limit,
+			boolean forward) throws ApplicationException {
+		if(limit > IChainService.MaxChainLimit || limit < 1)
+			limit = IChainService.MaxChainLimit; 
+		List<NewChain> newChains = null;
+		ApplicationException ae = null;
+		Map<String, Object> result = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			newChains = DaoUtils.chainDao.getNewChains(accountId, start, end, limit + 1, forward); 			
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		boolean more = newChains.size() > limit;
+		result = new TreeMap<String, Object>();
+		result.put("more", more);
+		result.put("newChains", newChains);
 		return result;
 	}
 	

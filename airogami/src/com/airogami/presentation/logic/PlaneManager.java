@@ -15,6 +15,9 @@ import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
+import com.airogami.presentation.notification.LPMNotification;
+import com.airogami.presentation.notification.Notification;
+import com.airogami.presentation.notification.RPMNotification;
 
 public class PlaneManager {
 	
@@ -112,7 +115,7 @@ public class PlaneManager {
 		Long notifiedAccountId = (Long)result.remove("accountId");
 		if(notifiedAccountId != null){
 			String name = (String)result.remove("name");
-			Notification notification = Notification.receivedPlaneMessage(notifiedAccountId, name, message.getContent());
+			Notification notification = new RPMNotification(notifiedAccountId, name, message.getContent());
 			ManagerUtils.notificationManager.addNotification(notification);
 		}
 		
@@ -188,7 +191,7 @@ public class PlaneManager {
 		Long notifiedAccountId = (Long)result.remove("accountId");
 		if(notifiedAccountId != null){
 			String name = (String)result.remove("name");
-			Notification notification = Notification.likedPlaneMessage(notifiedAccountId, name);
+			Notification notification = new LPMNotification(notifiedAccountId, name);
 			ManagerUtils.notificationManager.addNotification(notification);
 		}
 		return result;

@@ -1,6 +1,5 @@
 package com.airogami.persistence.daos;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -8,18 +7,17 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
-import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
-import com.airogami.common.constants.PlaneConstants;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainDAO;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
-import com.airogami.persistence.entities.Plane;
+import com.airogami.persistence.entities.NewChain;
 
 public class ChainDao extends ChainDAO {
 	private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
@@ -90,7 +88,7 @@ public class ChainDao extends ChainDAO {
 		}
 	}
 	
-	 private final String getChainAccountIdsJPQL = "select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+	private final String getChainAccountIdsJPQL = "select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
 	
 	public List<Long> getChainAccountIds(long chainId, long accountId) {
 		EntityManagerHelper.log("getChainAccountIdsing with chainId = " + chainId, Level.INFO, null);
@@ -197,7 +195,38 @@ public class ChainDao extends ChainDAO {
 			EntityManagerHelper.log("obtainChains failed", Level.SEVERE, re);
 			throw re;
 		}
-	}	
+	}
+	
+	private final String getNewChainsForwardJPQL = "select chain.chainId, chain.updateInc, chain.updateCount from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status >= ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
+
+	private final String getNewChainsBackwardJPQL = "select chain.chainId, chain.updateInc, chain.updateCount from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status >= ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
+
+	public List<NewChain> getNewChains(long accountId, Long start, Long end, int limit, boolean forward){
+		EntityManagerHelper.log("getNewChainsing with accountId = " + accountId, Level.INFO, null);
+		try {
+			String jpql = null;
+			if(forward){
+				jpql = getNewChainsForwardJPQL;
+			}
+			else{
+				jpql = getNewChainsBackwardJPQL;
+			}
+			TypedQuery<NewChain> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, NewChain.class);
+			query.setParameter(1, accountId);
+			query.setParameter(2, ChainMessageConstants.StatusNew);
+			query.setParameter(3, start);
+			query.setParameter(4, end);
+			query.setMaxResults(limit);
+			List<NewChain> chains = query.getResultList();
+			EntityManagerHelper
+					.log("getChains successful", Level.INFO, null);
+			return chains;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getChains failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
 	
 	private final String obtainChainIdsForwardJPQL = "select chain.chainId from Chain chain , ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
 

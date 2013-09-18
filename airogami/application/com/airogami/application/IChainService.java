@@ -75,7 +75,19 @@ public final int MaxChainIdLimit = 1000;
 	 * @throws ApplicationException if failed 
 	 */ 
 	public Map<String, Object> obtainChains(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
-	
+
+	/* 
+	 * obtain replied and received chains
+	 * @param accountId:(long)
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxChainLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), newChains if successful
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> getNewChains(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
+
 	/* 
 	 * obtain replied chains
 	 * @param accountId:(long)

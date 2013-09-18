@@ -28,4 +28,12 @@ public class ClientAgent {
 		this.deviceToken = deviceToken;
 	}
 	
+	public boolean equals(Object o){
+		if(o instanceof ClientAgent){
+			ClientAgent clientAgent =(ClientAgent)o;
+			return this.deviceType == clientAgent.deviceType && this.deviceToken.equals(clientAgent.deviceToken);
+		}
+		return false;
+	}
+	
 }

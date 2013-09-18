@@ -16,6 +16,8 @@ import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
+import com.airogami.presentation.notification.Notification;
+import com.airogami.presentation.notification.RCMNotification;
 
 public class ChainManager {
 	/*
@@ -87,7 +89,7 @@ public class ChainManager {
 			if(accountIds != null && accountIds.size() > 0){
 				ChainMessage chainMessage = (ChainMessage)result.get("chainMessage");
 				String name = (String)result.remove("name");
-				Notification notification = Notification.receivedChainMessage(accountIds, name, chainMessage.getContent());
+				Notification notification = new RCMNotification(accountIds, name, chainMessage.getContent());
 				ManagerUtils.notificationManager.addNotification(notification);
 			}
 		}
@@ -145,6 +147,27 @@ public class ChainManager {
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.obtainChains(accountId, start, end, limit, forward);
+		} catch (ApplicationException re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+		return result;
+	}
+	
+	/*
+	 * @param accountId:(long)
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), newChains if successful
+	 * @throws AirogamiException if failed 
+	 */ 
+	public Map<String, Object> getNewChains(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+		Map<String, Object> result;
+		try {
+			result = ServiceUtils.chainService.getNewChains(accountId, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,

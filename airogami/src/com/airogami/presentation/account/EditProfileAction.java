@@ -49,7 +49,7 @@ public class EditProfileAction extends AirogamiActionSupport implements ModelDri
 			JSONUtils.putStatus(dataMap, e.getStatus(), localizedMessage);
 		}
 		catch(Throwable t){
-			t.printStackTrace(System.out);
+			//t.printStackTrace(System.out);
 			JSONUtils.putStatus(dataMap, "Unexpected exception");
 		}
 		//success
