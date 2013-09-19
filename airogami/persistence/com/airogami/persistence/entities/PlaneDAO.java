@@ -20,6 +20,7 @@ import javax.persistence.Query;
 
 public class PlaneDAO {
 	// property constants
+	public static final String UPDATE_COUNT = "updateCount";
 	public static final String UPDATE_INC = "updateInc";
 	public static final String STATUS = "status";
 	public static final String LONGITUDE = "longitude";
@@ -306,6 +307,28 @@ public class PlaneDAO {
 		}
 	}
 
+	private static final String increaseUpdateCountJPQL = "update Plane a set a.updateCount = a.updateCount + :count where a.planeId in (:planeId)";
+
+	public boolean increaseUpdateCount(java.lang.Long planeId, int count) {
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseUpdateCountJPQL);
+			query.setParameter("planeId", planeId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
 	private static final String increaseMatchCountJPQL = "update Plane a set a.matchCount = a.matchCount + :count where a.planeId in (:planeId)";
 
 	public boolean increaseMatchCount(java.lang.Long planeId, int count) {
@@ -393,6 +416,11 @@ public class PlaneDAO {
 					Level.SEVERE, re);
 			throw re;
 		}
+	}
+
+	public List<Plane> findByUpdateCount(Object updateCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByUpdateInc(Object updateInc,

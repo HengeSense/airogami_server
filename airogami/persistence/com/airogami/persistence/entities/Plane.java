@@ -39,6 +39,8 @@ public class Plane implements java.io.Serializable {
 
 	private Account accountByOwnerId;
 
+	private Integer updateCount = 0;
+
 	private Timestamp updatedTime;
 
 	private Timestamp createdTime;
@@ -92,12 +94,13 @@ public class Plane implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Plane(Category category, Timestamp updatedTime,
+	public Plane(Category category, Integer updateCount, Timestamp updatedTime,
 			Timestamp createdTime, Long updateInc, Short status,
 			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, Short sex,
 			Short matchCount, Short maxMatchCount, Short likedByOwner,
 			Short likedByTarget, Short deletedByOwner, Short deletedByTarget) {
 		this.category = category;
+		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
 		this.updateInc = updateInc;
@@ -115,17 +118,19 @@ public class Plane implements java.io.Serializable {
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
-			Account accountByOwnerId, Timestamp updatedTime,
-			Timestamp createdTime, Long updateInc, Short status,
-			Double longitude, Double latitude, Long lastMsgIdOfTarget,
-			Long lastMsgIdOfOwner, String city, String province,
-			String country, Short sex, Short matchCount, Short maxMatchCount,
-			Short likedByOwner, Short likedByTarget, Short deletedByOwner,
-			Short deletedByTarget, Date birthdayLower, Date birthdayUpper,
-			String language, List<PlaneHist> planeHists, List<Message> messages) {
+			Account accountByOwnerId, Integer updateCount,
+			Timestamp updatedTime, Timestamp createdTime, Long updateInc,
+			Short status, Double longitude, Double latitude,
+			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, String city,
+			String province, String country, Short sex, Short matchCount,
+			Short maxMatchCount, Short likedByOwner, Short likedByTarget,
+			Short deletedByOwner, Short deletedByTarget, Date birthdayLower,
+			Date birthdayUpper, String language, List<PlaneHist> planeHists,
+			List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
+		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
 		this.updateInc = updateInc;
@@ -191,6 +196,15 @@ public class Plane implements java.io.Serializable {
 
 	public void setAccountByOwnerId(Account accountByOwnerId) {
 		this.accountByOwnerId = accountByOwnerId;
+	}
+
+	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getUpdateCount() {
+		return this.updateCount;
+	}
+
+	public void setUpdateCount(Integer updateCount) {
+		this.updateCount = updateCount;
 	}
 
 	@Column(name = "UPDATED_TIME", nullable = false, length = 19)

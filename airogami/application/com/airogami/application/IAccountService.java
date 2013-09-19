@@ -59,11 +59,11 @@ public interface IAccountService {
 
 	/*
 	 * @param accountId:(long)
-	 * @param last:(Timestamp)
+	 * @param updateCount:(Integer)
 	 * @return profile, null if not updated
 	 * @throws ApplicationException if failed 
 	 */
-	public Profile obtainProfile(long accountId, Long updateCount) throws ApplicationException;
+	public Profile obtainProfile(long accountId, Integer updateCount) throws ApplicationException;
 
 	/*
 	 * @param report:(Report)

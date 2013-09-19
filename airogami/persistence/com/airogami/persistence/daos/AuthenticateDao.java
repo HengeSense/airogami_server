@@ -19,7 +19,7 @@ public class AuthenticateDao extends AuthenticateDAO {
 	
 	//fetch objects are different between automatic and nonautomatic
 	public Account authenticateWithEmail(String email, String password, boolean automatic) {
-		EntityManagerHelper.log("authenticate with email", Level.INFO, null);
+		EntityManagerHelper.log("authenticating with email", Level.INFO, null);
 		Account account = null;
 		try {
 			String jpql;
@@ -77,7 +77,7 @@ public class AuthenticateDao extends AuthenticateDAO {
 
 	//fetch objects are different between automatic and nonautomatic
 	public Account authenticateWithScreenName(String screenName, String password, boolean automatic) {
-		EntityManagerHelper.log("authenticate with screen name", Level.INFO, null);
+		EntityManagerHelper.log("authenticating with screen name", Level.INFO, null);
 		Account account = null;
 		try {
 			String jpql;

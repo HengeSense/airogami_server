@@ -14,7 +14,7 @@
 	</field>
 
 	<field name="updateCount">
-		<field-validator type="long">
+		<field-validator type="int">
 			<param name="min"><![CDATA[-1]]></param>
 			<message key="error.account.obtainaccount.updateCount.invalid">The updateCount should be greater than ${min}</message>
 		</field-validator>

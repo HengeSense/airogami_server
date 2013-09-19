@@ -51,7 +51,7 @@ public class Profile implements java.io.Serializable {
 
 	private Date birthday;
 
-	private Long updateCount = 0L;
+	private Integer updateCount = 0;
 
 	private Integer likesCount = 0;
 
@@ -69,7 +69,7 @@ public class Profile implements java.io.Serializable {
 	public Profile(Long accountId, Account account, String fullName, Short sex,
 			Double longitude, Double latitude, Short status,
 			Timestamp createdTime, String city, String province,
-			String country, Long updateCount, Integer likesCount) {
+			String country, Integer updateCount, Integer likesCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.fullName = fullName;
@@ -89,7 +89,7 @@ public class Profile implements java.io.Serializable {
 	public Profile(Long accountId, Account account, String fullName,
 			String screenName, Short sex, Double longitude, Double latitude,
 			Short status, Timestamp createdTime, String city, String province,
-			String country, Date birthday, Long updateCount,
+			String country, Date birthday, Integer updateCount,
 			Integer likesCount, String shout, String language) {
 		this.accountId = accountId;
 		this.account = account;
@@ -233,11 +233,11 @@ public class Profile implements java.io.Serializable {
 	}
 
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Long getUpdateCount() {
+	public Integer getUpdateCount() {
 		return this.updateCount;
 	}
 
-	public void setUpdateCount(Long updateCount) {
+	public void setUpdateCount(Integer updateCount) {
 		this.updateCount = updateCount;
 	}
 

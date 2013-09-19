@@ -18,7 +18,7 @@ import com.opensymphony.xwork2.ModelDriven;
 public class ObtainProfileAction extends AirogamiActionSupport{
 
 	private static final long serialVersionUID = 1L;
-	private Long updateCount;
+	private Integer updateCount;
 	private Long accountId;
 	
     public String execute() throws Exception{
@@ -54,11 +54,11 @@ public class ObtainProfileAction extends AirogamiActionSupport{
 		this.accountId = accountId;
 	}
 
-	public Long getUpdateCount() {
+	public Integer getUpdateCount() {
 		return updateCount;
 	}
 
-	public void setUpdateCount(Long updateCount) {
+	public void setUpdateCount(Integer updateCount) {
 		this.updateCount = updateCount;
 	}
 

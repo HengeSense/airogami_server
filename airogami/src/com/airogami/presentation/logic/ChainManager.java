@@ -178,6 +178,43 @@ public class ChainManager {
 	
 	/*
 	 * @param accountId:(long)
+	 * @param chainIds:(List<Long>)
+	 * @return chains if successful
+	 * @throws AirogamiException if failed 
+	 */ 
+	public List<Chain> getChains(long accountId, List<Long> chainIds) throws AirogamiException{
+		try {
+			return  ServiceUtils.chainService.getChains(accountId, chainIds);
+		} catch (ApplicationException re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+	}
+	
+	/*
+	 * @param accountId:(long)
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxChainIdLimit
+	 * @param forward:(boolean)
+	 * @return more:(boolean), chainIds if successful
+	 * @throws AirogamiException if failed 
+	 */ 
+	public Map<String, Object> getChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+		Map<String, Object> result;
+		try {
+			result = ServiceUtils.chainService.getChainIds(accountId, start, end, limit, forward);
+		} catch (ApplicationException re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+		return result;
+	}
+	
+	/*
+	 * @param accountId:(long)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit

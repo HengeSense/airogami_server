@@ -154,7 +154,7 @@ public class TestAccount {
 	@Test
 	public void testObtainAccount() {
 		long accountId = 0L;
-		Long updateCount = null;
+		Integer updateCount = null;
 		try {
 			Profile profile = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
 			ObjectUtils.printObject(profile);

@@ -250,7 +250,7 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public Profile obtainProfile(long accountId, Long updateCount) throws ApplicationException{
+	public Profile obtainProfile(long accountId, Integer updateCount) throws ApplicationException{
 		ApplicationException ae = null;
 		Profile profile = null;
 		try {

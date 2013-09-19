@@ -20,6 +20,7 @@ import javax.persistence.Query;
 
 public class ChainDAO {
 	// property constants
+	public static final String UPDATE_COUNT = "updateCount";
 	public static final String UPDATE_INC = "updateInc";
 	public static final String STATUS = "status";
 	public static final String CITY = "city";
@@ -261,6 +262,28 @@ public class ChainDAO {
 		}
 	}
 
+	private static final String increaseUpdateCountJPQL = "update Chain a set a.updateCount = a.updateCount + :count where a.chainId in (:chainId)";
+
+	public boolean increaseUpdateCount(java.lang.Long chainId, int count) {
+		EntityManagerHelper.log(
+				"increaseMaxMatchCount with chainId:" + chainId, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(
+					increaseUpdateCountJPQL);
+			query.setParameter("chainId", chainId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseMaxMatchCount successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMaxMatchCount failed",
+					Level.SEVERE, re);
+			throw re;
+		}
+	}
+
 	private static final String increasePassCountJPQL = "update Chain a set a.passCount = a.passCount + :count where a.chainId in (:chainId)";
 
 	public boolean increasePassCount(java.lang.Long chainId, int count) {
@@ -391,6 +414,11 @@ public class ChainDAO {
 					Level.SEVERE, re);
 			throw re;
 		}
+	}
+
+	public List<Chain> findByUpdateCount(Object updateCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByUpdateInc(Object updateInc,

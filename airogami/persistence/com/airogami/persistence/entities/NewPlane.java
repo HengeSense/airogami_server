@@ -2,25 +2,25 @@ package com.airogami.persistence.entities;
 
 import java.io.Serializable;
 
-public class NewChain implements Serializable{
+public class NewPlane implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private Long chainId;
+	private Long planeId;
 	private Long updateInc;
 	private Integer updateCount;
 	
-	public NewChain(Long chainId, Long updateInc, Integer updateCount){
-		this.chainId = chainId;
+	public NewPlane(Long planeId, Long updateInc, Integer updateCount){
+		this.planeId = planeId;
 		this.updateInc = updateInc;
 		this.updateCount = updateCount;
 	}
 	
-	public Long getChainId() {
-		return chainId;
+	public Long getPlaneId() {
+		return planeId;
 	}
-	public void setChainId(Long chainId) {
-		this.chainId = chainId;
+	public void setPlaneId(Long chainId) {
+		this.planeId = chainId;
 	}
 	public Long getUpdateInc() {
 		return updateInc;

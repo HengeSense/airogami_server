@@ -48,6 +48,36 @@
 			</result>
 		</action>
 		
+		<action name="getNewChains" class="com.airogami.presentation.chain.GetNewChainsAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="getChains" class="com.airogami.presentation.chain.GetChainsAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="getChainIds" class="com.airogami.presentation.chain.GetChainIdsAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
 		<action name="receiveChains" class="com.airogami.presentation.chain.ObtainChainsAction"
 		method="receiveChains">
 			<result type="json" name="input">

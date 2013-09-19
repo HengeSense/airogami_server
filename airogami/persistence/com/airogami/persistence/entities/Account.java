@@ -30,7 +30,7 @@ public class Account implements java.io.Serializable {
 
 	private Authenticate authenticate;
 
-	private Long updateCount = 0L;
+	private Integer updateCount = 0;
 
 	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
 
@@ -61,20 +61,21 @@ public class Account implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Account(Long accountId, Authenticate authenticate, Long updateCount) {
+	public Account(Long accountId, Authenticate authenticate,
+			Integer updateCount) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.updateCount = updateCount;
 	}
 
 	/** full constructor */
-	public Account(Long accountId, Authenticate authenticate, Long updateCount,
-			List<Report> reportsForReportedId, List<PlaneHist> planeHists,
-			List<Plane> planesForOwnerId, List<Message> messages,
-			Profile profile, List<Report> reportsForReportId,
-			List<Plane> planesForTargetId, List<Chain> chains,
-			List<ChainHist> chainHists, AccountStat accountStat,
-			List<ChainMessage> chainMessages) {
+	public Account(Long accountId, Authenticate authenticate,
+			Integer updateCount, List<Report> reportsForReportedId,
+			List<PlaneHist> planeHists, List<Plane> planesForOwnerId,
+			List<Message> messages, Profile profile,
+			List<Report> reportsForReportId, List<Plane> planesForTargetId,
+			List<Chain> chains, List<ChainHist> chainHists,
+			AccountStat accountStat, List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.updateCount = updateCount;
@@ -113,11 +114,11 @@ public class Account implements java.io.Serializable {
 	}
 
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Long getUpdateCount() {
+	public Integer getUpdateCount() {
 		return this.updateCount;
 	}
 
-	public void setUpdateCount(Long updateCount) {
+	public void setUpdateCount(Integer updateCount) {
 		this.updateCount = updateCount;
 	}
 

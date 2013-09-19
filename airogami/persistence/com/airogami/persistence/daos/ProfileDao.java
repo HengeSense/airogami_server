@@ -13,7 +13,7 @@ public class ProfileDao extends ProfileDAO {
 	
 	private final String obtainProfileJPQL = "select profile from Profile profile where profile.accountId = ?1 and (?2 is null or profile.updateCount > ?2)";
 
-	public Profile obtainProfile(long accountId, Long updateCount) {
+	public Profile obtainProfile(long accountId, Integer updateCount) {
 		EntityManagerHelper.log("obtainProfileing", Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(

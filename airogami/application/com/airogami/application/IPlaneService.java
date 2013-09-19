@@ -149,6 +149,38 @@ public interface IPlaneService {
 	 */ 
 	public Map<String, Object> obtainPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
+	/*
+	 * @param accountId:(long)
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxPlaneLimit
+	 * @param forward:(boolean)
+	 * @return more, newPlanes (may have more than one plane if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> getNewPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+
+	
+	/*
+	 * @param accountId:(long)
+	 * @param planeIds:(List<Long>) 
+	 * @return planes
+	 * @throws ApplicationException if failed 
+	 */ 
+	public List<Plane> getPlanes(long accountId, List<Long> planeIds) throws ApplicationException;
+
+	
+	/*
+	 * @param accountId:(long)
+	 * @param start:(Long) (exclusive)
+	 * @param end:(Long) (exclusive)
+	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
+	 * @param forward:(boolean)
+	 * @return more, planeIds (may have more than one plane if more = true)
+	 * @throws ApplicationException if failed 
+	 */ 
+	public Map<String, Object> getPlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+
 	
 	/*
 	 * @param accountId:(long)

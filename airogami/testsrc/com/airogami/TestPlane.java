@@ -3,6 +3,7 @@ package com.airogami;
 import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.NewPlane;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
@@ -133,6 +135,68 @@ public class TestPlane {
 				Plane plane = iter.next();
 				System.out.print(plane.getPlaneId());
 				System.out.println(": " + plane.getUpdateInc());
+			}
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testGetNewPlanes() {
+		long accountId = 2;
+		int limit = 50;
+		boolean forward = false;
+		Long start = Long.MIN_VALUE;
+		Long end = Long.MAX_VALUE;
+		try {
+			Map<String, Object> result = ManagerUtils.planeManager.getNewPlanes(accountId, start, end, limit, forward);
+			//ObjectUtils.printObject(result);
+			List<NewPlane> newPlanes = (List<NewPlane>) result.get("newPlanes");
+			Iterator<NewPlane> iter = newPlanes.iterator();
+			while(iter.hasNext()){
+				NewPlane newPlane = iter.next();
+				System.out.print(newPlane.getPlaneId());
+				System.out.print(": " + newPlane.getUpdateInc());
+				System.out.println(": " + newPlane.getUpdateCount());
+			}
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testGetPlanes() {
+		long accountId = 2;
+		List<Long> planeIds = Arrays.asList(6L, 7L);
+		try {
+			List<Plane> planes = ManagerUtils.planeManager.getPlanes(accountId, planeIds);
+			ObjectUtils.printObject(planes);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	//@Ignore
+	@Test
+	public void testGetPlaneIds() {
+		long accountId = 1;
+		boolean forward = false;
+		Long start = 1L;
+		Long end = 2L;
+		int limit = -1;
+		try {
+			Map<String, Object> result = ManagerUtils.planeManager.getPlaneIds(accountId, start, end, limit, forward);
+			//ObjectUtils.printObject(result);
+			List<Long> planes = (List<Long>) result.get("planeIds");
+			Iterator<Long> iter = planes.iterator();
+			while(iter.hasNext()){
+				Long planeId = iter.next();
+				System.out.println(planeId);
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();

@@ -72,6 +72,36 @@
 			</result>
 		</action>
 		
+		<action name="getNewPlanes" class="com.airogami.presentation.plane.GetNewPlanesAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="getPlanes" class="com.airogami.presentation.plane.GetPlanesAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="getPlaneIds" class="com.airogami.presentation.plane.GetPlaneIdsAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
 		<action name="receivePlanes" class="com.airogami.presentation.plane.ObtainPlanesAction"
 		method="receivePlanes">
 			<result type="json" name="input">

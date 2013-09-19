@@ -1,0 +1,12 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+	<field name="planeIds">
+     	<field-validator type="fieldexpression">
+     	    <param name="expression"><![CDATA[planeIds.size() < 51]]></param>
+			<message key="error.plane.getplanes.planeIds.required">Please input a valid planeIds</message>
+		</field-validator>
+	</field>
+		
+</validators>

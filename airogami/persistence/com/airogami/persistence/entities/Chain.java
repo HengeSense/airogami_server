@@ -36,6 +36,8 @@ public class Chain implements java.io.Serializable {
 
 	private Account account;
 
+	private Integer updateCount = 0;
+
 	private Timestamp updatedTime;
 
 	private Timestamp createdTime;
@@ -81,10 +83,12 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Chain(Account account, Timestamp updatedTime, Timestamp createdTime,
-			Long updateInc, Short status, Short sex, Short passCount,
-			Short matchCount, Short maxPassCount, Short maxMatchCount) {
+	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
+			Timestamp createdTime, Long updateInc, Short status, Short sex,
+			Short passCount, Short matchCount, Short maxPassCount,
+			Short maxMatchCount) {
 		this.account = account;
+		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
 		this.updateInc = updateInc;
@@ -97,14 +101,15 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Chain(Account account, Timestamp updatedTime, Timestamp createdTime,
-			Long updateInc, Short status, String city, String province,
-			Double longitude, Double latitude, Short sex, String country,
-			Short passCount, Short matchCount, Short maxPassCount,
-			Short maxMatchCount, Date birthdayLower, Date birthdayUpper,
-			String language, List<ChainHist> chainHists,
+	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
+			Timestamp createdTime, Long updateInc, Short status, String city,
+			String province, Double longitude, Double latitude, Short sex,
+			String country, Short passCount, Short matchCount,
+			Short maxPassCount, Short maxMatchCount, Date birthdayLower,
+			Date birthdayUpper, String language, List<ChainHist> chainHists,
 			List<ChainMessage> chainMessages) {
 		this.account = account;
+		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
 		this.updateInc = updateInc;
@@ -146,6 +151,15 @@ public class Chain implements java.io.Serializable {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getUpdateCount() {
+		return this.updateCount;
+	}
+
+	public void setUpdateCount(Integer updateCount) {
+		this.updateCount = updateCount;
 	}
 
 	@Column(name = "UPDATED_TIME", nullable = false, length = 19)

@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.NewPlane;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.persistence.entities.PlaneDAO;
 
@@ -202,6 +204,9 @@ public class PlaneDao extends PlaneDAO {
 			query.setParameter(2, accountId);
 			query.setParameter(3, PlaneConstants.StatusReplied);
 			int count = query.executeUpdate();
+			if(count == 1){
+				this.increaseUpdateCount(planeId, 1);
+			}
 			EntityManagerHelper
 					.log("deletePlane successful", Level.INFO, null);
 			return count == 1;
@@ -239,6 +244,8 @@ public class PlaneDao extends PlaneDAO {
 			//query.setParameter(4, new Timestamp(System.currentTimeMillis()));
 			accountId = null;
 			if(query.executeUpdate() == 1){
+				this.increaseUpdateCount(planeId, 1);
+				//query
 				if(byOwner){
 					jpql = likePlaneQueryByOwnerJPQL;
 				}
@@ -255,6 +262,87 @@ public class PlaneDao extends PlaneDAO {
 			return accountId;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("likePlane failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+	private final String getNewPlanesForwardJPQL = "select new NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
+
+	private final String getNewPlanesBackwardJPQL = "select new NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+
+	public List<NewPlane> getNewPlanes(long accountId, Long start, Long end, int limit, boolean forward){
+		EntityManagerHelper.log("getNewPlanesing with accountId = " + accountId, Level.INFO, null);
+		try {
+			String jpql = null;
+			if(forward){
+				jpql = getNewPlanesForwardJPQL; 
+			}
+			else{
+				jpql = getNewPlanesBackwardJPQL;
+			}
+			TypedQuery<NewPlane> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, NewPlane.class);
+			query.setParameter(1, accountId);
+			query.setParameter(2, PlaneConstants.StatusReplied);
+			query.setParameter(3, start);
+			query.setParameter(4, end);
+			query.setMaxResults(limit);
+			List<NewPlane> newPlanes = query.getResultList();
+			EntityManagerHelper
+					.log("getNewPlanes successful", Level.INFO, null);
+			return newPlanes;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getNewPlanes failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+	private final String getPlanesJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where (plane.accountByOwnerId.accountId = ?1 or plane.accountByTargetId.accountId = ?1) and plane.planeId in (?2) ";
+
+	public List<Plane> getPlanes(long accountId, List<Long> planeIds){
+		EntityManagerHelper.log("getPlanesing with accountId = " + accountId, Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					getPlanesJPQL);
+			query.setParameter(1, accountId);
+			query.setParameter(2, planeIds);
+			List<Plane> planes = query.getResultList();
+			EntityManagerHelper
+					.log("getPlanes successful", Level.INFO, null);
+			return planes;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getPlanes failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+	private final String getPlaneIdsForwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId asc";
+
+	private final String getPlaneIdsBackwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId desc";
+
+	public List<Long> getPlaneIds(long accountId, Long start, Long end, int limit, boolean forward){
+		EntityManagerHelper.log("getPlaneIdsing with accountId = " + accountId, Level.INFO, null);
+		try {
+			String jpql = null;
+			if(forward){
+				jpql = getPlaneIdsForwardJPQL;
+			}
+			else{
+				jpql = getPlaneIdsBackwardJPQL;
+			}
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql);
+			query.setParameter(1, accountId);
+			query.setParameter(2, PlaneConstants.StatusReplied);
+			query.setParameter(3, start);
+			query.setParameter(4, end);
+			query.setMaxResults(limit);
+			List<Long> planeIds = query.getResultList();
+			EntityManagerHelper
+					.log("getPlaneIds successful", Level.INFO, null);
+			return planeIds;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getPlaneIds failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

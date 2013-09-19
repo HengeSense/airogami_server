@@ -1,0 +1,12 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+	<field name="chainIds">
+     	<field-validator type="fieldexpression">
+     	    <param name="expression"><![CDATA[chainIds.size() < 51]]></param>
+			<message key="error.chain.getchains.chainIds.required">Please input a valid chainIds</message>
+		</field-validator>
+	</field>
+		
+</validators>

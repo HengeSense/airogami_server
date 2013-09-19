@@ -3,6 +3,7 @@ package com.airogami;
 import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
+import com.airogami.persistence.entities.NewChain;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
@@ -32,7 +34,7 @@ public class TestChain {
 	public void tearDown() throws Exception {
 	}
 	
-	//@Ignore
+	@Ignore
 	@Test
 	public void testSendChain() {
 		Chain chain = new Chain();
@@ -122,10 +124,10 @@ public class TestChain {
 		}
 	}
 	
-	//@Ignore
+	@Ignore
 	@Test
 	public void testGetNewChains() {
-		long accountId = 5;
+		long accountId = 1;
 		int limit = 4;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
@@ -133,12 +135,53 @@ public class TestChain {
 		try {
 			Map<String, Object> result = ManagerUtils.chainManager.getNewChains(
 					accountId, start, end, limit, forward);
-			List<Chain> planes = (List<Chain>) result.get("chains");
-			Iterator<Chain> iter = planes.iterator();
+			List<NewChain> newChains = (List<NewChain>) result.get("newChains");
+			Iterator<NewChain> iter = newChains.iterator();
 			while(iter.hasNext()){
-				Chain chain = iter.next();
-				System.out.print(chain.getChainId());
-				System.out.println(": " + chain.getUpdateInc());
+				//ObjectUtils.printObject(iter.next());
+				NewChain newChain = iter.next();
+				System.out.print(newChain.getChainId());
+				System.out.print(": " + newChain.getUpdateInc());
+				System.out.println(": " + newChain.getUpdateCount());
+			}
+			//ObjectUtils.printObject(result);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	//@Ignore
+	@Test
+	public void testGetChains() {
+		long accountId = 1;
+		List<Long> chainIds = Arrays.asList(1L, 2L);
+		try {
+			List<Chain> chains = ManagerUtils.chainManager.getChains(
+					accountId, chainIds);
+			ObjectUtils.printObject(chains);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testGetChainIds() {
+		long accountId = 2;
+		int limit = 4;
+		Long start = 1L;
+		Long end = 2L;
+		boolean forward = false;
+		try {
+			Map<String, Object> result = ManagerUtils.chainManager.getChainIds(
+					accountId, start, end, limit, forward);
+			List<Long> newChains = (List<Long>) result.get("chainIds");
+			Iterator<Long> iter = newChains.iterator();
+			while(iter.hasNext()){
+				Long chainId = iter.next();
+				System.out.println(chainId);
 			}
 			//ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {

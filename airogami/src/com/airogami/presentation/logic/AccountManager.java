@@ -266,13 +266,13 @@ public class AccountManager {
 	/*
 	 * @param accountId:(long)
 	 * 
-	 * @param last:(String) must not be empty
+	 * @param updateCount:(Integer)
 	 * 
 	 * @return profile, null if not updated
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Profile obtainProfile(long accountId, Long updateCount)
+	public Profile obtainProfile(long accountId, Integer updateCount)
 			throws AirogamiException {
 		if (accountId < 1) {
 			throw new IllegalArgumentException(
