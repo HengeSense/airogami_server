@@ -14,7 +14,7 @@ public class User {
 		this.accountId = accountId;
 		this.clientAgent = clientAgent;
 		this.signinCount = accountStat.getSigninCount();
-		this.messagesCount = accountStat.getNewChainMsgCount() + accountStat.getNewMsgCount();
+		this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
 	}
 	public User(){
 		clientAgent = new ClientAgent();
@@ -49,7 +49,7 @@ public class User {
 	
 	public void reset(ClientAgent clientAgent, AccountStat accountStat){
 		this.clientAgent = clientAgent;
-		this.messagesCount = accountStat.getNewChainMsgCount() + accountStat.getNewMsgCount();
+		this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
 		synchronized(this){
 			if(accountStat.getSigninCount() > this.signinCount){
 				this.signinCount = accountStat.getSigninCount();

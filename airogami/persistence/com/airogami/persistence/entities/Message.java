@@ -37,6 +37,8 @@ public class Message implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
+	private Short status = 0;
+
 	// Constructors
 
 	/** default constructor */
@@ -45,12 +47,13 @@ public class Message implements java.io.Serializable {
 
 	/** full constructor */
 	public Message(Account account, Plane plane, String content, Short type,
-			Timestamp createdTime) {
+			Timestamp createdTime, Short status) {
 		this.account = account;
 		this.plane = plane;
 		this.content = content;
 		this.type = type;
 		this.createdTime = createdTime;
+		this.status = status;
 	}
 
 	// Property accessors
@@ -111,6 +114,15 @@ public class Message implements java.io.Serializable {
 
 	public void setCreatedTime(Timestamp createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	@Column(name = "STATUS", nullable = false)
+	public Short getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 
 	@PrePersist

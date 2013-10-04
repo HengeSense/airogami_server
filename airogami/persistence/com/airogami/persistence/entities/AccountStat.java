@@ -29,9 +29,17 @@ public class AccountStat implements java.io.Serializable {
 
 	private Short status = 0;
 
-	private Integer newMsgCount = 0;
+	private Integer msgCount = 0;
 
-	private Integer newChainMsgCount = 0;
+	private Integer chainMsgCount = 0;
+
+	private Short devType;
+
+	private String devToken;
+
+	private Short pickupCount = 0;
+
+	private Short sendCount = 0;
 
 	// Constructors
 
@@ -39,15 +47,34 @@ public class AccountStat implements java.io.Serializable {
 	public AccountStat() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public AccountStat(Long accountId, Account account, Long signinCount,
-			Short status, Integer newMsgCount, Integer newChainMsgCount) {
+			Short status, Integer msgCount, Integer chainMsgCount,
+			Short pickupCount, Short sendCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.signinCount = signinCount;
 		this.status = status;
-		this.newMsgCount = newMsgCount;
-		this.newChainMsgCount = newChainMsgCount;
+		this.msgCount = msgCount;
+		this.chainMsgCount = chainMsgCount;
+		this.pickupCount = pickupCount;
+		this.sendCount = sendCount;
+	}
+
+	/** full constructor */
+	public AccountStat(Long accountId, Account account, Long signinCount,
+			Short status, Integer msgCount, Integer chainMsgCount,
+			Short devType, String devToken, Short pickupCount, Short sendCount) {
+		this.accountId = accountId;
+		this.account = account;
+		this.signinCount = signinCount;
+		this.status = status;
+		this.msgCount = msgCount;
+		this.chainMsgCount = chainMsgCount;
+		this.devType = devType;
+		this.devToken = devToken;
+		this.pickupCount = pickupCount;
+		this.sendCount = sendCount;
 	}
 
 	// Property accessors
@@ -89,22 +116,58 @@ public class AccountStat implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "NEW_MSG_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getNewMsgCount() {
-		return this.newMsgCount;
+	@Column(name = "MSG_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getMsgCount() {
+		return this.msgCount;
 	}
 
-	public void setNewMsgCount(Integer newMsgCount) {
-		this.newMsgCount = newMsgCount;
+	public void setMsgCount(Integer msgCount) {
+		this.msgCount = msgCount;
 	}
 
-	@Column(name = "NEW_CHAIN_MSG_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getNewChainMsgCount() {
-		return this.newChainMsgCount;
+	@Column(name = "CHAIN_MSG_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getChainMsgCount() {
+		return this.chainMsgCount;
 	}
 
-	public void setNewChainMsgCount(Integer newChainMsgCount) {
-		this.newChainMsgCount = newChainMsgCount;
+	public void setChainMsgCount(Integer chainMsgCount) {
+		this.chainMsgCount = chainMsgCount;
+	}
+
+	@Column(name = "DEV_TYPE")
+	public Short getDevType() {
+		return this.devType;
+	}
+
+	public void setDevType(Short devType) {
+		this.devType = devType;
+	}
+
+	@Column(name = "DEV_TOKEN", length = 4096)
+	public String getDevToken() {
+		return this.devToken;
+	}
+
+	public void setDevToken(String devToken) {
+		this.devToken = devToken;
+	}
+
+	@Column(name = "PICKUP_COUNT", nullable = false, insertable = false, updatable = false)
+	public Short getPickupCount() {
+		return this.pickupCount;
+	}
+
+	public void setPickupCount(Short pickupCount) {
+		this.pickupCount = pickupCount;
+	}
+
+	@Column(name = "SEND_COUNT", nullable = false, insertable = false, updatable = false)
+	public Short getSendCount() {
+		return this.sendCount;
+	}
+
+	public void setSendCount(Short sendCount) {
+		this.sendCount = sendCount;
 	}
 
 }

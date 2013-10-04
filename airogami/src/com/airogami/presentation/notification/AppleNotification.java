@@ -24,7 +24,7 @@ import com.airogami.presentation.logic.User;
 
 public class AppleNotification implements Runnable {
 	private final int threads = 100;
-	private URL keystore = getClass().getResource("keystore.p12");
+	private URL keystore = getClass().getResource("/com/airogami/presentation/notification/keystore.p12");
 	private final String password = "$Airogami2013";
 	private final boolean production = false;
 	private long internal = 60 * 1000;// 60s

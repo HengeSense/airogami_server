@@ -83,6 +83,8 @@ public class Plane implements java.io.Serializable {
 
 	private String language;
 
+	private Short source = (short) 0;
+
 	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
 
 	private List<Message> messages = new ArrayList<Message>(0);
@@ -98,7 +100,8 @@ public class Plane implements java.io.Serializable {
 			Timestamp createdTime, Long updateInc, Short status,
 			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, Short sex,
 			Short matchCount, Short maxMatchCount, Short likedByOwner,
-			Short likedByTarget, Short deletedByOwner, Short deletedByTarget) {
+			Short likedByTarget, Short deletedByOwner, Short deletedByTarget,
+			Short source) {
 		this.category = category;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
@@ -114,6 +117,7 @@ public class Plane implements java.io.Serializable {
 		this.likedByTarget = likedByTarget;
 		this.deletedByOwner = deletedByOwner;
 		this.deletedByTarget = deletedByTarget;
+		this.source = source;
 	}
 
 	/** full constructor */
@@ -125,8 +129,8 @@ public class Plane implements java.io.Serializable {
 			String province, String country, Short sex, Short matchCount,
 			Short maxMatchCount, Short likedByOwner, Short likedByTarget,
 			Short deletedByOwner, Short deletedByTarget, Date birthdayLower,
-			Date birthdayUpper, String language, List<PlaneHist> planeHists,
-			List<Message> messages) {
+			Date birthdayUpper, String language, Short source,
+			List<PlaneHist> planeHists, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
@@ -152,6 +156,7 @@ public class Plane implements java.io.Serializable {
 		this.birthdayLower = birthdayLower;
 		this.birthdayUpper = birthdayUpper;
 		this.language = language;
+		this.source = source;
 		this.planeHists = planeHists;
 		this.messages = messages;
 	}
@@ -398,6 +403,15 @@ public class Plane implements java.io.Serializable {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	@Column(name = "SOURCE", nullable = false)
+	public Short getSource() {
+		return this.source;
+	}
+
+	public void setSource(Short source) {
+		this.source = source;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")

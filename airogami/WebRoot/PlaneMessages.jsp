@@ -54,7 +54,7 @@
     <input type="text" name="planeId" value="1" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>LastMsgId: </label>
-    <input type="text" name="lastMsgId"  value="2013-01-01 00:00:00"/>
+    <input type="text" name="lastMsgId"  value="1"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <label>ByOwner: </label>
     <input type="text" name="byOwner"  value="true"/>

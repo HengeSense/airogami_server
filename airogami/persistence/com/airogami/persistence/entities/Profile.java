@@ -69,7 +69,8 @@ public class Profile implements java.io.Serializable {
 	public Profile(Long accountId, Account account, String fullName, Short sex,
 			Double longitude, Double latitude, Short status,
 			Timestamp createdTime, String city, String province,
-			String country, Integer updateCount, Integer likesCount) {
+			String country, Date birthday, Integer updateCount,
+			Integer likesCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.fullName = fullName;
@@ -81,6 +82,7 @@ public class Profile implements java.io.Serializable {
 		this.city = city;
 		this.province = province;
 		this.country = country;
+		this.birthday = birthday;
 		this.updateCount = updateCount;
 		this.likesCount = likesCount;
 	}
@@ -222,7 +224,7 @@ public class Profile implements java.io.Serializable {
 		this.country = country;
 	}
 
-	@Column(name = "BIRTHDAY", length = 10)
+	@Column(name = "BIRTHDAY", nullable = false, length = 10)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getBirthday() {
 		return this.birthday;

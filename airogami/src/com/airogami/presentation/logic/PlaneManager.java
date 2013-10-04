@@ -327,7 +327,7 @@ public class PlaneManager {
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.planeService.getPlaneIds(accountId, start,
+			result = ServiceUtils.planeService.getOldPlanes(accountId, start,
 					end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(

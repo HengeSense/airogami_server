@@ -68,7 +68,7 @@
 			</result>
 		</action>
 		
-		<action name="getChainIds" class="com.airogami.presentation.chain.GetChainIdsAction">
+		<action name="getOldChains" class="com.airogami.presentation.chain.GetOldChainsAction">
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>

@@ -13,7 +13,7 @@ import com.airogami.persistence.entities.Plane;
 public interface IChainService {
 public final int MaxChainLimit = 50;
 public final int MaxChainMessageLimit = 20;
-public final int MaxChainIdLimit = 1000;
+public final int MaxOldChainsLimit = 1000;
 	
 	/*
 	 * @param chain:(Chain) must be not null, have chain.message
@@ -95,10 +95,10 @@ public final int MaxChainIdLimit = 1000;
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxChainIdLimit
 	 * @param forward:(boolean)
-	 * @return more:(boolean), chainIds if successful
+	 * @return more:(boolean), oldChains if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
+	public Map<String, Object> getOldChains(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
 
 	/* 
 	 * @param accountId:(long)

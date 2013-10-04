@@ -22,6 +22,7 @@ import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.NewChain;
+import com.airogami.persistence.entities.OldChain;
 import com.airogami.persistence.entities.Plane;
 
 public class ChainService implements IChainService {
@@ -388,16 +389,16 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> getChainIds(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> getOldChains(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
-		if(limit > IChainService.MaxChainIdLimit || limit < 1)
-			limit = IChainService.MaxChainIdLimit; 
-		List<Long> newChains = null;
+		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
+			limit = IChainService.MaxOldChainsLimit; 
+		List<OldChain> oldChains = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			newChains = DaoUtils.chainDao.getChainIds(accountId, start, end, limit + 1, forward); 			
+			oldChains = DaoUtils.chainDao.getOldChains(accountId, start, end, limit + 1, forward); 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -412,10 +413,10 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		boolean more = newChains.size() > limit;
+		boolean more = oldChains.size() > limit;
 		result = new TreeMap<String, Object>();
 		result.put("more", more);
-		result.put("chainIds", newChains);
+		result.put("oldChains", oldChains);
 		return result;
 	}
 	
@@ -423,8 +424,8 @@ public class ChainService implements IChainService {
 	@Override
 	public Map<String, Object> obtainChainIds(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
-		if(limit > IChainService.MaxChainIdLimit || limit < 1)
-			limit = IChainService.MaxChainIdLimit; 
+		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
+			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
@@ -454,8 +455,8 @@ public class ChainService implements IChainService {
 	
 	@Override
 	public Map<String, Object> obtainChainIds(long accountId, long startId, int limit) throws ApplicationException {
-		if(limit > IChainService.MaxChainIdLimit || limit < 1)
-			limit = IChainService.MaxChainIdLimit; 
+		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
+			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
@@ -518,8 +519,8 @@ public class ChainService implements IChainService {
 	@Override
 	public Map<String, Object> receiveChainIds(long accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
-		if(limit > IChainService.MaxChainIdLimit || limit < 1)
-			limit = IChainService.MaxChainIdLimit; 
+		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
+			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
@@ -549,8 +550,8 @@ public class ChainService implements IChainService {
 	
 	@Override
 	public Map<String, Object> receiveChainIds(long accountId, long startId, int limit) throws ApplicationException {
-		if(limit > IChainService.MaxChainIdLimit || limit < 1)
-			limit = IChainService.MaxChainIdLimit; 
+		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
+			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;

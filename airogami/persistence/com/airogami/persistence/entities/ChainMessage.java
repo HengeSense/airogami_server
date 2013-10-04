@@ -41,6 +41,10 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Timestamp lastViewedTime = baseTimestamp;
 
+	private Short source = (short) 0;
+
+	private Short readCount = 0;
+
 	private static final Timestamp baseTimestamp = Timestamp
 			.valueOf("2013-01-01 00:00:00.0");
 
@@ -52,19 +56,22 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Timestamp createdTime, Short status, Timestamp lastViewedTime) {
+			Timestamp createdTime, Short status, Timestamp lastViewedTime,
+			Short source, Short readCount) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
 		this.createdTime = createdTime;
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
+		this.source = source;
+		this.readCount = readCount;
 	}
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
 			String content, Short type, Timestamp createdTime, Short status,
-			Timestamp lastViewedTime) {
+			Timestamp lastViewedTime, Short source, Short readCount) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
@@ -73,6 +80,8 @@ public class ChainMessage implements java.io.Serializable {
 		this.createdTime = createdTime;
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
+		this.source = source;
+		this.readCount = readCount;
 	}
 
 	// Property accessors
@@ -153,6 +162,24 @@ public class ChainMessage implements java.io.Serializable {
 
 	public void setLastViewedTime(Timestamp lastViewedTime) {
 		this.lastViewedTime = lastViewedTime;
+	}
+
+	@Column(name = "SOURCE", nullable = false)
+	public Short getSource() {
+		return this.source;
+	}
+
+	public void setSource(Short source) {
+		this.source = source;
+	}
+
+	@Column(name = "READ_COUNT", nullable = false, insertable = false, updatable = false)
+	public Short getReadCount() {
+		return this.readCount;
+	}
+
+	public void setReadCount(Short readCount) {
+		this.readCount = readCount;
 	}
 
 	@PrePersist

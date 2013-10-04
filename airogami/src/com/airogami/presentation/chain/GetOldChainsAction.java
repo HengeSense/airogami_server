@@ -12,7 +12,7 @@ import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 
-public class GetChainIdsAction extends AirogamiActionSupport {
+public class GetOldChainsAction extends AirogamiActionSupport {
 
 	private static final long serialVersionUID = 1L;	
 	private Long start;

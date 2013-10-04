@@ -29,7 +29,7 @@
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />
 			<property name="openjpa.ConnectionURL"
-				value="jdbc:mysql://ec2-54-244-195-174.us-west-2.compute.amazonaws.com/Airogami?autoCommit=true&amp;characterEncoding=utf8" />
+				value="jdbc:mysql://ec2-54-244-195-174.us-west-2.compute.amazonaws.com/Airogami?autoCommit=true&amp;characterEncoding=utf8&amp;useLegacyDatetimeCode=false" />
 			<property name="openjpa.ConnectionUserName" value="Scoutin" />
 			<property name="openjpa.ConnectionPassword"
 				value="Scoutin12345!" />

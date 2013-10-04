@@ -51,8 +51,8 @@
     <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
     </form>  
     
-    <h2>Get ChainIds</h2>
-    <form action="chain/getChainIds.action"  method="get"> 
+    <h2>Get Old Chains</h2>
+    <form action="chain/getOldChains.action"  method="get"> 
     <label>Start: </label>
     <input type="text" name="start" value="1" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 

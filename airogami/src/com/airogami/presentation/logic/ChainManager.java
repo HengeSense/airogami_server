@@ -204,7 +204,7 @@ public class ChainManager {
 	public Map<String, Object> getChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.chainService.getChainIds(accountId, start, end, limit, forward);
+			result = ServiceUtils.chainService.getOldChains(accountId, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,

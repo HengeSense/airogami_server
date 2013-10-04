@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import javax.persistence.Query;
 
+import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
@@ -43,11 +44,15 @@ public class MessageDao extends MessageDAO {
 		}
 	}
 	
-	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgIdOfOwner = ?3 where plane.lastMsgIdOfOwner < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByOwnerJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfOwner and message.messageId <= ?3";
 
-	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgIdOfTarget = ?3 where plane.lastMsgIdOfTarget < ?3 and plane.accountByTargetId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByTargetJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfTarget and message.messageId <= ?3";
+	
+	private final String viewedMessageByOwnerUpdateJPQL = "update Plane plane set plane.lastMsgIdOfOwner = ?3 where plane.lastMsgIdOfOwner < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
 
-	//verifed whether replied
+	private final String viewedMessageByTargetUpdateJPQL = "update Plane plane set plane.lastMsgIdOfTarget = ?3 where plane.lastMsgIdOfTarget < ?3 and plane.accountByTargetId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
+
+	//may verify whether lastMsgId exists
 	public boolean viewedMessage(long accountId, long planeId, long lastMsgId, boolean byOwner){
 		EntityManagerHelper.log("viewedMessaging", Level.INFO, null);		
 		try {
@@ -63,8 +68,30 @@ public class MessageDao extends MessageDAO {
 			query.setParameter(1, planeId);
 			query.setParameter(2, accountId);
 			query.setParameter(3, lastMsgId);
-			query.setParameter(4, PlaneConstants.StatusReplied);
+			query.setParameter(4, MessageConstants.MessageStatusUnread);
+			query.setParameter(5, MessageConstants.MessageStatusRead);
+			query.setParameter(6, PlaneConstants.StatusReplied);
+			//
 			int count = query.executeUpdate();
+			if(count > 0){
+				DaoUtils.accountStatDao.increaseMsgCount(accountId, -count);
+				//
+				if(byOwner){
+					jpql = viewedMessageByOwnerUpdateJPQL;
+				}
+				else{
+					jpql = viewedMessageByTargetUpdateJPQL;
+				}
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						jpql);
+				query.setParameter(1, planeId);
+				query.setParameter(2, accountId);
+				query.setParameter(3, lastMsgId);
+				query.setParameter(4, PlaneConstants.StatusReplied);
+				count = query.executeUpdate();
+
+			}
+			
 			EntityManagerHelper
 					.log("viewedMessage successful", Level.INFO, null);
 			return count == 1;

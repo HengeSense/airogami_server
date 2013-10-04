@@ -38,6 +38,7 @@ public class PlaneDAO {
 	public static final String DELETED_BY_OWNER = "deletedByOwner";
 	public static final String DELETED_BY_TARGET = "deletedByTarget";
 	public static final String LANGUAGE = "language";
+	public static final String SOURCE = "source";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -508,6 +509,10 @@ public class PlaneDAO {
 	public List<Plane> findByLanguage(Object language,
 			int... rowStartIdxAndCount) {
 		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findBySource(Object source, int... rowStartIdxAndCount) {
+		return findByProperty(SOURCE, source, rowStartIdxAndCount);
 	}
 
 	/**

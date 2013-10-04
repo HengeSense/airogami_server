@@ -21,6 +21,7 @@ public class MessageDAO {
 	// property constants
 	public static final String CONTENT = "content";
 	public static final String TYPE = "type";
+	public static final String STATUS = "status";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -322,6 +323,10 @@ public class MessageDAO {
 
 	public List<Message> findByType(Object type, int... rowStartIdxAndCount) {
 		return findByProperty(TYPE, type, rowStartIdxAndCount);
+	}
+
+	public List<Message> findByStatus(Object status, int... rowStartIdxAndCount) {
+		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
 
 	/**

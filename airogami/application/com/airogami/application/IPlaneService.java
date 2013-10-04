@@ -14,7 +14,7 @@ public interface IPlaneService {
 	
 	public final int MaxMessageLimit = 50;
 	
-	public final int MaxPlaneIdLimit = 1000;
+	public final int MaxOldPlanesLimit = 1000;
 	
 	/*
 	 * @param category:(Category) must be not null, have name
@@ -176,10 +176,10 @@ public interface IPlaneService {
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
 	 * @param forward:(boolean)
-	 * @return more, planeIds (may have more than one plane if more = true)
+	 * @return more, oldPlanes (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getPlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> getOldPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*

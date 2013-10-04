@@ -44,6 +44,7 @@ public class AccountManager {
 				|| (profile.getProvince() == null || profile.getProvince()
 						.length() == 0)
 				|| (profile.getCity() == null || profile.getCity().length() == 0)
+				|| profile.getBirthday() == null
 				|| (authenticate.getEmail() == null || authenticate.getEmail()
 						.length() == 0)
 				|| (authenticate.getPassword() == null || authenticate
