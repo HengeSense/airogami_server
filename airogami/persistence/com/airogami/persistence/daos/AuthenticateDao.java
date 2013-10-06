@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
@@ -29,8 +30,8 @@ public class AuthenticateDao extends AuthenticateDAO {
 			else{
 				jpql = emailAuthJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Account> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Account.class);
 			query.setParameter(1, email);
 			query.setParameter(2, password);
 			List<Account> result = query.getResultList();
@@ -49,16 +50,16 @@ public class AuthenticateDao extends AuthenticateDAO {
 	
 	private final String signoutEmailAuthJPQL = "select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2";
 
-	public Long signoutWithEmail(String email, String password) {
+	public Integer signoutWithEmail(String email, String password) {
 		EntityManagerHelper.log("signoutWithEmailing", Level.INFO, null);
-		Long accountId = null;
+		Integer accountId = null;
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					signoutEmailAuthJPQL);
+			TypedQuery<Integer> query = EntityManagerHelper.getEntityManager().createQuery(
+					signoutEmailAuthJPQL, Integer.class);
 			query.setParameter(1, email);
 			query.setParameter(2, password);
-			List<Long> result = query.getResultList();
-			Iterator<Long> iter = result.iterator();
+			List<Integer> result = query.getResultList();
+			Iterator<Integer> iter = result.iterator();
 			if(iter.hasNext()){
 				accountId = iter.next();
 			}
@@ -87,8 +88,8 @@ public class AuthenticateDao extends AuthenticateDAO {
 			else{
 				jpql = screenNameAuthJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Account> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Account.class);
 			query.setParameter(1, screenName);
 			query.setParameter(2, password);
 			List<Account> result = query.getResultList();
@@ -107,16 +108,16 @@ public class AuthenticateDao extends AuthenticateDAO {
 	
 	private final String signoutScreenNameAuthJPQL = "select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2";
 
-	public Long signoutWithScreenName(String screeName, String password) {
+	public Integer signoutWithScreenName(String screeName, String password) {
 		EntityManagerHelper.log("signoutWithScreenNaming", Level.INFO, null);
-		Long accountId = null;
+		Integer accountId = null;
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					signoutScreenNameAuthJPQL);
+			TypedQuery<Integer> query = EntityManagerHelper.getEntityManager().createQuery(
+					signoutScreenNameAuthJPQL, Integer.class);
 			query.setParameter(1, screeName);
 			query.setParameter(2, password);
-			List<Long> result = query.getResultList();
-			Iterator<Long> iter = result.iterator();
+			List<Integer> result = query.getResultList();
+			Iterator<Integer> iter = result.iterator();
 			if(iter.hasNext()){
 				accountId = iter.next();
 			}

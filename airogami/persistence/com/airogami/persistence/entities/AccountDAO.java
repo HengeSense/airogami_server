@@ -123,7 +123,7 @@ public class AccountDAO {
 		}
 	}
 
-	public Account findById(Long accountId) {
+	public Account findById(Integer accountId) {
 		EntityManagerHelper.log("finding Account instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -137,7 +137,7 @@ public class AccountDAO {
 		}
 	}
 
-	public Account getReference(Long accountId) {
+	public Account getReference(Integer accountId) {
 		EntityManagerHelper.log("getReferencing Account instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -216,7 +216,7 @@ public class AccountDAO {
 
 	private static final String removeByAccountIdJPQL = "delete from Account a where a.accountId in (?1)";
 
-	public int removeByAccountId(Long accountId) {
+	public int removeByAccountId(Integer accountId) {
 		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
 		int ret = 0;
 		try {
@@ -235,7 +235,7 @@ public class AccountDAO {
 
 	private static final String increaseUpdateCountJPQL = "update Account a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseUpdateCount(java.lang.Long accountId, int count) {
+	public boolean increaseUpdateCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log("increaseUpdateCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {

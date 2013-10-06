@@ -21,7 +21,7 @@
     <h3>Signin </h3>
     <form action="account/emailSignin.action"  method="GET">
     <label>Email: </label>
-    <input type="text" name="email" value="tianhuyang@gmail.com" />
+    <input type="text" name="email" value="airogami@gmail.com" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Password: </label>
     <input type="text" name="password" value="12345678" />

@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
@@ -22,11 +23,11 @@ import com.airogami.presentation.notification.RCMNotification;
 public class ChainManager {
 	/*
 	 * @param chain:(Chain) must be not null, have (chain.chainMessage) 
-	 * @param ownerId:(long) must exist
+	 * @param ownerId:(int) must exist
 	 * @return chain, chain.chainMessage if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> sendChain(Chain chain, long ownerId) throws AirogamiException{
+	public Map<String, Object> sendChain(Chain chain, int ownerId) throws AirogamiException{
 		if (chain == null || chain.getChainMessages().size() == 0){
 			throw new IllegalArgumentException("Illegal arguments in sendChain");
 		}
@@ -64,14 +65,14 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long) must exist
+	 * @param accountId:(int) must exist
 	 * @param chainId:(long) must exist
 	 * @param content:(String) must not be empty
 	 * @param type:(int)
 	 * @return chainMessage if successful otherwise error or chainMessage
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> replyChain(long accountId, long chainId, String content, int type) throws AirogamiException{
+	public Map<String, Object> replyChain(int accountId, long chainId, String content, int type) throws AirogamiException{
 		if(content == null || content.length() == 0){
 			throw new IllegalArgumentException("Illegal arguments in replyChain");
 		}
@@ -85,11 +86,9 @@ public class ChainManager {
 		}
 		if(result.get("error") == null){
 			ServiceUtils.airogamiService.appendChain(chainId);
-			List<Long> accountIds = (List<Long>)result.remove("accountIds");
-			if(accountIds != null && accountIds.size() > 0){
-				ChainMessage chainMessage = (ChainMessage)result.get("chainMessage");
-				String name = (String)result.remove("name");
-				Notification notification = new RCMNotification(accountIds, name, chainMessage.getContent());
+			NotifiedInfo notifiedInfo = (NotifiedInfo)result.remove("notifiedInfo");
+			if(notifiedInfo != null && notifiedInfo.getNotifiedInfos().size() > 0){
+				Notification notification = new RCMNotification(notifiedInfo);
 				ManagerUtils.notificationManager.addNotification(notification);
 			}
 		}
@@ -99,11 +98,11 @@ public class ChainManager {
 	
 	/*
 	 * @param chainId:(long) must be not null
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @return canMatchedAgain if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> throwChain(long chainId,long accountId) throws AirogamiException{
+	public Map<String, Object> throwChain(long chainId,int accountId) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.throwChain(chainId, accountId);
@@ -121,10 +120,10 @@ public class ChainManager {
 	
 	/*
 	 * @param chainId:(long)
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> deleteChain(long chainId,long accountId) throws AirogamiException{
+	public Map<String, Object> deleteChain(long chainId,int accountId) throws AirogamiException{
 		try {
 			return ServiceUtils.chainService.deleteChain(chainId, accountId);
 		} catch (ApplicationException re) {
@@ -135,7 +134,7 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
@@ -143,7 +142,7 @@ public class ChainManager {
 	 * @return more:(boolean), chains (chain.chaiMessages) if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> obtainChains(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> obtainChains(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.obtainChains(accountId, start, end, limit, forward);
@@ -156,7 +155,7 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
@@ -164,7 +163,7 @@ public class ChainManager {
 	 * @return more:(boolean), newChains if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> getNewChains(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> getNewChains(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.getNewChains(accountId, start, end, limit, forward);
@@ -177,12 +176,12 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param chainIds:(List<Long>)
 	 * @return chains if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public List<Chain> getChains(long accountId, List<Long> chainIds) throws AirogamiException{
+	public List<Chain> getChains(int accountId, List<Long> chainIds) throws AirogamiException{
 		try {
 			return  ServiceUtils.chainService.getChains(accountId, chainIds);
 		} catch (ApplicationException re) {
@@ -193,7 +192,7 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxChainIdLimit
@@ -201,7 +200,7 @@ public class ChainManager {
 	 * @return more:(boolean), chainIds if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> getChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> getChainIds(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.getOldChains(accountId, start, end, limit, forward);
@@ -214,7 +213,7 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
@@ -222,7 +221,7 @@ public class ChainManager {
 	 * @return more:(boolean), chainIds if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> obtainChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> obtainChainIds(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.obtainChainIds(accountId, start, end, limit, forward);
@@ -236,13 +235,13 @@ public class ChainManager {
 	
 	/* 
 	 * obtain replied chainIds for synchronization
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param startIdx:(long) start chainId (exclusive)
 	 * @param limit:(int) max(limit) = MaxChainIdLimit
 	 * @return more:(boolean), chainIds if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> obtainChainIds(long accountId, long startId, int limit) throws AirogamiException{
+	public Map<String, Object> obtainChainIds(int accountId, long startId, int limit) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.obtainChainIds(accountId, startId, limit);
@@ -256,7 +255,7 @@ public class ChainManager {
 	
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
@@ -264,7 +263,7 @@ public class ChainManager {
 	 * @return more:(boolean), chains (chain.chaiMessages) if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> receiveChains(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> receiveChains(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.receiveChains(accountId, start, end, limit, forward);
@@ -277,7 +276,7 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
@@ -285,7 +284,7 @@ public class ChainManager {
 	 * @return more:(boolean), chainIds if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> receiveChainIds(long accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> receiveChainIds(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.receiveChainIds(accountId, start, end, limit, forward);
@@ -299,13 +298,13 @@ public class ChainManager {
 	
 	/* 
 	 * get newly received chainIds for synchronization
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param startIdx:(long) start chainId (exclusive)
 	 * @param limit:(int) max(limit) = MaxChainIdLimit
 	 * @return more:(boolean), chainIds if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> receiveChainIds(long accountId, long startId, int limit) throws AirogamiException{
+	public Map<String, Object> receiveChainIds(int accountId, long startId, int limit) throws AirogamiException{
 		Map<String, Object> result;
 		try {
 			result = ServiceUtils.chainService.receiveChainIds(accountId, startId, limit);
@@ -318,14 +317,14 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param chainId:(long) 
 	 * @param last:(Timestamp) null for (updatedTime > lastViewedTime)
 	 * @param limit:(int) max(limit) = MaxChainMessageLimit
 	 * @return chainMessages (asc), more
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit) throws AirogamiException{
+	public Map<String, Object> obtainChainMessages(int accountId, long chainId, Timestamp last, int limit) throws AirogamiException{
 		try {
 			    return ServiceUtils.chainService.obtainChainMessages(accountId, chainId, last, limit);
 			} catch (ApplicationException re) {
@@ -337,13 +336,13 @@ public class ChainManager {
 	}
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param chainId:(long)	 
 	 * @param last:(Timestamp) must not be empty
 	 * @return succeed
 	 * @throws AirogamiException if failed 
 	 */ 
-	public boolean viewedChainMessages(long accountId, long chainId, Timestamp last) throws AirogamiException{
+	public boolean viewedChainMessages(int accountId, long chainId, Timestamp last) throws AirogamiException{
 		if(last == null){
 			throw new IllegalArgumentException("Illegal arguments in viewedChainMessages");
 		}

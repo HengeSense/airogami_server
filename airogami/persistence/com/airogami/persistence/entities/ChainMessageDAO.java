@@ -23,7 +23,6 @@ public class ChainMessageDAO {
 	public static final String TYPE = "type";
 	public static final String STATUS = "status";
 	public static final String SOURCE = "source";
-	public static final String READ_COUNT = "readCount";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -243,27 +242,6 @@ public class ChainMessageDAO {
 		}
 	}
 
-	private static final String increaseReadCountJPQL = "update ChainMessage a set a.readCount = a.readCount + :count where a.id in (:id)";
-
-	public boolean increaseReadCount(
-			com.airogami.persistence.entities.ChainMessageId id, int count) {
-		EntityManagerHelper.log("increaseReadCount with id:" + id, Level.INFO,
-				null);
-		try {
-			Query query = getEntityManager().createQuery(increaseReadCountJPQL);
-			query.setParameter("id", id);
-			query.setParameter("count", count);
-			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseReadCount successful", Level.INFO,
-					null);
-			return result;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseReadCount failed", Level.SEVERE,
-					re);
-			throw re;
-		}
-	}
-
 	/**
 	 * Find all ChainMessage entities with a specific property value.
 	 * 
@@ -327,11 +305,6 @@ public class ChainMessageDAO {
 	public List<ChainMessage> findBySource(Object source,
 			int... rowStartIdxAndCount) {
 		return findByProperty(SOURCE, source, rowStartIdxAndCount);
-	}
-
-	public List<ChainMessage> findByReadCount(Object readCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(READ_COUNT, readCount, rowStartIdxAndCount);
 	}
 
 	/**

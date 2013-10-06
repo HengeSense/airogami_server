@@ -116,11 +116,13 @@ public class AppleNotification implements Runnable {
 		}
 	}
 
-	public void sendNotification(long accountId, String token, int badge,
+	public void sendNotification(int accountId, String token, Long badge,
 			PushNotificationPayload payload) {		
 		try {
-			payload.addBadge(badge);
-			payload.addCustomDictionary("accountId", (int)accountId);
+			if(badge != null){
+				payload.addBadge((int)(long)badge);
+			}
+			payload.addCustomDictionary("accountId", accountId);
 			queue.add(payload, token);
 			System.out.printf("sending (apple) token to (%d): " + token + "\n",
 					accountId);

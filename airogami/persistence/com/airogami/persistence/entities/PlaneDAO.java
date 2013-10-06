@@ -39,6 +39,7 @@ public class PlaneDAO {
 	public static final String DELETED_BY_TARGET = "deletedByTarget";
 	public static final String LANGUAGE = "language";
 	public static final String SOURCE = "source";
+	public static final String LAST_MSG_ID = "lastMsgId";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -250,14 +251,14 @@ public class PlaneDAO {
 
 	private static final String accountByTargetIdJPQL = "select a.accountByTargetId.accountId from Plane a where a.planeId = :planeId";
 
-	public java.lang.Long getAccountByTargetId(java.lang.Long planeId) {
+	public java.lang.Integer getAccountByTargetId(java.lang.Long planeId) {
 		EntityManagerHelper.log("getAccountByOwnerIdId with planeId" + planeId,
 				Level.INFO, null);
-		java.lang.Long accountId;
+		java.lang.Integer accountId;
 		try {
 			Query query = getEntityManager().createQuery(accountByTargetIdJPQL);
 			query.setParameter("planeId", planeId);
-			accountId = (java.lang.Long) query.getSingleResult();
+			accountId = (java.lang.Integer) query.getSingleResult();
 			EntityManagerHelper.log("getAccountByOwnerIdId successful",
 					Level.INFO, null);
 			return accountId;
@@ -290,14 +291,14 @@ public class PlaneDAO {
 
 	private static final String accountByOwnerIdJPQL = "select a.accountByOwnerId.accountId from Plane a where a.planeId = :planeId";
 
-	public java.lang.Long getAccountByOwnerId(java.lang.Long planeId) {
+	public java.lang.Integer getAccountByOwnerId(java.lang.Long planeId) {
 		EntityManagerHelper.log("getAccountByOwnerIdId with planeId" + planeId,
 				Level.INFO, null);
-		java.lang.Long accountId;
+		java.lang.Integer accountId;
 		try {
 			Query query = getEntityManager().createQuery(accountByOwnerIdJPQL);
 			query.setParameter("planeId", planeId);
-			accountId = (java.lang.Long) query.getSingleResult();
+			accountId = (java.lang.Integer) query.getSingleResult();
 			EntityManagerHelper.log("getAccountByOwnerIdId successful",
 					Level.INFO, null);
 			return accountId;
@@ -513,6 +514,11 @@ public class PlaneDAO {
 
 	public List<Plane> findBySource(Object source, int... rowStartIdxAndCount) {
 		return findByProperty(SOURCE, source, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLastMsgId(Object lastMsgId,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LAST_MSG_ID, lastMsgId, rowStartIdxAndCount);
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class TestPlane {
 		//plane.setLongitude(0.0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
-		long ownerId = 20L;
+		int ownerId = 20;
 		Message message = new Message();
 		message.setContent("hello!");
         message.setType((short) 0);
@@ -64,7 +64,7 @@ public class TestPlane {
 		Message message = new Message();
 		message.setContent("hello!");
 		message.setType((short) 0);
-		long ownerId = 2;
+		int ownerId = 2;
 		long planeId = 3;
 		try {
 			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
@@ -77,7 +77,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testThrowPlane() {
-		long accountId = 5;
+		int accountId = 5;
 		long planeId = 2;
 		try {
 			Map<String, Object> result = ManagerUtils.planeManager.throwPlane(planeId, accountId);
@@ -90,7 +90,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testLikePlane() {
-		long accountId = 3;
+		int accountId = 3;
 		long planeId = 3;
 		boolean byOwner = true;
 		try {
@@ -106,7 +106,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testDeletePlane() {
-		long accountId = 3;
+		int accountId = 3;
 		long planeId = 3;
 		boolean byOwner = true;
 		try {
@@ -121,7 +121,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testObtainPlanes() {
-		long accountId = 4;
+		int accountId = 4;
 		int limit = 50;
 		boolean forward = false;
 		Long start = Long.MIN_VALUE;
@@ -145,7 +145,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testGetNewPlanes() {
-		long accountId = 2;
+		int accountId = 2;
 		int limit = 50;
 		boolean forward = false;
 		Long start = Long.MIN_VALUE;
@@ -170,7 +170,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testGetPlanes() {
-		long accountId = 2;
+		int accountId = 2;
 		List<Long> planeIds = Arrays.asList(6L, 7L);
 		try {
 			List<Plane> planes = ManagerUtils.planeManager.getPlanes(accountId, planeIds);
@@ -184,7 +184,7 @@ public class TestPlane {
 	//@Ignore
 	@Test
 	public void testGetPlaneIds() {
-		long accountId = 1;
+		int accountId = 1;
 		boolean forward = false;
 		Long start = 1L;
 		Long end = 2L;
@@ -207,7 +207,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testObtainPlaneIds() {
-		long accountId = 4;
+		int accountId = 4;
 		int startId = 2;
 		int limit = -1;
 		try {
@@ -228,7 +228,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testReceivePlanes() {
-		long accountId = 1;
+		int accountId = 1;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
 		int limit = 1;
@@ -253,7 +253,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testReceivePlaneIds() {
-		long accountId = 4;
+		int accountId = 4;
 		int startId = 9;
 		int limit = 50;
 		try {
@@ -275,7 +275,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testPickupPlane() {
-		long accountId = 3;
+		int accountId = 3;
 		try {
 			Map<String, Object> result = null;
 			result = ManagerUtils.planeManager.pickup(accountId);
@@ -289,7 +289,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testObtainMessages() {
-		long accountId = 4;
+		int accountId = 4;
 		Long lastMsgId = null;
 		int limit = 2; 
 		long planeId = 14;
@@ -305,7 +305,7 @@ public class TestPlane {
 	@Ignore
 	@Test
 	public void testViewedMessage() {
-		long accountId = 1;
+		int accountId = 1;
 		long planeId = 4;
 		long lastMsgId = 0;
 		boolean byOwner = true, succeed;

@@ -25,11 +25,11 @@ public interface IPlaneService {
 	
 	/*
 	 * @param plane:(Plane) must be not null, have plane.message, plane.category
-	 * @param ownerId:(long) must exist
+	 * @param ownerId:(int) must exist
 	 * @return plane, plane.messages, plane.category if successful or null if ownerId not exist
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Plane sendPlane(Plane plane, long ownerId) throws ApplicationException;
+	public Plane sendPlane(Plane plane, int ownerId) throws ApplicationException;
 	
 	/*
 	 * @param planeId:(long) must exist
@@ -40,50 +40,50 @@ public interface IPlaneService {
 
 	/*
 	 * @param planeId:(long) must be not null
-	 * @param ownerId:(long) must be plane.accoutByOwnerId or plane.accountByTargetId
+	 * @param ownerId:(int) must be plane.accoutByOwnerId or plane.accountByTargetId
 	 * @param message:(Message)
 	 * @return message if successful or error if failed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> replyPlane(long planeId,long ownerId, Message message) throws ApplicationException;	
+	public Map<String, Object> replyPlane(long planeId,int ownerId, Message message) throws ApplicationException;	
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param count:(int) should > 0
 	 * @return planes, planes.messages, planes.category, planes.accountByOwnerId if successful
 	 * @throws ApplicationException if failed 
 	 */
-	public List<Plane> pickupPlane(long accountId, int count) throws ApplicationException;
+	public List<Plane> pickupPlane(int accountId, int count) throws ApplicationException;
 	
 	/*
 	 * @param planeId:(long) must be not null
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param byOwner:(boolean)
 	 * @return message, oppositeAccountId if successful otherwise error, plane
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> likePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
+	public Map<String, Object> likePlane(long planeId,int accountId, boolean byOwner) throws ApplicationException;
 
 	/*
 	 * @param planeId:(long) must be not null
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @return canMatchedAgain if successful otherwise error or plane
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> throwPlane(long planeId,long accountId) throws ApplicationException;
+	public Map<String, Object> throwPlane(long planeId,int accountId) throws ApplicationException;
 	
 	/*
 	 * @param planeId:(long) must be not null
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param byOwner:(boolean)
 	 * @return succeed if successful otherwise error or plane
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> deletePlane(long planeId,long accountId, boolean byOwner) throws ApplicationException;
+	public Map<String, Object> deletePlane(long planeId,int accountId, boolean byOwner) throws ApplicationException;
 	
 	/*
 	 * get received planes
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
@@ -91,21 +91,21 @@ public interface IPlaneService {
 	 * @return more, planes (planes.messages, planes.category, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> receivePlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> receivePlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 	
 	/*
 	 * get all received planeIds for synchronization
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param startId:(long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> receivePlaneIds(long accountId, long startId, int limit) throws ApplicationException;
+	public Map<String, Object> receivePlaneIds(int accountId, long startId, int limit) throws ApplicationException;
 	
 	/*
 	 * get received planes
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
@@ -113,21 +113,21 @@ public interface IPlaneService {
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> receivePlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> receivePlaneIds(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 	
 	
 	/*
 	 * obtain all replied and undeleted planeIds for synchronization
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param startId:(long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainPlaneIds(long accountId, long startId, int limit) throws ApplicationException;
+	public Map<String, Object> obtainPlaneIds(int accountId, long startId, int limit) throws ApplicationException;
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
@@ -135,11 +135,11 @@ public interface IPlaneService {
 	 * @return more, planeIds if successful (may have more than one planeId if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainPlaneIds(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> obtainPlaneIds(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
@@ -147,10 +147,10 @@ public interface IPlaneService {
 	 * @return more, planes(planes.messages, planes.category, planes.accountByTargetId, planes.accountByOwnerId) if successful (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> obtainPlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
@@ -158,20 +158,20 @@ public interface IPlaneService {
 	 * @return more, newPlanes (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getNewPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> getNewPlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param planeIds:(List<Long>) 
 	 * @return planes
 	 * @throws ApplicationException if failed 
 	 */ 
-	public List<Plane> getPlanes(long accountId, List<Long> planeIds) throws ApplicationException;
+	public List<Plane> getPlanes(int accountId, List<Long> planeIds) throws ApplicationException;
 
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param start:(Long) (exclusive)
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneIdLimit
@@ -179,11 +179,11 @@ public interface IPlaneService {
 	 * @return more, oldPlanes (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getOldPlanes(long accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> getOldPlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param planeId:(long)
 	 * @param startId:(Long) start messageId (can be null)
 	 * @param limit:(int) max(limit) = MaxMessageLimit
@@ -191,17 +191,17 @@ public interface IPlaneService {
 	 * @return more, messages if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> obtainMessages(long accountId, long planeId, Long startId,
+	public Map<String, Object> obtainMessages(int accountId, long planeId, Long startId,
 			int limit, boolean forward) throws ApplicationException;
 	
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param planeId:(long)	 
 	 * @param lastMsgId:(long) (exclusive)
 	 * @param byOwner:(boolean)
 	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean viewedMessages(long accountId, long planeId, long lastMsgId, boolean byOwner) throws ApplicationException;
+	public boolean viewedMessages(int accountId, long planeId, long lastMsgId, boolean byOwner) throws ApplicationException;
 }

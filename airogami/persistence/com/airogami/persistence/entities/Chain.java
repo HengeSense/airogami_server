@@ -348,10 +348,9 @@ public class Chain implements java.io.Serializable {
 
 	}
 
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
-	}
+	/*
+	 * @PreUpdate protected void onPreUpdate(){ Timestamp timestamp = new
+	 * Timestamp(System.currentTimeMillis()); setUpdatedTime(timestamp); }
+	 */
 
 }

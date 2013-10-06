@@ -91,4 +91,6 @@ public class Category implements java.io.Serializable {
 		this.planes = planes;
 	}
 
+	/**/
+
 }

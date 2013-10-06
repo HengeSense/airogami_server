@@ -6,23 +6,14 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
+import com.airogami.common.NotifiedInfo;
 import com.airogami.presentation.logic.ClientAgent;
 
 //received chain message
 public class RCMNotification extends Notification{
 	
-	private String name, content;
-	
-	public RCMNotification(Object accountIds, String name, String content){
-		super(accountIds);
-		this.name = name;
-		if(content.length() > MessageLength){
-			StringBuffer stringBuffer = new StringBuffer(MessageLength);
-			stringBuffer.append(content.substring(0, MessageLength - 3));
-			stringBuffer.append("...");
-			content = stringBuffer.toString();
-		}
-		this.content = content;
+	public RCMNotification(NotifiedInfo notifiedInfos){
+		super(notifiedInfos);
 		type = TypeReceivedChainMessage;
 	}
 	
@@ -31,7 +22,7 @@ public class RCMNotification extends Notification{
 		try {
 			payload.addCustomDictionary("type", type);
 			payload.addCustomAlertLocKey(LocKeys[type]);
-			payload.addCustomAlertLocArgs(Arrays.asList(name, content));
+			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName(), notifiedInfos.getContent()));
 			payload.addSound("default");
 		} catch (JSONException e) {
 			e.printStackTrace();

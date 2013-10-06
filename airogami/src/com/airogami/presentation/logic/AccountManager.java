@@ -157,7 +157,7 @@ public class AccountManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Long signout(String account, String password, short type) throws AirogamiException {
+	public Integer signout(String account, String password, short type) throws AirogamiException {
 		if (account == null || account.length() == 0 || password == null
 				|| password.length() == 0) {
 			throw new IllegalArgumentException(
@@ -185,7 +185,7 @@ public class AccountManager {
 	 */
 	public Profile editProfile(Map<String, Object> properties)
 			throws AirogamiException {
-		Long accountId = (Long) properties.get("accountId");
+		Integer accountId = (Integer) properties.get("accountId");
 		if (accountId == null) {
 			throw new IllegalArgumentException(
 					"Illegal arguments in editAccount");
@@ -212,7 +212,7 @@ public class AccountManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param oldPassword:(String) must not be empty
 	 * 
@@ -222,7 +222,7 @@ public class AccountManager {
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public boolean changePassword(long accountId, String oldPassword,
+	public boolean changePassword(int accountId, String oldPassword,
 			String newPassword) throws AirogamiException {
 		if (oldPassword == null || oldPassword.length() == 0
 				|| newPassword == null || newPassword.length() == 0) {
@@ -240,7 +240,7 @@ public class AccountManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param screenName:(String)
 	 * 
@@ -248,7 +248,7 @@ public class AccountManager {
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public boolean changeScreenName(long accountId, String screenName)
+	public boolean changeScreenName(int accountId, String screenName)
 			throws AirogamiException {
 		if (screenName == null || screenName.length() == 0) {
 			throw new IllegalArgumentException(
@@ -265,7 +265,7 @@ public class AccountManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param updateCount:(Integer)
 	 * 
@@ -273,7 +273,7 @@ public class AccountManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Profile obtainProfile(long accountId, Integer updateCount)
+	public Profile obtainProfile(int accountId, Integer updateCount)
 			throws AirogamiException {
 		if (accountId < 1) {
 			throw new IllegalArgumentException(
@@ -301,7 +301,7 @@ public class AccountManager {
 	 * 
 	 * @throws AirogamiException or EmailExistsException if failed
 	 */
-	public Report reportAccount(long reportId, long reportedId, String reason)
+	public Report reportAccount(Integer reportId, Integer reportedId, String reason)
 			throws AirogamiException {
 		if (reason == null || reason.length() == 0) {
 			throw new IllegalArgumentException(

@@ -79,7 +79,10 @@ public class SignupVO {
 	public void setBirthday(String birthday) {
 		if(birthday != null && birthday.length() > 0){
 			try{
-				this.birthday = Date.valueOf(birthday.substring(0, 10));
+				if(birthday.length() > 10){
+					birthday = birthday.substring(0, 10);
+				}
+				this.birthday = Date.valueOf(birthday);
 			}
 			catch(IllegalArgumentException lae){}	
 		}	

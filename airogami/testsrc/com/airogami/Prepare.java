@@ -155,7 +155,7 @@ public class Prepare {
         		plane.setBirthdayLower(ageLower);
         		plane.setBirthdayUpper(ageUpper);
         		plane.setLanguage("English");
-        		long ownerId = i + 1;
+        		int ownerId = i + 1;
         		Message message = new Message();
         		message.setContent("hello" + i);
                 message.setType(MessageConstants.MessageTypeText);
@@ -192,7 +192,7 @@ public class Prepare {
     			Message message = new Message();
         		message.setContent("reply from" + (i + 1));
         		message.setType((short) 0);
-        		long ownerId = i + 1;
+        		int ownerId = i + 1;
         		long planeId = plane.getPlaneId();
         		 ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
     		}
@@ -209,7 +209,7 @@ public class Prepare {
     			//chain.setProvince("shanghai");
     			//chain.setCountry("China");
     			//chain.setMessageCount((short) 0);
-    			long ownerId = i + 1;
+    			int ownerId = i + 1;
     			ChainMessage chainMessage = new ChainMessage();
     			chainMessage.setContent("hello! " + j);
     			chainMessage.setType(MessageConstants.MessageTypeText);
@@ -240,7 +240,7 @@ public class Prepare {
     			Chain chain = iter.next();
     			String content = "hello! from" + (i + 1);
     			int type = 0;
-    			long ownerId = i + 1;
+    			int ownerId = i + 1;
     			long chainId = chain.getChainId();
     			ManagerUtils.chainManager.replyChain(ownerId, chainId, content, type);
     		}

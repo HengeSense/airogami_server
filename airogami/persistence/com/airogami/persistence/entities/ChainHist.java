@@ -75,4 +75,6 @@ public class ChainHist implements java.io.Serializable {
 		this.account = account;
 	}
 
+	/**/
+
 }

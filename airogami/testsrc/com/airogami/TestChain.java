@@ -42,7 +42,7 @@ public class TestChain {
 		//chain.setProvince("shanghai");
 		//chain.setCountry("China");
 
-		long ownerId = 4L;
+		int ownerId = 4;
 		ChainMessage chainMessage = new ChainMessage();
 		chainMessage.setContent("hello!");
 		chainMessage.setType((short) 0);
@@ -62,7 +62,7 @@ public class TestChain {
 	public void testReplyChain() {
 		String content = "hello!";
 		int type = 0;
-		long ownerId = 1;
+		int ownerId = 1;
 		long chainId = 1;
 		try {
 			Map<String, Object> result = ManagerUtils.chainManager.replyChain(ownerId, chainId, content, type);
@@ -76,7 +76,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testThrowChain() {
-		long accountId = 2;
+		int accountId = 2;
 		long chainId = 1;
 		try {
 			System.out.println(ManagerUtils.chainManager.throwChain(chainId, accountId));
@@ -89,7 +89,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testDeleteChain() {
-		long accountId = 2;
+		int accountId = 2;
 		long chainId = 3;
 		try {
 			ManagerUtils.chainManager.deleteChain(chainId, accountId);
@@ -102,7 +102,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testObtainChains() {
-		long accountId = 5;
+		int accountId = 5;
 		int limit = 4;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
@@ -127,7 +127,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testGetNewChains() {
-		long accountId = 1;
+		int accountId = 1;
 		int limit = 4;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
@@ -154,7 +154,7 @@ public class TestChain {
 	//@Ignore
 	@Test
 	public void testGetChains() {
-		long accountId = 1;
+		int accountId = 1;
 		List<Long> chainIds = Arrays.asList(1L, 2L);
 		try {
 			List<Chain> chains = ManagerUtils.chainManager.getChains(
@@ -169,7 +169,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testGetChainIds() {
-		long accountId = 2;
+		int accountId = 2;
 		int limit = 4;
 		Long start = 1L;
 		Long end = 2L;
@@ -193,7 +193,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testObtainChainIds() {
-		long accountId = 2;
+		int accountId = 2;
 		int limit = 1;
 		int startId = 5;
 		try {
@@ -215,7 +215,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testReceiveChains() {
-		long accountId = 5;
+		int accountId = 5;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
 		int limit = 4;
@@ -240,7 +240,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testReceiveChainIds() {
-		long accountId = 2;
+		int accountId = 2;
 		int limit = 4;
 		int startId = 3;
 		try {
@@ -262,7 +262,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testObtainChainMessages() {
-		long accountId = 2;
+		int accountId = 2;
 		long chainId = 8;
 		String last = "2013-08-15 18:48:44";
 		int limit = 2;
@@ -278,7 +278,7 @@ public class TestChain {
 	@Ignore
 	@Test
 	public void testViewedChainMessage() {
-		long accountId = 5;
+		int accountId = 5;
 		long chainId = 3;
 		String last = "2013-08-15 18:48:44";
 		boolean result;

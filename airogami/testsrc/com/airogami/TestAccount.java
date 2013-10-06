@@ -125,7 +125,7 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testChangePassword() {
-		long accountId = 1L;
+		int accountId = 1;
 		String oldPassword = "12345678";
 		String newPassword = "12345678";
 		try {
@@ -139,7 +139,7 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testChangeScreenName() {
-		long accountId = 0L;
+		int accountId = 0;
 		String screenName = "screenName";
 		try {
 			boolean succeed = ManagerUtils.accountManager.changeScreenName(accountId, screenName);
@@ -153,7 +153,7 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testObtainAccount() {
-		long accountId = 0L;
+		int accountId = 0;
 		Integer updateCount = null;
 		try {
 			Profile profile = ManagerUtils.accountManager.obtainProfile(accountId, updateCount);
@@ -238,7 +238,7 @@ public class TestAccount {
         		plane.setLongitude(0.0);
         		plane.setCategory(new Category());
         		plane.getCategory().setCategoryId((short)1);
-        		long ownerId = i + 1;
+        		int ownerId = i + 1;
         		Message message = new Message();
         		message.setContent("hello" + i);
                 message.setType((short) 0);
@@ -257,7 +257,7 @@ public class TestAccount {
     			//chain.setProvince("shanghai");
     			chain.setCountry("Japan");
     			//chain.setMessageCount((short) 0);
-    			long ownerId = i + 1;
+    			int ownerId = i + 1;
     			ChainMessage chainMessage = new ChainMessage();
     			chainMessage.setContent("hello! " + j);
     			chainMessage.setType((short) 0);
@@ -270,8 +270,8 @@ public class TestAccount {
 	@Ignore
 	@Test
 	public void testReportAccount() {
-		long reportId = 10;
-		long reportedId = 2;
+		int reportId = 10;
+		int reportedId = 2;
 		String reason = "Good 1 words";
 		try {			
 			Report report = ManagerUtils.accountManager.reportAccount(reportId, reportedId, reason);

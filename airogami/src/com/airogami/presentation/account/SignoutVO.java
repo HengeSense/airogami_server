@@ -4,14 +4,14 @@ import com.airogami.presentation.logic.ClientAgent;
 
 public class SignoutVO {
 
-	private long accountId;
+	private int accountId;
 	private int signinCount;
 	private ClientAgent clientAgent = new ClientAgent();
 	
-	public long getAccountId() {
+	public int getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(long accountId) {
+	public void setAccountId(int accountId) {
 		this.accountId = accountId;
 	}
 	public ClientAgent getClientAgent() {

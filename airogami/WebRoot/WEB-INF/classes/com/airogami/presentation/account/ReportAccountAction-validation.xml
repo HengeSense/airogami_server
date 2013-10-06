@@ -6,7 +6,7 @@
 		<field-validator type="required">
 			<message key="error.account.reportaccount.reportedId.required">Please input a reportedId</message>
 		</field-validator>
-		<field-validator type="long">
+		<field-validator type="int">
 			<param name="min"><![CDATA[1]]></param>
 			<message key="error.account.reportaccount.reportedId.invalid">The reportedId should be greater than ${min}</message>
 		</field-validator>

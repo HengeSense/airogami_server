@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Profile;
@@ -16,8 +17,8 @@ public class ProfileDao extends ProfileDAO {
 	public Profile obtainProfile(long accountId, Integer updateCount) {
 		EntityManagerHelper.log("obtainProfileing", Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					obtainProfileJPQL);
+			TypedQuery<Profile> query = EntityManagerHelper.getEntityManager().createQuery(
+					obtainProfileJPQL, Profile.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, updateCount);
 			List<Profile> result = query.getResultList();
@@ -39,8 +40,8 @@ public class ProfileDao extends ProfileDAO {
 	public String getFullName(long accountId) {
 		EntityManagerHelper.log("getFullNameing", Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					getFullNameJPQL);
+			TypedQuery<String> query = EntityManagerHelper.getEntityManager().createQuery(
+					getFullNameJPQL, String.class);
 			query.setParameter(1, accountId);
 			List<String> result = query.getResultList();
 			String fullName = null;

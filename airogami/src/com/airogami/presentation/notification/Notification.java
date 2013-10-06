@@ -1,5 +1,7 @@
 package com.airogami.presentation.notification;
 
+import com.airogami.common.NotifiedInfo;
+
 import javapns.notification.PushNotificationPayload;
 
 public abstract class Notification {
@@ -11,14 +13,15 @@ public abstract class Notification {
 	public static final int TypeLikedPlaneMessage = 5;
 	
 	protected static final String LocKeys[] = {"", "LKRP", "LKRC", "LKRPM", "LKRCM", "LKLPM"};
-	
-	protected static final int MessageLength = 50;
 
 	protected int type;
-	protected Object accountIds;
+	protected NotifiedInfo notifiedInfos;
 	
-	public Notification(Object accountIds){
-		this.accountIds = accountIds;
+	public Notification(){
+	}
+	
+	public Notification(NotifiedInfo notifiedInfos){
+		this.notifiedInfos = notifiedInfos;
 	}
 	
 	public abstract PushNotificationPayload buildIOSPayload();
@@ -31,12 +34,12 @@ public abstract class Notification {
 		this.type = type;
 	}
 
-	public Object getAccountIds() {
-		return accountIds;
+	public NotifiedInfo getNotifiedInfos() {
+		return notifiedInfos;
 	}
 
-	public void setAccountIds(Object accountIds) {
-		this.accountIds = accountIds;
+	public void setNotifiedInfos(NotifiedInfo notifiedInfos) {
+		this.notifiedInfos = notifiedInfos;
 	}
 	
 }

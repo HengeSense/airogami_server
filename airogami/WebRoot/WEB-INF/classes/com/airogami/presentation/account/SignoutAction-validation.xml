@@ -3,7 +3,7 @@
 <validators>
 
     <field name="accountId">
-		<field-validator type="long">
+		<field-validator type="int">
 		    <param name="min"><![CDATA[1]]> </param>
 			<message key="error.account.signout.accountId.required">Please input a valid accountId</message>
 		</field-validator>

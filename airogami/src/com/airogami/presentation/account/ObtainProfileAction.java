@@ -19,7 +19,7 @@ public class ObtainProfileAction extends AirogamiActionSupport{
 
 	private static final long serialVersionUID = 1L;
 	private Integer updateCount;
-	private Long accountId;
+	private Integer accountId;
 	
     public String execute() throws Exception{
     	boolean succeed = false;
@@ -46,11 +46,11 @@ public class ObtainProfileAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 	
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 

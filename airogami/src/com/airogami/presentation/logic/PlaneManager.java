@@ -8,7 +8,10 @@ import java.util.TreeMap;
 
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.MessageNotifiedInfo;
+import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.AccountConstants;
+import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Category;
@@ -50,14 +53,14 @@ public class PlaneManager {
 	/*
 	 * @param plane:(Plane) must be not null, have plane.message, plane.category
 	 * 
-	 * @param ownerId:(long) must exist
+	 * @param ownerId:(int) must exist
 	 * 
 	 * @return plane, plane.messages, plane.category if successful or error if
 	 * ownerId not exist
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> sendPlane(Plane plane, long ownerId)
+	public Map<String, Object> sendPlane(Plane plane, int ownerId)
 			throws AirogamiException {
 		Category category = null;
 		if (plane == null || plane.getMessages().size() == 0
@@ -81,6 +84,7 @@ public class PlaneManager {
 			plane.setSex((short) AccountConstants.SexType_Unknown);
 		}
 		message.setPlane(plane);
+		message.setStatus(MessageConstants.MessageStatusRead);
 		try {
 			plane = ServiceUtils.planeService.sendPlane(plane, ownerId);
 		} catch (ApplicationException re) {
@@ -103,7 +107,7 @@ public class PlaneManager {
 	/*
 	 * @param planeId:(long) must exist
 	 * 
-	 * @param accountId:(long) must be plane.accoutByOwnerId or
+	 * @param accountId:(int) must be plane.accoutByOwnerId or
 	 * plane.accountByTargetId
 	 * 
 	 * @param message:(Message) must be not null, has type and content
@@ -112,7 +116,7 @@ public class PlaneManager {
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public Map<String, Object> replyPlane(long planeId, long accountId,
+	public Map<String, Object> replyPlane(long planeId, int accountId,
 			Message message) throws AirogamiException {
 		Map<String, Object> result = null;
 		if (message == null || message.getType() == null
@@ -130,11 +134,9 @@ public class PlaneManager {
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Long notifiedAccountId = (Long) result.remove("accountId");
-		if (notifiedAccountId != null) {
-			String name = (String) result.remove("name");
-			Notification notification = new RPMNotification(notifiedAccountId,
-					name, message.getContent());
+		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
+		if (notifiedInfo != null) {
+			Notification notification = new RPMNotification(notifiedInfo);
 			ManagerUtils.notificationManager.addNotification(notification);
 		}
 
@@ -144,13 +146,13 @@ public class PlaneManager {
 	/*
 	 * pickup planes or chains
 	 * 
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @return planes, chains if successful
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> pickup(long accountId) throws AirogamiException {
+	public Map<String, Object> pickup(int accountId) throws AirogamiException {
 		List<Plane> planes = Collections.emptyList();
 		List<Chain> chains = Collections.emptyList();
 		int[] counts = ManagerUtils.pickupCount();
@@ -177,13 +179,13 @@ public class PlaneManager {
 	/*
 	 * @param planeId:(long) must be not null
 	 * 
-	 * @param accountId:(long) should = plane.accountByTarget.accountId
+	 * @param accountId:(int) should = plane.accountByTarget.accountId
 	 * 
 	 * @return canMatchedAgain if successful otherwise error or plane
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public Map<String, Object> throwPlane(long planeId, long accountId)
+	public Map<String, Object> throwPlane(long planeId, int accountId)
 			throws AirogamiException {
 		Map<String, Object> result = null;
 		try {
@@ -203,7 +205,7 @@ public class PlaneManager {
 	/*
 	 * @param planeId:(long) must be not null
 	 * 
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param byOwner:(boolean)
 	 * 
@@ -211,7 +213,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> likePlane(long planeId, long accountId,
+	public Map<String, Object> likePlane(long planeId, int accountId,
 			boolean byOwner) throws AirogamiException {
 		Map<String, Object> result = null;
 		try {
@@ -222,11 +224,9 @@ public class PlaneManager {
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Long notifiedAccountId = (Long) result.remove("accountId");
-		if (notifiedAccountId != null) {
-			String name = (String) result.remove("name");
-			Notification notification = new LPMNotification(notifiedAccountId,
-					name);
+		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
+		if (notifiedInfo != null) {
+			Notification notification = new LPMNotification(notifiedInfo);
 			ManagerUtils.notificationManager.addNotification(notification);
 		}
 		return result;
@@ -235,7 +235,7 @@ public class PlaneManager {
 	/*
 	 * @param planeId:(long)
 	 * 
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param byOwner:(boolean)
 	 * 
@@ -243,7 +243,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> deletePlane(long planeId, long accountId,
+	public Map<String, Object> deletePlane(long planeId, int accountId,
 			boolean byOwner) throws AirogamiException {
 		try {
 			return ServiceUtils.planeService.deletePlane(planeId, accountId,
@@ -256,7 +256,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -270,7 +270,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> getNewPlanes(long accountId, Long start,
+	public Map<String, Object> getNewPlanes(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -285,7 +285,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param planeIds:(List<Long>)
 	 * 
@@ -293,7 +293,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public List<Plane> getPlanes(long accountId, List<Long> planeIds)
+	public List<Plane> getPlanes(int accountId, List<Long> planeIds)
 			throws AirogamiException {
 		if (planeIds == null) {
 			throw new IllegalArgumentException(
@@ -309,7 +309,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -323,7 +323,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> getPlaneIds(long accountId, Long start,
+	public Map<String, Object> getPlaneIds(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -338,7 +338,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -353,7 +353,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> obtainPlanes(long accountId, Long start,
+	public Map<String, Object> obtainPlanes(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -368,7 +368,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -383,7 +383,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> obtainPlaneIds(long accountId, Long start,
+	public Map<String, Object> obtainPlaneIds(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -400,7 +400,7 @@ public class PlaneManager {
 	/*
 	 * obtain all replied and undeleted planeIds for synchronization
 	 * 
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param startId:(long) (exclusive)
 	 * 
@@ -411,7 +411,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> obtainPlaneIds(long accountId, long startId,
+	public Map<String, Object> obtainPlaneIds(int accountId, long startId,
 			int limit) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -426,7 +426,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -441,7 +441,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> receivePlanes(long accountId, Long start,
+	public Map<String, Object> receivePlanes(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -456,7 +456,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param start:(Long) (exclusive)
 	 * 
@@ -471,7 +471,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> receivePlaneIds(long accountId, Long start,
+	public Map<String, Object> receivePlaneIds(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -488,7 +488,7 @@ public class PlaneManager {
 	/*
 	 * get all received planeIds for synchronization
 	 * 
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param startId:(long) (exclusive)
 	 * 
@@ -499,7 +499,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> receivePlaneIds(long accountId, long startId,
+	public Map<String, Object> receivePlaneIds(int accountId, long startId,
 			int limit) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -514,7 +514,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param planeId:(long)
 	 * 
@@ -526,7 +526,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> obtainMessages(long accountId, long planeId,
+	public Map<String, Object> obtainMessages(int accountId, long planeId,
 			Long startId, int limit) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -541,7 +541,7 @@ public class PlaneManager {
 	}
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * 
 	 * @param planeId:(long)
 	 * 
@@ -553,7 +553,7 @@ public class PlaneManager {
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public boolean viewedMessages(long accountId, long planeId, long lastMsgId,
+	public boolean viewedMessages(int accountId, long planeId, long lastMsgId,
 			boolean byOwner) throws AirogamiException {
 		try {
 			return ServiceUtils.planeService.viewedMessages(accountId, planeId,

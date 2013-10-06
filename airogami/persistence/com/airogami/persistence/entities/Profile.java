@@ -25,7 +25,7 @@ public class Profile implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long accountId;
+	private Integer accountId;
 
 	private Account account;
 
@@ -66,8 +66,8 @@ public class Profile implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Profile(Long accountId, Account account, String fullName, Short sex,
-			Double longitude, Double latitude, Short status,
+	public Profile(Integer accountId, Account account, String fullName,
+			Short sex, Double longitude, Double latitude, Short status,
 			Timestamp createdTime, String city, String province,
 			String country, Date birthday, Integer updateCount,
 			Integer likesCount) {
@@ -88,7 +88,7 @@ public class Profile implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Profile(Long accountId, Account account, String fullName,
+	public Profile(Integer accountId, Account account, String fullName,
 			String screenName, Short sex, Double longitude, Double latitude,
 			Short status, Timestamp createdTime, String city, String province,
 			String country, Date birthday, Integer updateCount,
@@ -115,11 +115,11 @@ public class Profile implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -277,5 +277,7 @@ public class Profile implements java.io.Serializable {
 		setCreatedTime(timestamp);
 
 	}
+
+	/**/
 
 }

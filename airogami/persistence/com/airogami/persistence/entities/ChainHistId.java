@@ -15,7 +15,7 @@ public class ChainHistId implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long accountId;
+	private Integer accountId;
 
 	private Long chainId;
 
@@ -26,7 +26,7 @@ public class ChainHistId implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ChainHistId(Long accountId, Long chainId) {
+	public ChainHistId(Integer accountId, Long chainId) {
 		this.accountId = accountId;
 		this.chainId = chainId;
 	}
@@ -34,11 +34,11 @@ public class ChainHistId implements java.io.Serializable {
 	// Property accessors
 
 	@Column(name = "ACCOUNT_ID", nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -77,5 +77,7 @@ public class ChainHistId implements java.io.Serializable {
 				+ (getChainId() == null ? 0 : this.getChainId().hashCode());
 		return result;
 	}
+
+	/**/
 
 }

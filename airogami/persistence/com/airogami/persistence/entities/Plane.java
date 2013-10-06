@@ -85,6 +85,8 @@ public class Plane implements java.io.Serializable {
 
 	private Short source = (short) 0;
 
+	private Long lastMsgId = 0L;
+
 	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
 
 	private List<Message> messages = new ArrayList<Message>(0);
@@ -129,7 +131,7 @@ public class Plane implements java.io.Serializable {
 			String province, String country, Short sex, Short matchCount,
 			Short maxMatchCount, Short likedByOwner, Short likedByTarget,
 			Short deletedByOwner, Short deletedByTarget, Date birthdayLower,
-			Date birthdayUpper, String language, Short source,
+			Date birthdayUpper, String language, Short source, Long lastMsgId,
 			List<PlaneHist> planeHists, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
@@ -157,6 +159,7 @@ public class Plane implements java.io.Serializable {
 		this.birthdayUpper = birthdayUpper;
 		this.language = language;
 		this.source = source;
+		this.lastMsgId = lastMsgId;
 		this.planeHists = planeHists;
 		this.messages = messages;
 	}
@@ -414,6 +417,15 @@ public class Plane implements java.io.Serializable {
 		this.source = source;
 	}
 
+	@Column(name = "LAST_MSG_ID", updatable = false)
+	public Long getLastMsgId() {
+		return this.lastMsgId;
+	}
+
+	public void setLastMsgId(Long lastMsgId) {
+		this.lastMsgId = lastMsgId;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")
 	public List<PlaneHist> getPlaneHists() {
 		return this.planeHists;
@@ -442,10 +454,9 @@ public class Plane implements java.io.Serializable {
 
 	}
 
-	@PreUpdate
-	protected void onPreUpdate() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		setUpdatedTime(timestamp);
-	}
+	/*
+	 * @PreUpdate protected void onPreUpdate(){ Timestamp timestamp = new
+	 * Timestamp(System.currentTimeMillis()); setUpdatedTime(timestamp); }
+	 */
 
 }

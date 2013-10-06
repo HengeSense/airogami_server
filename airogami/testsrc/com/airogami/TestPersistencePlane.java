@@ -85,7 +85,7 @@ public class TestPersistencePlane {
         plane.setDeletedByTarget((short)0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
-		long ownerId = 1L;
+		int ownerId = 1;
 		Message message = new Message();
 		message.setContent("hello!");
 		message.setType((short) 0);
@@ -106,7 +106,7 @@ public class TestPersistencePlane {
 		Message message = new Message();
 		message.setContent("hello!");
 		message.setType((short) 0);
-		long ownerId = 4;
+		int ownerId = 4;
 		long planeId = 2;
 		try {
 			Map<String, Object> result = ServiceUtils.planeService.replyPlane(planeId, ownerId, message);
@@ -120,7 +120,7 @@ public class TestPersistencePlane {
 	@Ignore
 	@Test
 	public void testThrowPlane() {
-		long accountId = 4;
+		int accountId = 4;
 		long planeId = 2;
 		try {
 			ServiceUtils.planeService.throwPlane(planeId, accountId);
@@ -133,7 +133,7 @@ public class TestPersistencePlane {
 	@Ignore
 	@Test
 	public void testDeletePlane() {
-		long accountId = 3;
+		int accountId = 3;
 		long planeId = 2;
 		boolean byOwner = false;
 		try {
@@ -147,7 +147,7 @@ public class TestPersistencePlane {
 	@Ignore
 	@Test
 	public void testObtainPlanes() {
-		long accountId = 4;
+		int accountId = 4;
 		int limit = 2;
 		boolean forward = true;
 		Long start = Long.MIN_VALUE;
@@ -164,7 +164,7 @@ public class TestPersistencePlane {
 	@Ignore
 	@Test
 	public void testPickupPlanes() {
-		long accountId = 5;
+		int accountId = 5;
 		try {
 			List<Plane> planes = ServiceUtils.planeService.pickupPlane(accountId, 2);
 			ObjectUtils.printObject(planes);
@@ -177,7 +177,7 @@ public class TestPersistencePlane {
 	@Ignore
 	@Test
 	public void testViewedMessage() {
-		long accountId = 4;
+		int accountId = 4;
 		long planeId = 4;
 		long lastMsgId = 0L;
 		boolean byOwner = false;

@@ -4,13 +4,13 @@ import com.airogami.persistence.entities.AccountStat;
 
 public class User {
 
-	private long accountId;
+	private int accountId;
 	private int messagesCount;
 	//private HttpSession session;
 	private ClientAgent clientAgent;
 	private long signinCount;//for change password and signin other place
 	
-	public User(long accountId, ClientAgent clientAgent, AccountStat accountStat){
+	public User(int accountId, ClientAgent clientAgent, AccountStat accountStat){
 		this.accountId = accountId;
 		this.clientAgent = clientAgent;
 		this.signinCount = accountStat.getSigninCount();
@@ -19,10 +19,10 @@ public class User {
 	public User(){
 		clientAgent = new ClientAgent();
 	}
-	public long getAccountId() {
+	public int getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(long accountId) {
+	public void setAccountId(int accountId) {
 		this.accountId = accountId;
 	}
 	public ClientAgent getClientAgent() {

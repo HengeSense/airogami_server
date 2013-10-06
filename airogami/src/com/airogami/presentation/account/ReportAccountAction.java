@@ -19,7 +19,7 @@ import com.opensymphony.xwork2.ModelDriven;
 public class ReportAccountAction extends AirogamiActionSupport{
 
 	private static final long serialVersionUID = 1L;
-	private Long reportedId;
+	private Integer reportedId;
 	private String reason;
 	
     public String execute() throws Exception{
@@ -46,11 +46,11 @@ public class ReportAccountAction extends AirogamiActionSupport{
 		return SUCCESS;
 	}
 
-	public Long getReportedId() {
+	public Integer getReportedId() {
 		return reportedId;
 	}
 
-	public void setReportedId(Long accountId) {
+	public void setReportedId(Integer accountId) {
 		this.reportedId = accountId;
 	}
 

@@ -6,16 +6,13 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
-import com.airogami.presentation.logic.ClientAgent;
+import com.airogami.common.NotifiedInfo;
 
 //like plane message
 public class LPMNotification extends Notification{
 	
-	private String name;
-	
-	public LPMNotification(Object accountIds, String name){
-		super(accountIds);
-		this.name = name;
+	public LPMNotification(NotifiedInfo notifiedInfos){
+		super(notifiedInfos);
 		type = TypeLikedPlaneMessage;
 	}
 	
@@ -24,7 +21,7 @@ public class LPMNotification extends Notification{
 		try {
 			payload.addCustomDictionary("type", type);
 			payload.addCustomAlertLocKey(LocKeys[type]);
-			payload.addCustomAlertLocArgs(Arrays.asList(name));
+			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName()));
 			payload.addSound("default");
 		} catch (JSONException e) {
 			e.printStackTrace();

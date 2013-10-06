@@ -43,7 +43,7 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Short source = (short) 0;
 
-	private Short readCount = 0;
+	private Timestamp lastTime;
 
 	private static final Timestamp baseTimestamp = Timestamp
 			.valueOf("2013-01-01 00:00:00.0");
@@ -57,7 +57,7 @@ public class ChainMessage implements java.io.Serializable {
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
 			Timestamp createdTime, Short status, Timestamp lastViewedTime,
-			Short source, Short readCount) {
+			Short source) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
@@ -65,13 +65,12 @@ public class ChainMessage implements java.io.Serializable {
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
 		this.source = source;
-		this.readCount = readCount;
 	}
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
 			String content, Short type, Timestamp createdTime, Short status,
-			Timestamp lastViewedTime, Short source, Short readCount) {
+			Timestamp lastViewedTime, Short source, Timestamp lastTime) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
@@ -81,7 +80,7 @@ public class ChainMessage implements java.io.Serializable {
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
 		this.source = source;
-		this.readCount = readCount;
+		this.lastTime = lastTime;
 	}
 
 	// Property accessors
@@ -173,13 +172,14 @@ public class ChainMessage implements java.io.Serializable {
 		this.source = source;
 	}
 
-	@Column(name = "READ_COUNT", nullable = false, insertable = false, updatable = false)
-	public Short getReadCount() {
-		return this.readCount;
+	@Column(name = "LAST_TIME", length = 19)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Timestamp getLastTime() {
+		return this.lastTime;
 	}
 
-	public void setReadCount(Short readCount) {
-		this.readCount = readCount;
+	public void setLastTime(Timestamp lastTime) {
+		this.lastTime = lastTime;
 	}
 
 	@PrePersist
@@ -190,6 +190,10 @@ public class ChainMessage implements java.io.Serializable {
 
 		setLastViewedTime(baseTimestamp);
 
+		setLastTime(timestamp);
+
 	}
+
+	/**/
 
 }

@@ -136,7 +136,7 @@ public class ProfileDAO {
 		}
 	}
 
-	public Profile findById(Long accountId) {
+	public Profile findById(Integer accountId) {
 		EntityManagerHelper.log("finding Profile instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -150,7 +150,7 @@ public class ProfileDAO {
 		}
 	}
 
-	public Profile getReference(Long accountId) {
+	public Profile getReference(Integer accountId) {
 		EntityManagerHelper.log("getReferencing Profile instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -229,7 +229,7 @@ public class ProfileDAO {
 
 	private static final String removeByAccountIdJPQL = "delete from Profile a where a.accountId in (?1)";
 
-	public int removeByAccountId(Long accountId) {
+	public int removeByAccountId(Integer accountId) {
 		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
 		int ret = 0;
 		try {
@@ -248,7 +248,7 @@ public class ProfileDAO {
 
 	private static final String increaseUpdateCountJPQL = "update Profile a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseUpdateCount(java.lang.Long accountId, int count) {
+	public boolean increaseUpdateCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log("increaseLikesCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {
@@ -269,7 +269,7 @@ public class ProfileDAO {
 
 	private static final String increaseLikesCountJPQL = "update Profile a set a.likesCount = a.likesCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseLikesCount(java.lang.Long accountId, int count) {
+	public boolean increaseLikesCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log("increaseLikesCount with accountId:"
 				+ accountId, Level.INFO, null);
 		try {

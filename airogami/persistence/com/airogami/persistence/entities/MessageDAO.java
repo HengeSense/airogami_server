@@ -237,14 +237,14 @@ public class MessageDAO {
 
 	private static final String accountJPQL = "select a.account.accountId from Message a where a.messageId = :messageId";
 
-	public java.lang.Long getAccount(java.lang.Long messageId) {
+	public java.lang.Integer getAccount(java.lang.Long messageId) {
 		EntityManagerHelper.log("getPlaneId with messageId" + messageId,
 				Level.INFO, null);
-		java.lang.Long accountId;
+		java.lang.Integer accountId;
 		try {
 			Query query = getEntityManager().createQuery(accountJPQL);
 			query.setParameter("messageId", messageId);
-			accountId = (java.lang.Long) query.getSingleResult();
+			accountId = (java.lang.Integer) query.getSingleResult();
 			EntityManagerHelper.log("getPlaneId successful", Level.INFO, null);
 			return accountId;
 		} catch (RuntimeException re) {

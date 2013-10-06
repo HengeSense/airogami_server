@@ -38,7 +38,7 @@ public class DataManager {
 		}	
 	}
 	
-	public String accountIcon(long accoutId) {
+	public String accountIcon(int accoutId) {
 		Date date = new Date(System.currentTimeMillis() + expiration);
 		String str = sdf.format(date);
 		JSONObject json = new JSONObject();

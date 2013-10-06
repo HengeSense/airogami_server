@@ -13,6 +13,7 @@ import org.apache.struts2.ServletActionContext;
 import org.json.JSONException;
 
 import com.airogami.application.Airogami;
+import com.airogami.common.NotifiedInfo;
 import com.airogami.presentation.notification.AppleNotification;
 import com.airogami.presentation.notification.Notification;
 
@@ -44,12 +45,12 @@ public class NotificationManager extends Thread{
 			try{
 				Notification notification = notificationQueque.take();
 				if (notification.getType() == Notification.TypeReceivedChainMessage) {
-					for (Long accountId : (List<Long>) notification.getAccountIds()) {
-						this.sendNotification(accountId, notification);
+					for (NotifiedInfo notifiedInfo : notification.getNotifiedInfos().getNotifiedInfos()) {
+						this.sendNotification(notifiedInfo.getAccountId(), notifiedInfo.getMessagesCount(), notification);
 					}
 				} else {
-					Long accountId = (Long) notification.getAccountIds();
-					this.sendNotification(accountId, notification);
+					NotifiedInfo notifiedInfo = notification.getNotifiedInfos();
+					this.sendNotification(notifiedInfo.getAccountId(), notifiedInfo.getMessagesCount(), notification);
 				}
 			}
 			catch(Throwable t){
@@ -58,7 +59,7 @@ public class NotificationManager extends Thread{
 		}		
 	}
 	
-	private void sendNotification(Long accountId, Notification notification){
+	private void sendNotification(Integer accountId, Long messagesCount, Notification notification){
 		User user = ManagerUtils.userManager.getUser(accountId);
 		ClientAgent clientAgent;
 		String token;
@@ -66,7 +67,7 @@ public class NotificationManager extends Thread{
 				&& (token = clientAgent.getDeviceToken()) != null){
 			if(clientAgent.getDeviceType() == ClientAgent.DeviceTypeIOS){
 				PushNotificationPayload payload = (PushNotificationPayload)notification.buildIOSPayload();
-				appleNotification.sendNotification(accountId, token, user.getMessagesCount(), payload);
+				appleNotification.sendNotification(accountId, token, messagesCount, payload);
 			}
 		}
 	}

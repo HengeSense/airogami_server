@@ -18,11 +18,11 @@
 #end
 
 
-#if($hasUpdatedTime)
+/*#if($hasUpdatedTime)
 	@$pojo.importType("javax.persistence.PreUpdate")
 	protected void onPreUpdate(){
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		setUpdatedTime(timestamp);
 	}
-#end
+#end*/
 

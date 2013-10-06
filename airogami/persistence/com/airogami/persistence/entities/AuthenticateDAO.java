@@ -127,7 +127,7 @@ public class AuthenticateDAO {
 		}
 	}
 
-	public Authenticate findById(Long accountId) {
+	public Authenticate findById(Integer accountId) {
 		EntityManagerHelper.log("finding Authenticate instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -141,7 +141,7 @@ public class AuthenticateDAO {
 		}
 	}
 
-	public Authenticate getReference(Long accountId) {
+	public Authenticate getReference(Integer accountId) {
 		EntityManagerHelper.log(
 				"getReferencing Authenticate instance with id: " + accountId,
 				Level.INFO, null);
@@ -225,7 +225,7 @@ public class AuthenticateDAO {
 
 	private static final String removeByAccountIdJPQL = "delete from Authenticate a where a.accountId in (?1)";
 
-	public int removeByAccountId(Long accountId) {
+	public int removeByAccountId(Integer accountId) {
 		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
 		int ret = 0;
 		try {

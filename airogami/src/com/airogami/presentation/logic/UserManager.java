@@ -13,7 +13,7 @@ public class UserManager {// implements HttpSessionListener
 	private final int incCapacity = 1;
 	private User[] users = new User[initCapacity];
 
-	public User updateUser(long accountId, ClientAgent clientAgent,
+	public User updateUser(int accountId, ClientAgent clientAgent,
 			AccountStat accountStat) {
 		int index = (int) accountId;
 		if (index >= users.length) {
@@ -39,18 +39,18 @@ public class UserManager {// implements HttpSessionListener
 	}
 	
 	//can set null once set value but user.clientAgent can be null
-	public void removeUser(long accountId){
+	public void removeUser(int accountId){
 		if(accountId < users.length && users[(int)accountId] != null){
-			users[(int)accountId].setClientAgent(null);
+			users[accountId].setClientAgent(null);
 		}
 	}
 
-	public User getUser(long accountId) {
+	public User getUser(int accountId) {
 		User[] uu = users;
 		if (accountId >= uu.length) {
 			return null;
 		} else {
-			return uu[(int) accountId];
+			return uu[accountId];
 		}
 	}
 

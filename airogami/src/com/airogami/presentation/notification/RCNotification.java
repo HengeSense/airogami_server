@@ -4,14 +4,21 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
+import com.airogami.common.NotifiedInfo;
+import com.airogami.common.ReceiveNotifiedInfo;
 import com.airogami.presentation.logic.ClientAgent;
 
 //received chain
 public class RCNotification extends Notification{
 	
-	public RCNotification(Object accountIds){
-		super(accountIds);
+	public RCNotification(NotifiedInfo notifiedInfos){
+		super(notifiedInfos);
 		type = TypeReceivedChain;
+	}
+	
+	public RCNotification(Integer accountId){
+		this.notifiedInfos = new ReceiveNotifiedInfo(accountId); 
+		type = TypeReceivedPlane;
 	}
 	
 	public PushNotificationPayload buildIOSPayload(){

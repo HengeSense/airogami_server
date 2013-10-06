@@ -26,7 +26,7 @@ public class Account implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long accountId;
+	private Integer accountId;
 
 	private Authenticate authenticate;
 
@@ -61,7 +61,7 @@ public class Account implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Account(Long accountId, Authenticate authenticate,
+	public Account(Integer accountId, Authenticate authenticate,
 			Integer updateCount) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
@@ -69,7 +69,7 @@ public class Account implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Account(Long accountId, Authenticate authenticate,
+	public Account(Integer accountId, Authenticate authenticate,
 			Integer updateCount, List<Report> reportsForReportedId,
 			List<PlaneHist> planeHists, List<Plane> planesForOwnerId,
 			List<Message> messages, Profile profile,
@@ -95,11 +95,11 @@ public class Account implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -221,5 +221,7 @@ public class Account implements java.io.Serializable {
 	public void setChainMessages(List<ChainMessage> chainMessages) {
 		this.chainMessages = chainMessages;
 	}
+
+	/**/
 
 }

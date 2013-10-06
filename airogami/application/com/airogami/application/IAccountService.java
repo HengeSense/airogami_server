@@ -31,7 +31,7 @@ public interface IAccountService {
 	 * @return accountId if successful or null if not matched
 	 * @throws ApplicationException if failed 
 	 */
-	public Long signout(String[]args, int type) throws ApplicationException;
+	public Integer signout(String[]args, int type) throws ApplicationException;
 	
 	/*
 	 * @param properties:((Map<String, Object>) no screenName
@@ -41,29 +41,29 @@ public interface IAccountService {
 	public Profile editProfile(Map<String, Object> properties) throws ApplicationException;
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param oldPassword:(String)
 	 * @param newPassword:(String)
 	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */
-	public boolean changePassword(long accountId, String oldPassword, String newPassword) throws ApplicationException;
+	public boolean changePassword(int accountId, String oldPassword, String newPassword) throws ApplicationException;
 	
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param screenName:(String)
 	 * @return succeed
 	 * @throws ApplicationException if failed 
 	 */
-	public boolean changeScreenName(long accountId, String screenName) throws ApplicationException;
+	public boolean changeScreenName(int accountId, String screenName) throws ApplicationException;
 
 	/*
-	 * @param accountId:(long)
+	 * @param accountId:(int)
 	 * @param updateCount:(Integer)
 	 * @return profile, null if not updated
 	 * @throws ApplicationException if failed 
 	 */
-	public Profile obtainProfile(long accountId, Integer updateCount) throws ApplicationException;
+	public Profile obtainProfile(int accountId, Integer updateCount) throws ApplicationException;
 
 	/*
 	 * @param report:(Report)

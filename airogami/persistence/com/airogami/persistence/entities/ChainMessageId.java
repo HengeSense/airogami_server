@@ -17,7 +17,7 @@ public class ChainMessageId implements java.io.Serializable {
 
 	private Long chainId;
 
-	private Long accountId;
+	private Integer accountId;
 
 	// Constructors
 
@@ -26,7 +26,7 @@ public class ChainMessageId implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ChainMessageId(Long chainId, Long accountId) {
+	public ChainMessageId(Long chainId, Integer accountId) {
 		this.chainId = chainId;
 		this.accountId = accountId;
 	}
@@ -43,11 +43,11 @@ public class ChainMessageId implements java.io.Serializable {
 	}
 
 	@Column(name = "ACCOUNT_ID", nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -78,5 +78,7 @@ public class ChainMessageId implements java.io.Serializable {
 				+ (getAccountId() == null ? 0 : this.getAccountId().hashCode());
 		return result;
 	}
+
+	/**/
 
 }

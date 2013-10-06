@@ -25,7 +25,7 @@ public class Authenticate implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long accountId;
+	private Integer accountId;
 
 	private String email;
 
@@ -60,11 +60,11 @@ public class Authenticate implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -103,5 +103,7 @@ public class Authenticate implements java.io.Serializable {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
+
+	/**/
 
 }

@@ -9,6 +9,8 @@ import java.util.TreeMap;
 import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.ChainMessageNotifiedInfos;
+import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
@@ -32,7 +34,7 @@ public class ChainService implements IChainService {
 	 * targetId, long ownerId)
 	 */
 	@Override
-	public Chain sendChain(Chain chain, long ownerId)
+	public Chain sendChain(Chain chain, int ownerId)
 			throws ApplicationException {
 
 		ApplicationException ae = null;
@@ -75,20 +77,22 @@ public class ChainService implements IChainService {
      * @see com.airogami.application.IChainService#replyChain(long, long, java.lang.String, int)
      */     
 	@Override
-	public Map<String, Object> replyChain(long accountId, long chainId, String content, int type)
+	public Map<String, Object> replyChain(int accountId, long chainId, String content, int type)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		ChainMessage chainMessage = null;
 		String error = null;
-		List<Long> accountIds = null;
+		List<NotifiedInfo> notifiedInfos = null;
 		String name = null;
+		ChainMessageId id = new ChainMessageId(chainId, accountId);
 		try {
 			EntityManagerHelper.beginTransaction();
 			if(DaoUtils.chainMessageDao.replyChainMessage(accountId, chainId, content, type)){
-				DaoUtils.chainDao.increasePassCount(chainId, 1);
-				chainMessage = DaoUtils.chainMessageDao.findById(new ChainMessageId(chainId, accountId));
+				//DaoUtils.chainDao.increasePassCount(chainId, 1);
+				chainMessage = DaoUtils.chainMessageDao.findById(id);
 				DaoUtils.chainDao.updateInc(chainId);
-				accountIds = DaoUtils.chainDao.getChainAccountIds(chainId, accountId);
+				DaoUtils.chainDao.increaseChainMessageCount(chainId, accountId);
+				notifiedInfos = DaoUtils.chainDao.getNotifiedInfos(chainId, accountId);
 				name = DaoUtils.profileDao.getFullName(accountId);
 			}
 			else{
@@ -122,15 +126,15 @@ public class ChainService implements IChainService {
 			}
 		}
 		else{
+			NotifiedInfo notifiedInfo = new ChainMessageNotifiedInfos(notifiedInfos, name, chainMessage.getContent());
 			result.put("chainMessage", chainMessage);
-			result.put("accountIds", accountIds);
-			result.put("name", name);
+			result.put("notifiedInfo", notifiedInfo);
 		}
 		return result;
 	}
 	
 	@Override
-	public List<Chain> pickupChain(long accountId, int count) throws ApplicationException{
+	public List<Chain> pickupChain(int accountId, int count) throws ApplicationException{
 		ApplicationException ae = null;
 		List<Chain> chains = null;
 		try {
@@ -158,7 +162,7 @@ public class ChainService implements IChainService {
 		ApplicationException ae = null;
 		Boolean rematch = true;
 		Boolean succeed = false;
-		Long accountId = null;
+		Integer accountId = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			accountId = DaoUtils.accountDao.randChainAccount(chainId);
@@ -200,7 +204,7 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public Map<String, Object> throwChain(long chainId, long accountId)
+	public Map<String, Object> throwChain(long chainId, int accountId)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		boolean canMatchedAgain = false;
@@ -252,7 +256,7 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public Map<String, Object> deleteChain(long chainId, long accountId)
+	public Map<String, Object> deleteChain(long chainId, int accountId)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		boolean succeed = false;
@@ -261,7 +265,7 @@ public class ChainService implements IChainService {
 		try {
 			EntityManagerHelper.beginTransaction();
 			if(succeed = DaoUtils.chainDao.deleteChain(chainId, accountId)){
-				
+				DaoUtils.chainMessageDao.decreaseChainMessageCount(chainId, accountId);
 			}
 			else{
 				chainMessage = DaoUtils.chainDao.getChainMessage(accountId, chainId);
@@ -301,7 +305,7 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public Map<String, Object> obtainChains(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> obtainChains(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxChainLimit || limit < 1)
 			limit = IChainService.MaxChainLimit; 
@@ -333,7 +337,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> getNewChains(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> getNewChains(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxChainLimit || limit < 1)
 			limit = IChainService.MaxChainLimit; 
@@ -365,7 +369,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public List<Chain> getChains(long accountId, List<Long> chainIds) throws ApplicationException {
+	public List<Chain> getChains(int accountId, List<Long> chainIds) throws ApplicationException {
 		List<Chain> chains = null;
 		ApplicationException ae = null;
 		try {
@@ -389,7 +393,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> getOldChains(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> getOldChains(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
 			limit = IChainService.MaxOldChainsLimit; 
@@ -422,7 +426,7 @@ public class ChainService implements IChainService {
 	
 	
 	@Override
-	public Map<String, Object> obtainChainIds(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> obtainChainIds(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
 			limit = IChainService.MaxOldChainsLimit; 
@@ -454,7 +458,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> obtainChainIds(long accountId, long startId, int limit) throws ApplicationException {
+	public Map<String, Object> obtainChainIds(int accountId, long startId, int limit) throws ApplicationException {
 		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
 			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
@@ -485,7 +489,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> receiveChains(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> receiveChains(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxChainLimit || limit < 1)
 			limit = IChainService.MaxChainLimit; 
@@ -517,7 +521,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> receiveChainIds(long accountId, Long start, Long end, int limit,
+	public Map<String, Object> receiveChainIds(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
 			limit = IChainService.MaxOldChainsLimit; 
@@ -549,7 +553,7 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> receiveChainIds(long accountId, long startId, int limit) throws ApplicationException {
+	public Map<String, Object> receiveChainIds(int accountId, long startId, int limit) throws ApplicationException {
 		if(limit > IChainService.MaxOldChainsLimit || limit < 1)
 			limit = IChainService.MaxOldChainsLimit; 
 		List<Long> chainIds = null;
@@ -580,7 +584,7 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public Map<String, Object> obtainChainMessages(long accountId, long chainId, Timestamp last, int limit)
+	public Map<String, Object> obtainChainMessages(int accountId, long chainId, Timestamp last, int limit)
 			throws ApplicationException {
 		if(limit > IChainService.MaxChainMessageLimit || limit < 1)
 			limit = IChainService.MaxChainMessageLimit; 
@@ -621,7 +625,7 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public boolean viewedChainMessages(long accountId, long chainId, Timestamp last)
+	public boolean viewedChainMessages(int accountId, long chainId, Timestamp last)
 			throws ApplicationException {
 		boolean succeed = false;
 		ApplicationException ae = null;

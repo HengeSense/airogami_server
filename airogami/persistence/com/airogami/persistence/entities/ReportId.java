@@ -15,9 +15,9 @@ public class ReportId implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long reportId;
+	private Integer reportId;
 
-	private Long reportedId;
+	private Integer reportedId;
 
 	// Constructors
 
@@ -26,7 +26,7 @@ public class ReportId implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ReportId(Long reportId, Long reportedId) {
+	public ReportId(Integer reportId, Integer reportedId) {
 		this.reportId = reportId;
 		this.reportedId = reportedId;
 	}
@@ -34,20 +34,20 @@ public class ReportId implements java.io.Serializable {
 	// Property accessors
 
 	@Column(name = "REPORT_ID", nullable = false)
-	public Long getReportId() {
+	public Integer getReportId() {
 		return this.reportId;
 	}
 
-	public void setReportId(Long reportId) {
+	public void setReportId(Integer reportId) {
 		this.reportId = reportId;
 	}
 
 	@Column(name = "REPORTED_ID", nullable = false)
-	public Long getReportedId() {
+	public Integer getReportedId() {
 		return this.reportedId;
 	}
 
-	public void setReportedId(Long reportedId) {
+	public void setReportedId(Integer reportedId) {
 		this.reportedId = reportedId;
 	}
 
@@ -80,5 +80,7 @@ public class ReportId implements java.io.Serializable {
 						.hashCode());
 		return result;
 	}
+
+	/**/
 
 }

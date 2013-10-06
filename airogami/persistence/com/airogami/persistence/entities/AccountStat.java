@@ -21,11 +21,11 @@ public class AccountStat implements java.io.Serializable {
 	// Fields
 	private static final long serialVersionUID = 1L;
 
-	private Long accountId;
+	private Integer accountId;
 
 	private Account account;
 
-	private Long signinCount = 0L;
+	private Integer signinCount = 0;
 
 	private Short status = 0;
 
@@ -48,7 +48,7 @@ public class AccountStat implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public AccountStat(Long accountId, Account account, Long signinCount,
+	public AccountStat(Integer accountId, Account account, Integer signinCount,
 			Short status, Integer msgCount, Integer chainMsgCount,
 			Short pickupCount, Short sendCount) {
 		this.accountId = accountId;
@@ -62,7 +62,7 @@ public class AccountStat implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AccountStat(Long accountId, Account account, Long signinCount,
+	public AccountStat(Integer accountId, Account account, Integer signinCount,
 			Short status, Integer msgCount, Integer chainMsgCount,
 			Short devType, String devToken, Short pickupCount, Short sendCount) {
 		this.accountId = accountId;
@@ -80,11 +80,11 @@ public class AccountStat implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = false)
-	public Long getAccountId() {
+	public Integer getAccountId() {
 		return this.accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -99,11 +99,11 @@ public class AccountStat implements java.io.Serializable {
 	}
 
 	@Column(name = "SIGNIN_COUNT", nullable = false, insertable = false, updatable = false)
-	public Long getSigninCount() {
+	public Integer getSigninCount() {
 		return this.signinCount;
 	}
 
-	public void setSigninCount(Long signinCount) {
+	public void setSigninCount(Integer signinCount) {
 		this.signinCount = signinCount;
 	}
 
@@ -169,5 +169,7 @@ public class AccountStat implements java.io.Serializable {
 	public void setSendCount(Short sendCount) {
 		this.sendCount = sendCount;
 	}
+
+	/**/
 
 }

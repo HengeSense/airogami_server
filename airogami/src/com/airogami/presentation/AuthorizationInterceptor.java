@@ -38,7 +38,7 @@ public class AuthorizationInterceptor implements Interceptor {
 		String result = null;
 		//should save user and signinCount simultaneously in session
 		if(session != null && (user = (User)session.getAttribute("user")) != null){
-			Long signinCount = (Long)session.getAttribute("signinCount");
+			Integer signinCount = (Integer)session.getAttribute("signinCount");
 			if(user.getSigninCount() == signinCount){
 				request.setAttribute("user", user);
 				result = invocation.invoke();

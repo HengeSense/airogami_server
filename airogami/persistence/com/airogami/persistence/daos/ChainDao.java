@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import com.airogami.common.ChainMessageNotifiedInfo;
+import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
@@ -24,11 +26,11 @@ import com.airogami.persistence.entities.OldChain;
 public class ChainDao extends ChainDAO {
 	private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
 	
-	public ChainMessage getChainMessage(long accountId, long chainId){
+	public ChainMessage getChainMessage(int accountId, long chainId){
 		EntityManagerHelper.log("getChainMessageing", Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					getChainMessageJPQL);
+			TypedQuery<ChainMessage> query = EntityManagerHelper.getEntityManager().createQuery(
+					getChainMessageJPQL, ChainMessage.class);
 			query.setParameter(1, chainId);
 			query.setParameter(2, accountId);
 			List<ChainMessage> chainMessages = query.getResultList();
@@ -48,7 +50,7 @@ public class ChainDao extends ChainDAO {
 	private final String throwChainJPQL = "delete from ChainMessage chainMessage where chainMessage.account.accountId = ?2 and chainMessage.status = ?3 and chainMessage.chain.chainId = ?1";
 	private final String throwChainSetJPQL = "update Chain chain set chain.status = ?2 where chain.chainId = ?1";
 
-	public boolean throwChain(long chainId, long accountId){
+	public boolean throwChain(long chainId, int accountId){
 		EntityManagerHelper.log("throwChaining with chainId = " + chainId + " and accountId = " + accountId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
@@ -90,22 +92,44 @@ public class ChainDao extends ChainDAO {
 		}
 	}
 	
-	private final String getChainAccountIdsJPQL = "select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+private final String increaseChainMessageCountJPQL = "update AccountStat accountStat set accountStat.chainMsgCount = accountStat.chainMsgCount + 1 where accountStat.account in (select chainMessage.account from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3)";
 	
-	public List<Long> getChainAccountIds(long chainId, long accountId) {
-		EntityManagerHelper.log("getChainAccountIdsing with chainId = " + chainId, Level.INFO, null);
+//return increased lines
+	public int increaseChainMessageCount(long chainId, int accountId) {
+		EntityManagerHelper.log("increaseChainMessageCounting with chainId = " + chainId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					getChainAccountIdsJPQL);
+					increaseChainMessageCountJPQL);
 			query.setParameter(1, chainId);
 			query.setParameter(2, ChainMessageConstants.StatusReplied);
 			query.setParameter(3, accountId);
-			List<Long> accountIds = query.getResultList();
+			int count = query.executeUpdate();
 			EntityManagerHelper
-					.log("getChainAccountIds successful", Level.INFO, null);
-			return accountIds;
+					.log("increaseChainMessageCount successful", Level.INFO, null);
+			return count;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getChainAccountIds failed", Level.SEVERE, re);
+			EntityManagerHelper.log("increaseChainMessageCount failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+	private final String getNotifiedInfoJPQL = "select new com.airogami.common.ChainMessageNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+	
+	//
+	public List<NotifiedInfo> getNotifiedInfos(long chainId, int accountId) {
+		EntityManagerHelper.log("getNotifiedInfosing with chainId = " + chainId, Level.INFO, null);
+		try {
+			TypedQuery<NotifiedInfo> query = EntityManagerHelper.getEntityManager().createQuery(
+					getNotifiedInfoJPQL, NotifiedInfo.class);
+			query.setParameter(1, chainId);
+			query.setParameter(2, ChainMessageConstants.StatusReplied);
+			query.setParameter(3, accountId);
+			List<NotifiedInfo> notifiedInfos = query.getResultList();
+			EntityManagerHelper
+					.log("getNotifiedInfos successful", Level.INFO, null);
+			return notifiedInfos;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getNotifiedInfos failed", Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -115,10 +139,10 @@ public class ChainDao extends ChainDAO {
 	public int getChainMatchCount(long chainId){
 		EntityManagerHelper.log("getChainMatchCounting with chainId = " + chainId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					getChainMatchCountJPQL);
+			TypedQuery<Integer> query = EntityManagerHelper.getEntityManager().createQuery(
+					getChainMatchCountJPQL, Integer.class);
 			query.setParameter(1, chainId);
-			int count = (Integer)query.getSingleResult();
+			int count = query.getSingleResult();
 			EntityManagerHelper
 					.log("getChainMatchCount successful", Level.INFO, null);
 			return count;
@@ -134,10 +158,10 @@ public class ChainDao extends ChainDAO {
 	public boolean canChainMatch(long chainId){
 		EntityManagerHelper.log("canChainMatching with planeId = " + chainId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					canChainMatchJPQL);
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					canChainMatchJPQL, Long.class);
 			query.setParameter(1, chainId);
-			long count = (Long)query.getSingleResult();
+			long count = query.getSingleResult();
 			EntityManagerHelper
 					.log("canChainMatch successful", Level.INFO, null);
 			return count == 1;
@@ -149,7 +173,7 @@ public class ChainDao extends ChainDAO {
 	
 	private final String deleteChainJPQL = "update ChainMessage chainMessage set chainMessage.status = ?3 where chainMessage.chain.chainId = ?1 and chainMessage.status = ?4 and chainMessage.account.accountId = ?2";
 
-	public boolean deleteChain(long chainId, long accountId){
+	public boolean deleteChain(long chainId, int accountId){
 		EntityManagerHelper.log("deleteChaining with chainId = " + chainId + " and accountId = " + accountId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
@@ -172,7 +196,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String obtainChainsBackwardJPQL = "select chain from Chain chain join fetch chain.account, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
-	public List<Chain> obtainChains(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<Chain> obtainChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -182,8 +206,8 @@ public class ChainDao extends ChainDAO {
 			else{
 				jpql = obtainChainsBackwardJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Chain> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Chain.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, ChainMessageConstants.StatusReplied);
 			query.setParameter(3, start);
@@ -203,7 +227,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String getNewChainsBackwardJPQL = "select new NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
-	public List<NewChain> getNewChains(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<NewChain> getNewChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNewChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -232,7 +256,7 @@ public class ChainDao extends ChainDAO {
 	
 	private final String getChainsJPQL = "select chain from Chain chain join fetch chain.account where chain.chainId in (?2) and exists (select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1)";
 
-	public List<Chain> getChains(long accountId, List<Long> chainIds){
+	public List<Chain> getChains(int accountId, List<Long> chainIds){
 		EntityManagerHelper.log("getChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			TypedQuery<Chain> query = EntityManagerHelper.getEntityManager().createQuery(
@@ -253,7 +277,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String getOldChainsBackwardJPQL = "select chain.chainId from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.chainId > ?3) and (?4 is null or chain.chainId < ?4) order by chain.chainId desc";
 
-	public List<OldChain> getOldChains(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<OldChain> getOldChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getOldChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -284,7 +308,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String obtainChainIdsBackwardJPQL = "select chain.chainId from Chain chain , ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
-	public List<Long> obtainChainIds(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<Long> obtainChainIds(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainChainIdsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -294,8 +318,8 @@ public class ChainDao extends ChainDAO {
 			else{
 				jpql = obtainChainIdsBackwardJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Long.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, ChainMessageConstants.StatusReplied);
 			query.setParameter(3, start);
@@ -313,11 +337,11 @@ public class ChainDao extends ChainDAO {
 	
 	private final String obtainChainIdsJPQL = "select chain.chainId from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status = ?3 and chain.chainId > ?2 order by chain.chainId asc";
 
-	public List<Long> obtainChainIds(long accountId, long startId, int limit){
+	public List<Long> obtainChainIds(int accountId, long startId, int limit){
 		EntityManagerHelper.log("obtainChainIdsing with accountId = " + accountId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					obtainChainIdsJPQL);
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					obtainChainIdsJPQL, Long.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, startId);
 			query.setParameter(3, ChainMessageConstants.StatusReplied);
@@ -336,7 +360,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String receiveChainsBackwardJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.account.profile, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
-	public List<Chain> receiveChains(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<Chain> receiveChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("receiveChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -346,8 +370,8 @@ public class ChainDao extends ChainDAO {
 			else{
 				jpql = receiveChainsBackwardJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Chain> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Chain.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, ChainMessageConstants.StatusNew);
 			query.setParameter(3, start);
@@ -368,7 +392,7 @@ public class ChainDao extends ChainDAO {
 
 	private final String receiveChainIdsBackwardJPQL = "select chain.chainId from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
-	public List<Long> receiveChainIds(long accountId, Long start, Long end, int limit, boolean forward){
+	public List<Long> receiveChainIds(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("receiveChainIdsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
@@ -378,8 +402,8 @@ public class ChainDao extends ChainDAO {
 			else{
 				jpql = receiveChainIdsBackwardJPQL;
 			}
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql);
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, Long.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, ChainMessageConstants.StatusNew);
 			query.setParameter(3, start);
@@ -397,11 +421,11 @@ public class ChainDao extends ChainDAO {
 	
 	private final String receiveChainIdsJPQL = "select chain.chainId from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and chainMessage.status = ?3 and chain.chainId > ?2 order by chain.chainId asc";
 
-	public List<Long> receiveChainIds(long accountId, long startId, int limit){
+	public List<Long> receiveChainIds(int accountId, long startId, int limit){
 		EntityManagerHelper.log("receiveChainIdsing with accountId = " + accountId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					receiveChainIdsJPQL);
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					receiveChainIdsJPQL, Long.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, startId);
 			query.setParameter(3, ChainMessageConstants.StatusNew);
@@ -420,7 +444,7 @@ public class ChainDao extends ChainDAO {
 	private final String matchJPQL = "update Chain chain set chain.status = ?2 where chain.chainId = ?1 and chain.status <> ?2 and chain.passCount < chain.maxPassCount and chain.matchCount < chain.maxMatchCount and not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = chain.chainId and chainMessage.account.accountId = ?3) and not exists (select chainHist from ChainHist chainHist where chainHist.id.chainId = chain.chainId and ?3 = chainHist.id.accountId)";
 	private final String pickupQueryJPQL = "select chain from Chain chain join fetch chain.account join fetch chain.account.profile where chain.chainId in (?1)";
 		
-	public List<Chain> pickup(long accountId, int count){
+	public List<Chain> pickup(int accountId, int count){
 		EntityManagerHelper.log("pickuping chain with accountId = " + accountId + " and count = " + count, Level.INFO, null);
 		try {
 			List<Chain> chains = Collections.emptyList();
@@ -478,7 +502,7 @@ public class ChainDao extends ChainDAO {
 	}
 	
 	// set chain.status = matched when chain.status != matched
-	public boolean match(long chainId, long accountId) {
+	public boolean match(long chainId, int accountId) {
 		EntityManagerHelper.log("matching chain with chainId = " + chainId + " and accountId = " + accountId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(

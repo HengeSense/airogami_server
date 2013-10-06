@@ -70,7 +70,7 @@ public class TestPersistenceChain {
 		chain.setCity("shanghai");
 		chain.setProvince("shanghai");
 		chain.setCountry("China");
-		long ownerId = 4L;
+		int ownerId = 4;
 		ChainMessage chainMessage = new ChainMessage();
 		chainMessage.setContent("hello!");
 		chainMessage.setType((short) 0);
@@ -91,7 +91,7 @@ public class TestPersistenceChain {
 		ChainMessage chainMessage = null;
 		String content = "hello!";
 		int type = 0;
-		long ownerId = 5;
+		int ownerId = 5;
 		long chainId = 8;
 		try {
 			Map<String, Object> result = ServiceUtils.chainService.replyChain(ownerId, chainId, content, type);
@@ -105,7 +105,7 @@ public class TestPersistenceChain {
 	@Ignore
 	@Test
 	public void testThrowChain() {
-		long accountId = 5;
+		int accountId = 5;
 		long chainId = 8;
 		try {
 			System.out.println(ServiceUtils.chainService.throwChain(chainId, accountId));
@@ -118,7 +118,7 @@ public class TestPersistenceChain {
 	@Ignore
 	@Test
 	public void testDeleteChain() {
-		long accountId = 5;
+		int accountId = 5;
 		long chainId = 8;
 		try {
 			ServiceUtils.chainService.deleteChain(chainId, accountId);
@@ -131,7 +131,7 @@ public class TestPersistenceChain {
 	@Ignore
 	@Test
 	public void testObtainChains() {
-		long accountId = 5;
+		int accountId = 5;
 		int limit = 2;
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
@@ -148,7 +148,7 @@ public class TestPersistenceChain {
 	@Ignore
 	@Test
 	public void testObtainChainMessages() {
-		long accountId = 5;
+		int accountId = 5;
 		long chainId = 8;
 		Timestamp last = Timestamp.valueOf("2013-05-31 22:36:15");
 		int limit = 2;
@@ -164,7 +164,7 @@ public class TestPersistenceChain {
 	//@Ignore
 	@Test
 	public void testPickupChain() {
-		long accountId = 2;
+		int accountId = 2;
 		try {
 			List<Chain> chains = ServiceUtils.chainService.pickupChain(accountId, 2);
 			ObjectUtils.printObject(chains);
@@ -180,7 +180,7 @@ public class TestPersistenceChain {
 	@Ignore
 	@Test
 	public void testViewedChainMessage() {
-		long accountId = 4;
+		int accountId = 4;
 		long chainId = 3;
 		Timestamp last = Timestamp.valueOf("2013-05-31 22:36:15");
 		try {

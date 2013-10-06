@@ -119,8 +119,8 @@ public class AccountService implements IAccountService {
 	 * int)
 	 */
 	@Override
-	public Long signout(String[]args, int type) throws ApplicationException {
-		Long accountId = null;
+	public Integer signout(String[]args, int type) throws ApplicationException {
+		Integer accountId = null;
 		ApplicationException ae = null;
 		try {
 			EntityManagerHelper.beginTransaction();
@@ -156,7 +156,7 @@ public class AccountService implements IAccountService {
 		ApplicationException ae = null;
 		Profile profile = null;
 		try {
-			Long accountId = (Long)properties.get("accountId");
+			Integer accountId = (Integer)properties.get("accountId");
 			EntityManagerHelper.beginTransaction();
 			profile = DaoUtils.profileDao.findById(accountId);
 			if(profile != null){
@@ -195,7 +195,7 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public boolean changePassword(long accountId, String oldPassword, String newPassword) throws ApplicationException{
+	public boolean changePassword(int accountId, String oldPassword, String newPassword) throws ApplicationException{
 		ApplicationException ae = null;
 		boolean succeed = false;
 		try {
@@ -221,7 +221,7 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public boolean changeScreenName(long accountId, String screenName) throws ApplicationException{
+	public boolean changeScreenName(int accountId, String screenName) throws ApplicationException{
 		ApplicationException ae = null;
 		boolean succeed = false;
 		try {
@@ -250,7 +250,7 @@ public class AccountService implements IAccountService {
 	}
 	
 	@Override
-	public Profile obtainProfile(long accountId, Integer updateCount) throws ApplicationException{
+	public Profile obtainProfile(int accountId, Integer updateCount) throws ApplicationException{
 		ApplicationException ae = null;
 		Profile profile = null;
 		try {

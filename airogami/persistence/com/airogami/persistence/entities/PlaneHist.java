@@ -75,4 +75,6 @@ public class PlaneHist implements java.io.Serializable {
 		this.plane = plane;
 	}
 
+	/**/
+
 }

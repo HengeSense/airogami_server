@@ -245,14 +245,14 @@ public class ChainDAO {
 
 	private static final String accountJPQL = "select a.account.accountId from Chain a where a.chainId = :chainId";
 
-	public java.lang.Long getAccount(java.lang.Long chainId) {
+	public java.lang.Integer getAccount(java.lang.Long chainId) {
 		EntityManagerHelper.log("getAccountId with chainId" + chainId,
 				Level.INFO, null);
-		java.lang.Long accountId;
+		java.lang.Integer accountId;
 		try {
 			Query query = getEntityManager().createQuery(accountJPQL);
 			query.setParameter("chainId", chainId);
-			accountId = (java.lang.Long) query.getSingleResult();
+			accountId = (java.lang.Integer) query.getSingleResult();
 			EntityManagerHelper
 					.log("getAccountId successful", Level.INFO, null);
 			return accountId;

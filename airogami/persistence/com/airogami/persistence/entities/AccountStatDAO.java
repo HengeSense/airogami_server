@@ -132,7 +132,7 @@ public class AccountStatDAO {
 		}
 	}
 
-	public AccountStat findById(Long accountId) {
+	public AccountStat findById(Integer accountId) {
 		EntityManagerHelper.log("finding AccountStat instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -146,7 +146,7 @@ public class AccountStatDAO {
 		}
 	}
 
-	public AccountStat getReference(Long accountId) {
+	public AccountStat getReference(Integer accountId) {
 		EntityManagerHelper.log("getReferencing AccountStat instance with id: "
 				+ accountId, Level.INFO, null);
 		try {
@@ -229,7 +229,7 @@ public class AccountStatDAO {
 
 	private static final String removeByAccountIdJPQL = "delete from AccountStat a where a.accountId in (?1)";
 
-	public int removeByAccountId(Long accountId) {
+	public int removeByAccountId(Integer accountId) {
 		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
 		int ret = 0;
 		try {
@@ -248,7 +248,7 @@ public class AccountStatDAO {
 
 	private static final String increaseSigninCountJPQL = "update AccountStat a set a.signinCount = a.signinCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseSigninCount(java.lang.Long accountId, int count) {
+	public boolean increaseSigninCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
 				"increaseSendCount with accountId:" + accountId, Level.INFO,
 				null);
@@ -270,7 +270,7 @@ public class AccountStatDAO {
 
 	private static final String increaseMsgCountJPQL = "update AccountStat a set a.msgCount = a.msgCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseMsgCount(java.lang.Long accountId, int count) {
+	public boolean increaseMsgCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
 				"increaseSendCount with accountId:" + accountId, Level.INFO,
 				null);
@@ -291,7 +291,7 @@ public class AccountStatDAO {
 
 	private static final String increaseChainMsgCountJPQL = "update AccountStat a set a.chainMsgCount = a.chainMsgCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseChainMsgCount(java.lang.Long accountId, int count) {
+	public boolean increaseChainMsgCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
 				"increaseSendCount with accountId:" + accountId, Level.INFO,
 				null);
@@ -313,7 +313,7 @@ public class AccountStatDAO {
 
 	private static final String increasePickupCountJPQL = "update AccountStat a set a.pickupCount = a.pickupCount + :count where a.accountId in (:accountId)";
 
-	public boolean increasePickupCount(java.lang.Long accountId, int count) {
+	public boolean increasePickupCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
 				"increaseSendCount with accountId:" + accountId, Level.INFO,
 				null);
@@ -335,7 +335,7 @@ public class AccountStatDAO {
 
 	private static final String increaseSendCountJPQL = "update AccountStat a set a.sendCount = a.sendCount + :count where a.accountId in (:accountId)";
 
-	public boolean increaseSendCount(java.lang.Long accountId, int count) {
+	public boolean increaseSendCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
 				"increaseSendCount with accountId:" + accountId, Level.INFO,
 				null);

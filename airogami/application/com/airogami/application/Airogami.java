@@ -54,7 +54,7 @@ public class Airogami implements Delayed{
 	// return whether needs rematching
 	public boolean match(){
 		Map<String, Object> result;
-		Long accountId;
+		Integer accountId;
 		boolean rematch = false;
 		if(type == TypePlane){
 			try {
@@ -69,7 +69,7 @@ public class Airogami implements Delayed{
 				}
 				else if(succeed){
 					//match succeed
-					accountId = (Long)result.get("accountId");
+					accountId = (Integer)result.get("accountId");
 					Notification notification = new RPNotification(accountId);
 					ManagerUtils.notificationManager.addNotification(notification);
 				}	
@@ -96,7 +96,7 @@ public class Airogami implements Delayed{
 				}
 				else if(succeed){
 					//match succeed
-					accountId = (Long)result.get("accountId");
+					accountId = (Integer)result.get("accountId");
 					Notification notification = new RCNotification(accountId);
 					ManagerUtils.notificationManager.addNotification(notification);
 				}
