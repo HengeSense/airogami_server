@@ -1,0 +1,10 @@
+ubuntu@ec2-54-244-195-174.us-west-2.compute.amazonaws.com
+
+sftp -o IdentityFile=F:\projects\Scoutin\amazon-server\mysqlkey.pem ubuntu@ec2-54-244-195-174.us-west-2.compute.amazonaws.com
+
+mysql -h ec2-54-244-195-174.us-west-2.compute.amazonaws.com -u Scoutin -p
+Scoutin12345!
+use Airogami;
+call test1();
+
+plane.updateInc = (select tmp.max_value from (select max(plane.updateInc) + 1 as max_value from Plane plane) as tmp)

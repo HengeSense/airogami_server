@@ -19,7 +19,7 @@ public interface AccountConstants {
 	public static final byte SexType_Female = 2;
 	public static final byte SexType_NotApllicable = 9;
 	
-	public static final byte SendMaxCount = 6;
-	public static final byte PickupMaxCount = 6;
+	public static byte SendMaxCount = 6;
+	public static byte PickupMaxCount = 6;
 
 }

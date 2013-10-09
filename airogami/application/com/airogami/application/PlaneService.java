@@ -8,16 +8,18 @@ import java.util.TreeMap;
 import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.MessageNotifiedInfo;
 import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
+import com.airogami.persistence.classes.AccountStatLeft;
+import com.airogami.persistence.classes.NewPlane;
+import com.airogami.persistence.classes.OldPlane;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
-import com.airogami.persistence.entities.NewPlane;
-import com.airogami.persistence.entities.OldPlane;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.persistence.entities.PlaneHist;
 import com.airogami.persistence.entities.PlaneHistId;
@@ -51,20 +53,28 @@ public class PlaneService implements IPlaneService {
 	 * targetId, long ownerId)
 	 */
 	@Override
-	public Plane sendPlane(Plane plane, int ownerId)
+	public Map<String, Object> sendPlane(Plane plane, int ownerId)
 			throws ApplicationException {
-
 		ApplicationException ae = null;
+		String error = null;
+		AccountStatLeft accountStatLeft = null;
 		Message message = plane.getMessages().get(0);
 		try {
 			EntityManagerHelper.beginTransaction();
-			Account accountByOwnerId = DaoUtils.accountDao
-					.getReference(ownerId);
-			plane.setAccountByOwnerId(accountByOwnerId);
-			message.setAccount(accountByOwnerId);
-			DaoUtils.planeDao.save(plane);
-			//may be not needed
-			DaoUtils.planeDao.initLastMsgIdOfTarget(plane.getPlaneId(), message.getMessageId());
+			if(DaoUtils.accountStatDao.verifySend(ownerId))
+			{
+				Account accountByOwnerId = DaoUtils.accountDao
+						.getReference(ownerId);
+				plane.setAccountByOwnerId(accountByOwnerId);
+				message.setAccount(accountByOwnerId);
+				DaoUtils.planeDao.save(plane);
+				//may be not needed
+				//DaoUtils.planeDao.initLastMsgIdOfTarget(plane.getPlaneId(), message.getMessageId());
+			}
+			else{
+				error = "limit";
+			}
+			accountStatLeft = DaoUtils.accountStatDao.getSendAndPickupLeftCounts(ownerId);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			//t.printStackTrace();
@@ -72,7 +82,7 @@ public class PlaneService implements IPlaneService {
 				ae = new ApplicationException();
 			} else {
 				if(t.getCause().getCause() instanceof EntityExistsException){
-					plane = null;
+					error = "none";
 				}
 				else{
 					ae = new ApplicationException(t.getCause().getMessage());
@@ -84,8 +94,19 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		plane.setLastMsgIdOfTarget(message.getMessageId());
-		return plane;
+		
+		Map<String, Object> result = new TreeMap<String, Object>();
+		if(error != null){
+		    result.put("error", error);
+		}
+		else{
+			//plane.setLastMsgIdOfTarget(message.getMessageId());
+			result.put("plane", plane);
+		}
+		
+		result.put("accountStatLeft", accountStatLeft);
+		
+		return result;
 	}
 
 	/*
@@ -98,7 +119,7 @@ public class PlaneService implements IPlaneService {
 			throws ApplicationException {
 		ApplicationException ae = null;
 		String error = null;
-		NotifiedInfo notifiedInfo = null;
+		MessageNotifiedInfo notifiedInfo = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			if (DaoUtils.planeDao.verifyReply(planeId, accountId)) {
@@ -138,6 +159,8 @@ public class PlaneService implements IPlaneService {
 		else{
 			result.put("message", message);
 			if(notifiedInfo != null){
+				//should process different types
+				notifiedInfo.setContent(message.getContent());
 				notifiedInfo.setMessagesCount(notifiedInfo.getMessagesCount() + 1);
 				result.put("notifiedInfo", notifiedInfo);
 			}
@@ -704,13 +727,13 @@ public class PlaneService implements IPlaneService {
 	}
 
 	@Override
-	public boolean viewedMessages(int accountId, long planeId, long lastMsgId, boolean byOwner)
+	public Map<String, Object> viewedMessages(int accountId, long planeId, long lastMsgId, boolean byOwner)
 			throws ApplicationException {
 		ApplicationException ae = null;
-		boolean succeed = false;
+		Object results[] = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			succeed = DaoUtils.messageDao.viewedMessage(accountId, planeId, lastMsgId, byOwner);
+			results = DaoUtils.messageDao.viewedMessage(accountId, planeId, lastMsgId, byOwner);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -725,7 +748,12 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		return succeed;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		result.put("succeed", results[0]);
+		if(results[1] != null){
+			result.put("lastMsgId", results[1]);
+		}
+		return result;
 	}
 
 }

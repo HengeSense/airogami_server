@@ -5,7 +5,7 @@
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
 #foreach($property in $pojo.getAllPropertiesIterator())
 #if($pojo.getMetaAttribAsBool($property, "gen-property", true))
-   #if($property.name.equals("lastViewedTime") && $pojo.getDeclarationName().equals("ChainMessage"))
+   #if(false && $property.name.equals("lastViewedTime") && $pojo.getDeclarationName().equals("ChainMessage"))
    set$pojo.getPropertyName($property)(baseTimestamp);
    #elseif($property.name.endsWith("Time"))
       set$pojo.getPropertyName($property)(timestamp);

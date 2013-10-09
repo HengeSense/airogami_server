@@ -1,7 +1,10 @@
 package com.airogami.application;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.persistence.EntityExistsException;
 
@@ -10,13 +13,18 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
 import com.airogami.common.constants.AccountConstants;
+import com.airogami.exception.AirogamiException;
+import com.airogami.persistence.classes.AccountStatLeft;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.AccountStat;
 import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Plane;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
+import com.airogami.presentation.logic.ManagerUtils;
 
 public class AccountService implements IAccountService {
 
@@ -275,11 +283,12 @@ public class AccountService implements IAccountService {
 		return profile;
 	}
 	
-	public Report reportAccount(Report report) throws ApplicationException
-	{
+	public Report reportAccount(Report report) throws ApplicationException{
 		ApplicationException ae = null;				
 		try {
-			report = DaoUtils.reportDao.createReport(report);								
+			EntityManagerHelper.beginTransaction();
+			report = DaoUtils.reportDao.createReport(report);	
+			EntityManagerHelper.commit();
 		} catch (Throwable t) {		
 			//t.printStackTrace();
             if(t.getCause() == null){
@@ -288,11 +297,90 @@ public class AccountService implements IAccountService {
 			else{
 				ae = new ApplicationException(t.getCause().getMessage());
 			}
-		}		
+		}	
+		finally {
+			EntityManagerHelper.closeEntityManager();
+		}
 		if (ae != null) {
 			throw ae;
 		} 		
 		return report;
+	}
+
+	@Override
+	public int updateAccountStat() throws ApplicationException {
+		int count = 0;	
+		ApplicationException ae = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			count = DaoUtils.accountStatDao.updatePickupAndSendCounts();	
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+            if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		}	
+		finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 		
+		return count;
+	}
+
+	@Override
+	public Map<String, Object> pickup(int accountId) throws ApplicationException {
+		List<Plane> planes = Collections.emptyList();
+		List<Chain> chains = Collections.emptyList();
+		int[] counts = ServiceUtils.pickupCount();
+		//
+		String error = null;
+		AccountStatLeft accountStatLeft = null;
+		ApplicationException ae = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			if(DaoUtils.accountStatDao.verifyPickup(accountId)){
+				if (counts[0] > 0) {
+					planes = DaoUtils.planeDao.pickup(accountId, counts[0]);
+				}
+				if (counts[1] > 0) {
+					chains = DaoUtils.chainDao.pickup(accountId, counts[1]);
+				}
+			}
+			else{
+				error = "limit";
+			}
+			accountStatLeft = DaoUtils.accountStatDao.getSendAndPickupLeftCounts(accountId);
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		}
+		finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		Map<String, Object> result = new TreeMap<String, Object>();
+		if(error != null){
+		    result.put("error", error);
+		}
+		else{
+			result.put("planes", planes);
+			result.put("chains", chains);
+		}
+		result.put("accountStatLeft", accountStatLeft);
+		return result;
 	}
 
 }

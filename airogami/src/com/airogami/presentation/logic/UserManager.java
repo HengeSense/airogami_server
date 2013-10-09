@@ -1,9 +1,5 @@
 package com.airogami.presentation.logic;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
 import com.airogami.persistence.entities.AccountStat;
 
 public class UserManager {// implements HttpSessionListener

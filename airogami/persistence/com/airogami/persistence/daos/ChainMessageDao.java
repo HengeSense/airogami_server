@@ -83,15 +83,17 @@ public class ChainMessageDao extends ChainMessageDAO {
 
 	private final String viewedChainMessageUpdateSQL = "update ACCOUNT_STAT set CHAIN_MSG_COUNT = CHAIN_MSG_COUNT - (select count(*) from CHAIN_MESSAGE a, CHAIN_MESSAGE cm where a.STATUS >= ?3 and a.CREATED_TIME <= cm.LAST_VIEWED_TIME and a.CREATED_TIME > cm.LAST_TIME and a.ACCOUNT_ID <> ?2 and cm.CHAIN_ID = ?1 and cm.ACCOUNT_ID = ?2) where ACCOUNT_ID = ?2";
 
+	private final String viewedChainMessageQueryJPQL = "select chainMessage.lastViewedTime from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2 and chainMessage.status = ?3";
+
 	
-	public boolean viewedChainMessage(int accountId, long chainId, Timestamp lastTimestamp){
+	public Object[] viewedChainMessage(int accountId, long chainId, Timestamp lastViewedTime){
 		EntityManagerHelper.log("viewedChainMessaging with chainId = " + chainId, Level.INFO, null);		
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
 					viewedChainMessageJPQL);
 			query.setParameter(1, chainId);
 			query.setParameter(2, accountId);
-			query.setParameter(3, lastTimestamp);
+			query.setParameter(3, lastViewedTime);
 			query.setParameter(4, ChainMessageConstants.StatusReplied);
 			int count = query.executeUpdate();
 			if(count > 0){
@@ -102,9 +104,22 @@ public class ChainMessageDao extends ChainMessageDAO {
 				query.setParameter(3, ChainMessageConstants.StatusReplied);
 				query.executeUpdate();
 			}
+			else{
+				lastViewedTime = null;
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						viewedChainMessageQueryJPQL, Timestamp.class);
+				query.setParameter(1, chainId);
+				query.setParameter(2, accountId);
+				query.setParameter(3, ChainMessageConstants.StatusReplied);
+				List<Timestamp> result = query.getResultList();
+				if(result.size() > 0){
+					lastViewedTime = result.get(0);
+				}
+			}
+			Object[] results = new Object[]{count == 1, lastViewedTime};
 			EntityManagerHelper
 					.log("viewedChainMessage successful", Level.INFO, null);
-			return count == 1;
+			return results;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("viewedChainMessage failed", Level.SEVERE, re);
 			throw re;

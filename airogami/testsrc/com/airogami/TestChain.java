@@ -16,11 +16,11 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
+import com.airogami.persistence.classes.NewChain;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
-import com.airogami.persistence.entities.NewChain;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
@@ -281,7 +281,7 @@ public class TestChain {
 		int accountId = 5;
 		long chainId = 3;
 		String last = "2013-08-15 18:48:44";
-		boolean result;
+		Map<String, Object> result;
 		try {
 			result = ManagerUtils.chainManager.viewedChainMessages(
 					accountId, chainId, Timestamp.valueOf(last));

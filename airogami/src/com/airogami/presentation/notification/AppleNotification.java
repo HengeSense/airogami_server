@@ -116,7 +116,7 @@ public class AppleNotification implements Runnable {
 		}
 	}
 
-	public void sendNotification(int accountId, String token, Long badge,
+	public void sendNotification(int accountId, String token, Integer badge,
 			PushNotificationPayload payload) {		
 		try {
 			if(badge != null){

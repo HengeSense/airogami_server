@@ -3,15 +3,16 @@ package com.airogami.common;
 public class ChainMessageNotifiedInfo extends NotifiedInfo {
 
 	private Integer accountId;
-	private Long messagesCount;
+	private Integer messagesCount;
 	
 	public ChainMessageNotifiedInfo(Integer accountId, Long messagesCount){
 		this.accountId = accountId;
-		this.messagesCount = messagesCount;
+		this.messagesCount = (int)(long)messagesCount;
 	}
 	
-	public ChainMessageNotifiedInfo(Integer accountId, int messagesCount){
-		this.messagesCount = (long)messagesCount;
+	public ChainMessageNotifiedInfo(Integer accountId, Integer messagesCount){
+		this.accountId = accountId;
+		this.messagesCount = messagesCount;
 	}
 	
 	public Integer getAccountId() {
@@ -22,10 +23,19 @@ public class ChainMessageNotifiedInfo extends NotifiedInfo {
 		this.accountId = accountId;
 	}
 
-	public Long getMessagesCount() {
+	public Integer getMessagesCount() {
 		return messagesCount;
 	}
-	public void setMessagesCount(Long messageCount) {
+	public void setMessagesCount(Integer messageCount) {
 		this.messagesCount = messageCount;
+	}
+	public void setMessagesCount(Long messagesCount) {
+		if(messagesCount == null){
+			this.messagesCount = null;
+		}
+		else{
+			this.messagesCount = (int)(long)messagesCount;
+		}
+		
 	}
 }

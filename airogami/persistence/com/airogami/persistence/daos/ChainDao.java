@@ -15,13 +15,13 @@ import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
+import com.airogami.persistence.classes.NewChain;
+import com.airogami.persistence.classes.OldChain;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainDAO;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
-import com.airogami.persistence.entities.NewChain;
-import com.airogami.persistence.entities.OldChain;
 
 public class ChainDao extends ChainDAO {
 	private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
@@ -223,9 +223,9 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNewChainsForwardJPQL = "select new NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
+	private final String getNewChainsForwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
 
-	private final String getNewChainsBackwardJPQL = "select new NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
+	private final String getNewChainsBackwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
 
 	public List<NewChain> getNewChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNewChainsing with accountId = " + accountId, Level.INFO, null);
@@ -273,9 +273,9 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getOldChainsForwardJPQL = "select new OldChain(chain.chainId, chainMessage.status) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.chainId > ?3) and (?4 is null or chain.chainId < ?4) order by chain.chainId asc";
+	private final String getOldChainsForwardJPQL = "select new com.airogami.persistence.classes.OldChain(chain.chainId, chainMessage.status, chainMessage.lastViewedTime) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.chainId > ?3) and (?4 is null or chain.chainId < ?4) order by chain.chainId asc";
 
-	private final String getOldChainsBackwardJPQL = "select chain.chainId from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.chainId > ?3) and (?4 is null or chain.chainId < ?4) order by chain.chainId desc";
+	private final String getOldChainsBackwardJPQL = "select new com.airogami.persistence.classes.OldChain(chain.chainId, chainMessage.status, chainMessage.lastViewedTime) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.chainId > ?3) and (?4 is null or chain.chainId < ?4) order by chain.chainId desc";
 
 	public List<OldChain> getOldChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getOldChainsing with accountId = " + accountId, Level.INFO, null);

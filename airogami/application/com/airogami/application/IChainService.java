@@ -18,10 +18,10 @@ public final int MaxOldChainsLimit = 1000;
 	/*
 	 * @param chain:(Chain) must be not null, have chain.message
 	 * @param ownerId:(int) must exist
-	 * @return chain, chain.message, chain.category if successful otherwise null if ownerId not exist
+	 * @return chain, accountStatLeft if successful otherwise error, accountStatLeft
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Chain sendChain(Chain chain, int ownerId) throws ApplicationException;
+	public Map<String, Object> sendChain(Chain chain, int ownerId) throws ApplicationException;
 	
 	/*
 	 * @param chainId:(long) must exist
@@ -182,9 +182,9 @@ public final int MaxOldChainsLimit = 1000;
 	 * @param accountId:(int)
 	 * @param chainId:(long)	 
 	 * @param last:(Timestamp) must be not-null
-	 * @return succeed
+	 * @return succeed, lastViewedTime
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean viewedChainMessages(int accountId, long chainId, Timestamp last) throws ApplicationException;
+	public Map<String, Object> viewedChainMessages(int accountId, long chainId, Timestamp last) throws ApplicationException;
 	
 }

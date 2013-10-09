@@ -24,7 +24,7 @@ public class ChainManager {
 	/*
 	 * @param chain:(Chain) must be not null, have (chain.chainMessage) 
 	 * @param ownerId:(int) must exist
-	 * @return chain, chain.chainMessage if successful
+	 * @return chain, accountStatLeft if successful otherwise error, accountStatLeft
 	 * @throws AirogamiException if failed 
 	 */ 
 	public Map<String, Object> sendChain(Chain chain, int ownerId) throws AirogamiException{
@@ -45,20 +45,18 @@ public class ChainManager {
         	chain.setSex((short)AccountConstants.SexType_Unknown);
         }
         chainMessage.setStatus((short)ChainMessageConstants.StatusReplied);
+        //
+        Map<String, Object> result = null;
 		try {
-			chain = ServiceUtils.chainService.sendChain(chain, ownerId);
+			result = ServiceUtils.chainService.sendChain(chain, ownerId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Map<String, Object> result = new TreeMap<String, Object>();
+		chain = (Chain)result.get("chain");
 		if(chain != null){
 			ServiceUtils.airogamiService.appendChain(chain.getChainId());
-			result.put("chain", chain);
-		}
-		else{
-			result.put("error", "none");
 		}
 		
 		return result;
@@ -339,10 +337,10 @@ public class ChainManager {
 	 * @param accountId:(int)
 	 * @param chainId:(long)	 
 	 * @param last:(Timestamp) must not be empty
-	 * @return succeed
+	 * @return succeed, lastViewedTime
 	 * @throws AirogamiException if failed 
 	 */ 
-	public boolean viewedChainMessages(int accountId, long chainId, Timestamp last) throws AirogamiException{
+	public Map<String, Object> viewedChainMessages(int accountId, long chainId, Timestamp last) throws AirogamiException{
 		if(last == null){
 			throw new IllegalArgumentException("Illegal arguments in viewedChainMessages");
 		}

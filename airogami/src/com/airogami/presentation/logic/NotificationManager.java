@@ -59,7 +59,7 @@ public class NotificationManager extends Thread{
 		}		
 	}
 	
-	private void sendNotification(Integer accountId, Long messagesCount, Notification notification){
+	private void sendNotification(Integer accountId, Integer messagesCount, Notification notification){
 		User user = ManagerUtils.userManager.getUser(accountId);
 		ClientAgent clientAgent;
 		String token;

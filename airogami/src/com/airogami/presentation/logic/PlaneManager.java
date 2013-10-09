@@ -55,8 +55,7 @@ public class PlaneManager {
 	 * 
 	 * @param ownerId:(int) must exist
 	 * 
-	 * @return plane, plane.messages, plane.category if successful or error if
-	 * ownerId not exist
+	 * @return plane, accountStatLeft if successful otherwise error, accountStatLeft
 	 * 
 	 * @throws AirogamiException if failed
 	 */
@@ -85,21 +84,19 @@ public class PlaneManager {
 		}
 		message.setPlane(plane);
 		message.setStatus(MessageConstants.MessageStatusRead);
+		Map<String, Object> result = null;
 		try {
-			plane = ServiceUtils.planeService.sendPlane(plane, ownerId);
+			result = ServiceUtils.planeService.sendPlane(plane, ownerId);
 		} catch (ApplicationException re) {
 			// re.printStackTrace();
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Map<String, Object> result = new TreeMap<String, Object>();
+        plane = (Plane)result.get("plane"); 
 		if (plane != null) {
 			ServiceUtils.airogamiService.appendPlane(plane.getPlaneId());
-			result.put("plane", plane);
-		} else {
-			result.put("error", "none");
-		}
+		} 
 
 		return result;
 	}
@@ -148,32 +145,18 @@ public class PlaneManager {
 	 * 
 	 * @param accountId:(int)
 	 * 
-	 * @return planes, chains if successful
+	 * @return planes, chains if successful, otherwise error, accountStatLeft
 	 * 
 	 * @throws AirogamiException if failed
 	 */
 	public Map<String, Object> pickup(int accountId) throws AirogamiException {
-		List<Plane> planes = Collections.emptyList();
-		List<Chain> chains = Collections.emptyList();
-		int[] counts = ManagerUtils.pickupCount();
 		try {
-			if (counts[0] > 0) {
-				planes = ServiceUtils.planeService.pickupPlane(accountId,
-						counts[0]);
-			}
-			if (counts[1] > 0) {
-				chains = ServiceUtils.chainService.pickupChain(accountId,
-						counts[1]);
-			}
+			return ServiceUtils.accountService.pickup(accountId);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
-		Map<String, Object> result = new TreeMap<String, Object>();
-		result.put("planes", planes);
-		result.put("chains", chains);
-		return result;
 	}
 
 	/*
@@ -323,7 +306,7 @@ public class PlaneManager {
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> getPlaneIds(int accountId, Long start,
+	public Map<String, Object> getOldPlanes(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
@@ -553,7 +536,7 @@ public class PlaneManager {
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public boolean viewedMessages(int accountId, long planeId, long lastMsgId,
+	public Map<String, Object> viewedMessages(int accountId, long planeId, long lastMsgId,
 			boolean byOwner) throws AirogamiException {
 		try {
 			return ServiceUtils.planeService.viewedMessages(accountId, planeId,

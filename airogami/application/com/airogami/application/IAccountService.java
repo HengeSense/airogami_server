@@ -72,4 +72,24 @@ public interface IAccountService {
 	 */
 	public Report reportAccount(Report report) throws ApplicationException;
 	
+	
+	/*
+	 * @return count if successful
+	 * @throws ApplicationException if failed 
+	 */
+	public int updateAccountStat() throws ApplicationException;
+	
+	/*
+	 * pickup planes or chains
+	 * 
+	 * @param accountId:(int)
+	 * 
+	 * @return planes, chains, accountStatLeft if successful otherwise error, accountStatLeft
+	 * 
+	 * @throws ApplicationException if failed
+	 */
+	public Map<String, Object> pickup(int accountId) throws ApplicationException;
+	
+	
+	
 }

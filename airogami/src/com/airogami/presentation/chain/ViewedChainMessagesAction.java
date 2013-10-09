@@ -42,9 +42,7 @@ public class ViewedChainMessagesAction extends AirogamiActionSupport{
 		boolean succeed = false;
 		try {
 			User user = (User)request.getAttribute("user");	
-			boolean succeeded = ManagerUtils.chainManager.viewedChainMessages(user.getAccountId(), chainId, timestamp);
-			Map<String, Object> result = new TreeMap<String, Object>(); 
-			result.put("succeed", succeeded);
+			Map<String, Object> result = ManagerUtils.chainManager.viewedChainMessages(user.getAccountId(), chainId, timestamp);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

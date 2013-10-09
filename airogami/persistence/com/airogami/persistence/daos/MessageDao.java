@@ -1,6 +1,5 @@
 package com.airogami.persistence.daos;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -9,7 +8,6 @@ import javax.persistence.TypedQuery;
 
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
-import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.MessageDAO;
@@ -51,16 +49,20 @@ public class MessageDao extends MessageDAO {
 	 * lock plane first
 	 */
 
-	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfOwner, plane.lastMsgIdOfOwner = ?3 where plane.lastMsgIdOfOwner < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfOwner, plane.lastMsgIdOfOwner = ?3 where plane.lastMsgIdOfOwner < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByOwner = 0 and plane.planeId = ?1 and plane.status = ?4";
 
-	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfTarget, plane.lastMsgIdOfTarget = ?3 where plane.lastMsgIdOfTarget < ?3 and plane.accountByTargetId.accountId = ?2 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfTarget, plane.lastMsgIdOfTarget = ?3 where plane.lastMsgIdOfTarget < ?3 and plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0 and plane.planeId = ?1 and plane.status = ?4";
 
 	private final String viewedMessageByOwnerCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
 
 	private final String viewedMessageByTargetCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
 
+	private final String viewedMessageByOwnerQueryJPQL = "select plane.lastMsgIdOfOwner from Plane plane where plane.planeId = ?1 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByOwner = 0 and plane.status = ?3";
+
+	private final String viewedMessageByTargetQueryJPQL = "select plane.lastMsgIdOfTarget from Plane plane where plane.planeId = ?1 and plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0 and plane.status = ?3";
+
 	// may verify whether lastMsgId exists
-	public boolean viewedMessage(int accountId, long planeId, long lastMsgId,
+	public Object[] viewedMessage(int accountId, long planeId, Long lastMsgId,
 			boolean byOwner) {
 		EntityManagerHelper.log("viewedMessaging", Level.INFO, null);
 		try {
@@ -97,10 +99,29 @@ public class MessageDao extends MessageDAO {
 					DaoUtils.accountStatDao.increaseMsgCount(accountId, -cnt);
 				}
 			}
-
+			else{
+				lastMsgId = null;
+				if (byOwner) {
+					jpql = viewedMessageByOwnerQueryJPQL;
+				} else {
+					jpql = viewedMessageByTargetQueryJPQL;
+				}
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						jpql);
+				query.setParameter(1, planeId);
+				query.setParameter(2, accountId);
+				query.setParameter(3, PlaneConstants.StatusReplied);
+				List<Long> result = query.getResultList();
+				if(result.size() > 0){
+					lastMsgId = result.get(0);
+				}
+			}
+            Object[] results = new Object[2];
+            results[0] = count == 1;
+            results[1] = lastMsgId;
 			EntityManagerHelper.log("viewedMessage successful", Level.INFO,
 					null);
-			return count == 1;
+			return results;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("viewedMessage failed", Level.SEVERE, re);
 			throw re;

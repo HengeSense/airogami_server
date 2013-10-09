@@ -24,7 +24,7 @@ public class GetOldPlanesAction extends AirogamiActionSupport {
 		boolean succeed = false;
 		try {			
 			User user = (User)request.getAttribute("user");
-			Map<String, Object> result = ManagerUtils.planeManager.getPlaneIds(
+			Map<String, Object> result = ManagerUtils.planeManager.getOldPlanes(
 					user.getAccountId(), start, end, limit, forward);
             dataMap.put("result", result);
 			succeed = true;

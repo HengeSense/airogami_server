@@ -16,9 +16,9 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
+import com.airogami.persistence.classes.NewPlane;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Message;
-import com.airogami.persistence.entities.NewPlane;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.logic.ManagerUtils;
 
@@ -190,9 +190,9 @@ public class TestPlane {
 		Long end = 2L;
 		int limit = -1;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.getPlaneIds(accountId, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.planeManager.getOldPlanes(accountId, start, end, limit, forward);
 			//ObjectUtils.printObject(result);
-			List<Long> planes = (List<Long>) result.get("planeIds");
+			List<Long> planes = (List<Long>) result.get("oldPlanes");
 			Iterator<Long> iter = planes.iterator();
 			while(iter.hasNext()){
 				Long planeId = iter.next();
@@ -202,6 +202,11 @@ public class TestPlane {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
+		
+		try{
+			Thread.sleep(1000 * 3600);
+		}
+		catch(Throwable t){}
 	}
 	
 	@Ignore
@@ -308,10 +313,10 @@ public class TestPlane {
 		int accountId = 1;
 		long planeId = 4;
 		long lastMsgId = 0;
-		boolean byOwner = true, succeed;
+		boolean byOwner = true;
 		try {
-			succeed = ManagerUtils.planeManager.viewedMessages(accountId, planeId, lastMsgId, byOwner);
-		    System.out.println(succeed);
+			Map<String, Object> result = ManagerUtils.planeManager.viewedMessages(accountId, planeId, lastMsgId, byOwner);
+		    System.out.println(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
 			fail();

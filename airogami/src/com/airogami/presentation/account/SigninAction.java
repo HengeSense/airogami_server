@@ -73,7 +73,7 @@ public class SigninAction extends AirogamiActionSupport implements
 								shouldSignin = false;
 							}
 							else{
-								account.setAccountStat(null);
+								//account.setAccountStat(null);
 							}
 						}
 						if(shouldSignin){

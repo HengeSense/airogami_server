@@ -1,5 +1,6 @@
 package com.airogami.persistence.entities;
 
+import com.airogami.common.constants.AccountConstants;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -37,9 +38,13 @@ public class AccountStat implements java.io.Serializable {
 
 	private String devToken;
 
-	private Short pickupCount = 0;
+	private Short pickupLeftCount = AccountConstants.PickupMaxCount;
 
-	private Short sendCount = 0;
+	private Short sendLeftCount = AccountConstants.SendMaxCount;
+
+	private Short pickupCount = AccountConstants.PickupMaxCount;
+
+	private Short sendCount = AccountConstants.SendMaxCount;
 
 	// Constructors
 
@@ -50,13 +55,16 @@ public class AccountStat implements java.io.Serializable {
 	/** minimal constructor */
 	public AccountStat(Integer accountId, Account account, Integer signinCount,
 			Short status, Integer msgCount, Integer chainMsgCount,
-			Short pickupCount, Short sendCount) {
+			Short pickupLeftCount, Short sendLeftCount, Short pickupCount,
+			Short sendCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.signinCount = signinCount;
 		this.status = status;
 		this.msgCount = msgCount;
 		this.chainMsgCount = chainMsgCount;
+		this.pickupLeftCount = pickupLeftCount;
+		this.sendLeftCount = sendLeftCount;
 		this.pickupCount = pickupCount;
 		this.sendCount = sendCount;
 	}
@@ -64,7 +72,8 @@ public class AccountStat implements java.io.Serializable {
 	/** full constructor */
 	public AccountStat(Integer accountId, Account account, Integer signinCount,
 			Short status, Integer msgCount, Integer chainMsgCount,
-			Short devType, String devToken, Short pickupCount, Short sendCount) {
+			Short devType, String devToken, Short pickupLeftCount,
+			Short sendLeftCount, Short pickupCount, Short sendCount) {
 		this.accountId = accountId;
 		this.account = account;
 		this.signinCount = signinCount;
@@ -73,6 +82,8 @@ public class AccountStat implements java.io.Serializable {
 		this.chainMsgCount = chainMsgCount;
 		this.devType = devType;
 		this.devToken = devToken;
+		this.pickupLeftCount = pickupLeftCount;
+		this.sendLeftCount = sendLeftCount;
 		this.pickupCount = pickupCount;
 		this.sendCount = sendCount;
 	}
@@ -152,7 +163,25 @@ public class AccountStat implements java.io.Serializable {
 		this.devToken = devToken;
 	}
 
-	@Column(name = "PICKUP_COUNT", nullable = false, insertable = false, updatable = false)
+	@Column(name = "PICKUP_LEFT_COUNT", nullable = false, updatable = false)
+	public Short getPickupLeftCount() {
+		return this.pickupLeftCount;
+	}
+
+	public void setPickupLeftCount(Short pickupLeftCount) {
+		this.pickupLeftCount = pickupLeftCount;
+	}
+
+	@Column(name = "SEND_LEFT_COUNT", nullable = false, updatable = false)
+	public Short getSendLeftCount() {
+		return this.sendLeftCount;
+	}
+
+	public void setSendLeftCount(Short sendLeftCount) {
+		this.sendLeftCount = sendLeftCount;
+	}
+
+	@Column(name = "PICKUP_COUNT", nullable = false, updatable = false)
 	public Short getPickupCount() {
 		return this.pickupCount;
 	}
@@ -161,7 +190,7 @@ public class AccountStat implements java.io.Serializable {
 		this.pickupCount = pickupCount;
 	}
 
-	@Column(name = "SEND_COUNT", nullable = false, insertable = false, updatable = false)
+	@Column(name = "SEND_COUNT", nullable = false, updatable = false)
 	public Short getSendCount() {
 		return this.sendCount;
 	}

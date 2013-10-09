@@ -92,8 +92,8 @@ public class TestPersistencePlane {
 		plane.getMessages().add(message);
 		message.setPlane(plane);
 		try {
-			plane = ServiceUtils.planeService.sendPlane(plane, ownerId);
-			ObjectUtils.printObject(plane);
+			Map<String, Object> result = ServiceUtils.planeService.sendPlane(plane, ownerId);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

@@ -77,8 +77,8 @@ public class TestPersistenceChain {
 		chain.getChainMessages().add(chainMessage);
 		chainMessage.setChain(chain);
 		try {
-			chain = ServiceUtils.chainService.sendChain(chain, ownerId);
-			ObjectUtils.printObject(chain);
+			Map<String, Object> result = ServiceUtils.chainService.sendChain(chain, ownerId);
+			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			fail();

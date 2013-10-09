@@ -9,7 +9,7 @@ public class NotifiedInfo {
 	public Integer getAccountId(){
 		return null;
 	}
-	public Long getMessagesCount(){
+	public Integer getMessagesCount(){
 		return null;
 	}
 	public List<NotifiedInfo> getNotifiedInfos(){
@@ -25,7 +25,7 @@ public class NotifiedInfo {
 	
 	public void setAccountId(Integer accountId){
 	}
-	public void setMessagesCount(Long messagesCount){
+	public void setMessagesCount(Integer messagesCount){
 	}
 	public void setNotifiedInfos(NotifiedInfo[] notifiedInfos){
 	}

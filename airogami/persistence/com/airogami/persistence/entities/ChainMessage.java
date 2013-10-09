@@ -39,14 +39,11 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Short status = 0;
 
-	private Timestamp lastViewedTime = baseTimestamp;
+	private Timestamp lastViewedTime;
 
 	private Short source = (short) 0;
 
 	private Timestamp lastTime;
-
-	private static final Timestamp baseTimestamp = Timestamp
-			.valueOf("2013-01-01 00:00:00.0");
 
 	// Constructors
 
@@ -188,7 +185,7 @@ public class ChainMessage implements java.io.Serializable {
 
 		setCreatedTime(timestamp);
 
-		setLastViewedTime(baseTimestamp);
+		setLastViewedTime(timestamp);
 
 		setLastTime(timestamp);
 

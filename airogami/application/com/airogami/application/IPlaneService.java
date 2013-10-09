@@ -26,10 +26,10 @@ public interface IPlaneService {
 	/*
 	 * @param plane:(Plane) must be not null, have plane.message, plane.category
 	 * @param ownerId:(int) must exist
-	 * @return plane, plane.messages, plane.category if successful or null if ownerId not exist
+	 * @return plane, accountStatLeft if successful otherwise error, accountStatLeft 
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Plane sendPlane(Plane plane, int ownerId) throws ApplicationException;
+	public Map<String, Object> sendPlane(Plane plane, int ownerId) throws ApplicationException;
 	
 	/*
 	 * @param planeId:(long) must exist
@@ -50,7 +50,7 @@ public interface IPlaneService {
 	/*
 	 * @param accountId:(int)
 	 * @param count:(int) should > 0
-	 * @return planes, planes.messages, planes.category, planes.accountByOwnerId if successful
+	 * @return planes if successful
 	 * @throws ApplicationException if failed 
 	 */
 	public List<Plane> pickupPlane(int accountId, int count) throws ApplicationException;
@@ -200,8 +200,8 @@ public interface IPlaneService {
 	 * @param planeId:(long)	 
 	 * @param lastMsgId:(long) (exclusive)
 	 * @param byOwner:(boolean)
-	 * @return succeed
+	 * @return succeed, lastMsgId
 	 * @throws ApplicationException if failed 
 	 */ 
-	public boolean viewedMessages(int accountId, long planeId, long lastMsgId, boolean byOwner) throws ApplicationException;
+	public Map<String, Object> viewedMessages(int accountId, long planeId, long lastMsgId, boolean byOwner) throws ApplicationException;
 }

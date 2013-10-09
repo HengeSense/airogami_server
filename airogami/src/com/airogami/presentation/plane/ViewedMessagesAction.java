@@ -25,9 +25,7 @@ public class ViewedMessagesAction extends AirogamiActionSupport{
 		boolean succeed = false;
 		try {
 			User user = (User)request.getAttribute("user");	
-			boolean succeeded = ManagerUtils.planeManager.viewedMessages(user.getAccountId(), planeId, lastMsgId, byOwner);
-			Map<String, Object> result = new TreeMap<String, Object>();
-		    result.put("succeed", succeeded);
+			Map<String, Object> result = ManagerUtils.planeManager.viewedMessages(user.getAccountId(), planeId, lastMsgId, byOwner);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

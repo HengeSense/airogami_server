@@ -3,6 +3,7 @@
 #set($hasTime=false)
 #set($lastViewedTime=false)
 #set($chainMessageLastViewedTime=false)
+#set($accountConstantsImport=false)
 #foreach($field in $pojo.getAllPropertiesIterator())
 #if($pojo.getMetaAttribAsBool($field, "gen-property", true))    
     #if($field.name.equals("createdTime"))
@@ -13,7 +14,7 @@
        #set($hasTime=true)
     #end    
     
-    #if($field.name.endsWith("ViewedTime"))
+    #if(false && $field.name.endsWith("ViewedTime"))
     #set($lastViewedTime=true)
     #set($field.columnIterator.next().defaultValue = "baseTimestamp")
     #end
@@ -48,8 +49,26 @@
         #set($column=$field.columnIterator.next())
         #set($column.defaultValue="0")
     #end
+    
+    #if($field.name.equals("pickupCount") || $field.name.equals("pickupLeftCount"))
+        #set($column=$field.columnIterator.next())
+        #set($column.defaultValue="AccountConstants.PickupMaxCount")
+        #set($accountConstantsImport=true)
+        #set($field.insertable=true)
+    #end
+    
+    #if($field.name.equals("sendCount") || $field.name.equals("sendLeftCount"))
+        #set($column=$field.columnIterator.next())
+        #set($column.defaultValue="AccountConstants.SendMaxCount")
+        #set($accountConstantsImport=true)
+        #set($field.insertable=true)
+    #end
   
 #end
+#end
+
+#if($accountConstantsImport)
+#set($temp = $pojo.importType("com.airogami.common.constants.AccountConstants"))
 #end
 
 #set($temp = $pojo.importType("java.util.List"))

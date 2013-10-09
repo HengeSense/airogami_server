@@ -14,6 +14,9 @@ import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
+import com.airogami.persistence.classes.AccountStatLeft;
+import com.airogami.persistence.classes.NewChain;
+import com.airogami.persistence.classes.OldChain;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Chain;
@@ -23,8 +26,6 @@ import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
 import com.airogami.persistence.entities.Message;
-import com.airogami.persistence.entities.NewChain;
-import com.airogami.persistence.entities.OldChain;
 import com.airogami.persistence.entities.Plane;
 
 public class ChainService implements IChainService {
@@ -34,22 +35,30 @@ public class ChainService implements IChainService {
 	 * targetId, long ownerId)
 	 */
 	@Override
-	public Chain sendChain(Chain chain, int ownerId)
+	public Map<String, Object> sendChain(Chain chain, int ownerId)
 			throws ApplicationException {
-
+		String error = null;
+		AccountStatLeft accountStatLeft = null;
 		ApplicationException ae = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			Account account = DaoUtils.accountDao
-					.getReference(ownerId);
-			chain.setAccount(account);
-			ChainMessage chainMessage = chain.getChainMessages().iterator().next();
-			chain.getChainMessages().clear();
-			DaoUtils.chainDao.save(chain);
-			DaoUtils.chainDao.flush();
-			ChainMessageId id = new ChainMessageId(chain.getChainId(), ownerId);			
-			chainMessage.setId(id);
-			chain.getChainMessages().add(chainMessage);
+			if(DaoUtils.accountStatDao.verifySend(ownerId))
+			{
+				Account account = DaoUtils.accountDao
+						.getReference(ownerId);
+				chain.setAccount(account);
+				ChainMessage chainMessage = chain.getChainMessages().iterator().next();
+				chain.getChainMessages().clear();
+				DaoUtils.chainDao.save(chain);
+				DaoUtils.chainDao.flush();
+				ChainMessageId id = new ChainMessageId(chain.getChainId(), ownerId);			
+				chainMessage.setId(id);
+				chain.getChainMessages().add(chainMessage);
+			}
+			else{
+				error = "limit";
+			}
+			accountStatLeft = DaoUtils.accountStatDao.getSendAndPickupLeftCounts(ownerId);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			//t.printStackTrace();
@@ -58,7 +67,7 @@ public class ChainService implements IChainService {
 			} else {
 				//ownerId not exist
 				if(t.getCause() instanceof EntityExistsException){
-					chain = null;
+					error = "none";
 				}
 				else{
 					ae = new ApplicationException(t.getCause().getMessage());
@@ -70,7 +79,15 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		return chain; 
+		Map<String, Object> result = new TreeMap<String, Object>();
+		if(error != null){
+		    result.put("error", error);
+		}
+		else{
+			result.put("chain", chain);
+		}
+		result.put("accountStatLeft", accountStatLeft);
+		return result; 
 	}
 
     /*
@@ -625,13 +642,14 @@ public class ChainService implements IChainService {
 	}
 
 	@Override
-	public boolean viewedChainMessages(int accountId, long chainId, Timestamp last)
+	public Map<String, Object> viewedChainMessages(int accountId, long chainId, Timestamp last)
 			throws ApplicationException {
 		boolean succeed = false;
 		ApplicationException ae = null;
+		Object[] results = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			succeed = DaoUtils.chainMessageDao.viewedChainMessage(accountId, chainId, last);
+			results = DaoUtils.chainMessageDao.viewedChainMessage(accountId, chainId, last);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -646,6 +664,11 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		return succeed;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		result.put("succeed", results[0]);
+		if(results[1] != null){
+			result.put("lastViewedTime", ServiceUtils.format((Timestamp)results[1]));
+		}
+		return result;
 	}
 }
