@@ -25,6 +25,8 @@
 		<class>com.airogami.persistence.entities.ChainHist</class>
 		<class>com.airogami.persistence.entities.ChainHistId</class>
 		<class>com.airogami.persistence.entities.PlaneHistId</class>
+		<class>com.airogami.persistence.entities.AccountSys</class>
+		<class>com.airogami.persistence.entities.Agent</class>
 		<properties>
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />
@@ -51,7 +53,7 @@
 			<property name="openjpa.QueryCache" value="CacheSize=1000" />
 			<property name="openjpa.RemoteCommitProvider" value="sjvm" />
 
-			
+
 
 		</properties>
 	</persistence-unit>

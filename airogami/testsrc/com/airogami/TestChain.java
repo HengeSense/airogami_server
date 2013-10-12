@@ -115,7 +115,6 @@ public class TestChain {
 			while(iter.hasNext()){
 				Chain chain = iter.next();
 				System.out.print(chain.getChainId());
-				System.out.println(": " + chain.getUpdateInc());
 			}
 			//ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
@@ -228,7 +227,6 @@ public class TestChain {
 			while(iter.hasNext()){
 				Chain chain = iter.next();
 				System.out.print(chain.getChainId());
-				System.out.println(": " + chain.getUpdateInc());
 			}
 			//ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {

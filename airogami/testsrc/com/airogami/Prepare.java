@@ -194,7 +194,7 @@ public class Prepare {
         		message.setType((short) 0);
         		int ownerId = i + 1;
         		long planeId = plane.getPlaneId();
-        		 ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
+        		 ManagerUtils.planeManager.replyPlane(planeId, ownerId, false, message);
     		}
     		
     		//ObjectUtils.printObject(message);

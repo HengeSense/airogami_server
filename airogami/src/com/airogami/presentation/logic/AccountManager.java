@@ -6,6 +6,7 @@ import java.util.Map;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
+import com.airogami.common.ClientAgent;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
@@ -83,16 +84,18 @@ public class AccountManager {
 	 * @param args:(String[]) must have two valid elements (screenName,
 	 * password)
 	 * 
+	 * @param clientAgent:(ClientAgent) must be non-null
+	 * 
 	 * @param automatic:(boolean) whether signed in automatically
 	 * 
 	 * @return account, accountStat if successful or null if not matched
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Account signinWithScreenName(String screenName, String password,
+	public Account signinWithScreenName(String screenName, String password, ClientAgent clientAgent,
 			boolean automatic) throws AirogamiException {
 		if (screenName == null || screenName.length() == 0 || password == null
-				|| password.length() == 0) {
+				|| password.length() == 0 || clientAgent == null) {
 			throw new IllegalArgumentException(
 					"Illegal arguments in signinWithScreenName");
 		}
@@ -100,7 +103,7 @@ public class AccountManager {
 		try {
 			account = ServiceUtils.accountService.signin(new String[] {
 					screenName, password },
-					AccountConstants.AuthenticateTypeScreenName, automatic);
+					AccountConstants.AuthenticateTypeScreenName, clientAgent, automatic);
 		} catch (Throwable re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
@@ -117,23 +120,25 @@ public class AccountManager {
 	/*
 	 * @param args:(String[]) must have two valid elements (email, password)
 	 * 
+	 * @param clientAgent:(ClientAgent) must be non-null
+	 * 
 	 * @param automatic:(boolean) whether signed in automatically
 	 * 
 	 * @return account, accountStat if successful or null if not matched
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Account signinWithEmail(String email, String password,
+	public Account signinWithEmail(String email, String password, ClientAgent clientAgent,
 			boolean automatic) throws AirogamiException {
 		if (email == null || email.length() == 0 || password == null
-				|| password.length() == 0) {
+				|| password.length() == 0 || clientAgent == null) {
 			throw new IllegalArgumentException(
 					"Illegal arguments in signinWithEmail");
 		}
 		Account account = null;
 		try {
 			account = ServiceUtils.accountService.signin(new String[] { email,
-					password }, AccountConstants.AuthenticateTypeEmail, automatic);
+					password }, AccountConstants.AuthenticateTypeEmail, clientAgent, automatic);
 		} catch (Throwable re) {
 			re.printStackTrace();
 			throw new AirogamiException(

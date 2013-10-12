@@ -16,25 +16,25 @@
 		</field-validator>
 	</field>
 	
-	<field name="clientAgent.deviceType">
+	<field name="clientAgent.devType">
 		<field-validator type="fieldexpression">
-		    <param name="expression"><![CDATA[clientAgent.deviceType > 0 && clientAgent.deviceType < 3]]> </param>
-			<message key="error.account.signout.deviceType.range">The deviceType should be between 1 and 2</message>
+		    <param name="expression"><![CDATA[clientAgent.devType > 0 && clientAgent.devType < 3]]> </param>
+			<message key="error.account.signout.devType.range">The devType should be between 1 and 2</message>
 		</field-validator>
 	</field>
 	
-	<field name="clientAgent.clientVersion">
+	<field name="clientAgent.devVersion">
 		<field-validator type="fieldexpression">
-		    <param name="expression"><![CDATA[clientAgent.clientVersion > 0]]> </param>
-			<message key="error.account.signout.clientVersion.min">The clientVersion should be over 0</message>
+		    <param name="expression"><![CDATA[clientAgent.devVersion > 0]]> </param>
+			<message key="error.account.signout.devVersion.min">The devVersion should be over 0</message>
 		</field-validator>
 	</field>
 	
-	<field name="clientAgent.deviceToken">
+	<field name="clientAgent.devToken">
 		<field-validator type="stringlength">
 		    <param name="minLength"><![CDATA[64]]> </param>
 		    <param name="maxLength"><![CDATA[64]]> </param>
-			<message key="error.account.signout.deviceToken.length">The deviceToken should be ${minLength}</message>
+			<message key="error.account.signout.devToken.length">The devToken should be ${minLength}</message>
 		</field-validator>
 	</field>
 	

@@ -21,25 +21,25 @@ import com.airogami.persistence.entities.PlaneDAO;
 
 public class PlaneDao extends PlaneDAO {
 	
-	private final String initLastMsgIdOfTargetJPQL = "update Plane plane set plane.lastMsgIdOfTarget = ?2 where plane.planeId = ?1";
+	private final String initLastMsgIdOfTJPQL = "update Plane plane set plane.lastMsgIdOfT = ?2 where plane.planeId = ?1";
 	
-	public void initLastMsgIdOfTarget(long planeId, long messageId) {
-		EntityManagerHelper.log("initLastMsgIdOfTargeting with planeId = " + planeId, Level.INFO, null);
+	public void initLastMsgIdOfT(long planeId, long messageId) {
+		EntityManagerHelper.log("initLastMsgIdOfTing with planeId = " + planeId, Level.INFO, null);
 		try {
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					initLastMsgIdOfTargetJPQL);
+					initLastMsgIdOfTJPQL);
 			query.setParameter(1, planeId);
 			query.setParameter(2, messageId);
 			query.executeUpdate();
 			EntityManagerHelper
-					.log("initLastMsgIdOfTarget successful", Level.INFO, null);
+					.log("initLastMsgIdOfT successful", Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("initLastMsgIdOfTarget failed", Level.SEVERE, re);
+			EntityManagerHelper.log("initLastMsgIdOfT failed", Level.SEVERE, re);
 			throw re;
 		}
 	}
 	
-	private final String planeExistsJPQL = "select count(plane.planeId) from Plane plane where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0))";
+	private final String planeExistsJPQL = "select count(plane.planeId) from Plane plane where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByT = 0))";
 
 	public boolean planeExists(long planeId, int accountId) {
 		EntityManagerHelper.log("planeExistsing with planeId = " + planeId + " and accountId = " + accountId, Level.INFO, null);
@@ -61,7 +61,7 @@ public class PlaneDao extends PlaneDAO {
 	}
 	
 	
-	private final String getPlaneJPQL = "select plane from Plane plane where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0))";
+	private final String getPlaneJPQL = "select plane from Plane plane where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByT = 0))";
 
 	public Plane getPlane(long planeId, int accountId) {
 		EntityManagerHelper.log("getPlaneing with planeId = " + planeId + " and accountId = " + accountId, Level.INFO, null);
@@ -86,14 +86,23 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	//CURRENT_TIMESTAMP
-	private final String verifyReplyJPQL = "update Plane plane set plane.status = ?3, plane.updatedTime = ?4, plane.updateCount = plane.updateCount + 1 where plane.planeId = ?1 and ((plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0))";
+	//plane.updateCount = plane.updateCount + 1
+	private final String verifyReplyByOwnerJPQL = "update Plane plane set plane.status = ?3, plane.updatedTime = ?4 where plane.planeId = ?1 and plane.accountByOwnerId.accountId = ?2 and plane.status = ?3 and plane.deletedByO = 0";
 
-	public boolean verifyReply(long planeId, int ownerId) {
+	private final String verifyReplyByTargetJPQL = "update Plane plane set plane.status = ?3, plane.updatedTime = ?4 where plane.planeId = ?1 and plane.accountByTargetId.accountId = ?2 and plane.deletedByT = 0";
+
+	public boolean verifyReply(long planeId, int ownerId, boolean byOwner) {
 		EntityManagerHelper.log("verifyReplying with planeId = " + planeId + " and ownerId = " + ownerId, Level.INFO, null);
 		try {
+			String jpql = null;
+			if(byOwner){
+				jpql = verifyReplyByOwnerJPQL;
+			}
+			else{
+				jpql = verifyReplyByTargetJPQL;
+			}
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					verifyReplyJPQL);
+					jpql);
 			query.setParameter(1, planeId);
 			query.setParameter(2, ownerId);
 			query.setParameter(3, PlaneConstants.StatusReplied);
@@ -108,7 +117,7 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String getNotifiedInfoSQL = "select OWNER_ID as accountId, MSG_COUNT + CHAIN_MSG_COUNT as messagesCount, FULL_NAME as name from PLANE, PROFILE profile, ACCOUNT_STAT accountStat where PLANE_ID = ?1 and DELETED_BY_OWNER = 0 and OWNER_ID <> ?2 and profile.ACCOUNT_ID = OWNER_ID and accountStat.ACCOUNT_ID = OWNER_ID union select TARGET_ID as accountId, MSG_COUNT + CHAIN_MSG_COUNT as messagesCount, FULL_NAME as name from PLANE, PROFILE profile, ACCOUNT_STAT accountStat  where PLANE_ID = ?1 and DELETED_BY_TARGET = 0 and TARGET_ID <> ?2 and profile.ACCOUNT_ID = TARGET_ID and accountStat.ACCOUNT_ID = TARGET_ID";
+	private final String getNotifiedInfoSQL = "select OWNER_ID as accountId, MSG_COUNT + CHAIN_MSG_COUNT as messagesCount, FULL_NAME as name from PLANE, PROFILE profile, ACCOUNT_STAT accountStat where PLANE_ID = ?1 and DELETED_BY_O = 0 and OWNER_ID <> ?2 and profile.ACCOUNT_ID = OWNER_ID and accountStat.ACCOUNT_ID = OWNER_ID union all select TARGET_ID as accountId, MSG_COUNT + CHAIN_MSG_COUNT as messagesCount, FULL_NAME as name from PLANE, PROFILE profile, ACCOUNT_STAT accountStat  where PLANE_ID = ?1 and DELETED_BY_T = 0 and TARGET_ID <> ?2 and profile.ACCOUNT_ID = TARGET_ID and accountStat.ACCOUNT_ID = TARGET_ID";
 
 	public MessageNotifiedInfo getNotifiedInfo(long planeId, int accountId) {
 		EntityManagerHelper.log("getNotifiedInfoing with planeId = " + planeId, Level.INFO, null);
@@ -132,16 +141,30 @@ public class PlaneDao extends PlaneDAO {
 	}
 	
 	//private final String updateIncJPQL = "update Plane plane set (select max(plane.updateInc) + 1 from Plane plane) where plane.planeId = ?1";
-	private final String updateIncSQL = "update PLANE  set UPDATE_INC = (select max_value from (select max(UPDATE_INC) + 1 as max_value from PLANE) as tmp) WHERE PLANE_ID = ?";
+	//private final String updateIncSQL = "update PLANE  set UPDATE_INC = (select max_value from (select max(UPDATE_INC) + 1 as max_value from PLANE) as tmp) WHERE PLANE_ID = ?";
+
+	private final String updateIncByOwnerSQL = "update PLANE set OWNER_INC = (select PLANE_INC from ACCOUNT_SYS where ACCOUNT_ID = OWNER_ID) WHERE PLANE_ID = ?1";
+
+	private final String updateIncByTargetSQL = "update PLANE set TARGET_INC = (select PLANE_INC from ACCOUNT_SYS where ACCOUNT_ID = TARGET_ID) WHERE PLANE_ID = ?1";
 
 	
-	public void updateInc(long planeId) {
+	public void updateInc(long planeId, int accountId, boolean byOwner) {
 		EntityManagerHelper.log("updateIncing with planeId = " + planeId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
-					updateIncSQL);
-			query.setParameter(1, planeId);
-			query.executeUpdate();
+			if(DaoUtils.accountSysDao.increasePlaneInc(accountId, 1)){
+				String sql = null;
+				if(byOwner){
+					sql = updateIncByOwnerSQL;
+				}
+				else{
+					sql = updateIncByTargetSQL;
+				}
+				Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
+						sql);
+				query.setParameter(1, planeId);
+				query.executeUpdate();
+			}
+			
 			EntityManagerHelper
 					.log("updateInc successful", Level.INFO, null);
 		} catch (RuntimeException re) {
@@ -150,8 +173,8 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	//"plane.lastMsgIdOfTarget = 0" may be redundant
-	private final String throwPlaneJPQL = "update Plane plane set plane.accountByTargetId = null, plane.lastMsgIdOfTarget = 0 where plane.planeId = ?1 and plane.status = ?3 and plane.accountByTargetId.accountId = ?2";
+	//"plane.lastMsgIdOfT = 0" may be redundant
+	private final String throwPlaneJPQL = "update Plane plane set plane.accountByTargetId = null, plane.lastMsgIdOfT = 0 where plane.planeId = ?1 and plane.status = ?3 and plane.accountByTargetId.accountId = ?2";
 
 	public boolean throwPlane(long planeId, int accountId){
 		EntityManagerHelper.log("throwPlaneing with planeId = " + planeId + " and accountId = " + accountId, Level.INFO, null);
@@ -208,9 +231,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String deletePlaneByOwnerJPQL = "update Plane plane set plane.deletedByOwner = 1 where plane.deletedByOwner = 0 and plane.planeId = ?1 and plane.status = ?3 and plane.accountByOwnerId.accountId = ?2";
+	private final String deletePlaneByOwnerJPQL = "update Plane plane set plane.deletedByO = 1, plane.updateCount = plane.updateCount + 1 where plane.deletedByO = 0 and plane.planeId = ?1 and plane.status = ?3 and plane.accountByOwnerId.accountId = ?2";
 
-	private final String deletePlaneByTargetJPQL = "update Plane plane set plane.deletedByTarget = 1 where plane.deletedByTarget = 0 and plane.planeId = ?1 and plane.status = ?3 and plane.accountByTargetId.accountId = ?2";
+	private final String deletePlaneByTargetJPQL = "update Plane plane set plane.deletedByT = 1, plane.updateCount = plane.updateCount + 1 where plane.deletedByT = 0 and plane.planeId = ?1 and plane.status = ?3 and plane.accountByTargetId.accountId = ?2";
 
 	public boolean deletePlane(long planeId, int accountId, boolean byOwner){
 		EntityManagerHelper.log("deletePlaneing with planeId = " + planeId + " and accountId = " + accountId, Level.INFO, null);
@@ -228,9 +251,6 @@ public class PlaneDao extends PlaneDAO {
 			query.setParameter(2, accountId);
 			query.setParameter(3, PlaneConstants.StatusReplied);
 			int count = query.executeUpdate();
-			if(count == 1){
-				this.increaseUpdateCount(planeId, 1);
-			}
 			EntityManagerHelper
 					.log("deletePlane successful", Level.INFO, null);
 			return count == 1;
@@ -240,13 +260,13 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String likePlaneByOwnerJPQL = "update Plane plane set plane.likedByOwner = 1 where plane.likedByOwner = 0 and plane.planeId = ?1 and plane.status <> ?3 and plane.accountByOwnerId.accountId = ?2";
+	private final String likePlaneByOwnerJPQL = "update Plane plane set plane.likedByOwner = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByOwner = 0 and plane.planeId = ?1 and plane.status <> ?3 and plane.accountByOwnerId.accountId = ?2";
 
-	private final String likePlaneByTargetJPQL = "update Plane plane set plane.likedByTarget = 1 where plane.likedByTarget = 0 and plane.planeId = ?1  and plane.status <> ?3 and plane.accountByTargetId.accountId = ?2";
+	private final String likePlaneByTargetJPQL = "update Plane plane set plane.likedByTarget = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByTarget = 0 and plane.planeId = ?1  and plane.status <> ?3 and plane.accountByTargetId.accountId = ?2";
     //can't return if deleted
-	private final String likePlaneQueryByOwnerJPQL = "select plane.accountByTargetId.accountId from Plane plane where plane.planeId = ?1 and plane.deletedByTarget = 0";
+	private final String likePlaneQueryByOwnerJPQL = "select plane.accountByTargetId.accountId from Plane plane where plane.planeId = ?1 and plane.deletedByT = 0";
 
-	private final String likePlaneQueryByTargetJPQL = "select plane.accountByOwnerId.accountId from Plane plane where plane.planeId = ?1 and plane.deletedByOwner = 0";
+	private final String likePlaneQueryByTargetJPQL = "select plane.accountByOwnerId.accountId from Plane plane where plane.planeId = ?1 and plane.deletedByO = 0";
 
 	//return the opposite accountId
 	public Integer likePlane(long planeId, Integer accountId, boolean byOwner){
@@ -268,7 +288,7 @@ public class PlaneDao extends PlaneDAO {
 			//query.setParameter(4, new Timestamp(System.currentTimeMillis()));
 			accountId = null;
 			if(query.executeUpdate() == 1){
-				this.increaseUpdateCount(planeId, 1);
+				//this.increaseUpdateCount(planeId, 1);
 				//query
 				if(byOwner){
 					jpql = likePlaneQueryByOwnerJPQL;
@@ -290,27 +310,32 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String getNewPlanesForwardJPQL = "select new com.airogami.persistence.classes.NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
+	//private final String getNewPlanesForwardJPQL = "select new com.airogami.persistence.classes.NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
 
-	private final String getNewPlanesBackwardJPQL = "select new com.airogami.persistence.classes.NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+	//private final String getNewPlanesBackwardJPQL = "select new com.airogami.persistence.classes.NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+
+	private final String getNewPlanesForwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC asc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC asc limit ?5) order by updateInc asc limit ?5";
+
+	private final String getNewPlanesBackwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC desc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC desc limit ?5) order by updateInc desc limit ?5";
 
 	public List<NewPlane> getNewPlanes(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNewPlanesing with accountId = " + accountId, Level.INFO, null);
 		try {
-			String jpql = null;
+			String sql = null;
 			if(forward){
-				jpql = getNewPlanesForwardJPQL; 
+				sql = getNewPlanesForwardSQL; 
 			}
 			else{
-				jpql = getNewPlanesBackwardJPQL;
+				sql = getNewPlanesBackwardSQL;
 			}
-			TypedQuery<NewPlane> query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql, NewPlane.class);
+			Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
+					sql, NewPlane.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, PlaneConstants.StatusReplied);
 			query.setParameter(3, start);
 			query.setParameter(4, end);
-			query.setMaxResults(limit);
+			query.setParameter(5, limit);
+			//query.setMaxResults(limit);
 			List<NewPlane> newPlanes = query.getResultList();
 			EntityManagerHelper
 					.log("getNewPlanes successful", Level.INFO, null);
@@ -340,9 +365,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String getOldPlanesForwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfOwner, plane.lastMsgIdOfTarget) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId asc";
+	private final String getOldPlanesForwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId asc";
 
-	private final String getOldPlanesBackwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfOwner, plane.lastMsgIdOfTarget) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId desc";
+	private final String getOldPlanesBackwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId desc";
 
 	public List<OldPlane> getOldPlanes(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getOldPlanesing with accountId = " + accountId, Level.INFO, null);
@@ -371,9 +396,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String obtainPlanesForwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
+	private final String obtainPlanesForwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
 
-	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+	private final String obtainPlanesBackwardJPQL = "select plane from Plane plane join fetch plane.category join fetch plane.accountByTargetId join fetch plane.accountByOwnerId where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
 
 	public List<Plane> obtainPlanes(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainPlanesing with accountId = " + accountId, Level.INFO, null);
@@ -402,9 +427,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String obtainPlaneIdsForwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
+	private final String obtainPlaneIdsForwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc asc";
 
-	private final String obtainPlaneIdsBackwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
+	private final String obtainPlaneIdsBackwardJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and plane.status = ?2 and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
 
 	public List<Long> obtainPlaneIds(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("obtainPlaneIdsing with accountId = " + accountId, Level.INFO, null);
@@ -433,7 +458,7 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String obtainPlaneIdsJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByOwner = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByTarget = 0)) and plane.status = ?3 and plane.planeId > ?2 order by plane.planeId asc";
+	private final String obtainPlaneIdsJPQL = "select plane.planeId from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and plane.status = ?3 and plane.planeId > ?2 order by plane.planeId asc";
 
 	public List<Long> obtainPlaneIds(int accountId, long planeId, int limit){
 		EntityManagerHelper.log("obtainPlaneIdsing with accountId = " + accountId, Level.INFO, null);
@@ -571,7 +596,7 @@ public class PlaneDao extends PlaneDAO {
 					Iterator<Plane> iter = planes.iterator();
 					while(iter.hasNext()){
 						Plane plane = iter.next();
-						this.updateInc(plane.getPlaneId());
+						this.updateInc(plane.getPlaneId(), accountId, false);
 					}
 				}
 			}
@@ -601,7 +626,7 @@ public class PlaneDao extends PlaneDAO {
 			query.setParameter(5, PlaneConstants.SourceReceive);
 			int count = query.executeUpdate();
 			if(count == 1){
-				this.updateInc(planeId);
+				this.updateInc(planeId, accountId, false);
 			}
 			EntityManagerHelper
 					.log("match plane successful", Level.INFO, null);

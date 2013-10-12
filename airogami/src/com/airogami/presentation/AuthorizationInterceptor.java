@@ -8,8 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.exception.AirogamiError;
-import com.airogami.presentation.logic.ClientAgent;
 import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 import com.opensymphony.xwork2.ActionContext;

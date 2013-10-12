@@ -319,10 +319,11 @@ public class $className #if ($daoExporter.getExtends())extends $pojo.importType(
 		}
 	}
    
-#if(false)  && $needType.equals($field.type.getForeignKeyDirection().toString()) #end    
+#if(false)  && $needType.equals($field.type.getForeignKeyDirection().toString()) #end   
 #set($needType = "toParent")    
 #foreach($field in $pojo.getAllPropertiesIterator())
 #if($pojo.getMetaAttribAsBool($field, "gen-property", true) && $clazz.identifierProperty.equals($field)==false && $field.type.isEntityType())
+#set($incCount = $incCount + 1)
 #set($entityName = $field.getType().getName())
 #set($rclazz = $cfg.getClassMapping($entityName))
 #set($rClassName = $pojo.importType($rclazz.getClassName()))
@@ -358,7 +359,7 @@ public class $className #if ($daoExporter.getExtends())extends $pojo.importType(
 	}
 #end
 #end
-#if($field.name.endsWith("Count") || $field.name.equals("count"))
+#if($field.name.endsWith("Count") || $field.name.equals("count") || $field.name.endsWith("Inc"))
 #set($bbName = "increase")
 #set($bbName = $bbName.concat($field.name.substring(0,1).toUpperCase().concat($field.name.substring(1))))
 #set($idName = $clazz.identifierProperty.name)
@@ -367,16 +368,20 @@ public class $className #if ($daoExporter.getExtends())extends $pojo.importType(
     private static  final String ${bbName}JPQL = "update ${className} a set a.${field.name} = a.${field.name} + :count where a.${idName} in (:${idName})";
 
 	public boolean ${bbName}(${idType} ${idName}, int count) {
-		#logInfo('"${bbName} with ${idName}:" + ${idName}')
+		#if(false) "stupid"  #logInfo('"${bbName} with ${idName}: " + ${idName}')#end
+		EntityManagerHelper.log("${bbName} with ${idName}: " + ${idName}, Level.INFO, null);
 		try {
 			Query query = ${entityManager}.createQuery(${bbName}JPQL);
 			query.setParameter("${idName}", ${idName});
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			#logInfo('"${bbName} successful"')
+			#if(false)#logInfo('"${bbName} successful"')#end
+			EntityManagerHelper.log("${bbName} successful", Level.INFO,
+					null);
 			return result;
 		} catch (RuntimeException re) {
-		    #logError('"${bbName} failed"' "re")
+		    #if(false)#logError('"${bbName} failed"')#end
+		    EntityManagerHelper.log("${bbName} failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

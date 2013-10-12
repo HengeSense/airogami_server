@@ -6,8 +6,8 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.common.NotifiedInfo;
-import com.airogami.presentation.logic.ClientAgent;
 
 //received chain message
 public class RCMNotification extends Notification{

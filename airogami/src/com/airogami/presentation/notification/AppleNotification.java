@@ -18,7 +18,7 @@ import javapns.notification.transmission.PushQueue;
 
 import org.json.JSONException;
 
-import com.airogami.presentation.logic.ClientAgent;
+import com.airogami.common.ClientAgent;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
 
@@ -63,10 +63,10 @@ public class AppleNotification implements Runnable {
 						ClientAgent clientAgent;
 						if (user != null
 								&& (clientAgent = user.getClientAgent()) != null
-								&& clientAgent.getDeviceType() == ClientAgent.DeviceTypeIOS) {
-							String token = clientAgent.getDeviceToken();
+								&& clientAgent.getDevType() == ClientAgent.DeviceTypeIOS) {
+							String token = clientAgent.getDevToken();
 							if (hashSet.remove(token)) {
-								ManagerUtils.userManager.removeUser(user
+								ManagerUtils.userManager.removeClientAgent(user
 										.getAccountId());
 							}
 						}

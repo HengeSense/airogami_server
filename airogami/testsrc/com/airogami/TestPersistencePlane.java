@@ -79,10 +79,10 @@ public class TestPersistencePlane {
 		plane.setCountry("China");
 		plane.setLatitude(0.0);
 		plane.setLongitude(0.0);
-		plane.setLikedByOwner((short)0);
-        plane.setLikedByTarget((short)0);
-        plane.setDeletedByOwner((short)0);
-        plane.setDeletedByTarget((short)0);
+		plane.setLikedByO((short)0);
+        plane.setLikedByT((short)0);
+        plane.setDeletedByO((short)0);
+        plane.setDeletedByT((short)0);
 		plane.setCategory(new Category());
 		plane.getCategory().setCategoryId((short)1);
 		int ownerId = 1;
@@ -108,8 +108,9 @@ public class TestPersistencePlane {
 		message.setType((short) 0);
 		int ownerId = 4;
 		long planeId = 2;
+		boolean byOwner = false;
 		try {
-			Map<String, Object> result = ServiceUtils.planeService.replyPlane(planeId, ownerId, message);
+			Map<String, Object> result = ServiceUtils.planeService.replyPlane(planeId, ownerId,byOwner, message);
 			ObjectUtils.printObject(result);
 		} catch (ApplicationException e) {
 			e.printStackTrace();

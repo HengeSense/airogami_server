@@ -2,13 +2,13 @@ package com.airogami.common;
 
 import java.util.List;
 
-public class ChainMessageNotifiedInfos extends NotifiedInfo {
+public class CMNotifiedInfos extends NotifiedInfo {
 
 	private String name;
 	private String content;
 	private List<NotifiedInfo> notifiedInfos;
 	
-	public ChainMessageNotifiedInfos(List<NotifiedInfo> notifiedInfos, String name, String content){
+	public CMNotifiedInfos(List<NotifiedInfo> notifiedInfos, String name, String content){
 		this.notifiedInfos = notifiedInfos;
 		this.name = name;
 		this.content = content;

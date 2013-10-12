@@ -42,8 +42,6 @@ public class Chain implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
-	private Long updateInc = 0L;
-
 	private Short status = 0;
 
 	private String city;
@@ -54,7 +52,7 @@ public class Chain implements java.io.Serializable {
 
 	private Double latitude;
 
-	private Short sex;
+	private Short sex = (short) 0;
 
 	private String country;
 
@@ -62,9 +60,9 @@ public class Chain implements java.io.Serializable {
 
 	private Short matchCount = 0;
 
-	private Short maxPassCount;
+	private Short maxPassCount = (short) 0;
 
-	private Short maxMatchCount;
+	private Short maxMatchCount = (short) 0;
 
 	private Date birthdayLower;
 
@@ -84,14 +82,12 @@ public class Chain implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
-			Timestamp createdTime, Long updateInc, Short status, Short sex,
-			Short passCount, Short matchCount, Short maxPassCount,
-			Short maxMatchCount) {
+			Timestamp createdTime, Short status, Short sex, Short passCount,
+			Short matchCount, Short maxPassCount, Short maxMatchCount) {
 		this.account = account;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.updateInc = updateInc;
 		this.status = status;
 		this.sex = sex;
 		this.passCount = passCount;
@@ -102,17 +98,16 @@ public class Chain implements java.io.Serializable {
 
 	/** full constructor */
 	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
-			Timestamp createdTime, Long updateInc, Short status, String city,
-			String province, Double longitude, Double latitude, Short sex,
-			String country, Short passCount, Short matchCount,
-			Short maxPassCount, Short maxMatchCount, Date birthdayLower,
-			Date birthdayUpper, String language, List<ChainHist> chainHists,
+			Timestamp createdTime, Short status, String city, String province,
+			Double longitude, Double latitude, Short sex, String country,
+			Short passCount, Short matchCount, Short maxPassCount,
+			Short maxMatchCount, Date birthdayLower, Date birthdayUpper,
+			String language, List<ChainHist> chainHists,
 			List<ChainMessage> chainMessages) {
 		this.account = account;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.updateInc = updateInc;
 		this.status = status;
 		this.city = city;
 		this.province = province;
@@ -180,15 +175,6 @@ public class Chain implements java.io.Serializable {
 
 	public void setCreatedTime(Timestamp createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	@Column(name = "UPDATE_INC", nullable = false, insertable = false, updatable = false)
-	public Long getUpdateInc() {
-		return this.updateInc;
-	}
-
-	public void setUpdateInc(Long updateInc) {
-		this.updateInc = updateInc;
 	}
 
 	@Column(name = "STATUS", nullable = false)

@@ -31,7 +31,7 @@ public class ReplyPlaneAction extends AirogamiActionSupport implements ModelDriv
 			User user = (User)request.getAttribute("user");	
 			Message message = new Message();
 			PropertyUtils.copyProperties(message, replyPlaneVO.getMessageVO());
-			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(replyPlaneVO.getPlaneId(), user.getAccountId(), message);
+			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(replyPlaneVO.getPlaneId(), user.getAccountId(), replyPlaneVO.getByOwner(), message);
 			dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {

@@ -10,6 +10,8 @@ public class NewChain implements Serializable{
 	private Long updateInc;
 	private Integer updateCount;
 	
+	public NewChain(){}
+	
 	public NewChain(Long chainId, Long updateInc, Integer updateCount){
 		this.chainId = chainId;
 		this.updateInc = updateInc;

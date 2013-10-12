@@ -1,12 +1,16 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/7/2013 5:13:47 AM                         */
+/* Created on:     10/10/2013 2:45:41 PM                        */
 /*==============================================================*/
 
 
 drop table if exists ACCOUNT;
 
 drop table if exists ACCOUNT_STAT;
+
+drop table if exists ACCOUNT_SYS;
+
+drop table if exists AGENT;
 
 drop index EMAIL_UNIQUE on AUTHENTICATE;
 
@@ -18,11 +22,11 @@ drop table if exists AUTHENTICATE;
 
 drop table if exists CATEGORY;
 
-drop index UPDATE_INC_INDEX on CHAIN;
-
 drop table if exists CHAIN;
 
 drop table if exists CHAIN_HIST;
+
+drop index UPDATE_INC_INDEX on CHAIN_MESSAGE;
 
 drop index CREATEDTIME_INDEX on CHAIN_MESSAGE;
 
@@ -32,7 +36,9 @@ drop index CREATEDTIME_INDEX on MESSAGE;
 
 drop table if exists MESSAGE;
 
-drop index UPDATE_INC_INDEX on PLANE;
+drop index OWNER_INC_INDEX on PLANE;
+
+drop index TARGET_INC_INDEX on PLANE;
 
 drop table if exists PLANE;
 
@@ -64,12 +70,33 @@ create table ACCOUNT_STAT
    STATUS               tinyint not null default 0,
    MSG_COUNT            int not null default 0,
    CHAIN_MSG_COUNT      int not null default 0,
-   DEV_TYPE             tinyint,
-   DEV_TOKEN            varchar(4096),
    PICKUP_LEFT_COUNT    smallint not null default 0,
    SEND_LEFT_COUNT      smallint not null default 0,
    PICKUP_COUNT         smallint not null default 0,
    SEND_COUNT           smallint not null default 0,
+   primary key (ACCOUNT_ID)
+);
+
+/*==============================================================*/
+/* Table: ACCOUNT_SYS                                           */
+/*==============================================================*/
+create table ACCOUNT_SYS
+(
+   ACCOUNT_ID           int not null,
+   CHAIN_INC            bigint not null default -9223372036854775808,
+   PLANE_INC            bigint not null default -9223372036854775808,
+   primary key (ACCOUNT_ID)
+);
+
+/*==============================================================*/
+/* Table: AGENT                                                 */
+/*==============================================================*/
+create table AGENT
+(
+   ACCOUNT_ID           int not null,
+   DEV_TYPE             tinyint not null default 0,
+   DEV_VERSION          tinyint not null default 0,
+   DEV_TOKEN            varchar(4096),
    primary key (ACCOUNT_ID)
 );
 
@@ -130,7 +157,6 @@ create table CHAIN
    UPDATE_COUNT         int not null default 0,
    UPDATED_TIME         datetime not null,
    CREATED_TIME         datetime not null,
-   UPDATE_INC           bigint not null default -9223372036854775808,
    STATUS               tinyint not null default 0,
    CITY                 varchar(255),
    PROVINCE             varchar(255),
@@ -146,14 +172,6 @@ create table CHAIN
    BIRTHDAY_UPPER       date,
    LANGUAGE             varchar(255),
    primary key (CHAIN_ID)
-);
-
-/*==============================================================*/
-/* Index: UPDATE_INC_INDEX                                      */
-/*==============================================================*/
-create index UPDATE_INC_INDEX on CHAIN
-(
-   UPDATE_INC
 );
 
 /*==============================================================*/
@@ -173,6 +191,7 @@ create table CHAIN_MESSAGE
 (
    CHAIN_ID             bigint not null,
    ACCOUNT_ID           int not null,
+   UPDATE_INC           bigint not null default -9223372036854775808,
    CONTENT              varchar(255),
    TYPE                 tinyint,
    CREATED_TIME         datetime not null,
@@ -192,6 +211,14 @@ create index CREATEDTIME_INDEX on CHAIN_MESSAGE
 );
 
 /*==============================================================*/
+/* Index: UPDATE_INC_INDEX                                      */
+/*==============================================================*/
+create index UPDATE_INC_INDEX on CHAIN_MESSAGE
+(
+   UPDATE_INC
+);
+
+/*==============================================================*/
 /* Table: MESSAGE                                               */
 /*==============================================================*/
 create table MESSAGE
@@ -199,10 +226,10 @@ create table MESSAGE
    MESSAGE_ID           bigint not null auto_increment,
    PLANE_ID             bigint not null,
    ACCOUNT_ID           int not null,
-   CONTENT              varchar(255) not null,
    TYPE                 tinyint not null,
    CREATED_TIME         datetime not null,
    STATUS               tinyint not null default 0,
+   CONTENT              varchar(255) not null,
    primary key (MESSAGE_ID)
 );
 
@@ -220,28 +247,29 @@ create index CREATEDTIME_INDEX on MESSAGE
 create table PLANE
 (
    PLANE_ID             bigint not null auto_increment,
+   OWNER_INC            bigint not null default -9223372036854775808,
    CATEGORY_ID          smallint not null,
    OWNER_ID             int,
    TARGET_ID            int,
    UPDATE_COUNT         int not null default 0,
    UPDATED_TIME         datetime not null,
    CREATED_TIME         datetime not null,
-   UPDATE_INC           bigint not null default -9223372036854775808,
+   TARGET_INC           bigint not null default -9223372036854775808,
    STATUS               tinyint not null default 0,
    LONGITUDE            decimal(10,6) default 0.0,
    LATITUDE             decimal(10,6) default 0.0,
-   LAST_MSG_ID_OF_TARGET bigint not null default 0,
-   LAST_MSG_ID_OF_OWNER bigint not null default 0,
+   LAST_MSG_ID_OF_T     bigint not null default 0,
+   LAST_MSG_ID_OF_O     bigint not null default 0,
    CITY                 varchar(255),
    PROVINCE             varchar(255),
    COUNTRY              varchar(255),
    SEX                  tinyint not null,
    MATCH_COUNT          smallint not null default 0,
    MAX_MATCH_COUNT      smallint not null default 0,
-   LIKED_BY_OWNER       tinyint not null default 0,
-   LIKED_BY_TARGET      tinyint not null default 0,
-   DELETED_BY_OWNER     tinyint not null default 0,
-   DELETED_BY_TARGET    tinyint not null default 0,
+   LIKED_BY_O           tinyint not null default 0,
+   LIKED_BY_T           tinyint not null default 0,
+   DELETED_BY_O         tinyint not null default 0,
+   DELETED_BY_T         tinyint not null default 0,
    BIRTHDAY_LOWER       date,
    BIRTHDAY_UPPER       date,
    LANGUAGE             varchar(255),
@@ -251,11 +279,19 @@ create table PLANE
 );
 
 /*==============================================================*/
-/* Index: UPDATE_INC_INDEX                                      */
+/* Index: TARGET_INC_INDEX                                      */
 /*==============================================================*/
-create index UPDATE_INC_INDEX on PLANE
+create index TARGET_INC_INDEX on PLANE
 (
-   UPDATE_INC
+   TARGET_INC
+);
+
+/*==============================================================*/
+/* Index: OWNER_INC_INDEX                                       */
+/*==============================================================*/
+create index OWNER_INC_INDEX on PLANE
+(
+   OWNER_ID
 );
 
 /*==============================================================*/
@@ -317,6 +353,12 @@ alter table ACCOUNT add constraint FK_ACCOUNTOWNAUTHENTICATE foreign key (ACCOUN
       references AUTHENTICATE (ACCOUNT_ID) on delete restrict on update restrict;
 
 alter table ACCOUNT_STAT add constraint FK_ACCOUNTOWNACCOUNTSTAT foreign key (ACCOUNT_ID)
+      references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
+
+alter table ACCOUNT_SYS add constraint FK_ACCOUNTOWNACCOUNTSYS foreign key (ACCOUNT_ID)
+      references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
+
+alter table AGENT add constraint FK_ACCOUNTOWNAGENT foreign key (ACCOUNT_ID)
       references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
 
 alter table CHAIN add constraint FK_ACCOUNTHAVECHAIN foreign key (ACCOUNT_ID)

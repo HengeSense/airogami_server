@@ -4,9 +4,9 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.common.NotifiedInfo;
 import com.airogami.common.ReceiveNotifiedInfo;
-import com.airogami.presentation.logic.ClientAgent;
 
 // received plane
 public class RPNotification extends Notification{

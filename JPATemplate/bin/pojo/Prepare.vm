@@ -5,7 +5,25 @@
 #set($chainMessageLastViewedTime=false)
 #set($accountConstantsImport=false)
 #foreach($field in $pojo.getAllPropertiesIterator())
-#if($pojo.getMetaAttribAsBool($field, "gen-property", true))    
+#if($pojo.getMetaAttribAsBool($field, "gen-property", true))   
+
+    #if($field.columnIterator.hasNext())
+    #set($col = $field.columnIterator.next())
+    #end
+    #set($typename = $pojo.getJavaTypeName($field, $jdk5))
+    
+    #if($typename.equals("Short"))
+    #set($col.defaultValue = "(short)0")
+    #end 
+       
+    #if($typename.equals("Integer"))
+    #set($col.defaultValue = "0")
+    #end 
+    
+    #if($typename.equals("Long"))
+    #set($col.defaultValue = "0L")
+    #end 
+    
     #if($field.name.equals("createdTime"))
        #set($hasCreatedTime=true)
        #set($field.updateable=false)
@@ -16,7 +34,7 @@
     
     #if(false && $field.name.endsWith("ViewedTime"))
     #set($lastViewedTime=true)
-    #set($field.columnIterator.next().defaultValue = "baseTimestamp")
+    #set($col.defaultValue = "baseTimestamp")
     #end
     
     #if($field.name.equals("updatedTime"))
@@ -24,42 +42,37 @@
     #end
     
     #if($field.name.equals("source"))
-        #set($field.columnIterator.next().defaultValue = "(short)0")
+        #set($col.defaultValue = "(short)0")
     #end
     
     #if($field.name.endsWith("Inc") || $field.name.equals("signinUuid") || $field.name.equals("count") || ($field.name.endsWith("Count") && !$field.name.startsWith("max")))
         #set($field.insertable=false)
         #set($field.updateable=false)
-        #set($column=$field.columnIterator.next())
         #if($pojo.getJavaTypeName($field, $jdk5).equals("Long"))
-        #set($column.defaultValue="0L")
+        #set($col.defaultValue="0L")
         #else
-        #set($column.defaultValue="0")
+        #set($col.defaultValue="0")
         #end
         
     #end
     
     #if($field.name.startsWith("lastMsgId"))
-    #set($column=$field.columnIterator.next())
-    #set($column.defaultValue="0L")
+    #set($col.defaultValue="0L")
     #set($field.updateable=false)
     #end
     
     #if($field.name.equals("status"))
-        #set($column=$field.columnIterator.next())
-        #set($column.defaultValue="0")
+        #set($col.defaultValue="0")
     #end
     
     #if($field.name.equals("pickupCount") || $field.name.equals("pickupLeftCount"))
-        #set($column=$field.columnIterator.next())
-        #set($column.defaultValue="AccountConstants.PickupMaxCount")
+        #set($col.defaultValue="AccountConstants.PickupMaxCount")
         #set($accountConstantsImport=true)
         #set($field.insertable=true)
     #end
     
     #if($field.name.equals("sendCount") || $field.name.equals("sendLeftCount"))
-        #set($column=$field.columnIterator.next())
-        #set($column.defaultValue="AccountConstants.SendMaxCount")
+        #set($col.defaultValue="AccountConstants.SendMaxCount")
         #set($accountConstantsImport=true)
         #set($field.insertable=true)
     #end

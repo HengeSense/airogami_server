@@ -18,17 +18,6 @@
 		</field-validator>
 	</field>
 
-	<field name="birthday">
-	   <field-validator type="required">
-	   <message key="error.account.signup.birthday.valid">Please input a valid birthday</message>
-	   </field-validator>
-		<!-- <field-validator type="date">
-			<param name="min"><![CDATA[01/01/1900]]></param>
-			<param name="max"><![CDATA[01/01/2100]]></param>
-			<message key="error.account.signup.birthday.invalid">The birthday must be between ${min} and ${max}</message>
-		</field-validator> -->
-	</field>
-
 	<field name="longitude">
 		<field-validator type="double">
 		    <param name="minInclusive"><![CDATA[-180]]></param>

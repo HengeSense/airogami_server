@@ -29,17 +29,20 @@
     <label>Automatic: </label>
     <input type="text" name="automatic" value="false" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Update Device: </label>
+    <input type="text" name="updateDev" value="false" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Signin Count: </label>
     <input type="text" name="signinCount" value="0" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Type: </label>
-    <input type="text" name="clientAgent.deviceType" value="1" />
+    <input type="text" name="clientAgent.devType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1" />
+    <label>Device Version: </label>
+    <input type="text" name="clientAgent.devVersion" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Token: </label>
-    <input type="text" name="clientAgent.deviceToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
+    <input type="text" name="clientAgent.devToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <br> 
     <input type="submit" name="submit" value="submit" />
@@ -55,17 +58,20 @@
     <label>Automatic: </label>
     <input type="text" name="automatic" value="false" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Update Device: </label>
+    <input type="text" name="updateDev" value="false" />
+    <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Signin Count: </label>
     <input type="text" name="signinCount" value="0" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
    <label>Device Type: </label>
-    <input type="text" name="clientAgent.deviceType" value="1" />
+    <input type="text" name="clientAgent.devType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1" />
+    <label>Device Version: </label>
+    <input type="text" name="clientAgent.devVersion" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Token: </label>
-    <input type="text" name="clientAgent.deviceToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
+    <input type="text" name="clientAgent.devToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <br> 
     <input type="submit" name="submit" value="submit" />
@@ -79,13 +85,13 @@
     <input type="text" name="signinCount" value="0" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Type: </label>
-    <input type="text" name="clientAgent.deviceType" value="1" />
+    <input type="text" name="clientAgent.devType" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
-    <label>Client Version: </label>
-    <input type="text" name="clientAgent.clientVersion" value="1" />
+    <label>Device Version: </label>
+    <input type="text" name="clientAgent.devVersion" value="1" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Device Token: </label>
-    <input type="text" name="clientAgent.deviceToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
+    <input type="text" name="clientAgent.devToken" value="2ed202ac08ea9033665d053a3dc8bc4c5e98f7c6cf8d55910df290567037dcc4" />
     <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <br> 
     <input type="submit" name="submit" value="submit" />

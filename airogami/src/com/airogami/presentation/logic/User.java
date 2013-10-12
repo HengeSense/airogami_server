@@ -1,11 +1,12 @@
 package com.airogami.presentation.logic;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.persistence.entities.AccountStat;
 
 public class User {
 
 	private int accountId;
-	private int messagesCount;
+	//private int messagesCount;
 	//private HttpSession session;
 	private ClientAgent clientAgent;
 	private long signinCount;//for change password and signin other place
@@ -14,7 +15,7 @@ public class User {
 		this.accountId = accountId;
 		this.clientAgent = clientAgent;
 		this.signinCount = accountStat.getSigninCount();
-		this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
+		//this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
 	}
 	public User(){
 		clientAgent = new ClientAgent();
@@ -32,12 +33,12 @@ public class User {
 		this.clientAgent = clientAgent;
 	}
 	
-	public int getMessagesCount() {
+	/*public int getMessagesCount() {
 		return messagesCount;
 	}
 	public void setMessagesCount(int messagesCount) {
 		this.messagesCount = messagesCount;
-	}
+	}*/
 	
 	public long getSigninCount() {
 		return signinCount;
@@ -49,7 +50,7 @@ public class User {
 	
 	public void reset(ClientAgent clientAgent, AccountStat accountStat){
 		this.clientAgent = clientAgent;
-		this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
+		//this.messagesCount = accountStat.getChainMsgCount() + accountStat.getMsgCount();
 		synchronized(this){
 			if(accountStat.getSigninCount() > this.signinCount){
 				this.signinCount = accountStat.getSigninCount();

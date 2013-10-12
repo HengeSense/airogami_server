@@ -53,7 +53,7 @@ public class SignoutAction extends ActionSupport implements ServletRequestAware,
 			User user = ManagerUtils.userManager.getUser(signoutVO.getAccountId());
 			if(user != null && signoutVO.getSigninCount() == user.getSigninCount()
 					&& signoutVO.getClientAgent().equals(user.getClientAgent())){
-				ManagerUtils.userManager.removeUser(user.getAccountId());
+				ManagerUtils.userManager.removeClientAgent(user.getAccountId());
 				succeeded = true;
 			}
 			//

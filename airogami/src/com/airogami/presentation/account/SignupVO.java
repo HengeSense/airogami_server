@@ -2,7 +2,7 @@ package com.airogami.presentation.account;
 
 import java.sql.Date;
 
-import com.airogami.presentation.logic.ClientAgent;
+import com.airogami.common.ClientAgent;
 
 public class SignupVO {
 

@@ -10,6 +10,12 @@
 			<message key="error.plane.replyplane.planeId.invalid">The planeId must be over ${min}</message>
 		</field-validator>
 	</field>
+	
+	<field name="byOwner">
+		<field-validator type="required">
+			<message key="error.plane.replyplane.byOwner.required">Please input a byOwner</message>
+		</field-validator>
+	</field>
 
 	<field name="messageVO.content">
 		<field-validator type="requiredstring">

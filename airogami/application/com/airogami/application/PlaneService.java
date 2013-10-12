@@ -68,8 +68,7 @@ public class PlaneService implements IPlaneService {
 				plane.setAccountByOwnerId(accountByOwnerId);
 				message.setAccount(accountByOwnerId);
 				DaoUtils.planeDao.save(plane);
-				//may be not needed
-				//DaoUtils.planeDao.initLastMsgIdOfTarget(plane.getPlaneId(), message.getMessageId());
+				DaoUtils.planeDao.initLastMsgIdOfT(plane.getPlaneId(), message.getMessageId());
 			}
 			else{
 				error = "limit";
@@ -115,23 +114,23 @@ public class PlaneService implements IPlaneService {
 	 * lock plane first
 	 */
 	@Override
-	public Map<String, Object> replyPlane(long planeId, int accountId, Message message)
+	public Map<String, Object> replyPlane(long planeId, int accountId, boolean byOwner, Message message)
 			throws ApplicationException {
 		ApplicationException ae = null;
 		String error = null;
 		MessageNotifiedInfo notifiedInfo = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.planeDao.verifyReply(planeId, accountId)) {
+			if (DaoUtils.planeDao.verifyReply(planeId, accountId, byOwner)) {
 				Plane plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
 				Account account = DaoUtils.accountDao.getReference(accountId);
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				DaoUtils.planeDao.updateInc(planeId);
 				notifiedInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
+					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
 				}
 				
@@ -314,9 +313,9 @@ public class PlaneService implements IPlaneService {
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
 				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);	
-				DaoUtils.planeDao.updateInc(planeId);
 				notifiedInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
+					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
 				}
 			}

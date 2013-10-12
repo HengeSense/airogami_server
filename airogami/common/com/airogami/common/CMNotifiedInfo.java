@@ -1,16 +1,16 @@
 package com.airogami.common;
 
-public class ChainMessageNotifiedInfo extends NotifiedInfo {
+public class CMNotifiedInfo extends NotifiedInfo {
 
 	private Integer accountId;
 	private Integer messagesCount;
 	
-	public ChainMessageNotifiedInfo(Integer accountId, Long messagesCount){
+	public CMNotifiedInfo(Integer accountId, Long messagesCount){
 		this.accountId = accountId;
 		this.messagesCount = (int)(long)messagesCount;
 	}
 	
-	public ChainMessageNotifiedInfo(Integer accountId, Integer messagesCount){
+	public CMNotifiedInfo(Integer accountId, Integer messagesCount){
 		this.accountId = accountId;
 		this.messagesCount = messagesCount;
 	}

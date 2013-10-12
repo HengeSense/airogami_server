@@ -10,13 +10,22 @@
  
     #set ($typename = $pojo.getJavaTypeName($field, $jdk5)) 
     #set ($init = $pojo.getFieldInitialization($field, $jdk5)) 
+    
+    #set($defaultValue = false)
+    #if($field.columnIterator.hasNext())
+    #set($col = $field.columnIterator.next())
+    #if($clazz.identifierProperty != $field && ($typename.equals("Character") || $typename.equals("Byte") || $typename.equals("Short") || $typename.equals("Integer") || $typename.equals("Long") || $typename.equals("Float") || $typename.equals("Double") || $typename.equals("String") == true))
+    #set($defaultValue = $col.defaultValue)
+    #end
+    #end
+    
     #if ($typename.startsWith("Set")) 
     #set($typename = $typename.replaceFirst("Set", "List")) 
     #set($init = $init.replaceFirst("HashSet", "ArrayList")) 
     #end 
-    
+  
     $pojo.getFieldModifiers($field) $typename $field.name#if($pojo.hasFieldInitializor($field, $jdk5)) = $init
-    #elseif($field.columnIterator.next().defaultValue) = $field.columnIterator.next().defaultValue#end;
+    #elseif($$defaultValue) = $defaultValue#end;
 #end
 #end
 

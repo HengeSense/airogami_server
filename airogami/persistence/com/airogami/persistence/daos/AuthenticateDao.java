@@ -14,9 +14,9 @@ import com.airogami.persistence.entities.EntityManagerHelper;
 
 public class AuthenticateDao extends AuthenticateDAO {
 	
-	private final String emailAutoAuthJPQL = "select account from Account account join fetch account.accountStat where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
+	private final String emailAutoAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.agent where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
 
-	private final String emailAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile join fetch account.authenticate where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
+	private final String emailAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.agent join fetch account.profile join fetch account.authenticate where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.email = ?1 and authenticate.password = ?2)";
 	
 	//fetch objects are different between automatic and nonautomatic
 	public Account authenticateWithEmail(String email, String password, boolean automatic) {
@@ -72,9 +72,9 @@ public class AuthenticateDao extends AuthenticateDAO {
 		return accountId;
 	}
 	
-	private final String screenNameAutoAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
+	private final String screenNameAutoAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.agent join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
 
-	private final String screenNameAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
+	private final String screenNameAuthJPQL = "select account from Account account join fetch account.accountStat join fetch account.agent join fetch account.profile  join fetch account.authenticate  where account.accountId = (select authenticate.accountId from Authenticate authenticate where authenticate.screenName = ?1 and authenticate.password = ?2)";
 
 	//fetch objects are different between automatic and nonautomatic
 	public Account authenticateWithScreenName(String screenName, String password, boolean automatic) {

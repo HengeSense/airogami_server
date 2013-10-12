@@ -22,8 +22,6 @@ public class AccountStatDAO {
 	public static final String STATUS = "status";
 	public static final String MSG_COUNT = "msgCount";
 	public static final String CHAIN_MSG_COUNT = "chainMsgCount";
-	public static final String DEV_TYPE = "devType";
-	public static final String DEV_TOKEN = "devToken";
 	public static final String PICKUP_LEFT_COUNT = "pickupLeftCount";
 	public static final String SEND_LEFT_COUNT = "sendLeftCount";
 	public static final String PICKUP_COUNT = "pickupCount";
@@ -251,20 +249,19 @@ public class AccountStatDAO {
 	private static final String increaseSigninCountJPQL = "update AccountStat a set a.signinCount = a.signinCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseSigninCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseSigninCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increaseSigninCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("increaseSigninCount successful",
+					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
+			EntityManagerHelper.log("increaseSigninCount failed", Level.SEVERE,
 					re);
 			throw re;
 		}
@@ -274,19 +271,19 @@ public class AccountStatDAO {
 
 	public boolean increaseMsgCount(java.lang.Integer accountId, int count) {
 		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
+				"increaseMsgCount with accountId: " + accountId, Level.INFO,
 				null);
 		try {
 			Query query = getEntityManager().createQuery(increaseMsgCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
+			EntityManagerHelper.log("increaseMsgCount successful", Level.INFO,
 					null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper
+					.log("increaseMsgCount failed", Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -294,21 +291,20 @@ public class AccountStatDAO {
 	private static final String increaseChainMsgCountJPQL = "update AccountStat a set a.chainMsgCount = a.chainMsgCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseChainMsgCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseChainMsgCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increaseChainMsgCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("increaseChainMsgCount successful",
+					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseChainMsgCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -317,21 +313,20 @@ public class AccountStatDAO {
 
 	public boolean increasePickupLeftCount(java.lang.Integer accountId,
 			int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increasePickupLeftCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increasePickupLeftCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("increasePickupLeftCount successful",
+					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increasePickupLeftCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -339,21 +334,20 @@ public class AccountStatDAO {
 	private static final String increaseSendLeftCountJPQL = "update AccountStat a set a.sendLeftCount = a.sendLeftCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseSendLeftCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseSendLeftCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increaseSendLeftCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("increaseSendLeftCount successful",
+					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
-					re);
+			EntityManagerHelper.log("increaseSendLeftCount failed",
+					Level.SEVERE, re);
 			throw re;
 		}
 	}
@@ -361,20 +355,19 @@ public class AccountStatDAO {
 	private static final String increasePickupCountJPQL = "update AccountStat a set a.pickupCount = a.pickupCount + :count where a.accountId in (:accountId)";
 
 	public boolean increasePickupCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increasePickupCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increasePickupCountJPQL);
 			query.setParameter("accountId", accountId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseSendCount successful", Level.INFO,
-					null);
+			EntityManagerHelper.log("increasePickupCount successful",
+					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseSendCount failed", Level.SEVERE,
+			EntityManagerHelper.log("increasePickupCount failed", Level.SEVERE,
 					re);
 			throw re;
 		}
@@ -383,9 +376,8 @@ public class AccountStatDAO {
 	private static final String increaseSendCountJPQL = "update AccountStat a set a.sendCount = a.sendCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseSendCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log(
-				"increaseSendCount with accountId:" + accountId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseSendCount with accountId: "
+				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(increaseSendCountJPQL);
 			query.setParameter("accountId", accountId);
@@ -465,16 +457,6 @@ public class AccountStatDAO {
 			int... rowStartIdxAndCount) {
 		return findByProperty(CHAIN_MSG_COUNT, chainMsgCount,
 				rowStartIdxAndCount);
-	}
-
-	public List<AccountStat> findByDevType(Object devType,
-			int... rowStartIdxAndCount) {
-		return findByProperty(DEV_TYPE, devType, rowStartIdxAndCount);
-	}
-
-	public List<AccountStat> findByDevToken(Object devToken,
-			int... rowStartIdxAndCount) {
-		return findByProperty(DEV_TOKEN, devToken, rowStartIdxAndCount);
 	}
 
 	public List<AccountStat> findByPickupLeftCount(Object pickupLeftCount,

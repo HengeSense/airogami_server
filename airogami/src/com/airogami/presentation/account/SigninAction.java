@@ -41,42 +41,42 @@ public class SigninAction extends AirogamiActionSupport implements
 					user = (User) session.getAttribute("user");
 					if (user != null) {
 						shouldSignin = false;
-						//to assure follows, one user instance can't be changed to another instance
-						if(signinVO.getSigninCount() != user.getSigninCount()){
+						// to assure follows, one user instance can't be changed
+						// to another instance
+						if (signinVO.getSigninCount() != user.getSigninCount()) {
 							result.put("error", "elsewhere");
-						}
-						else{
-							user.setClientAgent(signinVO.getClientAgent());
+						} else if(signinVO.isUpdateDev()){
+							shouldSignin = true;
 						}
 					}
 				}
 			}
-			
+
 			if (shouldSignin) {
 				Account account;
 				if (type == 1) {
 					account = ManagerUtils.accountManager.signinWithEmail(
 							signinVO.getEmail(), signinVO.getPassword(),
-							automatic);
+							signinVO.getClientAgent(), automatic);
 				} else {
 					account = ManagerUtils.accountManager.signinWithScreenName(
 							signinVO.getScreenName(), signinVO.getPassword(),
-							automatic);
+							signinVO.getClientAgent(), automatic);
 				}
 				if (account != null) {
 					//
 					AccountStat accountStat = account.getAccountStat();
 					if (accountStat.getStatus() == 0) {
-						if(automatic){
-							if(signinVO.getSigninCount() != accountStat.getSigninCount()){
+						if (automatic) {
+							if (signinVO.getSigninCount() != accountStat
+									.getSigninCount()) {
 								result.put("error", "elsewhere");
 								shouldSignin = false;
-							}
-							else{
-								//account.setAccountStat(null);
+							} else {
+								// account.setAccountStat(null);
 							}
 						}
-						if(shouldSignin){
+						if (shouldSignin) {
 							session = request.getSession(true);
 							user = ManagerUtils.userManager.updateUser(
 									account.getAccountId(),
@@ -86,7 +86,7 @@ public class SigninAction extends AirogamiActionSupport implements
 									accountStat.getSigninCount());
 							result.put("account", account);
 						}
-						
+
 					} else {
 						session = request.getSession(false);
 						if (session != null) {
@@ -94,7 +94,7 @@ public class SigninAction extends AirogamiActionSupport implements
 						}
 						result.put("error", "banned");
 					}
-
+					account.setAgent(null);
 				} else {
 					result.put("error", "none");
 				}

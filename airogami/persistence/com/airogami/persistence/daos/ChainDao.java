@@ -6,10 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import com.airogami.common.ChainMessageNotifiedInfo;
+import com.airogami.common.CMNotifiedInfo;
 import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
@@ -17,6 +18,7 @@ import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.persistence.classes.NewChain;
 import com.airogami.persistence.classes.OldChain;
+import com.airogami.persistence.entities.AccountSys;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainDAO;
 import com.airogami.persistence.entities.ChainMessage;
@@ -75,15 +77,29 @@ public class ChainDao extends ChainDAO {
 		}
 	}
 	
-    private final String updateIncSQL = "update CHAIN  set UPDATE_INC = (select max_value from (select max(UPDATE_INC) + 1 as max_value from CHAIN) as tmp) WHERE CHAIN_ID = ?";
+    //private final String updateIncSQL = "update CHAIN  set UPDATE_INC = (select max_value from (select max(UPDATE_INC) + 1 as max_value from CHAIN) as tmp) WHERE CHAIN_ID = ?";
 
-	public void updateInc(long chainId) {
+    private final String updateChainIncJPQL = "update AccountSys accountSys set accountSys.chainInc = accountSys.chainInc + 1 where accountSys.account in (select chainMessage.account from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3)";
+    
+    private final String updateIncJPQL = "update ChainMessage chainMessage set chainMessage.updateInc = (select accountSys.chainInc from AccountSys accountSys where accountSys.account = chainMessage.account) where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+    
+    //not include accountId
+	public void updateInc(long chainId, int accountId) {
 		EntityManagerHelper.log("updateIncing with chainId = " + chainId, Level.INFO, null);
 		try {
-			Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
-					updateIncSQL);
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					updateChainIncJPQL);
 			query.setParameter(1, chainId);
-			query.executeUpdate();
+			query.setParameter(2, ChainMessageConstants.StatusReplied);
+			query.setParameter(3, accountId);
+			if(query.executeUpdate() > 0){
+				query = EntityManagerHelper.getEntityManager().createQuery(
+						updateIncJPQL);
+				query.setParameter(1, chainId);
+				query.setParameter(2, ChainMessageConstants.StatusReplied);
+				query.setParameter(3, accountId);
+				query.executeUpdate();
+			}
 			EntityManagerHelper
 					.log("updateInc successful", Level.INFO, null);
 		} catch (RuntimeException re) {
@@ -113,7 +129,7 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNotifiedInfoJPQL = "select new com.airogami.common.ChainMessageNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+	private final String getNotifiedInfoJPQL = "select new com.airogami.common.CMNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
 	
 	//
 	public List<NotifiedInfo> getNotifiedInfos(long chainId, int accountId) {
@@ -223,9 +239,9 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNewChainsForwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc asc";
+	private final String getNewChainsForwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc asc";
 
-	private final String getNewChainsBackwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chain.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chain.updateInc > ?3) and (?4 is null or chain.updateInc < ?4) order by chain.updateInc desc";
+	private final String getNewChainsBackwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc desc";
 
 	public List<NewChain> getNewChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNewChainsing with accountId = " + accountId, Level.INFO, null);
@@ -439,6 +455,7 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 			throw re;
 		}
 	}
+		
 	
 	private final String pickupFindJPQL = "select chain.chainId from Chain chain, Profile profile where profile.accountId = ?1 and (chain.sex = 0 or chain.sex = profile.sex) and chain.status = ?2 and chain.passCount < chain.maxPassCount and chain.matchCount < chain.maxMatchCount and not exists (select chainMessage from ChainMessage chainMessage where chainMessage.id.chainId = chain.chainId and profile.accountId = chainMessage.id.accountId) and not exists (select chainHist from ChainHist chainHist where chainHist.id.chainId = chain.chainId and profile.accountId = chainHist.id.accountId) and (chain.city is null or chain.city = '' or chain.city = profile.city) and (chain.province is null or chain.province = '' or chain.province = profile.province) and (chain.country is null or chain.country = '' or chain.country = profile.country)  and (chain.birthdayLower is null or chain.birthdayLower <= profile.birthday) and (chain.birthdayUpper is null or chain.birthdayUpper >= profile.birthday) and (chain.language is null or chain.language = '' or profile.language = chain.language)";
 	private final String matchJPQL = "update Chain chain set chain.status = ?2 where chain.chainId = ?1 and chain.status <> ?2 and chain.passCount < chain.maxPassCount and chain.matchCount < chain.maxMatchCount and not exists (select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = chain.chainId and chainMessage.account.accountId = ?3) and not exists (select chainHist from ChainHist chainHist where chainHist.id.chainId = chain.chainId and ?3 = chainHist.id.accountId)";
@@ -457,39 +474,40 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 			List<Long> chainIds = query.getResultList();
 			if(chainIds.size() > 0){
 				//match
-				Iterator<Long> iter = chainIds.iterator();
-				List<Long> matchedChainIds = new ArrayList<Long>(chainIds.size());
-				while(iter.hasNext()){
-					Long chainId = iter.next();
-					query = EntityManagerHelper.getEntityManager().createQuery(
-							matchJPQL);
-					query.setParameter(1, chainId);
-					query.setParameter(2, ChainConstants.StatusMatched);
-					query.setParameter(3, accountId);
-					if(query.executeUpdate() == 1){
-						ChainMessage chainMessage = new ChainMessage();
-						chainMessage.setId(new ChainMessageId(chainId, accountId));
-						chainMessage.setType(MessageConstants.MessageTypeText);
-						chainMessage.setSource((short) PlaneConstants.SourcePickup);
-						//chainMessage.setUpdatedTime(new Timestamp(System.currentTimeMillis()));
-						DaoUtils.chainMessageDao.save(chainMessage);
-						matchedChainIds.add(chainId);
-					}
-				}		
-				
-				if(matchedChainIds.size() > 0){
-					this.flush();
-					//query
-					query = EntityManagerHelper.getEntityManager().createQuery(
-							pickupQueryJPQL);
-					query.setParameter(1, matchedChainIds);
-					chains = query.getResultList();
-					Iterator<Chain> iterator = chains.iterator();
-					while(iterator.hasNext()){
-						Chain chain = iterator.next();
-						this.updateInc(chain.getChainId());
+				AccountSys accountSys = EntityManagerHelper.getEntityManager().find(AccountSys.class, accountId, LockModeType.PESSIMISTIC_WRITE);
+				if(accountSys != null){
+					Iterator<Long> iter = chainIds.iterator();
+					List<Long> matchedChainIds = new ArrayList<Long>(chainIds.size());
+					while(iter.hasNext()){
+						Long chainId = iter.next();
+						query = EntityManagerHelper.getEntityManager().createQuery(
+								matchJPQL);
+						query.setParameter(1, chainId);
+						query.setParameter(2, ChainConstants.StatusMatched);
+						query.setParameter(3, accountId);
+						if(query.executeUpdate() == 1){
+							ChainMessage chainMessage = new ChainMessage();
+							chainMessage.setId(new ChainMessageId(chainId, accountId));
+							accountSys.setChainInc(accountSys.getChainInc() + 1);
+							chainMessage.setUpdateInc(accountSys.getChainInc());
+							chainMessage.setType(MessageConstants.MessageTypeText);
+							chainMessage.setSource((short) PlaneConstants.SourcePickup);
+							//chainMessage.setUpdatedTime(new Timestamp(System.currentTimeMillis()));
+							DaoUtils.chainMessageDao.save(chainMessage);
+							matchedChainIds.add(chainId);						
+						}
+					}		
+					
+					if(matchedChainIds.size() > 0){
+						this.flush();
+						//query
+						query = EntityManagerHelper.getEntityManager().createQuery(
+								pickupQueryJPQL);
+						query.setParameter(1, matchedChainIds);
+						chains = query.getResultList();
 					}
 				}
+				
 			}
 			
 			EntityManagerHelper
@@ -512,13 +530,17 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 			query.setParameter(3, accountId);
 			int count = query.executeUpdate();
 			if(count == 1){
-				ChainMessage chainMessage = new ChainMessage();
-				chainMessage.setId(new ChainMessageId(chainId, accountId));
-				chainMessage.setType(MessageConstants.MessageTypeText);
-				chainMessage.setSource((short) PlaneConstants.SourceReceive);
-				DaoUtils.chainMessageDao.save(chainMessage);
-				this.flush();
-				this.updateInc(chainId);
+				AccountSys accountSys = EntityManagerHelper.getEntityManager().find(AccountSys.class, accountId, LockModeType.PESSIMISTIC_WRITE);
+                if(accountSys != null){
+                	ChainMessage chainMessage = new ChainMessage();
+    				chainMessage.setId(new ChainMessageId(chainId, accountId));
+    				accountSys.setChainInc(accountSys.getChainInc() + 1);
+    				chainMessage.setUpdateInc(accountSys.getChainInc());
+    				chainMessage.setType(MessageConstants.MessageTypeText);
+    				chainMessage.setSource((short) PlaneConstants.SourceReceive);
+    				DaoUtils.chainMessageDao.save(chainMessage);
+    				this.flush();
+                }
 			}
 			
 			EntityManagerHelper

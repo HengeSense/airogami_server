@@ -13,6 +13,7 @@ import org.apache.struts2.ServletActionContext;
 import org.json.JSONException;
 
 import com.airogami.application.Airogami;
+import com.airogami.common.ClientAgent;
 import com.airogami.common.NotifiedInfo;
 import com.airogami.presentation.notification.AppleNotification;
 import com.airogami.presentation.notification.Notification;
@@ -64,8 +65,8 @@ public class NotificationManager extends Thread{
 		ClientAgent clientAgent;
 		String token;
 		if(user != null && (clientAgent = user.getClientAgent()) != null
-				&& (token = clientAgent.getDeviceToken()) != null){
-			if(clientAgent.getDeviceType() == ClientAgent.DeviceTypeIOS){
+				&& (token = clientAgent.getDevToken()) != null){
+			if(clientAgent.getDevType() == ClientAgent.DeviceTypeIOS){
 				PushNotificationPayload payload = (PushNotificationPayload)notification.buildIOSPayload();
 				appleNotification.sendNotification(accountId, token, messagesCount, payload);
 			}

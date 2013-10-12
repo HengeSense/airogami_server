@@ -33,7 +33,7 @@ public class Profile implements java.io.Serializable {
 
 	private String screenName;
 
-	private Short sex;
+	private Short sex = (short) 0;
 
 	private Double longitude;
 

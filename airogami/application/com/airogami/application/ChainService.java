@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.common.ChainMessageNotifiedInfos;
+import com.airogami.common.CMNotifiedInfos;
 import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
@@ -107,7 +107,7 @@ public class ChainService implements IChainService {
 			if(DaoUtils.chainMessageDao.replyChainMessage(accountId, chainId, content, type)){
 				//DaoUtils.chainDao.increasePassCount(chainId, 1);
 				chainMessage = DaoUtils.chainMessageDao.findById(id);
-				DaoUtils.chainDao.updateInc(chainId);
+				DaoUtils.chainDao.updateInc(chainId, accountId);
 				DaoUtils.chainDao.increaseChainMessageCount(chainId, accountId);
 				notifiedInfos = DaoUtils.chainDao.getNotifiedInfos(chainId, accountId);
 				name = DaoUtils.profileDao.getFullName(accountId);
@@ -143,7 +143,7 @@ public class ChainService implements IChainService {
 			}
 		}
 		else{
-			NotifiedInfo notifiedInfo = new ChainMessageNotifiedInfos(notifiedInfos, name, chainMessage.getContent());
+			NotifiedInfo notifiedInfo = new CMNotifiedInfos(notifiedInfos, name, chainMessage.getContent());
 			result.put("chainMessage", chainMessage);
 			result.put("notifiedInfo", notifiedInfo);
 		}

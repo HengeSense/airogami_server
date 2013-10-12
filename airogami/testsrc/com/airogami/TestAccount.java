@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
@@ -72,8 +73,9 @@ public class TestAccount {
 		String screenName = "tianhuyang5";
 		String password = "12345678";
 		boolean automatic = true;
+		ClientAgent clientAgent = new ClientAgent();
 		try {
-			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password, automatic);
+			Account account = ManagerUtils.accountManager.signinWithScreenName(screenName, password, clientAgent, automatic);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -86,9 +88,10 @@ public class TestAccount {
 		String email = "tianhu@qq.com";
 		String password = "12345678";
 		Long uuid = 0L;
+		ClientAgent clientAgent = new ClientAgent();
 		boolean automatic = true;
-		try {
-			Account account = ManagerUtils.accountManager.signinWithEmail(email, password, automatic);
+		try {	
+			Account account = ManagerUtils.accountManager.signinWithEmail(email, password, clientAgent, automatic);
 			ObjectUtils.printObject(account);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

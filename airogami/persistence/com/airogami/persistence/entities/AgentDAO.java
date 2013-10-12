@@ -1,34 +1,32 @@
 package com.airogami.persistence.entities;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
- * A data access object (DAO) providing persistence and search support for
- * Message entities. Transaction control of the save(), update() and delete()
- * operations must be handled externally by senders of these methods or must be
- * manually added to each of these methods for data to be persisted to the JPA
- * datastore.
+ * A data access object (DAO) providing persistence and search support for Agent
+ * entities. Transaction control of the save(), update() and delete() operations
+ * must be handled externally by senders of these methods or must be manually
+ * added to each of these methods for data to be persisted to the JPA datastore.
  * 
- * @see com.airogami.persistence.entities.Message
+ * @see com.airogami.persistence.entities.Agent
  * @author MyEclipse Persistence Tools
  */
 
-public class MessageDAO {
+public class AgentDAO {
 	// property constants
-	public static final String TYPE = "type";
-	public static final String STATUS = "status";
-	public static final String CONTENT = "content";
+	public static final String DEV_TYPE = "devType";
+	public static final String DEV_VERSION = "devVersion";
+	public static final String DEV_TOKEN = "devToken";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
 	}
 
 	/**
-	 * Perform an initial save of a previously unsaved Message entity. All
+	 * Perform an initial save of a previously unsaved Agent entity. All
 	 * subsequent persist actions of this entity should use the #update()
 	 * method. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
@@ -38,19 +36,19 @@ public class MessageDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * MessageDAO.save(message);
+	 * AgentDAO.save(agent);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param message
-	 *            Message entity to persist
+	 * @param agent
+	 *            Agent entity to persist
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void save(Message message) {
-		EntityManagerHelper.log("saving Message instance", Level.INFO, null);
+	public void save(Agent agent) {
+		EntityManagerHelper.log("saving Agent instance", Level.INFO, null);
 		try {
-			getEntityManager().persist(message);
+			getEntityManager().persist(agent);
 			EntityManagerHelper.log("save successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("save failed", Level.SEVERE, re);
@@ -59,30 +57,30 @@ public class MessageDAO {
 	}
 
 	/**
-	 * Delete a persistent Message entity. This operation must be performed
-	 * within the a database transaction context for the entity's data to be
+	 * Delete a persistent Agent entity. This operation must be performed within
+	 * the a database transaction context for the entity's data to be
 	 * permanently deleted from the persistence store, i.e., database. This
 	 * method uses the {@link javax.persistence.EntityManager#remove(Object)
 	 * EntityManager#delete} operation.
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * MessageDAO.delete(message);
+	 * AgentDAO.delete(agent);
 	 * EntityManagerHelper.commit();
-	 * message = null;
+	 * agent = null;
 	 * </pre>
 	 * 
-	 * @param message
-	 *            Message entity to delete
+	 * @param agent
+	 *            Agent entity to delete
 	 * @throws RuntimeException
 	 *             when the operation fails
 	 */
-	public void delete(Message message) {
-		EntityManagerHelper.log("deleting Message instance", Level.INFO, null);
+	public void delete(Agent agent) {
+		EntityManagerHelper.log("deleting Agent instance", Level.INFO, null);
 		try {
-			message = getEntityManager().getReference(Message.class,
-					message.getMessageId());
-			getEntityManager().remove(message);
+			agent = getEntityManager().getReference(Agent.class,
+					agent.getAccountId());
+			getEntityManager().remove(agent);
 			EntityManagerHelper.log("delete successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("delete failed", Level.SEVERE, re);
@@ -91,10 +89,10 @@ public class MessageDAO {
 	}
 
 	/**
-	 * Persist a previously saved Message entity and return it or a copy of it
-	 * to the sender. A copy of the Message entity parameter is returned when
-	 * the JPA persistence mechanism has not previously been tracking the
-	 * updated entity. This operation must be performed within the a database
+	 * Persist a previously saved Agent entity and return it or a copy of it to
+	 * the sender. A copy of the Agent entity parameter is returned when the JPA
+	 * persistence mechanism has not previously been tracking the updated
+	 * entity. This operation must be performed within the a database
 	 * transaction context for the entity's data to be permanently saved to the
 	 * persistence store, i.e., database. This method uses the
 	 * {@link javax.persistence.EntityManager#merge(Object) EntityManager#merge}
@@ -102,21 +100,20 @@ public class MessageDAO {
 	 * 
 	 * <pre>
 	 * EntityManagerHelper.beginTransaction();
-	 * message = MessageDAO.update(message);
+	 * agent = AgentDAO.update(agent);
 	 * EntityManagerHelper.commit();
 	 * </pre>
 	 * 
-	 * @param message
-	 *            Message entity to update
-	 * @return Message the persisted Message entity instance, may not be the
-	 *         same
+	 * @param agent
+	 *            Agent entity to update
+	 * @return Agent the persisted Agent entity instance, may not be the same
 	 * @throws RuntimeException
 	 *             if the operation fails
 	 */
-	public Message update(Message message) {
-		EntityManagerHelper.log("updating Message instance", Level.INFO, null);
+	public Agent update(Agent agent) {
+		EntityManagerHelper.log("updating Agent instance", Level.INFO, null);
 		try {
-			Message result = getEntityManager().merge(message);
+			Agent result = getEntityManager().merge(agent);
 			EntityManagerHelper.log("update successful", Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
@@ -125,12 +122,11 @@ public class MessageDAO {
 		}
 	}
 
-	public Message findById(Long messageId) {
-		EntityManagerHelper.log("finding Message instance with id: "
-				+ messageId, Level.INFO, null);
+	public Agent findById(Integer accountId) {
+		EntityManagerHelper.log("finding Agent instance with id: " + accountId,
+				Level.INFO, null);
 		try {
-			Message instance = getEntityManager()
-					.find(Message.class, messageId);
+			Agent instance = getEntityManager().find(Agent.class, accountId);
 			EntityManagerHelper.log("find successful", Level.INFO, null);
 			return instance;
 		} catch (RuntimeException re) {
@@ -139,12 +135,12 @@ public class MessageDAO {
 		}
 	}
 
-	public Message getReference(Long messageId) {
-		EntityManagerHelper.log("getReferencing Message instance with id: "
-				+ messageId, Level.INFO, null);
+	public Agent getReference(Integer accountId) {
+		EntityManagerHelper.log("getReferencing Agent instance with id: "
+				+ accountId, Level.INFO, null);
 		try {
-			Message instance = getEntityManager().getReference(Message.class,
-					messageId);
+			Agent instance = getEntityManager().getReference(Agent.class,
+					accountId);
 			EntityManagerHelper
 					.log("getReference successful", Level.INFO, null);
 			return instance;
@@ -154,10 +150,10 @@ public class MessageDAO {
 		}
 	}
 
-	public void detach(Message message) {
-		EntityManagerHelper.log("detaching Message instance", Level.INFO, null);
+	public void detach(Agent agent) {
+		EntityManagerHelper.log("detaching Agent instance", Level.INFO, null);
 		try {
-			getEntityManager().detach(message);
+			getEntityManager().detach(agent);
 			EntityManagerHelper.log("detach successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("detach failed", Level.SEVERE, re);
@@ -165,11 +161,10 @@ public class MessageDAO {
 		}
 	}
 
-	public void refresh(Message message) {
-		EntityManagerHelper
-				.log("refreshing Message instance", Level.INFO, null);
+	public void refresh(Agent agent) {
+		EntityManagerHelper.log("refreshing Agent instance", Level.INFO, null);
 		try {
-			getEntityManager().refresh(message);
+			getEntityManager().refresh(agent);
 			EntityManagerHelper.log("refresh successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("refresh failed", Level.SEVERE, re);
@@ -183,10 +178,10 @@ public class MessageDAO {
 	 * @see delete
 	 */
 
-	public void remove(Message message) {
-		EntityManagerHelper.log("removing Message instance", Level.INFO, null);
+	public void remove(Agent agent) {
+		EntityManagerHelper.log("removing Agent instance", Level.INFO, null);
 		try {
-			getEntityManager().remove(message);
+			getEntityManager().remove(agent);
 			EntityManagerHelper.log("remove successful", Level.INFO, null);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("remove failed", Level.SEVERE, re);
@@ -195,7 +190,7 @@ public class MessageDAO {
 	}
 
 	public void flush() {
-		EntityManagerHelper.log("flushing Message instance", Level.INFO, null);
+		EntityManagerHelper.log("flushing Agent instance", Level.INFO, null);
 		try {
 			getEntityManager().flush();
 			EntityManagerHelper.log("flush successful", Level.INFO, null);
@@ -206,7 +201,7 @@ public class MessageDAO {
 	}
 
 	public void clear() {
-		EntityManagerHelper.log("clearing Message instance", Level.INFO, null);
+		EntityManagerHelper.log("clearing Agent instance", Level.INFO, null);
 		try {
 			getEntityManager().clear();
 			EntityManagerHelper.log("clear successful", Level.INFO, null);
@@ -216,66 +211,30 @@ public class MessageDAO {
 		}
 	}
 
-	private static final String removeByMessageIdJPQL = "delete from Message a where a.messageId in (?1)";
+	private static final String removeByAccountIdJPQL = "delete from Agent a where a.accountId in (?1)";
 
-	public int removeByMessageId(Long messageId) {
-		EntityManagerHelper.log("removeByMessageId", Level.INFO, null);
+	public int removeByAccountId(Integer accountId) {
+		EntityManagerHelper.log("removeByAccountId", Level.INFO, null);
 		int ret = 0;
 		try {
-			Query query = getEntityManager().createQuery(removeByMessageIdJPQL);
-			query.setParameter(1, messageId);
+			Query query = getEntityManager().createQuery(removeByAccountIdJPQL);
+			query.setParameter(1, accountId);
 			ret = query.executeUpdate();
-			EntityManagerHelper.log("removeByMessageId successful", Level.INFO,
+			EntityManagerHelper.log("removeByAccountId successful", Level.INFO,
 					null);
 			return ret;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("removeByMessageId failed", Level.SEVERE,
+			EntityManagerHelper.log("removeByAccountId failed", Level.SEVERE,
 					re);
 			throw re;
 		}
 	}
 
-	private static final String accountJPQL = "select a.account.accountId from Message a where a.messageId = :messageId";
-
-	public java.lang.Integer getAccount(java.lang.Long messageId) {
-		EntityManagerHelper.log("getPlaneId with messageId" + messageId,
-				Level.INFO, null);
-		java.lang.Integer accountId;
-		try {
-			Query query = getEntityManager().createQuery(accountJPQL);
-			query.setParameter("messageId", messageId);
-			accountId = (java.lang.Integer) query.getSingleResult();
-			EntityManagerHelper.log("getPlaneId successful", Level.INFO, null);
-			return accountId;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getPlaneId failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
-
-	private static final String planeJPQL = "select a.plane.planeId from Message a where a.messageId = :messageId";
-
-	public java.lang.Long getPlane(java.lang.Long messageId) {
-		EntityManagerHelper.log("getPlaneId with messageId" + messageId,
-				Level.INFO, null);
-		java.lang.Long planeId;
-		try {
-			Query query = getEntityManager().createQuery(planeJPQL);
-			query.setParameter("messageId", messageId);
-			planeId = (java.lang.Long) query.getSingleResult();
-			EntityManagerHelper.log("getPlaneId successful", Level.INFO, null);
-			return planeId;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getPlaneId failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
-
 	/**
-	 * Find all Message entities with a specific property value.
+	 * Find all Agent entities with a specific property value.
 	 * 
 	 * @param propertyName
-	 *            the name of the Message property to query
+	 *            the name of the Agent property to query
 	 * @param value
 	 *            the property value to match
 	 * @param rowStartIdxAndCount
@@ -283,15 +242,15 @@ public class MessageDAO {
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            number of results to return.
-	 * @return List<Message> found by query
+	 * @return List<Agent> found by query
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Message> findByProperty(String propertyName,
-			final Object value, final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding Message instance with property: "
+	public List<Agent> findByProperty(String propertyName, final Object value,
+			final int... rowStartIdxAndCount) {
+		EntityManagerHelper.log("finding Agent instance with property: "
 				+ propertyName + ", value: " + value, Level.INFO, null);
 		try {
-			final String queryString = "select model from Message model where model."
+			final String queryString = "select model from Agent model where model."
 					+ propertyName + "= :propertyValue";
 			Query query = getEntityManager().createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -316,35 +275,36 @@ public class MessageDAO {
 		}
 	}
 
-	public List<Message> findByType(Object type, int... rowStartIdxAndCount) {
-		return findByProperty(TYPE, type, rowStartIdxAndCount);
+	public List<Agent> findByDevType(Object devType, int... rowStartIdxAndCount) {
+		return findByProperty(DEV_TYPE, devType, rowStartIdxAndCount);
 	}
 
-	public List<Message> findByStatus(Object status, int... rowStartIdxAndCount) {
-		return findByProperty(STATUS, status, rowStartIdxAndCount);
-	}
-
-	public List<Message> findByContent(Object content,
+	public List<Agent> findByDevVersion(Object devVersion,
 			int... rowStartIdxAndCount) {
-		return findByProperty(CONTENT, content, rowStartIdxAndCount);
+		return findByProperty(DEV_VERSION, devVersion, rowStartIdxAndCount);
+	}
+
+	public List<Agent> findByDevToken(Object devToken,
+			int... rowStartIdxAndCount) {
+		return findByProperty(DEV_TOKEN, devToken, rowStartIdxAndCount);
 	}
 
 	/**
-	 * Find all Message entities.
+	 * Find all Agent entities.
 	 * 
 	 * @param rowStartIdxAndCount
 	 *            Optional int varargs. rowStartIdxAndCount[0] specifies the the
 	 *            row index in the query result-set to begin collecting the
 	 *            results. rowStartIdxAndCount[1] specifies the the maximum
 	 *            count of results to return.
-	 * @return List<Message> all Message entities
+	 * @return List<Agent> all Agent entities
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Message> findAll(final int... rowStartIdxAndCount) {
-		EntityManagerHelper.log("finding all Message instances", Level.INFO,
-				null);
+	public List<Agent> findAll(final int... rowStartIdxAndCount) {
+		EntityManagerHelper
+				.log("finding all Agent instances", Level.INFO, null);
 		try {
-			final String queryString = "select model from Message model";
+			final String queryString = "select model from Agent model";
 			Query query = getEntityManager().createQuery(queryString);
 			if (rowStartIdxAndCount != null && rowStartIdxAndCount.length > 0) {
 				int rowStartIdx = Math.max(0, rowStartIdxAndCount[0]);

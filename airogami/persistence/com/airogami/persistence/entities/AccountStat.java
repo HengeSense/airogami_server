@@ -34,10 +34,6 @@ public class AccountStat implements java.io.Serializable {
 
 	private Integer chainMsgCount = 0;
 
-	private Short devType;
-
-	private String devToken;
-
 	private Short pickupLeftCount = AccountConstants.PickupMaxCount;
 
 	private Short sendLeftCount = AccountConstants.SendMaxCount;
@@ -52,7 +48,7 @@ public class AccountStat implements java.io.Serializable {
 	public AccountStat() {
 	}
 
-	/** minimal constructor */
+	/** full constructor */
 	public AccountStat(Integer accountId, Account account, Integer signinCount,
 			Short status, Integer msgCount, Integer chainMsgCount,
 			Short pickupLeftCount, Short sendLeftCount, Short pickupCount,
@@ -63,25 +59,6 @@ public class AccountStat implements java.io.Serializable {
 		this.status = status;
 		this.msgCount = msgCount;
 		this.chainMsgCount = chainMsgCount;
-		this.pickupLeftCount = pickupLeftCount;
-		this.sendLeftCount = sendLeftCount;
-		this.pickupCount = pickupCount;
-		this.sendCount = sendCount;
-	}
-
-	/** full constructor */
-	public AccountStat(Integer accountId, Account account, Integer signinCount,
-			Short status, Integer msgCount, Integer chainMsgCount,
-			Short devType, String devToken, Short pickupLeftCount,
-			Short sendLeftCount, Short pickupCount, Short sendCount) {
-		this.accountId = accountId;
-		this.account = account;
-		this.signinCount = signinCount;
-		this.status = status;
-		this.msgCount = msgCount;
-		this.chainMsgCount = chainMsgCount;
-		this.devType = devType;
-		this.devToken = devToken;
 		this.pickupLeftCount = pickupLeftCount;
 		this.sendLeftCount = sendLeftCount;
 		this.pickupCount = pickupCount;
@@ -143,24 +120,6 @@ public class AccountStat implements java.io.Serializable {
 
 	public void setChainMsgCount(Integer chainMsgCount) {
 		this.chainMsgCount = chainMsgCount;
-	}
-
-	@Column(name = "DEV_TYPE")
-	public Short getDevType() {
-		return this.devType;
-	}
-
-	public void setDevType(Short devType) {
-		this.devType = devType;
-	}
-
-	@Column(name = "DEV_TOKEN", length = 4096)
-	public String getDevToken() {
-		return this.devToken;
-	}
-
-	public void setDevToken(String devToken) {
-		this.devToken = devToken;
 	}
 
 	@Column(name = "PICKUP_LEFT_COUNT", nullable = false, updatable = false)

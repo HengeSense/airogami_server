@@ -13,9 +13,9 @@ import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.MessageDAO;
 
 public class MessageDao extends MessageDAO {
-	private final String obtainMessagesForwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and ((message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget and message.account = message.plane.accountByOwnerId) or (message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner and (message.account = message.plane.accountByTargetId or message.plane.lastMsgIdOfOwner = 0))) and (?3 is null or message.messageId > ?3) order by message.messageId asc";
+	private final String obtainMessagesForwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and ((message.plane.accountByTargetId.accountId = ?1 and (message.messageId > message.plane.lastMsgIdOfT or message.plane.status = ?4) and message.account = message.plane.accountByOwnerId) or (message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfO and (message.account = message.plane.accountByTargetId or message.plane.lastMsgIdOfO = 0))) and (?3 is null or message.messageId > ?3) order by message.messageId asc";
 
-	private final String obtainMessagesBackwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and ((message.plane.accountByTargetId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfTarget and message.account = message.plane.accountByOwnerId) or (message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfOwner and (message.account = message.plane.accountByTargetId or message.plane.lastMsgIdOfOwner = 0))) and (?3 is null or message.messageId < ?3) order by message.messageId desc";
+	private final String obtainMessagesBackwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and ((message.plane.accountByTargetId.accountId = ?1 and (message.messageId > message.plane.lastMsgIdOfT or message.plane.status = ?4) and message.account = message.plane.accountByOwnerId) or (message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfO and (message.account = message.plane.accountByTargetId or message.plane.lastMsgIdOfO = 0))) and (?3 is null or message.messageId < ?3) order by message.messageId desc";
 
 	// not verify whether replied (verified in obtainPlanes)
 	public List<Message> obtainMessages(int accountId, long planeId,
@@ -34,6 +34,7 @@ public class MessageDao extends MessageDAO {
 			query.setParameter(1, accountId);
 			query.setParameter(2, planeId);
 			query.setParameter(3, startId);
+			query.setParameter(4, PlaneConstants.StatusNew);
 			query.setMaxResults(limit);
 			List<Message> messages = query.getResultList();
 			EntityManagerHelper.log("obtainMessages successful", Level.INFO,
@@ -49,17 +50,17 @@ public class MessageDao extends MessageDAO {
 	 * lock plane first
 	 */
 
-	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfOwner, plane.lastMsgIdOfOwner = ?3 where plane.lastMsgIdOfOwner < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByOwner = 0 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfO, plane.lastMsgIdOfO = ?3 where plane.lastMsgIdOfO < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByO = 0 and plane.planeId = ?1 and plane.status = ?4";
 
-	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfTarget, plane.lastMsgIdOfTarget = ?3 where plane.lastMsgIdOfTarget < ?3 and plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfT, plane.lastMsgIdOfT = ?3 where plane.lastMsgIdOfT < ?3 and plane.accountByTargetId.accountId = ?2 and plane.deletedByT = 0 and plane.planeId = ?1 and plane.status = ?4";
 
 	private final String viewedMessageByOwnerCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
 
 	private final String viewedMessageByTargetCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
 
-	private final String viewedMessageByOwnerQueryJPQL = "select plane.lastMsgIdOfOwner from Plane plane where plane.planeId = ?1 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByOwner = 0 and plane.status = ?3";
+	private final String viewedMessageByOwnerQueryJPQL = "select plane.lastMsgIdOfO from Plane plane where plane.planeId = ?1 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByO = 0 and plane.status = ?3";
 
-	private final String viewedMessageByTargetQueryJPQL = "select plane.lastMsgIdOfTarget from Plane plane where plane.planeId = ?1 and plane.accountByTargetId.accountId = ?2 and plane.deletedByTarget = 0 and plane.status = ?3";
+	private final String viewedMessageByTargetQueryJPQL = "select plane.lastMsgIdOfT from Plane plane where plane.planeId = ?1 and plane.accountByTargetId.accountId = ?2 and plane.deletedByT = 0 and plane.status = ?3";
 
 	// may verify whether lastMsgId exists
 	public Object[] viewedMessage(int accountId, long planeId, Long lastMsgId,
@@ -129,7 +130,7 @@ public class MessageDao extends MessageDAO {
 
 	}
 
-	private final String decreaseMessageCountJPQL = "update AccountStat accountStat set accountStat.msgCount = accountStat.msgCount - (select count(message) from Message message where message.status = ?3 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and ((message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfOwner) or (message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfTarget))) where accountStat.accountId = ?2";
+	private final String decreaseMessageCountJPQL = "update AccountStat accountStat set accountStat.msgCount = accountStat.msgCount - (select count(message) from Message message where message.status = ?3 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and ((message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfO) or (message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgIdOfT))) where accountStat.accountId = ?2";
 
 	public boolean decreaseMessageCount(long planeId, int accountId) {
 		EntityManagerHelper.log("decreaseMessageCounting with planeId = " + planeId

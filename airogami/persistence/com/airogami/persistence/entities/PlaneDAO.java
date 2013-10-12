@@ -20,23 +20,24 @@ import javax.persistence.Query;
 
 public class PlaneDAO {
 	// property constants
+	public static final String OWNER_INC = "ownerInc";
 	public static final String UPDATE_COUNT = "updateCount";
-	public static final String UPDATE_INC = "updateInc";
+	public static final String TARGET_INC = "targetInc";
 	public static final String STATUS = "status";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
-	public static final String LAST_MSG_ID_OF_TARGET = "lastMsgIdOfTarget";
-	public static final String LAST_MSG_ID_OF_OWNER = "lastMsgIdOfOwner";
+	public static final String LAST_MSG_ID_OF_T = "lastMsgIdOfT";
+	public static final String LAST_MSG_ID_OF_O = "lastMsgIdOfO";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
 	public static final String SEX = "sex";
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String MAX_MATCH_COUNT = "maxMatchCount";
-	public static final String LIKED_BY_OWNER = "likedByOwner";
-	public static final String LIKED_BY_TARGET = "likedByTarget";
-	public static final String DELETED_BY_OWNER = "deletedByOwner";
-	public static final String DELETED_BY_TARGET = "deletedByTarget";
+	public static final String LIKED_BY_O = "likedByO";
+	public static final String LIKED_BY_T = "likedByT";
+	public static final String DELETED_BY_O = "deletedByO";
+	public static final String DELETED_BY_T = "deletedByT";
 	public static final String LANGUAGE = "language";
 	public static final String SOURCE = "source";
 	public static final String LAST_MSG_ID = "lastMsgId";
@@ -309,24 +310,63 @@ public class PlaneDAO {
 		}
 	}
 
+	private static final String increaseOwnerIncJPQL = "update Plane a set a.ownerInc = a.ownerInc + :count where a.planeId in (:planeId)";
+
+	public boolean increaseOwnerInc(java.lang.Long planeId, int count) {
+		EntityManagerHelper.log("increaseOwnerInc with planeId: " + planeId,
+				Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(increaseOwnerIncJPQL);
+			query.setParameter("planeId", planeId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseOwnerInc successful", Level.INFO,
+					null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper
+					.log("increaseOwnerInc failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+
 	private static final String increaseUpdateCountJPQL = "update Plane a set a.updateCount = a.updateCount + :count where a.planeId in (:planeId)";
 
 	public boolean increaseUpdateCount(java.lang.Long planeId, int count) {
-		EntityManagerHelper.log(
-				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseUpdateCount with planeId: " + planeId,
+				Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increaseUpdateCountJPQL);
 			query.setParameter("planeId", planeId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseMaxMatchCount successful",
+			EntityManagerHelper.log("increaseUpdateCount successful",
 					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMaxMatchCount failed",
-					Level.SEVERE, re);
+			EntityManagerHelper.log("increaseUpdateCount failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
+	private static final String increaseTargetIncJPQL = "update Plane a set a.targetInc = a.targetInc + :count where a.planeId in (:planeId)";
+
+	public boolean increaseTargetInc(java.lang.Long planeId, int count) {
+		EntityManagerHelper.log("increaseTargetInc with planeId: " + planeId,
+				Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(increaseTargetIncJPQL);
+			query.setParameter("planeId", planeId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseTargetInc successful", Level.INFO,
+					null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseTargetInc failed", Level.SEVERE,
+					re);
 			throw re;
 		}
 	}
@@ -334,21 +374,20 @@ public class PlaneDAO {
 	private static final String increaseMatchCountJPQL = "update Plane a set a.matchCount = a.matchCount + :count where a.planeId in (:planeId)";
 
 	public boolean increaseMatchCount(java.lang.Long planeId, int count) {
-		EntityManagerHelper.log(
-				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseMatchCount with planeId: " + planeId,
+				Level.INFO, null);
 		try {
 			Query query = getEntityManager()
 					.createQuery(increaseMatchCountJPQL);
 			query.setParameter("planeId", planeId);
 			query.setParameter("count", count);
 			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseMaxMatchCount successful",
+			EntityManagerHelper.log("increaseMatchCount successful",
 					Level.INFO, null);
 			return result;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseMaxMatchCount failed",
-					Level.SEVERE, re);
+			EntityManagerHelper.log("increaseMatchCount failed", Level.SEVERE,
+					re);
 			throw re;
 		}
 	}
@@ -356,9 +395,8 @@ public class PlaneDAO {
 	private static final String increaseMaxMatchCountJPQL = "update Plane a set a.maxMatchCount = a.maxMatchCount + :count where a.planeId in (:planeId)";
 
 	public boolean increaseMaxMatchCount(java.lang.Long planeId, int count) {
-		EntityManagerHelper.log(
-				"increaseMaxMatchCount with planeId:" + planeId, Level.INFO,
-				null);
+		EntityManagerHelper.log("increaseMaxMatchCount with planeId: "
+				+ planeId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(
 					increaseMaxMatchCountJPQL);
@@ -420,14 +458,19 @@ public class PlaneDAO {
 		}
 	}
 
+	public List<Plane> findByOwnerInc(Object ownerInc,
+			int... rowStartIdxAndCount) {
+		return findByProperty(OWNER_INC, ownerInc, rowStartIdxAndCount);
+	}
+
 	public List<Plane> findByUpdateCount(Object updateCount,
 			int... rowStartIdxAndCount) {
 		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByUpdateInc(Object updateInc,
+	public List<Plane> findByTargetInc(Object targetInc,
 			int... rowStartIdxAndCount) {
-		return findByProperty(UPDATE_INC, updateInc, rowStartIdxAndCount);
+		return findByProperty(TARGET_INC, targetInc, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByStatus(Object status, int... rowStartIdxAndCount) {
@@ -444,15 +487,15 @@ public class PlaneDAO {
 		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLastMsgIdOfTarget(Object lastMsgIdOfTarget,
+	public List<Plane> findByLastMsgIdOfT(Object lastMsgIdOfT,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LAST_MSG_ID_OF_TARGET, lastMsgIdOfTarget,
+		return findByProperty(LAST_MSG_ID_OF_T, lastMsgIdOfT,
 				rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLastMsgIdOfOwner(Object lastMsgIdOfOwner,
+	public List<Plane> findByLastMsgIdOfO(Object lastMsgIdOfO,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LAST_MSG_ID_OF_OWNER, lastMsgIdOfOwner,
+		return findByProperty(LAST_MSG_ID_OF_O, lastMsgIdOfO,
 				rowStartIdxAndCount);
 	}
 
@@ -484,27 +527,24 @@ public class PlaneDAO {
 				rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLikedByOwner(Object likedByOwner,
+	public List<Plane> findByLikedByO(Object likedByO,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LIKED_BY_OWNER, likedByOwner, rowStartIdxAndCount);
+		return findByProperty(LIKED_BY_O, likedByO, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLikedByTarget(Object likedByTarget,
+	public List<Plane> findByLikedByT(Object likedByT,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LIKED_BY_TARGET, likedByTarget,
-				rowStartIdxAndCount);
+		return findByProperty(LIKED_BY_T, likedByT, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByDeletedByOwner(Object deletedByOwner,
+	public List<Plane> findByDeletedByO(Object deletedByO,
 			int... rowStartIdxAndCount) {
-		return findByProperty(DELETED_BY_OWNER, deletedByOwner,
-				rowStartIdxAndCount);
+		return findByProperty(DELETED_BY_O, deletedByO, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByDeletedByTarget(Object deletedByTarget,
+	public List<Plane> findByDeletedByT(Object deletedByT,
 			int... rowStartIdxAndCount) {
-		return findByProperty(DELETED_BY_TARGET, deletedByTarget,
-				rowStartIdxAndCount);
+		return findByProperty(DELETED_BY_T, deletedByT, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByLanguage(Object language,

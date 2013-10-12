@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
+import com.airogami.common.ClientAgent;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
@@ -19,11 +20,12 @@ public interface IAccountService {
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)
 	 * @param type:(int) must be a valid type
+	 * @param clientAgent:(ClientAgent) must be non-null
 	 * @param automatic:(boolean) whether signed in automatically
 	 * @return account, accountStat, [profile], [authenticate] if successful or null if not matched
 	 * @throws ApplicationException if failed 
 	 */
-	public Account signin(String[]args, int type, boolean automatic) throws ApplicationException;
+	public Account signin(String[]args, int type, ClientAgent clientAgent, boolean automatic) throws ApplicationException;
 	
 	/*
 	 * @param args:(String[] must be not null, have password and (have email, phone, or screenName)

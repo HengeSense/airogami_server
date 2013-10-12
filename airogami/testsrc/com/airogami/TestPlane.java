@@ -66,8 +66,9 @@ public class TestPlane {
 		message.setType((short) 0);
 		int ownerId = 2;
 		long planeId = 3;
+		boolean byOwner = false;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(planeId, ownerId, message);
+			Map<String, Object> result = ManagerUtils.planeManager.replyPlane(planeId, ownerId, byOwner, message);
 			ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -134,7 +135,6 @@ public class TestPlane {
 			while(iter.hasNext()){
 				Plane plane = iter.next();
 				System.out.print(plane.getPlaneId());
-				System.out.println(": " + plane.getUpdateInc());
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();
@@ -247,7 +247,6 @@ public class TestPlane {
 			while(iter.hasNext()){
 				Plane plane = iter.next();
 				System.out.print(plane.getPlaneId());
-				System.out.println(": " + plane.getUpdateInc());
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();

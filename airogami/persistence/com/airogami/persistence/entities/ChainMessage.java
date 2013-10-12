@@ -31,9 +31,11 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Account account;
 
+	private Long updateInc = 0L;
+
 	private String content;
 
-	private Short type;
+	private Short type = (short) 0;
 
 	private Timestamp createdTime;
 
@@ -53,11 +55,12 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Timestamp createdTime, Short status, Timestamp lastViewedTime,
-			Short source) {
+			Long updateInc, Timestamp createdTime, Short status,
+			Timestamp lastViewedTime, Short source) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
+		this.updateInc = updateInc;
 		this.createdTime = createdTime;
 		this.status = status;
 		this.lastViewedTime = lastViewedTime;
@@ -66,11 +69,13 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			String content, Short type, Timestamp createdTime, Short status,
-			Timestamp lastViewedTime, Short source, Timestamp lastTime) {
+			Long updateInc, String content, Short type, Timestamp createdTime,
+			Short status, Timestamp lastViewedTime, Short source,
+			Timestamp lastTime) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
+		this.updateInc = updateInc;
 		this.content = content;
 		this.type = type;
 		this.createdTime = createdTime;
@@ -111,6 +116,15 @@ public class ChainMessage implements java.io.Serializable {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	@Column(name = "UPDATE_INC", nullable = false, insertable = false, updatable = false)
+	public Long getUpdateInc() {
+		return this.updateInc;
+	}
+
+	public void setUpdateInc(Long updateInc) {
+		this.updateInc = updateInc;
 	}
 
 	@Column(name = "CONTENT")

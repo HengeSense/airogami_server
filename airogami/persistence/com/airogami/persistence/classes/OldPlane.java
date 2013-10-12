@@ -7,14 +7,14 @@ public class OldPlane implements Serializable {
 	private static final long serialVersionUID = 1L;
     private Long planeId;
     private Short status;
-    private Long lastMsgIdOfOwner;
-    private Long lastMsgIdOfTarget;
+    private Long lastMsgIdOfO;
+    private Long lastMsgIdOfT;
     
-    public OldPlane(Long planeId, Short status, Long lastMsgIdOfOwner, Long lastMsgIdOfTarget){
+    public OldPlane(Long planeId, Short status, Long lastMsgIdOfO, Long lastMsgIdOfT){
     	this.planeId = planeId;
     	this.status = status;
-    	this.lastMsgIdOfOwner = lastMsgIdOfOwner;
-    	this.lastMsgIdOfTarget = lastMsgIdOfTarget;
+    	this.lastMsgIdOfO = lastMsgIdOfO;
+    	this.lastMsgIdOfT = lastMsgIdOfT;
     }
     
     public Long getPlaneId() {
@@ -30,20 +30,20 @@ public class OldPlane implements Serializable {
 		this.status = status;
 	}
 
-	public Long getLastMsgIdOfOwner() {
-		return lastMsgIdOfOwner;
+	public Long getLastMsgIdOfO() {
+		return lastMsgIdOfO;
 	}
 
-	public void setLastMsgIdOfOwner(Long lastMsgIdOfOwner) {
-		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
+	public void setLastMsgIdOfO(Long lastMsgIdOfO) {
+		this.lastMsgIdOfO = lastMsgIdOfO;
 	}
 
-	public Long getLastMsgIdOfTarget() {
-		return lastMsgIdOfTarget;
+	public Long getLastMsgIdOfT() {
+		return lastMsgIdOfT;
 	}
 
-	public void setLastMsgIdOfTarget(Long lastMsgIdOfTarget) {
-		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
+	public void setLastMsgIdOfT(Long lastMsgIdOfT) {
+		this.lastMsgIdOfT = lastMsgIdOfT;
 	}
 	
 }

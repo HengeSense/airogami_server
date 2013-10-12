@@ -75,10 +75,10 @@ public class PlaneManager {
 		plane.setMaxMatchCount(PlaneConstants.MaxMatchCount);
 		plane.setMatchCount((short) 0);
 		plane.setStatus((short) PlaneConstants.StatusNew);
-		plane.setLikedByOwner((short) 0);
-		plane.setLikedByTarget((short) 0);
-		plane.setDeletedByOwner((short) 0);
-		plane.setDeletedByTarget((short) 0);
+		plane.setLikedByO((short) 0);
+		plane.setLikedByT((short) 0);
+		plane.setDeletedByO((short) 0);
+		plane.setDeletedByT((short) 0);
 		if (plane.getSex() == null) {
 			plane.setSex((short) AccountConstants.SexType_Unknown);
 		}
@@ -107,13 +107,15 @@ public class PlaneManager {
 	 * @param accountId:(int) must be plane.accoutByOwnerId or
 	 * plane.accountByTargetId
 	 * 
+	 * @param byOwner:(boolean)
+	 * 
 	 * @param message:(Message) must be not null, has type and content
 	 * 
 	 * @return message if successful otherwise error ( = "none")
 	 * 
 	 * @throws ApplicationException if failed
 	 */
-	public Map<String, Object> replyPlane(long planeId, int accountId,
+	public Map<String, Object> replyPlane(long planeId, int accountId, boolean byOwner,
 			Message message) throws AirogamiException {
 		Map<String, Object> result = null;
 		if (message == null || message.getType() == null
@@ -123,7 +125,7 @@ public class PlaneManager {
 					"Illegal arguments in replyPlane");
 		}
 		try {
-			result = ServiceUtils.planeService.replyPlane(planeId, accountId,
+			result = ServiceUtils.planeService.replyPlane(planeId, accountId, byOwner,
 					message);
 		} catch (ApplicationException re) {
 			// /re.printStackTrace();

@@ -34,23 +34,27 @@ public class Account implements java.io.Serializable {
 
 	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
 
-	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
-
-	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
-
-	private List<Message> messages = new ArrayList<Message>(0);
-
-	private Profile profile;
+	private AccountSys accountSys;
 
 	private List<Report> reportsForReportId = new ArrayList<Report>(0);
 
-	private List<Plane> planesForTargetId = new ArrayList<Plane>(0);
+	private Agent agent;
 
 	private List<Chain> chains = new ArrayList<Chain>(0);
 
 	private List<ChainHist> chainHists = new ArrayList<ChainHist>(0);
 
 	private AccountStat accountStat;
+
+	private List<Message> messages = new ArrayList<Message>(0);
+
+	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
+
+	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
+
+	private Profile profile;
+
+	private List<Plane> planesForTargetId = new ArrayList<Plane>(0);
 
 	private List<ChainMessage> chainMessages = new ArrayList<ChainMessage>(0);
 
@@ -71,24 +75,27 @@ public class Account implements java.io.Serializable {
 	/** full constructor */
 	public Account(Integer accountId, Authenticate authenticate,
 			Integer updateCount, List<Report> reportsForReportedId,
-			List<PlaneHist> planeHists, List<Plane> planesForOwnerId,
-			List<Message> messages, Profile profile,
-			List<Report> reportsForReportId, List<Plane> planesForTargetId,
-			List<Chain> chains, List<ChainHist> chainHists,
-			AccountStat accountStat, List<ChainMessage> chainMessages) {
+			AccountSys accountSys, List<Report> reportsForReportId,
+			Agent agent, List<Chain> chains, List<ChainHist> chainHists,
+			AccountStat accountStat, List<Message> messages,
+			List<Plane> planesForOwnerId, List<PlaneHist> planeHists,
+			Profile profile, List<Plane> planesForTargetId,
+			List<ChainMessage> chainMessages) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.updateCount = updateCount;
 		this.reportsForReportedId = reportsForReportedId;
-		this.planeHists = planeHists;
-		this.planesForOwnerId = planesForOwnerId;
-		this.messages = messages;
-		this.profile = profile;
+		this.accountSys = accountSys;
 		this.reportsForReportId = reportsForReportId;
-		this.planesForTargetId = planesForTargetId;
+		this.agent = agent;
 		this.chains = chains;
 		this.chainHists = chainHists;
 		this.accountStat = accountStat;
+		this.messages = messages;
+		this.planesForOwnerId = planesForOwnerId;
+		this.planeHists = planeHists;
+		this.profile = profile;
+		this.planesForTargetId = planesForTargetId;
 		this.chainMessages = chainMessages;
 	}
 
@@ -131,40 +138,13 @@ public class Account implements java.io.Serializable {
 		this.reportsForReportedId = reportsForReportedId;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
-	public List<PlaneHist> getPlaneHists() {
-		return this.planeHists;
-	}
-
-	public void setPlaneHists(List<PlaneHist> planeHists) {
-		this.planeHists = planeHists;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByOwnerId")
-	public List<Plane> getPlanesForOwnerId() {
-		return this.planesForOwnerId;
-	}
-
-	public void setPlanesForOwnerId(List<Plane> planesForOwnerId) {
-		this.planesForOwnerId = planesForOwnerId;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
-	public List<Message> getMessages() {
-		return this.messages;
-	}
-
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
-	}
-
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
-	public Profile getProfile() {
-		return this.profile;
+	public AccountSys getAccountSys() {
+		return this.accountSys;
 	}
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+	public void setAccountSys(AccountSys accountSys) {
+		this.accountSys = accountSys;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByReportId")
@@ -176,13 +156,13 @@ public class Account implements java.io.Serializable {
 		this.reportsForReportId = reportsForReportId;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByTargetId")
-	public List<Plane> getPlanesForTargetId() {
-		return this.planesForTargetId;
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	public Agent getAgent() {
+		return this.agent;
 	}
 
-	public void setPlanesForTargetId(List<Plane> planesForTargetId) {
-		this.planesForTargetId = planesForTargetId;
+	public void setAgent(Agent agent) {
+		this.agent = agent;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
@@ -210,6 +190,51 @@ public class Account implements java.io.Serializable {
 
 	public void setAccountStat(AccountStat accountStat) {
 		this.accountStat = accountStat;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+	public List<Message> getMessages() {
+		return this.messages;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByOwnerId")
+	public List<Plane> getPlanesForOwnerId() {
+		return this.planesForOwnerId;
+	}
+
+	public void setPlanesForOwnerId(List<Plane> planesForOwnerId) {
+		this.planesForOwnerId = planesForOwnerId;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+	public List<PlaneHist> getPlaneHists() {
+		return this.planeHists;
+	}
+
+	public void setPlaneHists(List<PlaneHist> planeHists) {
+		this.planeHists = planeHists;
+	}
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	public Profile getProfile() {
+		return this.profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "accountByTargetId")
+	public List<Plane> getPlanesForTargetId() {
+		return this.planesForTargetId;
+	}
+
+	public void setPlanesForTargetId(List<Plane> planesForTargetId) {
+		this.planesForTargetId = planesForTargetId;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")

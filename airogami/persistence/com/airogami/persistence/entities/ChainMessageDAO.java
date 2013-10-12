@@ -19,6 +19,7 @@ import javax.persistence.Query;
 
 public class ChainMessageDAO {
 	// property constants
+	public static final String UPDATE_INC = "updateInc";
 	public static final String CONTENT = "content";
 	public static final String TYPE = "type";
 	public static final String STATUS = "status";
@@ -242,6 +243,27 @@ public class ChainMessageDAO {
 		}
 	}
 
+	private static final String increaseUpdateIncJPQL = "update ChainMessage a set a.updateInc = a.updateInc + :count where a.id in (:id)";
+
+	public boolean increaseUpdateInc(
+			com.airogami.persistence.entities.ChainMessageId id, int count) {
+		EntityManagerHelper.log("increaseUpdateInc with id: " + id, Level.INFO,
+				null);
+		try {
+			Query query = getEntityManager().createQuery(increaseUpdateIncJPQL);
+			query.setParameter("id", id);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseUpdateInc successful", Level.INFO,
+					null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseUpdateInc failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
 	/**
 	 * Find all ChainMessage entities with a specific property value.
 	 * 
@@ -285,6 +307,11 @@ public class ChainMessageDAO {
 					Level.SEVERE, re);
 			throw re;
 		}
+	}
+
+	public List<ChainMessage> findByUpdateInc(Object updateInc,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_INC, updateInc, rowStartIdxAndCount);
 	}
 
 	public List<ChainMessage> findByContent(Object content,

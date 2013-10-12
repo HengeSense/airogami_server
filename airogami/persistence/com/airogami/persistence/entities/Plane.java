@@ -39,13 +39,15 @@ public class Plane implements java.io.Serializable {
 
 	private Account accountByOwnerId;
 
+	private Long ownerInc = 0L;
+
 	private Integer updateCount = 0;
 
 	private Timestamp updatedTime;
 
 	private Timestamp createdTime;
 
-	private Long updateInc = 0L;
+	private Long targetInc = 0L;
 
 	private Short status = 0;
 
@@ -53,9 +55,9 @@ public class Plane implements java.io.Serializable {
 
 	private Double latitude;
 
-	private Long lastMsgIdOfTarget = 0L;
+	private Long lastMsgIdOfT = 0L;
 
-	private Long lastMsgIdOfOwner = 0L;
+	private Long lastMsgIdOfO = 0L;
 
 	private String city;
 
@@ -63,19 +65,19 @@ public class Plane implements java.io.Serializable {
 
 	private String country;
 
-	private Short sex;
+	private Short sex = (short) 0;
 
 	private Short matchCount = 0;
 
-	private Short maxMatchCount;
+	private Short maxMatchCount = (short) 0;
 
-	private Short likedByOwner;
+	private Short likedByO = (short) 0;
 
-	private Short likedByTarget;
+	private Short likedByT = (short) 0;
 
-	private Short deletedByOwner;
+	private Short deletedByO = (short) 0;
 
-	private Short deletedByTarget;
+	private Short deletedByT = (short) 0;
 
 	private Date birthdayLower;
 
@@ -98,63 +100,64 @@ public class Plane implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Plane(Category category, Integer updateCount, Timestamp updatedTime,
-			Timestamp createdTime, Long updateInc, Short status,
-			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, Short sex,
-			Short matchCount, Short maxMatchCount, Short likedByOwner,
-			Short likedByTarget, Short deletedByOwner, Short deletedByTarget,
-			Short source) {
+	public Plane(Category category, Long ownerInc, Integer updateCount,
+			Timestamp updatedTime, Timestamp createdTime, Long targetInc,
+			Short status, Long lastMsgIdOfT, Long lastMsgIdOfO, Short sex,
+			Short matchCount, Short maxMatchCount, Short likedByO,
+			Short likedByT, Short deletedByO, Short deletedByT, Short source) {
 		this.category = category;
+		this.ownerInc = ownerInc;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.updateInc = updateInc;
+		this.targetInc = targetInc;
 		this.status = status;
-		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
-		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
+		this.lastMsgIdOfT = lastMsgIdOfT;
+		this.lastMsgIdOfO = lastMsgIdOfO;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
-		this.likedByOwner = likedByOwner;
-		this.likedByTarget = likedByTarget;
-		this.deletedByOwner = deletedByOwner;
-		this.deletedByTarget = deletedByTarget;
+		this.likedByO = likedByO;
+		this.likedByT = likedByT;
+		this.deletedByO = deletedByO;
+		this.deletedByT = deletedByT;
 		this.source = source;
 	}
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
-			Account accountByOwnerId, Integer updateCount,
-			Timestamp updatedTime, Timestamp createdTime, Long updateInc,
-			Short status, Double longitude, Double latitude,
-			Long lastMsgIdOfTarget, Long lastMsgIdOfOwner, String city,
-			String province, String country, Short sex, Short matchCount,
-			Short maxMatchCount, Short likedByOwner, Short likedByTarget,
-			Short deletedByOwner, Short deletedByTarget, Date birthdayLower,
-			Date birthdayUpper, String language, Short source, Long lastMsgId,
-			List<PlaneHist> planeHists, List<Message> messages) {
+			Account accountByOwnerId, Long ownerInc, Integer updateCount,
+			Timestamp updatedTime, Timestamp createdTime, Long targetInc,
+			Short status, Double longitude, Double latitude, Long lastMsgIdOfT,
+			Long lastMsgIdOfO, String city, String province, String country,
+			Short sex, Short matchCount, Short maxMatchCount, Short likedByO,
+			Short likedByT, Short deletedByO, Short deletedByT,
+			Date birthdayLower, Date birthdayUpper, String language,
+			Short source, Long lastMsgId, List<PlaneHist> planeHists,
+			List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
+		this.ownerInc = ownerInc;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.updateInc = updateInc;
+		this.targetInc = targetInc;
 		this.status = status;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
-		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
+		this.lastMsgIdOfT = lastMsgIdOfT;
+		this.lastMsgIdOfO = lastMsgIdOfO;
 		this.city = city;
 		this.province = province;
 		this.country = country;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
-		this.likedByOwner = likedByOwner;
-		this.likedByTarget = likedByTarget;
-		this.deletedByOwner = deletedByOwner;
-		this.deletedByTarget = deletedByTarget;
+		this.likedByO = likedByO;
+		this.likedByT = likedByT;
+		this.deletedByO = deletedByO;
+		this.deletedByT = deletedByT;
 		this.birthdayLower = birthdayLower;
 		this.birthdayUpper = birthdayUpper;
 		this.language = language;
@@ -206,6 +209,15 @@ public class Plane implements java.io.Serializable {
 		this.accountByOwnerId = accountByOwnerId;
 	}
 
+	@Column(name = "OWNER_INC", nullable = false, insertable = false, updatable = false)
+	public Long getOwnerInc() {
+		return this.ownerInc;
+	}
+
+	public void setOwnerInc(Long ownerInc) {
+		this.ownerInc = ownerInc;
+	}
+
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
 	public Integer getUpdateCount() {
 		return this.updateCount;
@@ -235,13 +247,13 @@ public class Plane implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "UPDATE_INC", nullable = false, insertable = false, updatable = false)
-	public Long getUpdateInc() {
-		return this.updateInc;
+	@Column(name = "TARGET_INC", nullable = false, insertable = false, updatable = false)
+	public Long getTargetInc() {
+		return this.targetInc;
 	}
 
-	public void setUpdateInc(Long updateInc) {
-		this.updateInc = updateInc;
+	public void setTargetInc(Long targetInc) {
+		this.targetInc = targetInc;
 	}
 
 	@Column(name = "STATUS", nullable = false)
@@ -271,22 +283,22 @@ public class Plane implements java.io.Serializable {
 		this.latitude = latitude;
 	}
 
-	@Column(name = "LAST_MSG_ID_OF_TARGET", nullable = false, updatable = false)
-	public Long getLastMsgIdOfTarget() {
-		return this.lastMsgIdOfTarget;
+	@Column(name = "LAST_MSG_ID_OF_T", nullable = false, updatable = false)
+	public Long getLastMsgIdOfT() {
+		return this.lastMsgIdOfT;
 	}
 
-	public void setLastMsgIdOfTarget(Long lastMsgIdOfTarget) {
-		this.lastMsgIdOfTarget = lastMsgIdOfTarget;
+	public void setLastMsgIdOfT(Long lastMsgIdOfT) {
+		this.lastMsgIdOfT = lastMsgIdOfT;
 	}
 
-	@Column(name = "LAST_MSG_ID_OF_OWNER", nullable = false, updatable = false)
-	public Long getLastMsgIdOfOwner() {
-		return this.lastMsgIdOfOwner;
+	@Column(name = "LAST_MSG_ID_OF_O", nullable = false, updatable = false)
+	public Long getLastMsgIdOfO() {
+		return this.lastMsgIdOfO;
 	}
 
-	public void setLastMsgIdOfOwner(Long lastMsgIdOfOwner) {
-		this.lastMsgIdOfOwner = lastMsgIdOfOwner;
+	public void setLastMsgIdOfO(Long lastMsgIdOfO) {
+		this.lastMsgIdOfO = lastMsgIdOfO;
 	}
 
 	@Column(name = "CITY")
@@ -343,40 +355,40 @@ public class Plane implements java.io.Serializable {
 		this.maxMatchCount = maxMatchCount;
 	}
 
-	@Column(name = "LIKED_BY_OWNER", nullable = false)
-	public Short getLikedByOwner() {
-		return this.likedByOwner;
+	@Column(name = "LIKED_BY_O", nullable = false)
+	public Short getLikedByO() {
+		return this.likedByO;
 	}
 
-	public void setLikedByOwner(Short likedByOwner) {
-		this.likedByOwner = likedByOwner;
+	public void setLikedByO(Short likedByO) {
+		this.likedByO = likedByO;
 	}
 
-	@Column(name = "LIKED_BY_TARGET", nullable = false)
-	public Short getLikedByTarget() {
-		return this.likedByTarget;
+	@Column(name = "LIKED_BY_T", nullable = false)
+	public Short getLikedByT() {
+		return this.likedByT;
 	}
 
-	public void setLikedByTarget(Short likedByTarget) {
-		this.likedByTarget = likedByTarget;
+	public void setLikedByT(Short likedByT) {
+		this.likedByT = likedByT;
 	}
 
-	@Column(name = "DELETED_BY_OWNER", nullable = false)
-	public Short getDeletedByOwner() {
-		return this.deletedByOwner;
+	@Column(name = "DELETED_BY_O", nullable = false)
+	public Short getDeletedByO() {
+		return this.deletedByO;
 	}
 
-	public void setDeletedByOwner(Short deletedByOwner) {
-		this.deletedByOwner = deletedByOwner;
+	public void setDeletedByO(Short deletedByO) {
+		this.deletedByO = deletedByO;
 	}
 
-	@Column(name = "DELETED_BY_TARGET", nullable = false)
-	public Short getDeletedByTarget() {
-		return this.deletedByTarget;
+	@Column(name = "DELETED_BY_T", nullable = false)
+	public Short getDeletedByT() {
+		return this.deletedByT;
 	}
 
-	public void setDeletedByTarget(Short deletedByTarget) {
-		this.deletedByTarget = deletedByTarget;
+	public void setDeletedByT(Short deletedByT) {
+		this.deletedByT = deletedByT;
 	}
 
 	@Column(name = "BIRTHDAY_LOWER", length = 10)

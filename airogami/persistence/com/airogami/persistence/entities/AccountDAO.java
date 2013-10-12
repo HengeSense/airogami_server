@@ -236,7 +236,7 @@ public class AccountDAO {
 	private static final String increaseUpdateCountJPQL = "update Account a set a.updateCount = a.updateCount + :count where a.accountId in (:accountId)";
 
 	public boolean increaseUpdateCount(java.lang.Integer accountId, int count) {
-		EntityManagerHelper.log("increaseUpdateCount with accountId:"
+		EntityManagerHelper.log("increaseUpdateCount with accountId: "
 				+ accountId, Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(

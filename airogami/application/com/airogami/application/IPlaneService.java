@@ -41,11 +41,12 @@ public interface IPlaneService {
 	/*
 	 * @param planeId:(long) must be not null
 	 * @param ownerId:(int) must be plane.accoutByOwnerId or plane.accountByTargetId
+	 * @param byOwner:(boolean)
 	 * @param message:(Message)
 	 * @return message if successful or error if failed
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> replyPlane(long planeId,int ownerId, Message message) throws ApplicationException;	
+	public Map<String, Object> replyPlane(long planeId,int ownerId, boolean byOwner,  Message message) throws ApplicationException;	
 	
 	/*
 	 * @param accountId:(int)

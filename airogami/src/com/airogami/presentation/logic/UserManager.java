@@ -1,5 +1,6 @@
 package com.airogami.presentation.logic;
 
+import com.airogami.common.ClientAgent;
 import com.airogami.persistence.entities.AccountStat;
 
 public class UserManager {// implements HttpSessionListener
@@ -35,8 +36,8 @@ public class UserManager {// implements HttpSessionListener
 	}
 	
 	//can set null once set value but user.clientAgent can be null
-	public void removeUser(int accountId){
-		if(accountId < users.length && users[(int)accountId] != null){
+	public void removeClientAgent(int accountId){
+		if(accountId < users.length && users[accountId] != null){
 			users[accountId].setClientAgent(null);
 		}
 	}

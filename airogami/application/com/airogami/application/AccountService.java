@@ -12,12 +12,15 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
+import com.airogami.common.ClientAgent;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.classes.AccountStatLeft;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.AccountStat;
+import com.airogami.persistence.entities.AccountSys;
+import com.airogami.persistence.entities.Agent;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.EntityManagerHelper;
@@ -37,9 +40,11 @@ public class AccountService implements IAccountService {
 
 		ApplicationException ae = null;
 		AccountStat accountStat = new AccountStat();
+		AccountSys accountSys = new AccountSys();
 		Authenticate authenticate = account.getAuthenticate();
 		Profile profile = account.getProfile();
 		account.setAuthenticate(null);
+		Agent agent = account.getAgent();
 		try {
 			EntityManagerHelper.beginTransaction();
 			authenticate = DaoUtils.authenticateDao.createAuthenticate(authenticate);
@@ -53,8 +58,12 @@ public class AccountService implements IAccountService {
 				DaoUtils.accountDao.save(account);
 				profile.setAccountId(authenticate.getAccountId());
 				DaoUtils.profileDao.save(profile);
+				agent.setAccountId(authenticate.getAccountId());
+				DaoUtils.agentDao.save(agent);
 				accountStat.setAccountId(authenticate.getAccountId());
 				DaoUtils.accountStatDao.save(accountStat);
+				accountSys.setAccountId(authenticate.getAccountId());
+				DaoUtils.accountSysDao.save(accountSys);
 			}
 								
 			EntityManagerHelper.commit();
@@ -75,6 +84,7 @@ public class AccountService implements IAccountService {
 		account.setAccountStat(accountStat);
 		account.setProfile(profile);
 		account.setAuthenticate(authenticate);
+		account.setAgent(null);
 		return account;
 	}
 
@@ -83,7 +93,7 @@ public class AccountService implements IAccountService {
 	 * int)
 	 */
 	@Override
-	public Account signin(String[]args, int type, boolean automatic) throws ApplicationException {
+	public Account signin(String[]args, int type, ClientAgent clientAgent, boolean automatic) throws ApplicationException {
 		Account account = null;
 		ApplicationException ae = null;
 		try {
@@ -96,8 +106,13 @@ public class AccountService implements IAccountService {
 				account = DaoUtils.authenticateDao.authenticateWithScreenName(args[0], args[1], automatic);
 				break;
 			}		
-			if(account != null && automatic == false){
-				DaoUtils.accountStatDao.increaseSigninCount(account.getAccountId(), 1);
+			if(account != null ){
+				if(clientAgent.equals(account.getAgent()) == false){
+					BeanUtils.copyProperties(account.getAgent(), clientAgent);
+				}
+				if(automatic == false){
+					DaoUtils.accountStatDao.increaseSigninCount(account.getAccountId(), 1);
+				}
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {

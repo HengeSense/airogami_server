@@ -1,6 +1,6 @@
 package com.airogami.presentation.account;
 
-import com.airogami.presentation.logic.ClientAgent;
+import com.airogami.common.ClientAgent;
 
 public class SigninVO {
 
@@ -8,6 +8,7 @@ public class SigninVO {
 	private String password;
 	private String screenName;	
 	private boolean automatic;
+	private boolean updateDev;
 	private ClientAgent clientAgent = new ClientAgent();
 	private int signinCount = -1;
 	
@@ -40,6 +41,12 @@ public class SigninVO {
 	}
 	public void setAutomatic(boolean automatic) {
 		this.automatic = automatic;
+	}
+	public boolean isUpdateDev() {
+		return updateDev;
+	}
+	public void setUpdateDev(boolean updateDev) {
+		this.updateDev = updateDev;
 	}
 	public int getSigninCount() {
 		return signinCount;

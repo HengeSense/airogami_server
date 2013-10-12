@@ -10,6 +10,10 @@ public class NewPlane implements Serializable{
 	private Long updateInc;
 	private Integer updateCount;
 	
+	public NewPlane(){
+		
+	}
+	
 	public NewPlane(Long planeId, Long updateInc, Integer updateCount){
 		this.planeId = planeId;
 		this.updateInc = updateInc;

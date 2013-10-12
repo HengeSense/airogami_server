@@ -233,7 +233,7 @@ public class ReportDAO {
 
 	public boolean increaseReportCount(
 			com.airogami.persistence.entities.ReportId id, int count) {
-		EntityManagerHelper.log("increaseReportCount with id:" + id,
+		EntityManagerHelper.log("increaseReportCount with id: " + id,
 				Level.INFO, null);
 		try {
 			Query query = getEntityManager().createQuery(

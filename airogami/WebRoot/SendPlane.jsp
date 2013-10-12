@@ -79,6 +79,9 @@
     <label>PlaneId: </label>
     <input type="text" name="planeId" value="1" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>byOwner: </label>
+    <input type="text" name="byOwner"  value="false"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
     <label>Message Content: </label>
     <input type="text" name="messageVO.content"  value="Reply, there!"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
