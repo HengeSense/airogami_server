@@ -375,7 +375,7 @@ public class PlaneService implements IPlaneService {
 		try {
 			EntityManagerHelper.beginTransaction();
 			if(succeed = DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner)){
-				DaoUtils.messageDao.decreaseMessageCount(planeId, accountId);
+				DaoUtils.messageDao.decreaseMessageCount(planeId);
 			}
 			else{
 				plane = DaoUtils.planeDao.getPlane(planeId, accountId);

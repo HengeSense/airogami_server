@@ -149,4 +149,24 @@ public class MessageDao extends MessageDAO {
 			throw re;
 		}
 	}
+	
+	private final String decreaseBothMessageCountJPQL = "update AccountStat accountStat set accountStat.msgCount = accountStat.msgCount - (select count(message) from Message message where message.status = ?2 and message.account.accountId <> accountStat.accountId and message.plane.planeId = ?1 and ((message.plane.accountByOwnerId.accountId = accountStat.accountId and message.messageId > message.plane.lastMsgIdOfO) or (message.plane.accountByTargetId.accountId = accountStat.accountId and message.messageId > message.plane.lastMsgIdOfT))) where accountStat.account = (select plane.accountByOwnerId from Plane plane where plane.planeId = ?1) or accountStat.account = (select plane.accountByTargetId from Plane plane where plane.planeId = ?1)";
+
+	//decrease both
+	public boolean decreaseMessageCount(long planeId) {
+		EntityManagerHelper.log("decreaseMessageCounting with planeId = " + planeId
+				 ,Level.INFO, null);
+		try {
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					decreaseBothMessageCountJPQL);
+			query.setParameter(1, planeId);
+			query.setParameter(2, MessageConstants.MessageStatusUnread);
+			int count = query.executeUpdate();
+			EntityManagerHelper.log("decreaseMessageCount successful", Level.INFO, null);
+			return count == 2;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("decreaseMessageCount failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
 }

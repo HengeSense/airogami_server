@@ -284,9 +284,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String likePlaneByOwnerJPQL = "update Plane plane set plane.likedByO = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByO = 0 and plane.planeId = ?1 and plane.status <> ?3 and plane.accountByOwnerId.accountId = ?2";
+	private final String likePlaneByOwnerJPQL = "update Plane plane set plane.likedByO = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByO = 0 and plane.planeId = ?1 and plane.deletedByT = 0 and plane.deletedByO = 0 and plane.status <> ?3 and plane.accountByOwnerId.accountId = ?2";
 
-	private final String likePlaneByTargetJPQL = "update Plane plane set plane.likedByT = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByT = 0 and plane.planeId = ?1  and plane.status <> ?3 and plane.accountByTargetId.accountId = ?2";
+	private final String likePlaneByTargetJPQL = "update Plane plane set plane.likedByT = 1, plane.updateCount = plane.updateCount + 1 where plane.likedByT = 0 and plane.planeId = ?1 and plane.deletedByT = 0 and plane.deletedByO = 0  and plane.status <> ?3 and plane.accountByTargetId.accountId = ?2";
     //can't return if deleted
 	private final String likePlaneQueryByOwnerJPQL = "select plane.accountByTargetId.accountId from Plane plane where plane.planeId = ?1 and plane.deletedByT = 0";
 
@@ -338,9 +338,9 @@ public class PlaneDao extends PlaneDAO {
 
 	//private final String getNewPlanesBackwardJPQL = "select new com.airogami.persistence.classes.NewPlane(plane.planeId, plane.updateInc, plane.updateCount) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.updateInc > ?3) and (?4 is null or plane.updateInc < ?4) order by plane.updateInc desc";
 
-	private final String getNewPlanesForwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC asc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC asc limit ?5) order by updateInc asc limit ?5";
+	private final String getNewPlanesForwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and DELETED_BY_T = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC asc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and DELETED_BY_O = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC asc limit ?5) order by updateInc asc limit ?5";
 
-	private final String getNewPlanesBackwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC desc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC desc limit ?5) order by updateInc desc limit ?5";
+	private final String getNewPlanesBackwardSQL = "(select PLANE_ID as planeId, OWNER_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where OWNER_ID = ?1 and DELETED_BY_O = 0 and DELETED_BY_T = 0 and STATUS = ?2 and (?3 is null or OWNER_INC > ?3) and (?4 is null or OWNER_INC < ?4) order by OWNER_INC desc limit ?5) union all (select PLANE_ID as planeId, TARGET_INC as updateInc, UPDATE_COUNT as updateCount from PLANE where TARGET_ID = ?1 and DELETED_BY_T = 0 and DELETED_BY_O = 0 and (?3 is null or TARGET_INC > ?3) and (?4 is null or TARGET_INC < ?4) order by TARGET_INC desc limit ?5) order by updateInc desc limit ?5";
 
 	public List<NewPlane> getNewPlanes(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNewPlanesing with accountId = " + accountId, Level.INFO, null);
@@ -389,9 +389,9 @@ public class PlaneDao extends PlaneDAO {
 		}
 	}
 	
-	private final String getOldPlanesForwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId asc";
+	private final String getOldPlanesForwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1)) and plane.deletedByT = 0 and plane.deletedByO = 0 and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId asc";
 
-	private final String getOldPlanesBackwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.deletedByO = 0 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1 and plane.deletedByT = 0)) and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId desc";
+	private final String getOldPlanesBackwardJPQL = "select new com.airogami.persistence.classes.OldPlane(plane.planeId, plane.status, plane.lastMsgIdOfO, plane.lastMsgIdOfT) from Plane plane where ((plane.accountByOwnerId.accountId = ?1 and plane.status = ?2) or (plane.accountByTargetId.accountId = ?1)) and plane.deletedByT = 0 and plane.deletedByO = 0 and (?3 is null or plane.planeId > ?3) and (?4 is null or plane.planeId < ?4) order by plane.planeId desc";
 
 	public List<OldPlane> getOldPlanes(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getOldPlanesing with accountId = " + accountId, Level.INFO, null);
