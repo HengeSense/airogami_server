@@ -1,4 +1,4 @@
-package com.airogami.common;
+package com.airogami.common.notification;
 
 public class CMNotifiedInfo extends NotifiedInfo {
 

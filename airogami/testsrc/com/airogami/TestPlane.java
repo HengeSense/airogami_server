@@ -104,6 +104,20 @@ public class TestPlane {
 		}
 	}
 	
+	//@Ignore
+	@Test
+	public void testClearPlane() {
+		int accountId = 2;
+		long planeId = 2;
+		try {
+			Map<String, Object> result = ManagerUtils.planeManager.clearPlane(planeId, accountId);
+		    System.out.println(result);
+		} catch (AirogamiException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
 	@Ignore
 	@Test
 	public void testDeletePlane() {
@@ -181,7 +195,7 @@ public class TestPlane {
 		}
 	}
 	
-	//@Ignore
+	@Ignore
 	@Test
 	public void testGetPlaneIds() {
 		int accountId = 1;

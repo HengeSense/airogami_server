@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.common.ClientAgent;
+import com.airogami.common.notification.ClientAgent;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;

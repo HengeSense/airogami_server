@@ -9,15 +9,19 @@ public class NewPlane implements Serializable{
 	private Long planeId;
 	private Long updateInc;
 	private Integer updateCount;
+	private Long clearMsgId;
+	private Long lastMsgId;//the opposite lastMsgId
 	
 	public NewPlane(){
 		
 	}
 	
-	public NewPlane(Long planeId, Long updateInc, Integer updateCount){
+	public NewPlane(Long planeId, Long updateInc, Integer updateCount, Long clearMsgId, Long lastMsgId){
 		this.planeId = planeId;
 		this.updateInc = updateInc;
 		this.updateCount = updateCount;
+		this.clearMsgId = clearMsgId;
+		this.lastMsgId = lastMsgId;
 	}
 	
 	public Long getPlaneId() {
@@ -37,6 +41,22 @@ public class NewPlane implements Serializable{
 	}
 	public void setUpdateCount(Integer updateCount) {
 		this.updateCount = updateCount;
+	}
+
+	public Long getClearMsgId() {
+		return clearMsgId;
+	}
+
+	public void setClearMsgId(Long clearMsgId) {
+		this.clearMsgId = clearMsgId;
+	}
+
+	public Long getLastMsgId() {
+		return lastMsgId;
+	}
+
+	public void setLastMsgId(Long lastMsgId) {
+		this.lastMsgId = lastMsgId;
 	}
 	
 	

@@ -74,6 +74,15 @@ public interface IPlaneService {
 	public Map<String, Object> throwPlane(long planeId,int accountId) throws ApplicationException;
 	
 	/*
+	 * @param planeId:(long)
+	 * @param accountId:(int)
+	 * @return clearMsgId, notifiedInfo if successful otherwise error
+	 * @throws ApplicationException if failed 
+	 */ 
+	
+	public Map<String, Object> clearPlane(long planeId, int accountId) throws ApplicationException;
+	
+	/*
 	 * @param planeId:(long) must be not null
 	 * @param accountId:(int)
 	 * @param byOwner:(boolean)

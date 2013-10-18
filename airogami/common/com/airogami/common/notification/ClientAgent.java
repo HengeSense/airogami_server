@@ -1,4 +1,4 @@
-package com.airogami.common;
+package com.airogami.common.notification;
 
 import com.airogami.persistence.entities.AccountStat;
 import com.airogami.persistence.entities.Agent;

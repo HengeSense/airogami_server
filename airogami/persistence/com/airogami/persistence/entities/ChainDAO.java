@@ -20,18 +20,18 @@ import javax.persistence.Query;
 
 public class ChainDAO {
 	// property constants
-	public static final String UPDATE_COUNT = "updateCount";
 	public static final String STATUS = "status";
-	public static final String CITY = "city";
-	public static final String PROVINCE = "province";
+	public static final String UPDATE_COUNT = "updateCount";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
 	public static final String SEX = "sex";
-	public static final String COUNTRY = "country";
 	public static final String PASS_COUNT = "passCount";
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String MAX_PASS_COUNT = "maxPassCount";
 	public static final String MAX_MATCH_COUNT = "maxMatchCount";
+	public static final String CITY = "city";
+	public static final String PROVINCE = "province";
+	public static final String COUNTRY = "country";
 	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
@@ -411,22 +411,13 @@ public class ChainDAO {
 		}
 	}
 
-	public List<Chain> findByUpdateCount(Object updateCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
-	}
-
 	public List<Chain> findByStatus(Object status, int... rowStartIdxAndCount) {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
 
-	public List<Chain> findByCity(Object city, int... rowStartIdxAndCount) {
-		return findByProperty(CITY, city, rowStartIdxAndCount);
-	}
-
-	public List<Chain> findByProvince(Object province,
+	public List<Chain> findByUpdateCount(Object updateCount,
 			int... rowStartIdxAndCount) {
-		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByLongitude(Object longitude,
@@ -441,10 +432,6 @@ public class ChainDAO {
 
 	public List<Chain> findBySex(Object sex, int... rowStartIdxAndCount) {
 		return findByProperty(SEX, sex, rowStartIdxAndCount);
-	}
-
-	public List<Chain> findByCountry(Object country, int... rowStartIdxAndCount) {
-		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByPassCount(Object passCount,
@@ -466,6 +453,19 @@ public class ChainDAO {
 			int... rowStartIdxAndCount) {
 		return findByProperty(MAX_MATCH_COUNT, maxMatchCount,
 				rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByCity(Object city, int... rowStartIdxAndCount) {
+		return findByProperty(CITY, city, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByProvince(Object province,
+			int... rowStartIdxAndCount) {
+		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+	}
+
+	public List<Chain> findByCountry(Object country, int... rowStartIdxAndCount) {
+		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
 	}
 
 	public List<Chain> findByLanguage(Object language,

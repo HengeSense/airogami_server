@@ -1,11 +1,12 @@
 package com.airogami.presentation.notification;
 
-import com.airogami.common.NotifiedInfo;
+import com.airogami.common.notification.NotifiedInfo;
 
 import javapns.notification.PushNotificationPayload;
 
 public abstract class Notification {
 
+	public static final int TypeSilent = 0;
 	public static final int TypeReceivedPlane = 1;
 	public static final int TypeReceivedChain = 2;
 	public static final int TypeReceivedPlaneMessage = 3;

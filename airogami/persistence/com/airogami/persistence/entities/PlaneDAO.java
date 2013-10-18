@@ -21,16 +21,15 @@ import javax.persistence.Query;
 public class PlaneDAO {
 	// property constants
 	public static final String OWNER_INC = "ownerInc";
-	public static final String UPDATE_COUNT = "updateCount";
 	public static final String TARGET_INC = "targetInc";
 	public static final String STATUS = "status";
-	public static final String LONGITUDE = "longitude";
-	public static final String LATITUDE = "latitude";
+	public static final String UPDATE_COUNT = "updateCount";
 	public static final String LAST_MSG_ID_OF_T = "lastMsgIdOfT";
 	public static final String LAST_MSG_ID_OF_O = "lastMsgIdOfO";
-	public static final String CITY = "city";
-	public static final String PROVINCE = "province";
-	public static final String COUNTRY = "country";
+	public static final String CLEAR_MSG_ID = "clearMsgId";
+	public static final String SOURCE = "source";
+	public static final String LONGITUDE = "longitude";
+	public static final String LATITUDE = "latitude";
 	public static final String SEX = "sex";
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String MAX_MATCH_COUNT = "maxMatchCount";
@@ -38,9 +37,11 @@ public class PlaneDAO {
 	public static final String LIKED_BY_T = "likedByT";
 	public static final String DELETED_BY_O = "deletedByO";
 	public static final String DELETED_BY_T = "deletedByT";
-	public static final String LANGUAGE = "language";
-	public static final String SOURCE = "source";
 	public static final String LAST_MSG_ID = "lastMsgId";
+	public static final String CITY = "city";
+	public static final String PROVINCE = "province";
+	public static final String COUNTRY = "country";
+	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -330,6 +331,26 @@ public class PlaneDAO {
 		}
 	}
 
+	private static final String increaseTargetIncJPQL = "update Plane a set a.targetInc = a.targetInc + :count where a.planeId in (:planeId)";
+
+	public boolean increaseTargetInc(java.lang.Long planeId, int count) {
+		EntityManagerHelper.log("increaseTargetInc with planeId: " + planeId,
+				Level.INFO, null);
+		try {
+			Query query = getEntityManager().createQuery(increaseTargetIncJPQL);
+			query.setParameter("planeId", planeId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseTargetInc successful", Level.INFO,
+					null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseTargetInc failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
 	private static final String increaseUpdateCountJPQL = "update Plane a set a.updateCount = a.updateCount + :count where a.planeId in (:planeId)";
 
 	public boolean increaseUpdateCount(java.lang.Long planeId, int count) {
@@ -346,26 +367,6 @@ public class PlaneDAO {
 			return result;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("increaseUpdateCount failed", Level.SEVERE,
-					re);
-			throw re;
-		}
-	}
-
-	private static final String increaseTargetIncJPQL = "update Plane a set a.targetInc = a.targetInc + :count where a.planeId in (:planeId)";
-
-	public boolean increaseTargetInc(java.lang.Long planeId, int count) {
-		EntityManagerHelper.log("increaseTargetInc with planeId: " + planeId,
-				Level.INFO, null);
-		try {
-			Query query = getEntityManager().createQuery(increaseTargetIncJPQL);
-			query.setParameter("planeId", planeId);
-			query.setParameter("count", count);
-			boolean result = query.executeUpdate() == 1;
-			EntityManagerHelper.log("increaseTargetInc successful", Level.INFO,
-					null);
-			return result;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseTargetInc failed", Level.SEVERE,
 					re);
 			throw re;
 		}
@@ -463,11 +464,6 @@ public class PlaneDAO {
 		return findByProperty(OWNER_INC, ownerInc, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByUpdateCount(Object updateCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
-	}
-
 	public List<Plane> findByTargetInc(Object targetInc,
 			int... rowStartIdxAndCount) {
 		return findByProperty(TARGET_INC, targetInc, rowStartIdxAndCount);
@@ -477,14 +473,9 @@ public class PlaneDAO {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLongitude(Object longitude,
+	public List<Plane> findByUpdateCount(Object updateCount,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
-	}
-
-	public List<Plane> findByLatitude(Object latitude,
-			int... rowStartIdxAndCount) {
-		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByLastMsgIdOfT(Object lastMsgIdOfT,
@@ -499,17 +490,23 @@ public class PlaneDAO {
 				rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByCity(Object city, int... rowStartIdxAndCount) {
-		return findByProperty(CITY, city, rowStartIdxAndCount);
-	}
-
-	public List<Plane> findByProvince(Object province,
+	public List<Plane> findByClearMsgId(Object clearMsgId,
 			int... rowStartIdxAndCount) {
-		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+		return findByProperty(CLEAR_MSG_ID, clearMsgId, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByCountry(Object country, int... rowStartIdxAndCount) {
-		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
+	public List<Plane> findBySource(Object source, int... rowStartIdxAndCount) {
+		return findByProperty(SOURCE, source, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLongitude(Object longitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LONGITUDE, longitude, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLatitude(Object latitude,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LATITUDE, latitude, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findBySex(Object sex, int... rowStartIdxAndCount) {
@@ -547,18 +544,27 @@ public class PlaneDAO {
 		return findByProperty(DELETED_BY_T, deletedByT, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLanguage(Object language,
-			int... rowStartIdxAndCount) {
-		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
-	}
-
-	public List<Plane> findBySource(Object source, int... rowStartIdxAndCount) {
-		return findByProperty(SOURCE, source, rowStartIdxAndCount);
-	}
-
 	public List<Plane> findByLastMsgId(Object lastMsgId,
 			int... rowStartIdxAndCount) {
 		return findByProperty(LAST_MSG_ID, lastMsgId, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByCity(Object city, int... rowStartIdxAndCount) {
+		return findByProperty(CITY, city, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByProvince(Object province,
+			int... rowStartIdxAndCount) {
+		return findByProperty(PROVINCE, province, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByCountry(Object country, int... rowStartIdxAndCount) {
+		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
+	}
+
+	public List<Plane> findByLanguage(Object language,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LANGUAGE, language, rowStartIdxAndCount);
 	}
 
 	/**

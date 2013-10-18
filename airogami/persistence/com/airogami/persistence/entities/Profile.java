@@ -29,11 +29,9 @@ public class Profile implements java.io.Serializable {
 
 	private Account account;
 
-	private String fullName;
-
-	private String screenName;
-
 	private Short sex = (short) 0;
+
+	private Integer updateCount = 0;
 
 	private Double longitude;
 
@@ -43,19 +41,21 @@ public class Profile implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
+	private Integer likesCount = 0;
+
+	private Date birthday;
+
+	private String fullName;
+
+	private String screenName;
+
+	private String shout;
+
 	private String city;
 
 	private String province;
 
 	private String country;
-
-	private Date birthday;
-
-	private Integer updateCount = 0;
-
-	private Integer likesCount = 0;
-
-	private String shout;
 
 	private String language;
 
@@ -66,49 +66,49 @@ public class Profile implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Profile(Integer accountId, Account account, String fullName,
-			Short sex, Double longitude, Double latitude, Short status,
-			Timestamp createdTime, String city, String province,
-			String country, Date birthday, Integer updateCount,
-			Integer likesCount) {
+	public Profile(Integer accountId, Account account, Short sex,
+			Integer updateCount, Double longitude, Double latitude,
+			Short status, Timestamp createdTime, Integer likesCount,
+			Date birthday, String fullName, String city, String province,
+			String country) {
 		this.accountId = accountId;
 		this.account = account;
-		this.fullName = fullName;
 		this.sex = sex;
+		this.updateCount = updateCount;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
+		this.likesCount = likesCount;
+		this.birthday = birthday;
+		this.fullName = fullName;
 		this.city = city;
 		this.province = province;
 		this.country = country;
-		this.birthday = birthday;
-		this.updateCount = updateCount;
-		this.likesCount = likesCount;
 	}
 
 	/** full constructor */
-	public Profile(Integer accountId, Account account, String fullName,
-			String screenName, Short sex, Double longitude, Double latitude,
-			Short status, Timestamp createdTime, String city, String province,
-			String country, Date birthday, Integer updateCount,
-			Integer likesCount, String shout, String language) {
+	public Profile(Integer accountId, Account account, Short sex,
+			Integer updateCount, Double longitude, Double latitude,
+			Short status, Timestamp createdTime, Integer likesCount,
+			Date birthday, String fullName, String screenName, String shout,
+			String city, String province, String country, String language) {
 		this.accountId = accountId;
 		this.account = account;
-		this.fullName = fullName;
-		this.screenName = screenName;
 		this.sex = sex;
+		this.updateCount = updateCount;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
+		this.likesCount = likesCount;
+		this.birthday = birthday;
+		this.fullName = fullName;
+		this.screenName = screenName;
+		this.shout = shout;
 		this.city = city;
 		this.province = province;
 		this.country = country;
-		this.birthday = birthday;
-		this.updateCount = updateCount;
-		this.likesCount = likesCount;
-		this.shout = shout;
 		this.language = language;
 	}
 
@@ -133,24 +133,6 @@ public class Profile implements java.io.Serializable {
 		this.account = account;
 	}
 
-	@Column(name = "FULL_NAME", nullable = false, length = 70)
-	public String getFullName() {
-		return this.fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	@Column(name = "SCREEN_NAME", unique = true, length = 32)
-	public String getScreenName() {
-		return this.screenName;
-	}
-
-	public void setScreenName(String screenName) {
-		this.screenName = screenName;
-	}
-
 	@Column(name = "SEX", nullable = false)
 	public Short getSex() {
 		return this.sex;
@@ -158,6 +140,15 @@ public class Profile implements java.io.Serializable {
 
 	public void setSex(Short sex) {
 		this.sex = sex;
+	}
+
+	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getUpdateCount() {
+		return this.updateCount;
+	}
+
+	public void setUpdateCount(Integer updateCount) {
+		this.updateCount = updateCount;
 	}
 
 	@Column(name = "LONGITUDE", nullable = false, precision = 10, scale = 6)
@@ -197,6 +188,52 @@ public class Profile implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
+	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
+	public Integer getLikesCount() {
+		return this.likesCount;
+	}
+
+	public void setLikesCount(Integer likesCount) {
+		this.likesCount = likesCount;
+	}
+
+	@Column(name = "BIRTHDAY", nullable = false, length = 10)
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getBirthday() {
+		return this.birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	@Column(name = "FULL_NAME", nullable = false, length = 70)
+	public String getFullName() {
+		return this.fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	@Column(name = "SCREEN_NAME", unique = true, length = 32)
+	public String getScreenName() {
+		return this.screenName;
+	}
+
+	public void setScreenName(String screenName) {
+		this.screenName = screenName;
+	}
+
+	@Column(name = "SHOUT")
+	public String getShout() {
+		return this.shout;
+	}
+
+	public void setShout(String shout) {
+		this.shout = shout;
+	}
+
 	@Column(name = "CITY", nullable = false)
 	public String getCity() {
 		return this.city;
@@ -222,43 +259,6 @@ public class Profile implements java.io.Serializable {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	@Column(name = "BIRTHDAY", nullable = false, length = 10)
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
-	public Date getBirthday() {
-		return this.birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getUpdateCount() {
-		return this.updateCount;
-	}
-
-	public void setUpdateCount(Integer updateCount) {
-		this.updateCount = updateCount;
-	}
-
-	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getLikesCount() {
-		return this.likesCount;
-	}
-
-	public void setLikesCount(Integer likesCount) {
-		this.likesCount = likesCount;
-	}
-
-	@Column(name = "SHOUT")
-	public String getShout() {
-		return this.shout;
-	}
-
-	public void setShout(String shout) {
-		this.shout = shout;
 	}
 
 	@Column(name = "LANGUAGE")

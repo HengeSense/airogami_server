@@ -6,7 +6,7 @@ import javapns.notification.PushNotificationPayload;
 
 import org.json.JSONException;
 
-import com.airogami.common.NotifiedInfo;
+import com.airogami.common.notification.NotifiedInfo;
 
 //like plane message
 public class LPMNotification extends Notification{

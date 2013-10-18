@@ -1,6 +1,6 @@
 package com.airogami.presentation.logic;
 
-import com.airogami.common.ClientAgent;
+import com.airogami.common.notification.ClientAgent;
 import com.airogami.persistence.entities.AccountStat;
 
 public class UserManager {// implements HttpSessionListener
@@ -31,7 +31,7 @@ public class UserManager {// implements HttpSessionListener
 		} else {
 			users[index].reset(clientAgent, accountStat);
 		}
-		System.out.println("addUser: " + accountId);
+		System.out.println("add User: " + accountId);
 		return users[index];
 	}
 	

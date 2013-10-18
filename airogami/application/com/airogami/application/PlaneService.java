@@ -8,10 +8,11 @@ import java.util.TreeMap;
 import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.common.MessageNotifiedInfo;
-import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
+import com.airogami.common.notification.MessageNotifiedInfo;
+import com.airogami.common.notification.NotifiedInfo;
+import com.airogami.common.notification.SilentNotifiedInfo;
 import com.airogami.persistence.classes.AccountStatLeft;
 import com.airogami.persistence.classes.NewPlane;
 import com.airogami.persistence.classes.OldPlane;
@@ -121,14 +122,14 @@ public class PlaneService implements IPlaneService {
 		MessageNotifiedInfo notifiedInfo = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.planeDao.verifyReply(planeId, accountId, byOwner)) {
+			if (DaoUtils.messageDao.verifyReply(planeId, accountId, byOwner)) {
 				Plane plane = DaoUtils.planeDao.getReference(planeId);
 				message.setPlane(plane);
 				Account account = DaoUtils.accountDao.getReference(accountId);
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				notifiedInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
+				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
 					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
@@ -313,7 +314,7 @@ public class PlaneService implements IPlaneService {
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
 				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);	
-				notifiedInfo = DaoUtils.planeDao.getNotifiedInfo(planeId, accountId);
+				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
 					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
@@ -361,6 +362,53 @@ public class PlaneService implements IPlaneService {
 		return result;	
 	}
 	
+	@Override
+	public Map<String, Object> clearPlane(long planeId, int accountId)
+			throws ApplicationException {
+		ApplicationException ae = null;
+		String error = null;
+		SilentNotifiedInfo notifiedInfo = null;
+		Object[] clearResult = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			clearResult = DaoUtils.messageDao.clearPlane(planeId, accountId);
+			if (clearResult != null) {
+				
+			} else {
+				error = "none";
+			}
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			//t.printStackTrace();
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		Map<String, Object> result = new TreeMap<String, Object>();
+		if(error != null){
+		    result.put("error", error);
+		}
+		else{
+			if((Integer)clearResult[1] == accountId){
+				accountId = (Integer)clearResult[2];
+			}
+			else{
+				accountId = (Integer)clearResult[1];
+			}
+			notifiedInfo = new SilentNotifiedInfo(accountId);
+            result.put("clearMsgId", (Long)clearResult[0]);
+			result.put("notifiedInfo", notifiedInfo);
+		}
+		return result;
+	}
+	
 	/*
 	 * lock plane first
 	 */
@@ -372,10 +420,12 @@ public class PlaneService implements IPlaneService {
 		boolean succeed = false;
 		String error = null;
 		Plane plane = null;
+		SilentNotifiedInfo notifiedInfo = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			if(succeed = DaoUtils.planeDao.deletePlane(planeId, accountId, byOwner)){
 				DaoUtils.messageDao.decreaseMessageCount(planeId);
+				notifiedInfo = DaoUtils.messageDao.getSNotifiedInfo(planeId, byOwner);
 			}
 			else{
 				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
@@ -408,6 +458,9 @@ public class PlaneService implements IPlaneService {
 			}
 		}
 		else{
+			if(notifiedInfo != null){
+				result.put("notifiedInfo", notifiedInfo);
+			}
 			result.put("succeed", succeed);
 		}
 		
@@ -751,6 +804,11 @@ public class PlaneService implements IPlaneService {
 		result.put("succeed", results[0]);
 		if(results[1] != null){
 			result.put("lastMsgId", results[1]);
+		}
+		if(results[2] != null){
+			accountId = (Integer)results[2];
+			SilentNotifiedInfo notifiedInfo = new SilentNotifiedInfo(accountId);
+			result.put("notifiedInfo", notifiedInfo);
 		}
 		return result;
 	}

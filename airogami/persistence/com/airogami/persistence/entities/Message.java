@@ -31,11 +31,11 @@ public class Message implements java.io.Serializable {
 
 	private Plane plane;
 
+	private Short status = 0;
+
 	private Short type = (short) 0;
 
 	private Timestamp createdTime;
-
-	private Short status = 0;
 
 	private String content;
 
@@ -46,13 +46,13 @@ public class Message implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Message(Account account, Plane plane, Short type,
-			Timestamp createdTime, Short status, String content) {
+	public Message(Account account, Plane plane, Short status, Short type,
+			Timestamp createdTime, String content) {
 		this.account = account;
 		this.plane = plane;
+		this.status = status;
 		this.type = type;
 		this.createdTime = createdTime;
-		this.status = status;
 		this.content = content;
 	}
 
@@ -88,6 +88,15 @@ public class Message implements java.io.Serializable {
 		this.plane = plane;
 	}
 
+	@Column(name = "STATUS", nullable = false)
+	public Short getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
+	}
+
 	@Column(name = "TYPE", nullable = false)
 	public Short getType() {
 		return this.type;
@@ -105,15 +114,6 @@ public class Message implements java.io.Serializable {
 
 	public void setCreatedTime(Timestamp createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	@Column(name = "STATUS", nullable = false)
-	public Short getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Short status) {
-		this.status = status;
 	}
 
 	@Column(name = "CONTENT", nullable = false)

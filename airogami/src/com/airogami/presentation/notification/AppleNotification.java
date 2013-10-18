@@ -18,7 +18,7 @@ import javapns.notification.transmission.PushQueue;
 
 import org.json.JSONException;
 
-import com.airogami.common.ClientAgent;
+import com.airogami.common.notification.ClientAgent;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
 
@@ -27,8 +27,11 @@ public class AppleNotification implements Runnable {
 	private URL keystore = getClass().getResource("/com/airogami/presentation/notification/keystore.p12");
 	private final String password = "$Airogami2013";
 	private final boolean production = false;
+	//for CriticalExceptions
 	private long internal = 60 * 1000;// 60s
-	private final long period = 24 * 3600 * 1000;
+	//for Feedback
+	//private final long period = 24 * 3600 * 1000;
+	private final long period = 60 * 1000;
 
 	private PushQueue queue;
 
@@ -47,15 +50,15 @@ public class AppleNotification implements Runnable {
 			@Override
 			public void run() {
 				try {
-					// System.out.println("Feedback");
-					List<Device> devices = Push.feedback(keystore, password,
+					 System.out.println("Feedback");
+					List<Device> devices = Push.feedback(keystore.getPath(), password,
 							production);
 					HashSet<String> hashSet = new HashSet<String>(
 							devices.size());
 					for (Device device : devices) {
 						hashSet.add(device.getToken());
-						// System.out.println("Inactive device: " +
-						// device.getToken());
+						 System.out.println("Inactive device: " +
+						device.getToken());
 					}
 					User[] uu = ManagerUtils.userManager.getUsers();
 					for (int index = 0; index < uu.length; ++index) {
@@ -124,7 +127,7 @@ public class AppleNotification implements Runnable {
 			}
 			payload.addCustomDictionary("accountId", accountId);
 			queue.add(payload, token);
-			System.out.printf("sending (apple) token to (%d): " + token + "\n",
+			System.out.printf("apple: sending token to (%d): " + token + "\n",
 					accountId);
 		} catch (JSONException e) {
 			e.printStackTrace();

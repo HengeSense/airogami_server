@@ -1,6 +1,6 @@
 package com.airogami.presentation.logic;
 
-import com.airogami.common.ClientAgent;
+import com.airogami.common.notification.ClientAgent;
 import com.airogami.persistence.entities.AccountStat;
 
 public class User {

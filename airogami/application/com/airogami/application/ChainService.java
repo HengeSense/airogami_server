@@ -9,11 +9,11 @@ import java.util.TreeMap;
 import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.common.CMNotifiedInfos;
-import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
+import com.airogami.common.notification.CMNotifiedInfos;
+import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.persistence.classes.AccountStatLeft;
 import com.airogami.persistence.classes.NewChain;
 import com.airogami.persistence.classes.OldChain;

@@ -33,19 +33,19 @@ public class ChainMessage implements java.io.Serializable {
 
 	private Long updateInc = 0L;
 
-	private String content;
-
-	private Short type = (short) 0;
-
-	private Timestamp createdTime;
-
 	private Short status = 0;
-
-	private Timestamp lastViewedTime;
 
 	private Short source = (short) 0;
 
+	private Timestamp createdTime;
+
+	private Timestamp lastViewedTime;
+
+	private Short type = (short) 0;
+
 	private Timestamp lastTime;
+
+	private String content;
 
 	// Constructors
 
@@ -55,34 +55,34 @@ public class ChainMessage implements java.io.Serializable {
 
 	/** minimal constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Long updateInc, Timestamp createdTime, Short status,
-			Timestamp lastViewedTime, Short source) {
+			Long updateInc, Short status, Short source, Timestamp createdTime,
+			Timestamp lastViewedTime) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
 		this.updateInc = updateInc;
-		this.createdTime = createdTime;
 		this.status = status;
-		this.lastViewedTime = lastViewedTime;
 		this.source = source;
+		this.createdTime = createdTime;
+		this.lastViewedTime = lastViewedTime;
 	}
 
 	/** full constructor */
 	public ChainMessage(ChainMessageId id, Chain chain, Account account,
-			Long updateInc, String content, Short type, Timestamp createdTime,
-			Short status, Timestamp lastViewedTime, Short source,
-			Timestamp lastTime) {
+			Long updateInc, Short status, Short source, Timestamp createdTime,
+			Timestamp lastViewedTime, Short type, Timestamp lastTime,
+			String content) {
 		this.id = id;
 		this.chain = chain;
 		this.account = account;
 		this.updateInc = updateInc;
-		this.content = content;
-		this.type = type;
-		this.createdTime = createdTime;
 		this.status = status;
-		this.lastViewedTime = lastViewedTime;
 		this.source = source;
+		this.createdTime = createdTime;
+		this.lastViewedTime = lastViewedTime;
+		this.type = type;
 		this.lastTime = lastTime;
+		this.content = content;
 	}
 
 	// Property accessors
@@ -127,22 +127,22 @@ public class ChainMessage implements java.io.Serializable {
 		this.updateInc = updateInc;
 	}
 
-	@Column(name = "CONTENT")
-	public String getContent() {
-		return this.content;
+	@Column(name = "STATUS", nullable = false)
+	public Short getStatus() {
+		return this.status;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 
-	@Column(name = "TYPE")
-	public Short getType() {
-		return this.type;
+	@Column(name = "SOURCE", nullable = false)
+	public Short getSource() {
+		return this.source;
 	}
 
-	public void setType(Short type) {
-		this.type = type;
+	public void setSource(Short source) {
+		this.source = source;
 	}
 
 	@Column(name = "CREATED_TIME", nullable = false, updatable = false, length = 19)
@@ -155,15 +155,6 @@ public class ChainMessage implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "STATUS", nullable = false)
-	public Short getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Short status) {
-		this.status = status;
-	}
-
 	@Column(name = "LAST_VIEWED_TIME", nullable = false, length = 19)
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getLastViewedTime() {
@@ -174,13 +165,13 @@ public class ChainMessage implements java.io.Serializable {
 		this.lastViewedTime = lastViewedTime;
 	}
 
-	@Column(name = "SOURCE", nullable = false)
-	public Short getSource() {
-		return this.source;
+	@Column(name = "TYPE")
+	public Short getType() {
+		return this.type;
 	}
 
-	public void setSource(Short source) {
-		this.source = source;
+	public void setType(Short type) {
+		this.type = type;
 	}
 
 	@Column(name = "LAST_TIME", length = 19)
@@ -191,6 +182,15 @@ public class ChainMessage implements java.io.Serializable {
 
 	public void setLastTime(Timestamp lastTime) {
 		this.lastTime = lastTime;
+	}
+
+	@Column(name = "CONTENT")
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	@PrePersist

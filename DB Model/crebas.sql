@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/10/2013 2:45:41 PM                        */
+/* Created on:     10/17/2013 3:03:50 PM                        */
 /*==============================================================*/
 
 
@@ -154,22 +154,22 @@ create table CHAIN
 (
    CHAIN_ID             bigint not null auto_increment,
    ACCOUNT_ID           int not null,
+   STATUS               tinyint not null default 0,
    UPDATE_COUNT         int not null default 0,
    UPDATED_TIME         datetime not null,
    CREATED_TIME         datetime not null,
-   STATUS               tinyint not null default 0,
-   CITY                 varchar(255),
-   PROVINCE             varchar(255),
    LONGITUDE            decimal(10,6) default 0.0,
    LATITUDE             decimal(10,6) default 0.0,
    SEX                  tinyint not null,
-   COUNTRY              varchar(255),
    PASS_COUNT           smallint not null default 0,
    MATCH_COUNT          smallint not null default 0,
    MAX_PASS_COUNT       smallint not null default 0,
    MAX_MATCH_COUNT      smallint not null default 0,
    BIRTHDAY_LOWER       date,
    BIRTHDAY_UPPER       date,
+   CITY                 varchar(255),
+   PROVINCE             varchar(255),
+   COUNTRY              varchar(255),
    LANGUAGE             varchar(255),
    primary key (CHAIN_ID)
 );
@@ -192,13 +192,13 @@ create table CHAIN_MESSAGE
    CHAIN_ID             bigint not null,
    ACCOUNT_ID           int not null,
    UPDATE_INC           bigint not null default -9223372036854775808,
-   CONTENT              varchar(255),
-   TYPE                 tinyint,
-   CREATED_TIME         datetime not null,
    STATUS               tinyint not null default 0,
-   LAST_VIEWED_TIME     datetime not null,
    SOURCE               tinyint not null default 0,
+   CREATED_TIME         datetime not null,
+   LAST_VIEWED_TIME     datetime not null,
+   TYPE                 tinyint,
    LAST_TIME            datetime,
+   CONTENT              varchar(255),
    primary key (CHAIN_ID, ACCOUNT_ID)
 );
 
@@ -226,9 +226,9 @@ create table MESSAGE
    MESSAGE_ID           bigint not null auto_increment,
    PLANE_ID             bigint not null,
    ACCOUNT_ID           int not null,
+   STATUS               tinyint not null default 0,
    TYPE                 tinyint not null,
    CREATED_TIME         datetime not null,
-   STATUS               tinyint not null default 0,
    CONTENT              varchar(255) not null,
    primary key (MESSAGE_ID)
 );
@@ -248,21 +248,20 @@ create table PLANE
 (
    PLANE_ID             bigint not null auto_increment,
    OWNER_INC            bigint not null default -9223372036854775808,
-   CATEGORY_ID          smallint not null,
-   OWNER_ID             int,
-   TARGET_ID            int,
-   UPDATE_COUNT         int not null default 0,
-   UPDATED_TIME         datetime not null,
-   CREATED_TIME         datetime not null,
    TARGET_INC           bigint not null default -9223372036854775808,
    STATUS               tinyint not null default 0,
-   LONGITUDE            decimal(10,6) default 0.0,
-   LATITUDE             decimal(10,6) default 0.0,
+   UPDATE_COUNT         int not null default 0,
+   OWNER_ID             int,
+   TARGET_ID            int,
    LAST_MSG_ID_OF_T     bigint not null default 0,
    LAST_MSG_ID_OF_O     bigint not null default 0,
-   CITY                 varchar(255),
-   PROVINCE             varchar(255),
-   COUNTRY              varchar(255),
+   CLEAR_MSG_ID         bigint not null,
+   CATEGORY_ID          smallint not null,
+   UPDATED_TIME         datetime not null,
+   CREATED_TIME         datetime not null,
+   SOURCE               tinyint not null default 0,
+   LONGITUDE            decimal(10,6) default 0.0,
+   LATITUDE             decimal(10,6) default 0.0,
    SEX                  tinyint not null,
    MATCH_COUNT          smallint not null default 0,
    MAX_MATCH_COUNT      smallint not null default 0,
@@ -272,9 +271,11 @@ create table PLANE
    DELETED_BY_T         tinyint not null default 0,
    BIRTHDAY_LOWER       date,
    BIRTHDAY_UPPER       date,
-   LANGUAGE             varchar(255),
-   SOURCE               tinyint not null default 0,
    LAST_MSG_ID          bigint,
+   CITY                 varchar(255),
+   PROVINCE             varchar(255),
+   COUNTRY              varchar(255),
+   LANGUAGE             varchar(255),
    primary key (PLANE_ID)
 );
 
@@ -310,20 +311,20 @@ create table PLANE_HIST
 create table PROFILE
 (
    ACCOUNT_ID           int not null,
-   FULL_NAME            varchar(70) not null,
-   SCREEN_NAME          varchar(32),
    SEX                  tinyint not null,
+   UPDATE_COUNT         int not null default 0,
    LONGITUDE            decimal(10,6) not null default 0.0,
    LATITUDE             decimal(10,6) not null default 0.0,
    STATUS               tinyint not null default 0,
    CREATED_TIME         datetime not null,
+   LIKES_COUNT          int not null default 0,
+   BIRTHDAY             date not null,
+   FULL_NAME            varchar(70) not null,
+   SCREEN_NAME          varchar(32),
+   SHOUT                varchar(255),
    CITY                 varchar(255) not null,
    PROVINCE             varchar(255) not null,
    COUNTRY              varchar(255) not null,
-   BIRTHDAY             date not null,
-   UPDATE_COUNT         int not null default 0,
-   LIKES_COUNT          int not null default 0,
-   SHOUT                varchar(255),
    LANGUAGE             varchar(255),
    primary key (ACCOUNT_ID)
 );

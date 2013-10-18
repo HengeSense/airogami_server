@@ -12,8 +12,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.application.exception.EmailExistsException;
-import com.airogami.common.ClientAgent;
 import com.airogami.common.constants.AccountConstants;
+import com.airogami.common.notification.ClientAgent;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.classes.AccountStatLeft;
 import com.airogami.persistence.daos.DaoUtils;

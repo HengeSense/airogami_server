@@ -1,6 +1,6 @@
 package com.airogami.presentation.account;
 
-import com.airogami.common.ClientAgent;
+import com.airogami.common.notification.ClientAgent;
 
 public class SignoutVO {
 

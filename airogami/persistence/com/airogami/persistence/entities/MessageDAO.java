@@ -19,8 +19,8 @@ import javax.persistence.Query;
 
 public class MessageDAO {
 	// property constants
-	public static final String TYPE = "type";
 	public static final String STATUS = "status";
+	public static final String TYPE = "type";
 	public static final String CONTENT = "content";
 
 	private EntityManager getEntityManager() {
@@ -316,12 +316,12 @@ public class MessageDAO {
 		}
 	}
 
-	public List<Message> findByType(Object type, int... rowStartIdxAndCount) {
-		return findByProperty(TYPE, type, rowStartIdxAndCount);
-	}
-
 	public List<Message> findByStatus(Object status, int... rowStartIdxAndCount) {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
+	}
+
+	public List<Message> findByType(Object type, int... rowStartIdxAndCount) {
+		return findByProperty(TYPE, type, rowStartIdxAndCount);
 	}
 
 	public List<Message> findByContent(Object content,

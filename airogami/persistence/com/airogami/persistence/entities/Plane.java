@@ -41,29 +41,27 @@ public class Plane implements java.io.Serializable {
 
 	private Long ownerInc = 0L;
 
-	private Integer updateCount = 0;
-
-	private Timestamp updatedTime;
-
-	private Timestamp createdTime;
-
 	private Long targetInc = 0L;
 
 	private Short status = 0;
 
-	private Double longitude;
-
-	private Double latitude;
+	private Integer updateCount = 0;
 
 	private Long lastMsgIdOfT = 0L;
 
 	private Long lastMsgIdOfO = 0L;
 
-	private String city;
+	private Long clearMsgId = 0L;
 
-	private String province;
+	private Timestamp updatedTime;
 
-	private String country;
+	private Timestamp createdTime;
+
+	private Short source = (short) 0;
+
+	private Double longitude;
+
+	private Double latitude;
 
 	private Short sex = (short) 0;
 
@@ -83,11 +81,15 @@ public class Plane implements java.io.Serializable {
 
 	private Date birthdayUpper;
 
-	private String language;
-
-	private Short source = (short) 0;
-
 	private Long lastMsgId = 0L;
+
+	private String city;
+
+	private String province;
+
+	private String country;
+
+	private String language;
 
 	private List<PlaneHist> planeHists = new ArrayList<PlaneHist>(0);
 
@@ -100,20 +102,23 @@ public class Plane implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Plane(Category category, Long ownerInc, Integer updateCount,
-			Timestamp updatedTime, Timestamp createdTime, Long targetInc,
-			Short status, Long lastMsgIdOfT, Long lastMsgIdOfO, Short sex,
-			Short matchCount, Short maxMatchCount, Short likedByO,
-			Short likedByT, Short deletedByO, Short deletedByT, Short source) {
+	public Plane(Category category, Long ownerInc, Long targetInc,
+			Short status, Integer updateCount, Long lastMsgIdOfT,
+			Long lastMsgIdOfO, Long clearMsgId, Timestamp updatedTime,
+			Timestamp createdTime, Short source, Short sex, Short matchCount,
+			Short maxMatchCount, Short likedByO, Short likedByT,
+			Short deletedByO, Short deletedByT) {
 		this.category = category;
 		this.ownerInc = ownerInc;
-		this.updateCount = updateCount;
-		this.updatedTime = updatedTime;
-		this.createdTime = createdTime;
 		this.targetInc = targetInc;
 		this.status = status;
+		this.updateCount = updateCount;
 		this.lastMsgIdOfT = lastMsgIdOfT;
 		this.lastMsgIdOfO = lastMsgIdOfO;
+		this.clearMsgId = clearMsgId;
+		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.source = source;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
@@ -121,36 +126,34 @@ public class Plane implements java.io.Serializable {
 		this.likedByT = likedByT;
 		this.deletedByO = deletedByO;
 		this.deletedByT = deletedByT;
-		this.source = source;
 	}
 
 	/** full constructor */
 	public Plane(Account accountByTargetId, Category category,
-			Account accountByOwnerId, Long ownerInc, Integer updateCount,
-			Timestamp updatedTime, Timestamp createdTime, Long targetInc,
-			Short status, Double longitude, Double latitude, Long lastMsgIdOfT,
-			Long lastMsgIdOfO, String city, String province, String country,
-			Short sex, Short matchCount, Short maxMatchCount, Short likedByO,
-			Short likedByT, Short deletedByO, Short deletedByT,
-			Date birthdayLower, Date birthdayUpper, String language,
-			Short source, Long lastMsgId, List<PlaneHist> planeHists,
-			List<Message> messages) {
+			Account accountByOwnerId, Long ownerInc, Long targetInc,
+			Short status, Integer updateCount, Long lastMsgIdOfT,
+			Long lastMsgIdOfO, Long clearMsgId, Timestamp updatedTime,
+			Timestamp createdTime, Short source, Double longitude,
+			Double latitude, Short sex, Short matchCount, Short maxMatchCount,
+			Short likedByO, Short likedByT, Short deletedByO, Short deletedByT,
+			Date birthdayLower, Date birthdayUpper, Long lastMsgId,
+			String city, String province, String country, String language,
+			List<PlaneHist> planeHists, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
 		this.accountByOwnerId = accountByOwnerId;
 		this.ownerInc = ownerInc;
-		this.updateCount = updateCount;
-		this.updatedTime = updatedTime;
-		this.createdTime = createdTime;
 		this.targetInc = targetInc;
 		this.status = status;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.updateCount = updateCount;
 		this.lastMsgIdOfT = lastMsgIdOfT;
 		this.lastMsgIdOfO = lastMsgIdOfO;
-		this.city = city;
-		this.province = province;
-		this.country = country;
+		this.clearMsgId = clearMsgId;
+		this.updatedTime = updatedTime;
+		this.createdTime = createdTime;
+		this.source = source;
+		this.longitude = longitude;
+		this.latitude = latitude;
 		this.sex = sex;
 		this.matchCount = matchCount;
 		this.maxMatchCount = maxMatchCount;
@@ -160,9 +163,11 @@ public class Plane implements java.io.Serializable {
 		this.deletedByT = deletedByT;
 		this.birthdayLower = birthdayLower;
 		this.birthdayUpper = birthdayUpper;
-		this.language = language;
-		this.source = source;
 		this.lastMsgId = lastMsgId;
+		this.city = city;
+		this.province = province;
+		this.country = country;
+		this.language = language;
 		this.planeHists = planeHists;
 		this.messages = messages;
 	}
@@ -218,6 +223,24 @@ public class Plane implements java.io.Serializable {
 		this.ownerInc = ownerInc;
 	}
 
+	@Column(name = "TARGET_INC", nullable = false, insertable = false, updatable = false)
+	public Long getTargetInc() {
+		return this.targetInc;
+	}
+
+	public void setTargetInc(Long targetInc) {
+		this.targetInc = targetInc;
+	}
+
+	@Column(name = "STATUS", nullable = false)
+	public Short getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
+	}
+
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
 	public Integer getUpdateCount() {
 		return this.updateCount;
@@ -225,6 +248,33 @@ public class Plane implements java.io.Serializable {
 
 	public void setUpdateCount(Integer updateCount) {
 		this.updateCount = updateCount;
+	}
+
+	@Column(name = "LAST_MSG_ID_OF_T", nullable = false, updatable = false)
+	public Long getLastMsgIdOfT() {
+		return this.lastMsgIdOfT;
+	}
+
+	public void setLastMsgIdOfT(Long lastMsgIdOfT) {
+		this.lastMsgIdOfT = lastMsgIdOfT;
+	}
+
+	@Column(name = "LAST_MSG_ID_OF_O", nullable = false, updatable = false)
+	public Long getLastMsgIdOfO() {
+		return this.lastMsgIdOfO;
+	}
+
+	public void setLastMsgIdOfO(Long lastMsgIdOfO) {
+		this.lastMsgIdOfO = lastMsgIdOfO;
+	}
+
+	@Column(name = "CLEAR_MSG_ID", nullable = false)
+	public Long getClearMsgId() {
+		return this.clearMsgId;
+	}
+
+	public void setClearMsgId(Long clearMsgId) {
+		this.clearMsgId = clearMsgId;
 	}
 
 	@Column(name = "UPDATED_TIME", nullable = false, length = 19)
@@ -247,22 +297,13 @@ public class Plane implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "TARGET_INC", nullable = false, insertable = false, updatable = false)
-	public Long getTargetInc() {
-		return this.targetInc;
+	@Column(name = "SOURCE", nullable = false)
+	public Short getSource() {
+		return this.source;
 	}
 
-	public void setTargetInc(Long targetInc) {
-		this.targetInc = targetInc;
-	}
-
-	@Column(name = "STATUS", nullable = false)
-	public Short getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Short status) {
-		this.status = status;
+	public void setSource(Short source) {
+		this.source = source;
 	}
 
 	@Column(name = "LONGITUDE", precision = 10, scale = 6)
@@ -281,51 +322,6 @@ public class Plane implements java.io.Serializable {
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
-	}
-
-	@Column(name = "LAST_MSG_ID_OF_T", nullable = false, updatable = false)
-	public Long getLastMsgIdOfT() {
-		return this.lastMsgIdOfT;
-	}
-
-	public void setLastMsgIdOfT(Long lastMsgIdOfT) {
-		this.lastMsgIdOfT = lastMsgIdOfT;
-	}
-
-	@Column(name = "LAST_MSG_ID_OF_O", nullable = false, updatable = false)
-	public Long getLastMsgIdOfO() {
-		return this.lastMsgIdOfO;
-	}
-
-	public void setLastMsgIdOfO(Long lastMsgIdOfO) {
-		this.lastMsgIdOfO = lastMsgIdOfO;
-	}
-
-	@Column(name = "CITY")
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@Column(name = "PROVINCE")
-	public String getProvince() {
-		return this.province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	@Column(name = "COUNTRY")
-	public String getCountry() {
-		return this.country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
 	}
 
 	@Column(name = "SEX", nullable = false)
@@ -411,24 +407,6 @@ public class Plane implements java.io.Serializable {
 		this.birthdayUpper = birthdayUpper;
 	}
 
-	@Column(name = "LANGUAGE")
-	public String getLanguage() {
-		return this.language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	@Column(name = "SOURCE", nullable = false)
-	public Short getSource() {
-		return this.source;
-	}
-
-	public void setSource(Short source) {
-		this.source = source;
-	}
-
 	@Column(name = "LAST_MSG_ID", updatable = false)
 	public Long getLastMsgId() {
 		return this.lastMsgId;
@@ -436,6 +414,42 @@ public class Plane implements java.io.Serializable {
 
 	public void setLastMsgId(Long lastMsgId) {
 		this.lastMsgId = lastMsgId;
+	}
+
+	@Column(name = "CITY")
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Column(name = "PROVINCE")
+	public String getProvince() {
+		return this.province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	@Column(name = "COUNTRY")
+	public String getCountry() {
+		return this.country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	@Column(name = "LANGUAGE")
+	public String getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plane")

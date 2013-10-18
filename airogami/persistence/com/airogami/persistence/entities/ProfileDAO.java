@@ -20,18 +20,18 @@ import javax.persistence.Query;
 
 public class ProfileDAO {
 	// property constants
-	public static final String FULL_NAME = "fullName";
-	public static final String SCREEN_NAME = "screenName";
 	public static final String SEX = "sex";
+	public static final String UPDATE_COUNT = "updateCount";
 	public static final String LONGITUDE = "longitude";
 	public static final String LATITUDE = "latitude";
 	public static final String STATUS = "status";
+	public static final String LIKES_COUNT = "likesCount";
+	public static final String FULL_NAME = "fullName";
+	public static final String SCREEN_NAME = "screenName";
+	public static final String SHOUT = "shout";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
-	public static final String UPDATE_COUNT = "updateCount";
-	public static final String LIKES_COUNT = "likesCount";
-	public static final String SHOUT = "shout";
 	public static final String LANGUAGE = "language";
 
 	private EntityManager getEntityManager() {
@@ -333,18 +333,13 @@ public class ProfileDAO {
 		}
 	}
 
-	public List<Profile> findByFullName(Object fullName,
-			int... rowStartIdxAndCount) {
-		return findByProperty(FULL_NAME, fullName, rowStartIdxAndCount);
-	}
-
-	public List<Profile> findByScreenName(Object screenName,
-			int... rowStartIdxAndCount) {
-		return findByProperty(SCREEN_NAME, screenName, rowStartIdxAndCount);
-	}
-
 	public List<Profile> findBySex(Object sex, int... rowStartIdxAndCount) {
 		return findByProperty(SEX, sex, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByUpdateCount(Object updateCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
 	}
 
 	public List<Profile> findByLongitude(Object longitude,
@@ -361,6 +356,25 @@ public class ProfileDAO {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
 	}
 
+	public List<Profile> findByLikesCount(Object likesCount,
+			int... rowStartIdxAndCount) {
+		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByFullName(Object fullName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(FULL_NAME, fullName, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByScreenName(Object screenName,
+			int... rowStartIdxAndCount) {
+		return findByProperty(SCREEN_NAME, screenName, rowStartIdxAndCount);
+	}
+
+	public List<Profile> findByShout(Object shout, int... rowStartIdxAndCount) {
+		return findByProperty(SHOUT, shout, rowStartIdxAndCount);
+	}
+
 	public List<Profile> findByCity(Object city, int... rowStartIdxAndCount) {
 		return findByProperty(CITY, city, rowStartIdxAndCount);
 	}
@@ -373,20 +387,6 @@ public class ProfileDAO {
 	public List<Profile> findByCountry(Object country,
 			int... rowStartIdxAndCount) {
 		return findByProperty(COUNTRY, country, rowStartIdxAndCount);
-	}
-
-	public List<Profile> findByUpdateCount(Object updateCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(UPDATE_COUNT, updateCount, rowStartIdxAndCount);
-	}
-
-	public List<Profile> findByLikesCount(Object likesCount,
-			int... rowStartIdxAndCount) {
-		return findByProperty(LIKES_COUNT, likesCount, rowStartIdxAndCount);
-	}
-
-	public List<Profile> findByShout(Object shout, int... rowStartIdxAndCount) {
-		return findByProperty(SHOUT, shout, rowStartIdxAndCount);
 	}
 
 	public List<Profile> findByLanguage(Object language,

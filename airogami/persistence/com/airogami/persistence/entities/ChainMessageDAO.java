@@ -20,10 +20,10 @@ import javax.persistence.Query;
 public class ChainMessageDAO {
 	// property constants
 	public static final String UPDATE_INC = "updateInc";
-	public static final String CONTENT = "content";
-	public static final String TYPE = "type";
 	public static final String STATUS = "status";
 	public static final String SOURCE = "source";
+	public static final String TYPE = "type";
+	public static final String CONTENT = "content";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -314,16 +314,6 @@ public class ChainMessageDAO {
 		return findByProperty(UPDATE_INC, updateInc, rowStartIdxAndCount);
 	}
 
-	public List<ChainMessage> findByContent(Object content,
-			int... rowStartIdxAndCount) {
-		return findByProperty(CONTENT, content, rowStartIdxAndCount);
-	}
-
-	public List<ChainMessage> findByType(Object type,
-			int... rowStartIdxAndCount) {
-		return findByProperty(TYPE, type, rowStartIdxAndCount);
-	}
-
 	public List<ChainMessage> findByStatus(Object status,
 			int... rowStartIdxAndCount) {
 		return findByProperty(STATUS, status, rowStartIdxAndCount);
@@ -332,6 +322,16 @@ public class ChainMessageDAO {
 	public List<ChainMessage> findBySource(Object source,
 			int... rowStartIdxAndCount) {
 		return findByProperty(SOURCE, source, rowStartIdxAndCount);
+	}
+
+	public List<ChainMessage> findByType(Object type,
+			int... rowStartIdxAndCount) {
+		return findByProperty(TYPE, type, rowStartIdxAndCount);
+	}
+
+	public List<ChainMessage> findByContent(Object content,
+			int... rowStartIdxAndCount) {
+		return findByProperty(CONTENT, content, rowStartIdxAndCount);
 	}
 
 	/**

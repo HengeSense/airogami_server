@@ -10,12 +10,12 @@ import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import com.airogami.common.CMNotifiedInfo;
-import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
+import com.airogami.common.notification.CMNotifiedInfo;
+import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.persistence.classes.NewChain;
 import com.airogami.persistence.classes.OldChain;
 import com.airogami.persistence.entities.AccountSys;
@@ -129,7 +129,7 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNotifiedInfoJPQL = "select new com.airogami.common.CMNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
+	private final String getNotifiedInfoJPQL = "select new com.airogami.common.notification.CMNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
 	
 	//
 	public List<NotifiedInfo> getNotifiedInfos(long chainId, int accountId) {

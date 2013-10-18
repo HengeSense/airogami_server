@@ -36,25 +36,19 @@ public class Chain implements java.io.Serializable {
 
 	private Account account;
 
+	private Short status = 0;
+
 	private Integer updateCount = 0;
 
 	private Timestamp updatedTime;
 
 	private Timestamp createdTime;
 
-	private Short status = 0;
-
-	private String city;
-
-	private String province;
-
 	private Double longitude;
 
 	private Double latitude;
 
 	private Short sex = (short) 0;
-
-	private String country;
 
 	private Short passCount = 0;
 
@@ -67,6 +61,12 @@ public class Chain implements java.io.Serializable {
 	private Date birthdayLower;
 
 	private Date birthdayUpper;
+
+	private String city;
+
+	private String province;
+
+	private String country;
 
 	private String language;
 
@@ -81,14 +81,15 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
-			Timestamp createdTime, Short status, Short sex, Short passCount,
-			Short matchCount, Short maxPassCount, Short maxMatchCount) {
+	public Chain(Account account, Short status, Integer updateCount,
+			Timestamp updatedTime, Timestamp createdTime, Short sex,
+			Short passCount, Short matchCount, Short maxPassCount,
+			Short maxMatchCount) {
 		this.account = account;
+		this.status = status;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.status = status;
 		this.sex = sex;
 		this.passCount = passCount;
 		this.matchCount = matchCount;
@@ -97,30 +98,30 @@ public class Chain implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Chain(Account account, Integer updateCount, Timestamp updatedTime,
-			Timestamp createdTime, Short status, String city, String province,
-			Double longitude, Double latitude, Short sex, String country,
-			Short passCount, Short matchCount, Short maxPassCount,
-			Short maxMatchCount, Date birthdayLower, Date birthdayUpper,
+	public Chain(Account account, Short status, Integer updateCount,
+			Timestamp updatedTime, Timestamp createdTime, Double longitude,
+			Double latitude, Short sex, Short passCount, Short matchCount,
+			Short maxPassCount, Short maxMatchCount, Date birthdayLower,
+			Date birthdayUpper, String city, String province, String country,
 			String language, List<ChainHist> chainHists,
 			List<ChainMessage> chainMessages) {
 		this.account = account;
+		this.status = status;
 		this.updateCount = updateCount;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
-		this.status = status;
-		this.city = city;
-		this.province = province;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.sex = sex;
-		this.country = country;
 		this.passCount = passCount;
 		this.matchCount = matchCount;
 		this.maxPassCount = maxPassCount;
 		this.maxMatchCount = maxMatchCount;
 		this.birthdayLower = birthdayLower;
 		this.birthdayUpper = birthdayUpper;
+		this.city = city;
+		this.province = province;
+		this.country = country;
 		this.language = language;
 		this.chainHists = chainHists;
 		this.chainMessages = chainMessages;
@@ -146,6 +147,15 @@ public class Chain implements java.io.Serializable {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	@Column(name = "STATUS", nullable = false)
+	public Short getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
@@ -177,33 +187,6 @@ public class Chain implements java.io.Serializable {
 		this.createdTime = createdTime;
 	}
 
-	@Column(name = "STATUS", nullable = false)
-	public Short getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Short status) {
-		this.status = status;
-	}
-
-	@Column(name = "CITY")
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@Column(name = "PROVINCE")
-	public String getProvince() {
-		return this.province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
 	@Column(name = "LONGITUDE", precision = 10, scale = 6)
 	public Double getLongitude() {
 		return this.longitude;
@@ -229,15 +212,6 @@ public class Chain implements java.io.Serializable {
 
 	public void setSex(Short sex) {
 		this.sex = sex;
-	}
-
-	@Column(name = "COUNTRY")
-	public String getCountry() {
-		return this.country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
 	}
 
 	@Column(name = "PASS_COUNT", nullable = false, insertable = false, updatable = false)
@@ -294,6 +268,33 @@ public class Chain implements java.io.Serializable {
 
 	public void setBirthdayUpper(Date birthdayUpper) {
 		this.birthdayUpper = birthdayUpper;
+	}
+
+	@Column(name = "CITY")
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Column(name = "PROVINCE")
+	public String getProvince() {
+		return this.province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	@Column(name = "COUNTRY")
+	public String getCountry() {
+		return this.country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	@Column(name = "LANGUAGE")

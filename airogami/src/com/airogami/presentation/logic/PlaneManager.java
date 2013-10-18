@@ -8,11 +8,11 @@ import java.util.TreeMap;
 
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
-import com.airogami.common.MessageNotifiedInfo;
-import com.airogami.common.NotifiedInfo;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
+import com.airogami.common.notification.MessageNotifiedInfo;
+import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
@@ -21,6 +21,7 @@ import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.notification.LPMNotification;
 import com.airogami.presentation.notification.Notification;
 import com.airogami.presentation.notification.RPMNotification;
+import com.airogami.presentation.notification.SNotification;
 
 public class PlaneManager {
 
@@ -216,6 +217,32 @@ public class PlaneManager {
 		}
 		return result;
 	}
+	
+	/*
+	 * @param planeId:(long)
+	 * @param accountId:(int)
+	 * @return clearMsgId if successful otherwise error
+	 * @throws AirogamiException if failed 
+	 */ 
+	
+	public Map<String, Object> clearPlane(long planeId, int accountId) throws AirogamiException
+	{
+		Map<String, Object> result = null;
+		try {
+			result = ServiceUtils.planeService.clearPlane(planeId, accountId);
+		} catch (ApplicationException re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
+		if (notifiedInfo != null) {
+			Notification notification = new SNotification(notifiedInfo);
+			ManagerUtils.notificationManager.addNotification(notification);
+		}
+		return result;
+	}
+
 
 	/*
 	 * @param planeId:(long)
@@ -230,14 +257,21 @@ public class PlaneManager {
 	 */
 	public Map<String, Object> deletePlane(long planeId, int accountId,
 			boolean byOwner) throws AirogamiException {
+		Map<String, Object> result = null;
 		try {
-			return ServiceUtils.planeService.deletePlane(planeId, accountId,
+			result = ServiceUtils.planeService.deletePlane(planeId, accountId,
 					byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
+		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
+		if (notifiedInfo != null) {
+			Notification notification = new SNotification(notifiedInfo);
+			ManagerUtils.notificationManager.addNotification(notification);
+		}
+		return result;
 	}
 
 	/*
@@ -540,14 +574,21 @@ public class PlaneManager {
 	 */
 	public Map<String, Object> viewedMessages(int accountId, long planeId, long lastMsgId,
 			boolean byOwner) throws AirogamiException {
+		Map<String, Object> result = null;
 		try {
-			return ServiceUtils.planeService.viewedMessages(accountId, planeId,
+			result = ServiceUtils.planeService.viewedMessages(accountId, planeId,
 					lastMsgId, byOwner);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
 					AirogamiException.Application_Exception_Message);
 		}
+		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
+		if (notifiedInfo != null) {
+			Notification notification = new SNotification(notifiedInfo);
+			ManagerUtils.notificationManager.addNotification(notification);
+		}
+		return result;
 	}
 
 }
