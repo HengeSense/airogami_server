@@ -46,6 +46,34 @@ public class MessageDao extends MessageDAO {
 			throw re;
 		}
 	}
+	
+    private final String updateNewMsgIdByOwnerJPQL = "update Plane plane set plane.newMsgIdOfO = ?2 where plane.planeId = ?1 and plane.newMsgIdOfO < ?2";
+	
+    private final String updateNewMsgIdByTargetJPQL = "update Plane plane set plane.newMsgIdOfT = ?2 where plane.planeId = ?1 and plane.newMsgIdOfT < ?2";
+	
+    
+	public void updateNewMsgId(long planeId, long messageId, boolean byOwner) {
+		EntityManagerHelper.log("updateNewMsgIding with planeId = " + planeId, Level.INFO, null);
+		try {
+			String jpql;
+			if(byOwner){
+				jpql = updateNewMsgIdByOwnerJPQL;
+			}
+			else{
+				jpql = updateNewMsgIdByTargetJPQL;
+			}
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql);
+			query.setParameter(1, planeId);
+			query.setParameter(2, messageId);
+			query.executeUpdate();
+			EntityManagerHelper
+					.log("updateNewMsgId successful", Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("updateNewMsgId failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
 
 	private final String obtainMessagesForwardJPQL = "select message from Message message join fetch message.account where message.plane.planeId = ?2 and ((message.plane.accountByTargetId.accountId = ?1 and (message.messageId > message.plane.lastMsgIdOfT or message.plane.status = ?4) and message.account = message.plane.accountByOwnerId) or (message.plane.accountByOwnerId.accountId = ?1 and message.messageId > message.plane.lastMsgIdOfO and (message.account = message.plane.accountByTargetId or message.plane.lastMsgIdOfO = 0))) and (?3 is null or message.messageId > ?3) order by message.messageId asc";
 
@@ -232,7 +260,7 @@ public class MessageDao extends MessageDAO {
 	}
 
 	// lock the plane first
-	private final String clearPlaneJPQL = "update Plane plane set plane.clearMsgId = (select max(message.messageId) from Message message where message.plane = plane), plane.updateCount = plane.updateCount + 1 where plane.planeId = ?1 and (plane.accountByOwnerId.accountId = ?2 or plane.accountByTargetId.accountId = ?2) and plane.status = ?3 and plane.deletedByO = 0 and plane.deletedByT = 0";
+	private final String clearPlaneJPQL = "update Plane plane set plane.clearMsgId = (select max(message.messageId) from Message message where message.plane = plane), plane.updateCount = plane.updateCount + 1 where plane.planeId = ?1 and plane.clearMsgId < (select max(message.messageId) from Message message where message.plane = plane) and (plane.accountByOwnerId.accountId = ?2 or plane.accountByTargetId.accountId = ?2) and plane.status = ?3 and plane.deletedByO = 0 and plane.deletedByT = 0";
 
 	private final String clearPlaneOwnerSetJPQL = "update Message message set message.status = ?3 where message.status = ?2 and message.account <> message.plane.accountByOwnerId and message.plane.planeId = ?1 and message.messageId > message.plane.lastMsgIdOfO and message.messageId <= message.plane.clearMsgId";
 

@@ -61,6 +61,16 @@
 			</result>
 		</action>
 		
+		<action name="clearPlane" class="com.airogami.presentation.plane.ClearPlaneAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
 		<action name="deletePlane" class="com.airogami.presentation.plane.LikeDeletePlaneAction"
 		method="deletePlane">
 			<result type="json" name="input">

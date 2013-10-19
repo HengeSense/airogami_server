@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/17/2013 3:03:50 PM                        */
+/* Created on:     10/18/2013 2:29:24 PM                        */
 /*==============================================================*/
 
 
@@ -83,8 +83,8 @@ create table ACCOUNT_STAT
 create table ACCOUNT_SYS
 (
    ACCOUNT_ID           int not null,
-   CHAIN_INC            bigint not null default -9223372036854775808,
-   PLANE_INC            bigint not null default -9223372036854775808,
+   CHAIN_INC            bigint not null default 0,
+   PLANE_INC            bigint not null default 0,
    primary key (ACCOUNT_ID)
 );
 
@@ -191,7 +191,7 @@ create table CHAIN_MESSAGE
 (
    CHAIN_ID             bigint not null,
    ACCOUNT_ID           int not null,
-   UPDATE_INC           bigint not null default -9223372036854775808,
+   UPDATE_INC           bigint not null default 0,
    STATUS               tinyint not null default 0,
    SOURCE               tinyint not null default 0,
    CREATED_TIME         datetime not null,
@@ -247,14 +247,16 @@ create index CREATEDTIME_INDEX on MESSAGE
 create table PLANE
 (
    PLANE_ID             bigint not null auto_increment,
-   OWNER_INC            bigint not null default -9223372036854775808,
-   TARGET_INC           bigint not null default -9223372036854775808,
+   OWNER_INC            bigint not null default 0,
+   TARGET_INC           bigint not null default 0,
    STATUS               tinyint not null default 0,
    UPDATE_COUNT         int not null default 0,
    OWNER_ID             int,
    TARGET_ID            int,
    LAST_MSG_ID_OF_T     bigint not null default 0,
    LAST_MSG_ID_OF_O     bigint not null default 0,
+   NEW_MSG_ID_OF_T      bigint not null default 0,
+   NEW_MSG_ID_OF_O      bigint not null default 0,
    CLEAR_MSG_ID         bigint not null,
    CATEGORY_ID          smallint not null,
    UPDATED_TIME         datetime not null,

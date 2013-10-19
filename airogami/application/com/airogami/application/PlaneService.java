@@ -132,6 +132,7 @@ public class PlaneService implements IPlaneService {
 				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
 					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
+					DaoUtils.messageDao.updateNewMsgId(planeId, message.getMessageId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
 				}
 				
@@ -369,13 +370,20 @@ public class PlaneService implements IPlaneService {
 		String error = null;
 		SilentNotifiedInfo notifiedInfo = null;
 		Object[] clearResult = null;
+		Plane plane = null;
 		try {
 			EntityManagerHelper.beginTransaction();
 			clearResult = DaoUtils.messageDao.clearPlane(planeId, accountId);
 			if (clearResult != null) {
 				
 			} else {
-				error = "none";
+				plane = DaoUtils.planeDao.getPlane(planeId, accountId);
+				if(plane == null){
+					error = "none";
+				}
+				else{
+					error =  "others";
+				}
 			}
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
@@ -394,6 +402,9 @@ public class PlaneService implements IPlaneService {
 		Map<String, Object> result = new TreeMap<String, Object>();
 		if(error != null){
 		    result.put("error", error);
+		    if(plane != null){
+				result.put("plane", plane);
+			}
 		}
 		else{
 			if((Integer)clearResult[1] == accountId){

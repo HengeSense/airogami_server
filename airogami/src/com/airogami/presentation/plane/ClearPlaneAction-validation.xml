@@ -1,0 +1,11 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="planeId">
+		<field-validator type="long">
+		    <param name="min">1</param>
+			<message key="error.plane.clearplane.planeId.invalid">The planeId must be over ${min}</message>
+		</field-validator>
+	</field>
+
+</validators>

@@ -76,7 +76,7 @@ public interface IPlaneService {
 	/*
 	 * @param planeId:(long)
 	 * @param accountId:(int)
-	 * @return clearMsgId, notifiedInfo if successful otherwise error
+	 * @return clearMsgId, notifiedInfo if successful otherwise error, plane
 	 * @throws ApplicationException if failed 
 	 */ 
 	

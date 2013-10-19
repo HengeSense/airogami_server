@@ -45,6 +45,18 @@
     <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
     </form>  
     
+    <h2>Clear Plane</h2>
+    <form action="plane/clearPlane.action"  method="get"> 
+    <label>PlaneId: </label>
+    <input type="text" name="planeId" value="1" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <br>
+    <button type="button" onclick="print(0)">print</button>
+    <input type="reset" name="submit" value="reset" />
+    <input type="submit" name="submit" value="submit" />
+    <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
+    </form> 
+    
     <h2>Delete Plane</h2>
     <form action="plane/deletePlane.action"  method="get"> 
     <label>PlaneId: </label>
