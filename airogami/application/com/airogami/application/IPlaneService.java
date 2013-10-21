@@ -165,10 +165,10 @@ public interface IPlaneService {
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxPlaneLimit
 	 * @param forward:(boolean)
-	 * @return more, newPlanes (may have more than one plane if more = true)
+	 * @return more, neoPlanes (may have more than one plane if more = true)
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getNewPlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
+	public Map<String, Object> getNeoPlanes(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;
 
 	
 	/*

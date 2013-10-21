@@ -83,10 +83,10 @@ public final int MaxOldChainsLimit = 1000;
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxChainLimit
 	 * @param forward:(boolean)
-	 * @return more:(boolean), newChains if successful
+	 * @return more:(boolean), neoChains if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public Map<String, Object> getNewChains(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
+	public Map<String, Object> getNeoChains(int accountId, Long start, Long end, int limit, boolean forward) throws ApplicationException;	
 
 	/* 
 	 * get all undeleted chainIds

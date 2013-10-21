@@ -285,15 +285,15 @@ public class PlaneManager {
 	 * 
 	 * @param forward:(boolean)
 	 * 
-	 * @return more, newPlanes (may have more than one plane if more = true)
+	 * @return more, neoPlanes (may have more than one plane if more = true)
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public Map<String, Object> getNewPlanes(int accountId, Long start,
+	public Map<String, Object> getNeoPlanes(int accountId, Long start,
 			Long end, int limit, boolean forward) throws AirogamiException {
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.planeService.getNewPlanes(accountId, start,
+			result = ServiceUtils.planeService.getNeoPlanes(accountId, start,
 					end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(

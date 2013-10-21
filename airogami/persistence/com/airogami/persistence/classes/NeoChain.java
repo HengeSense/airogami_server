@@ -2,7 +2,7 @@ package com.airogami.persistence.classes;
 
 import java.io.Serializable;
 
-public class NewChain implements Serializable{
+public class NeoChain implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -10,9 +10,9 @@ public class NewChain implements Serializable{
 	private Long updateInc;
 	private Integer updateCount;
 	
-	public NewChain(){}
+	public NeoChain(){}
 	
-	public NewChain(Long chainId, Long updateInc, Integer updateCount){
+	public NeoChain(Long chainId, Long updateInc, Integer updateCount){
 		this.chainId = chainId;
 		this.updateInc = updateInc;
 		this.updateCount = updateCount;

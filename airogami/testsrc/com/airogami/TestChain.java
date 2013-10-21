@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persistence.classes.NewChain;
+import com.airogami.persistence.classes.NeoChain;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
@@ -132,16 +132,16 @@ public class TestChain {
 		Long end = Long.MAX_VALUE;
 		boolean forward = false;
 		try {
-			Map<String, Object> result = ManagerUtils.chainManager.getNewChains(
+			Map<String, Object> result = ManagerUtils.chainManager.getNeoChains(
 					accountId, start, end, limit, forward);
-			List<NewChain> newChains = (List<NewChain>) result.get("newChains");
-			Iterator<NewChain> iter = newChains.iterator();
+			List<NeoChain> neoChains = (List<NeoChain>) result.get("newChains");
+			Iterator<NeoChain> iter = neoChains.iterator();
 			while(iter.hasNext()){
 				//ObjectUtils.printObject(iter.next());
-				NewChain newChain = iter.next();
-				System.out.print(newChain.getChainId());
-				System.out.print(": " + newChain.getUpdateInc());
-				System.out.println(": " + newChain.getUpdateCount());
+				NeoChain neoChain = iter.next();
+				System.out.print(neoChain.getChainId());
+				System.out.print(": " + neoChain.getUpdateInc());
+				System.out.println(": " + neoChain.getUpdateCount());
 			}
 			//ObjectUtils.printObject(result);
 		} catch (AirogamiException e) {

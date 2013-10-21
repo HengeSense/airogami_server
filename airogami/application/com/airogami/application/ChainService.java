@@ -15,7 +15,7 @@ import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.notification.CMNotifiedInfos;
 import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.persistence.classes.AccountStatLeft;
-import com.airogami.persistence.classes.NewChain;
+import com.airogami.persistence.classes.NeoChain;
 import com.airogami.persistence.classes.OldChain;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
@@ -354,16 +354,16 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public Map<String, Object> getNewChains(int accountId, Long start, Long end, int limit,
+	public Map<String, Object> getNeoChains(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IChainService.MaxChainLimit || limit < 1)
 			limit = IChainService.MaxChainLimit; 
-		List<NewChain> newChains = null;
+		List<NeoChain> neoChains = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			newChains = DaoUtils.chainDao.getNewChains(accountId, start, end, limit + 1, forward); 			
+			neoChains = DaoUtils.chainDao.getNeoChains(accountId, start, end, limit + 1, forward); 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -378,10 +378,10 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		boolean more = newChains.size() > limit;
+		boolean more = neoChains.size() > limit;
 		result = new TreeMap<String, Object>();
 		result.put("more", more);
-		result.put("newChains", newChains);
+		result.put("neoChains", neoChains);
 		return result;
 	}
 	

@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.airogami.application.ServiceUtils;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.exception.AirogamiException;
-import com.airogami.persistence.classes.NewPlane;
+import com.airogami.persistence.classes.NeoPlane;
 import com.airogami.persistence.entities.Category;
 import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
@@ -165,15 +165,15 @@ public class TestPlane {
 		Long start = Long.MIN_VALUE;
 		Long end = Long.MAX_VALUE;
 		try {
-			Map<String, Object> result = ManagerUtils.planeManager.getNewPlanes(accountId, start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.planeManager.getNeoPlanes(accountId, start, end, limit, forward);
 			//ObjectUtils.printObject(result);
-			List<NewPlane> newPlanes = (List<NewPlane>) result.get("newPlanes");
-			Iterator<NewPlane> iter = newPlanes.iterator();
+			List<NeoPlane> neoPlanes = (List<NeoPlane>) result.get("newPlanes");
+			Iterator<NeoPlane> iter = neoPlanes.iterator();
 			while(iter.hasNext()){
-				NewPlane newPlane = iter.next();
-				System.out.print(newPlane.getPlaneId());
-				System.out.print(": " + newPlane.getUpdateInc());
-				System.out.println(": " + newPlane.getUpdateCount());
+				NeoPlane neoPlane = iter.next();
+				System.out.print(neoPlane.getPlaneId());
+				System.out.print(": " + neoPlane.getUpdateInc());
+				System.out.println(": " + neoPlane.getUpdateCount());
 			}
 		} catch (AirogamiException e) {
 			e.printStackTrace();

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/18/2013 2:29:24 PM                        */
+/* Created on:     10/21/2013 2:52:38 AM                        */
 /*==============================================================*/
 
 
@@ -255,8 +255,8 @@ create table PLANE
    TARGET_ID            int,
    LAST_MSG_ID_OF_T     bigint not null default 0,
    LAST_MSG_ID_OF_O     bigint not null default 0,
-   NEW_MSG_ID_OF_T      bigint not null default 0,
-   NEW_MSG_ID_OF_O      bigint not null default 0,
+   NEO_MSG_ID_OF_T      bigint not null default 0,
+   NEO_MSG_ID_OF_O      bigint not null default 0,
    CLEAR_MSG_ID         bigint not null,
    CATEGORY_ID          smallint not null,
    UPDATED_TIME         datetime not null,

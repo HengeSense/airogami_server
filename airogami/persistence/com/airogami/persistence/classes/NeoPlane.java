@@ -2,7 +2,7 @@ package com.airogami.persistence.classes;
 
 import java.io.Serializable;
 
-public class NewPlane implements Serializable{
+public class NeoPlane implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -10,20 +10,20 @@ public class NewPlane implements Serializable{
 	private Long updateInc;
 	private Integer updateCount;
 	private Long clearMsgId;
-	private Long lastMsgId;//the opposite lastMsgId
-	private Long newMsgId;
+	private Long readMsgId;//the opposite lastMsgId
+	private Long neoMsgId;
 	
-	public NewPlane(){
+	public NeoPlane(){
 		
 	}
 	
-	public NewPlane(Long planeId, Long updateInc, Integer updateCount, Long clearMsgId, Long lastMsgId, Long newMsgId){
+	public NeoPlane(Long planeId, Long updateInc, Integer updateCount, Long clearMsgId, Long readMsgId, Long neoMsgId){
 		this.planeId = planeId;
 		this.updateInc = updateInc;
 		this.updateCount = updateCount;
 		this.clearMsgId = clearMsgId;
-		this.lastMsgId = lastMsgId;
-		this.newMsgId = newMsgId;
+		this.readMsgId = readMsgId;
+		this.neoMsgId = neoMsgId;
 	}
 	
 	public Long getPlaneId() {
@@ -53,20 +53,20 @@ public class NewPlane implements Serializable{
 		this.clearMsgId = clearMsgId;
 	}
 
-	public Long getLastMsgId() {
-		return lastMsgId;
+	public Long getReadMsgId() {
+		return readMsgId;
 	}
 
-	public void setLastMsgId(Long lastMsgId) {
-		this.lastMsgId = lastMsgId;
+	public void setReadMsgId(Long lastMsgId) {
+		this.readMsgId = lastMsgId;
 	}
 
-	public Long getNewMsgId() {
-		return newMsgId;
+	public Long getNeoMsgId() {
+		return neoMsgId;
 	}
 
-	public void setNewMsgId(Long newMsgId) {
-		this.newMsgId = newMsgId;
+	public void setNeoMsgId(Long newMsgId) {
+		this.neoMsgId = newMsgId;
 	}
 	
 	

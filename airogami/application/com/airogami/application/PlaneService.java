@@ -14,7 +14,7 @@ import com.airogami.common.notification.MessageNotifiedInfo;
 import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.common.notification.SilentNotifiedInfo;
 import com.airogami.persistence.classes.AccountStatLeft;
-import com.airogami.persistence.classes.NewPlane;
+import com.airogami.persistence.classes.NeoPlane;
 import com.airogami.persistence.classes.OldPlane;
 import com.airogami.persistence.daos.DaoUtils;
 import com.airogami.persistence.entities.Account;
@@ -132,7 +132,7 @@ public class PlaneService implements IPlaneService {
 				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
 					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
-					DaoUtils.messageDao.updateNewMsgId(planeId, message.getMessageId(), !byOwner);
+					DaoUtils.messageDao.updateNeoMsgId(planeId, message.getMessageId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
 				}
 				
@@ -479,16 +479,16 @@ public class PlaneService implements IPlaneService {
 	}
 	
 	@Override
-	public Map<String, Object> getNewPlanes(int accountId, Long start, Long end, int limit,
+	public Map<String, Object> getNeoPlanes(int accountId, Long start, Long end, int limit,
 			boolean forward) throws ApplicationException {
 		if(limit > IPlaneService.MaxPlaneLimit || limit < 1)
 			limit = IPlaneService.MaxPlaneLimit;
-		List<NewPlane> newPlanes = null;
+		List<NeoPlane> neoPlanes = null;
 		ApplicationException ae = null;
 		Map<String, Object> result = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			newPlanes = DaoUtils.planeDao.getNewPlanes(accountId, start, end, limit + 1, forward);
+			neoPlanes = DaoUtils.planeDao.getNeoPlanes(accountId, start, end, limit + 1, forward);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -503,10 +503,10 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		boolean more = newPlanes.size() > limit;
+		boolean more = neoPlanes.size() > limit;
 		result = new TreeMap<String, Object>();
 		result.put("more", more);
-		result.put("newPlanes", newPlanes);
+		result.put("neoPlanes", neoPlanes);
 		return result;
 	}
 	

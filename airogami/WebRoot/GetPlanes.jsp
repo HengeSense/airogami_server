@@ -30,10 +30,10 @@
      %> </p>
      <%
      if(user != null){ %>
-    <h2>Get New Planes</h2>
-    <form action="plane/getNewPlanes.action"  method="get"> 
+    <h2>Get Neo Planes</h2>
+    <form action="plane/getNeoPlanes.action"  method="get"> 
     <label>Start: </label>
-    <input type="text" name="start" value="-9223372036854775808" />
+    <input type="text" name="start" value="0" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
      <label>End: </label>
     <input type="text" name="end" value="0" />

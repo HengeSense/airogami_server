@@ -82,7 +82,7 @@
 			</result>
 		</action>
 		
-		<action name="getNewPlanes" class="com.airogami.presentation.plane.GetNewPlanesAction">
+		<action name="getNeoPlanes" class="com.airogami.presentation.plane.GetNeoPlanesAction">
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>

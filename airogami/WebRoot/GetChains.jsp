@@ -30,8 +30,8 @@
      %> </p>
      <%
      if(user != null){ %>
-    <h2>Get New Chains</h2>
-    <form action="chain/getNewChains.action"  method="get"> 
+    <h2>Get Neo Chains</h2>
+    <form action="chain/getNeoChains.action"  method="get"> 
     <label>Start: </label>
     <input type="text" name="start" value="-9223372036854775808" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br> 

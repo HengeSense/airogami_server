@@ -26,8 +26,8 @@ public class PlaneDAO {
 	public static final String UPDATE_COUNT = "updateCount";
 	public static final String LAST_MSG_ID_OF_T = "lastMsgIdOfT";
 	public static final String LAST_MSG_ID_OF_O = "lastMsgIdOfO";
-	public static final String NEW_MSG_ID_OF_T = "newMsgIdOfT";
-	public static final String NEW_MSG_ID_OF_O = "newMsgIdOfO";
+	public static final String NEO_MSG_ID_OF_T = "neoMsgIdOfT";
+	public static final String NEO_MSG_ID_OF_O = "neoMsgIdOfO";
 	public static final String CLEAR_MSG_ID = "clearMsgId";
 	public static final String SOURCE = "source";
 	public static final String LONGITUDE = "longitude";
@@ -492,14 +492,14 @@ public class PlaneDAO {
 				rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByNewMsgIdOfT(Object newMsgIdOfT,
+	public List<Plane> findByNeoMsgIdOfT(Object neoMsgIdOfT,
 			int... rowStartIdxAndCount) {
-		return findByProperty(NEW_MSG_ID_OF_T, newMsgIdOfT, rowStartIdxAndCount);
+		return findByProperty(NEO_MSG_ID_OF_T, neoMsgIdOfT, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByNewMsgIdOfO(Object newMsgIdOfO,
+	public List<Plane> findByNeoMsgIdOfO(Object neoMsgIdOfO,
 			int... rowStartIdxAndCount) {
-		return findByProperty(NEW_MSG_ID_OF_O, newMsgIdOfO, rowStartIdxAndCount);
+		return findByProperty(NEO_MSG_ID_OF_O, neoMsgIdOfO, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByClearMsgId(Object clearMsgId,

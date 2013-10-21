@@ -48,7 +48,7 @@
 			</result>
 		</action>
 		
-		<action name="getNewChains" class="com.airogami.presentation.chain.GetNewChainsAction">
+		<action name="getNeoChains" class="com.airogami.presentation.chain.GetNeoChainsAction">
 			<result type="json" name="input">
 				<param name="root">dataMap</param>
 			</result>

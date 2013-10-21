@@ -47,20 +47,20 @@ public class MessageDao extends MessageDAO {
 		}
 	}
 	
-    private final String updateNewMsgIdByOwnerJPQL = "update Plane plane set plane.newMsgIdOfO = ?2 where plane.planeId = ?1 and plane.newMsgIdOfO < ?2";
+    private final String updateNeoMsgIdByOwnerJPQL = "update Plane plane set plane.neoMsgIdOfO = ?2 where plane.planeId = ?1 and plane.neoMsgIdOfO < ?2";
 	
-    private final String updateNewMsgIdByTargetJPQL = "update Plane plane set plane.newMsgIdOfT = ?2 where plane.planeId = ?1 and plane.newMsgIdOfT < ?2";
+    private final String updateNeoMsgIdByTargetJPQL = "update Plane plane set plane.neoMsgIdOfT = ?2 where plane.planeId = ?1 and plane.neoMsgIdOfT < ?2";
 	
     
-	public void updateNewMsgId(long planeId, long messageId, boolean byOwner) {
-		EntityManagerHelper.log("updateNewMsgIding with planeId = " + planeId, Level.INFO, null);
+	public void updateNeoMsgId(long planeId, long messageId, boolean byOwner) {
+		EntityManagerHelper.log("updateNeoMsgIding with planeId = " + planeId, Level.INFO, null);
 		try {
 			String jpql;
 			if(byOwner){
-				jpql = updateNewMsgIdByOwnerJPQL;
+				jpql = updateNeoMsgIdByOwnerJPQL;
 			}
 			else{
-				jpql = updateNewMsgIdByTargetJPQL;
+				jpql = updateNeoMsgIdByTargetJPQL;
 			}
 			Query query = EntityManagerHelper.getEntityManager().createQuery(
 					jpql);
@@ -68,9 +68,9 @@ public class MessageDao extends MessageDAO {
 			query.setParameter(2, messageId);
 			query.executeUpdate();
 			EntityManagerHelper
-					.log("updateNewMsgId successful", Level.INFO, null);
+					.log("updateNeoMsgId successful", Level.INFO, null);
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("updateNewMsgId failed", Level.SEVERE, re);
+			EntityManagerHelper.log("updateNeoMsgId failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

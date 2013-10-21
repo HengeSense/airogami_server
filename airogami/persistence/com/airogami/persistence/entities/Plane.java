@@ -51,9 +51,9 @@ public class Plane implements java.io.Serializable {
 
 	private Long lastMsgIdOfO = 0L;
 
-	private Long newMsgIdOfT = 0L;
+	private Long neoMsgIdOfT = 0L;
 
-	private Long newMsgIdOfO = 0L;
+	private Long neoMsgIdOfO = 0L;
 
 	private Long clearMsgId = 0L;
 
@@ -108,7 +108,7 @@ public class Plane implements java.io.Serializable {
 	/** minimal constructor */
 	public Plane(Category category, Long ownerInc, Long targetInc,
 			Short status, Integer updateCount, Long lastMsgIdOfT,
-			Long lastMsgIdOfO, Long newMsgIdOfT, Long newMsgIdOfO,
+			Long lastMsgIdOfO, Long neoMsgIdOfT, Long neoMsgIdOfO,
 			Long clearMsgId, Timestamp updatedTime, Timestamp createdTime,
 			Short source, Short sex, Short matchCount, Short maxMatchCount,
 			Short likedByO, Short likedByT, Short deletedByO, Short deletedByT) {
@@ -119,8 +119,8 @@ public class Plane implements java.io.Serializable {
 		this.updateCount = updateCount;
 		this.lastMsgIdOfT = lastMsgIdOfT;
 		this.lastMsgIdOfO = lastMsgIdOfO;
-		this.newMsgIdOfT = newMsgIdOfT;
-		this.newMsgIdOfO = newMsgIdOfO;
+		this.neoMsgIdOfT = neoMsgIdOfT;
+		this.neoMsgIdOfO = neoMsgIdOfO;
 		this.clearMsgId = clearMsgId;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
@@ -138,7 +138,7 @@ public class Plane implements java.io.Serializable {
 	public Plane(Account accountByTargetId, Category category,
 			Account accountByOwnerId, Long ownerInc, Long targetInc,
 			Short status, Integer updateCount, Long lastMsgIdOfT,
-			Long lastMsgIdOfO, Long newMsgIdOfT, Long newMsgIdOfO,
+			Long lastMsgIdOfO, Long neoMsgIdOfT, Long neoMsgIdOfO,
 			Long clearMsgId, Timestamp updatedTime, Timestamp createdTime,
 			Short source, Double longitude, Double latitude, Short sex,
 			Short matchCount, Short maxMatchCount, Short likedByO,
@@ -155,8 +155,8 @@ public class Plane implements java.io.Serializable {
 		this.updateCount = updateCount;
 		this.lastMsgIdOfT = lastMsgIdOfT;
 		this.lastMsgIdOfO = lastMsgIdOfO;
-		this.newMsgIdOfT = newMsgIdOfT;
-		this.newMsgIdOfO = newMsgIdOfO;
+		this.neoMsgIdOfT = neoMsgIdOfT;
+		this.neoMsgIdOfO = neoMsgIdOfO;
 		this.clearMsgId = clearMsgId;
 		this.updatedTime = updatedTime;
 		this.createdTime = createdTime;
@@ -277,22 +277,22 @@ public class Plane implements java.io.Serializable {
 		this.lastMsgIdOfO = lastMsgIdOfO;
 	}
 
-	@Column(name = "NEW_MSG_ID_OF_T", nullable = false)
-	public Long getNewMsgIdOfT() {
-		return this.newMsgIdOfT;
+	@Column(name = "NEO_MSG_ID_OF_T", nullable = false)
+	public Long getNeoMsgIdOfT() {
+		return this.neoMsgIdOfT;
 	}
 
-	public void setNewMsgIdOfT(Long newMsgIdOfT) {
-		this.newMsgIdOfT = newMsgIdOfT;
+	public void setNeoMsgIdOfT(Long neoMsgIdOfT) {
+		this.neoMsgIdOfT = neoMsgIdOfT;
 	}
 
-	@Column(name = "NEW_MSG_ID_OF_O", nullable = false)
-	public Long getNewMsgIdOfO() {
-		return this.newMsgIdOfO;
+	@Column(name = "NEO_MSG_ID_OF_O", nullable = false)
+	public Long getNeoMsgIdOfO() {
+		return this.neoMsgIdOfO;
 	}
 
-	public void setNewMsgIdOfO(Long newMsgIdOfO) {
-		this.newMsgIdOfO = newMsgIdOfO;
+	public void setNeoMsgIdOfO(Long neoMsgIdOfO) {
+		this.neoMsgIdOfO = neoMsgIdOfO;
 	}
 
 	@Column(name = "CLEAR_MSG_ID", nullable = false)

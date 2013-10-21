@@ -16,7 +16,7 @@ import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.common.notification.CMNotifiedInfo;
 import com.airogami.common.notification.NotifiedInfo;
-import com.airogami.persistence.classes.NewChain;
+import com.airogami.persistence.classes.NeoChain;
 import com.airogami.persistence.classes.OldChain;
 import com.airogami.persistence.entities.AccountSys;
 import com.airogami.persistence.entities.Chain;
@@ -239,33 +239,33 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNewChainsForwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc asc";
+	private final String getNeoChainsForwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc asc";
 
-	private final String getNewChainsBackwardJPQL = "select new com.airogami.persistence.classes.NewChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc desc";
+	private final String getNeoChainsBackwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc desc";
 
-	public List<NewChain> getNewChains(int accountId, Long start, Long end, int limit, boolean forward){
-		EntityManagerHelper.log("getNewChainsing with accountId = " + accountId, Level.INFO, null);
+	public List<NeoChain> getNeoChains(int accountId, Long start, Long end, int limit, boolean forward){
+		EntityManagerHelper.log("getNeoChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
 			String jpql = null;
 			if(forward){
-				jpql = getNewChainsForwardJPQL;
+				jpql = getNeoChainsForwardJPQL;
 			}
 			else{
-				jpql = getNewChainsBackwardJPQL;
+				jpql = getNeoChainsBackwardJPQL;
 			}
-			TypedQuery<NewChain> query = EntityManagerHelper.getEntityManager().createQuery(
-					jpql, NewChain.class);
+			TypedQuery<NeoChain> query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql, NeoChain.class);
 			query.setParameter(1, accountId);
 			query.setParameter(2, ChainMessageConstants.StatusDeleted);
 			query.setParameter(3, start);
 			query.setParameter(4, end);
 			query.setMaxResults(limit);
-			List<NewChain> chains = query.getResultList();
+			List<NeoChain> chains = query.getResultList();
 			EntityManagerHelper
-					.log("getNewChains successful", Level.INFO, null);
+					.log("getNeoChains successful", Level.INFO, null);
 			return chains;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getNewChains failed", Level.SEVERE, re);
+			EntityManagerHelper.log("getNeoChains failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

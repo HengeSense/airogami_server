@@ -158,13 +158,13 @@ public class ChainManager {
 	 * @param end:(Long) (exclusive)
 	 * @param limit:(int) max(limit) = MaxLimit
 	 * @param forward:(boolean)
-	 * @return more:(boolean), newChains if successful
+	 * @return more:(boolean), neoChains if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public Map<String, Object> getNewChains(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
+	public Map<String, Object> getNeoChains(int accountId, Long start, Long end, int limit, boolean forward) throws AirogamiException{
 		Map<String, Object> result;
 		try {
-			result = ServiceUtils.chainService.getNewChains(accountId, start, end, limit, forward);
+			result = ServiceUtils.chainService.getNeoChains(accountId, start, end, limit, forward);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,

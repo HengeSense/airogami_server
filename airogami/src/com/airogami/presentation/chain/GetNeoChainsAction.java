@@ -1,4 +1,4 @@
-package com.airogami.presentation.plane;
+package com.airogami.presentation.chain;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -12,7 +12,7 @@ import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
 import com.airogami.presentation.utilities.JSONUtils;
 
-public class GetNewPlanesAction extends AirogamiActionSupport {
+public class GetNeoChainsAction extends AirogamiActionSupport {
 
 	private static final long serialVersionUID = 1L;	
 	private Long start;
@@ -25,7 +25,7 @@ public class GetNewPlanesAction extends AirogamiActionSupport {
 		boolean succeed = false;
 		try {			
 			User user = (User)request.getAttribute("user");
-			Map<String, Object> result = ManagerUtils.planeManager.getNewPlanes(user.getAccountId(), start, end, limit, forward);
+			Map<String, Object> result = ManagerUtils.chainManager.getNeoChains(user.getAccountId(), start, end, limit, forward);
             dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
