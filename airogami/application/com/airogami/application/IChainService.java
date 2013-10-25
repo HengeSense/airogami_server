@@ -103,10 +103,11 @@ public final int MaxOldChainsLimit = 1000;
 	/* 
 	 * @param accountId:(int)
 	 * @param chainIds:(List<Long>))
+	 * @param updated:(boolean)
 	 * @return chains if successful
 	 * @throws ApplicationException if failed 
 	 */ 
-	public List<Chain> getChains(int accountId, List<Long> chainIds) throws ApplicationException;	
+	public Map<String, Object> getChains(int accountId, List<Long> chainIds, boolean updated) throws ApplicationException;	
 
 	
 	/* 

@@ -142,13 +142,13 @@ public class MessageDao extends MessageDAO {
 	 * lock plane first
 	 */
 
-	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfO, plane.lastMsgIdOfO = ?3 where plane.lastMsgIdOfO < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByO = 0 and plane.deletedByT = 0  and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByOwnerJPQL = "update Plane plane set plane.tmpMsgId = plane.lastMsgIdOfO, plane.lastMsgIdOfO = ?3 where plane.lastMsgIdOfO < ?3 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByO = 0 and plane.deletedByT = 0  and plane.planeId = ?1 and plane.status = ?4";
 
-	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.lastMsgId = plane.lastMsgIdOfT, plane.lastMsgIdOfT = ?3 where plane.lastMsgIdOfT < ?3 and plane.accountByTargetId.accountId = ?2 and plane.deletedByO = 0 and plane.deletedByT = 0 and plane.planeId = ?1 and plane.status = ?4";
+	private final String viewedMessageByTargetJPQL = "update Plane plane set plane.tmpMsgId = plane.lastMsgIdOfT, plane.lastMsgIdOfT = ?3 where plane.lastMsgIdOfT < ?3 and plane.accountByTargetId.accountId = ?2 and plane.deletedByO = 0 and plane.deletedByT = 0 and plane.planeId = ?1 and plane.status = ?4";
 
-	private final String viewedMessageByOwnerCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
+	private final String viewedMessageByOwnerCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByOwnerId.accountId = ?2 and message.messageId > message.plane.tmpMsgId and message.messageId <= ?3";
 
-	private final String viewedMessageByTargetCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.lastMsgId and message.messageId <= ?3";
+	private final String viewedMessageByTargetCountJPQL = "update Message message set message.status = ?5 where message.status = ?4 and message.account.accountId <> ?2 and message.plane.planeId = ?1 and message.plane.status = ?6 and message.plane.accountByTargetId.accountId = ?2 and message.messageId > message.plane.tmpMsgId and message.messageId <= ?3";
 
 	private final String viewedMessageByOwnerQueryJPQL = "select plane.lastMsgIdOfO from Plane plane where plane.planeId = ?1 and plane.accountByOwnerId.accountId = ?2 and plane.deletedByO = 0 and plane.deletedByT = 0  and plane.status = ?3";
 
@@ -272,7 +272,8 @@ public class MessageDao extends MessageDAO {
 
 	private final String clearPlaneUpdateJPQL = "update Plane plane set plane.lastMsgIdOfO = plane.clearMsgId, plane.lastMsgIdOfT = plane.clearMsgId, plane.ownerInc = (select accountSys.planeInc from AccountSys accountSys where accountSys.account = plane.accountByOwnerId), plane.targetInc = (select accountSys.planeInc from AccountSys accountSys where accountSys.account = plane.accountByTargetId) where plane.planeId = ?1";
 
-	private final String clearPlaneQueryJPQL = "select plane.clearMsgId, plane.accountByOwnerId.accountId, plane.accountByTargetId.accountId from Plane plane where plane.planeId = ?1";
+	//exist conditions
+	private final String clearPlaneQueryJPQL = "select plane.clearMsgId, plane.accountByOwnerId.accountId, plane.accountByTargetId.accountId from Plane plane where plane.planeId = ?1 and (plane.accountByOwnerId.accountId = ?2 or plane.accountByTargetId.accountId = ?2) and plane.status = ?3 and plane.deletedByO = 0 and plane.deletedByT = 0";
 
 	// return null if not replied or deleted or not exist
 	public Object[] clearPlane(long planeId, int accountId) {
@@ -322,15 +323,16 @@ public class MessageDao extends MessageDAO {
 						clearPlaneUpdateJPQL);
 				query.setParameter(1, planeId);
 				query.executeUpdate();
-
-				// query
-				query = EntityManagerHelper.getEntityManager().createQuery(
-						clearPlaneQueryJPQL);
-				query.setParameter(1, planeId);
-				List<Object[]> result = query.getResultList();
-				if (result.size() > 0) {
-					clearResult = result.get(0);
-				}
+			}
+			// query (no matter whether succeeded)
+			query = EntityManagerHelper.getEntityManager().createQuery(
+					clearPlaneQueryJPQL);
+			query.setParameter(1, planeId);
+			query.setParameter(2, accountId);
+			query.setParameter(3, PlaneConstants.StatusReplied);
+			List<Object[]> result = query.getResultList();
+			if (result.size() > 0) {
+				clearResult = result.get(0);
 			}
 			EntityManagerHelper.log("clearPlane successful", Level.INFO, null);
 			return clearResult;

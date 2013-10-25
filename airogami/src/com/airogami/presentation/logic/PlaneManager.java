@@ -42,7 +42,7 @@ public class PlaneManager {
 					"Illegal arguments in createCatrgory");
 		}
 		try {
-			category = ServiceUtils.planeService.createCatrgory(category);
+			category = ServiceUtils.planeService.createCategory(category);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,
@@ -308,18 +308,20 @@ public class PlaneManager {
 	 * 
 	 * @param planeIds:(List<Long>)
 	 * 
+	 * @param updated:(boolean)
+	 * 
 	 * @return planes
 	 * 
 	 * @throws AirogamiException if failed
 	 */
-	public List<Plane> getPlanes(int accountId, List<Long> planeIds)
+	public Map<String, Object> getPlanes(int accountId, List<Long> planeIds, boolean updated)
 			throws AirogamiException {
 		if (planeIds == null) {
 			throw new IllegalArgumentException(
 					"Illegal arguments in getPlanes");
 		}
 		try {
-			return ServiceUtils.planeService.getPlanes(accountId, planeIds);
+			return ServiceUtils.planeService.getPlanes(accountId, planeIds, updated);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,

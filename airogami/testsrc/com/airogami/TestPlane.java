@@ -186,8 +186,9 @@ public class TestPlane {
 	public void testGetPlanes() {
 		int accountId = 2;
 		List<Long> planeIds = Arrays.asList(6L, 7L);
+		boolean updated = false;
 		try {
-			List<Plane> planes = ManagerUtils.planeManager.getPlanes(accountId, planeIds);
+			Object planes = ManagerUtils.planeManager.getPlanes(accountId, planeIds, updated);
 			ObjectUtils.printObject(planes);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

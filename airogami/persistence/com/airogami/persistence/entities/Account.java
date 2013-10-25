@@ -46,6 +46,8 @@ public class Account implements java.io.Serializable {
 
 	private AccountStat accountStat;
 
+	private Hot hot;
+
 	private List<Message> messages = new ArrayList<Message>(0);
 
 	private List<Plane> planesForOwnerId = new ArrayList<Plane>(0);
@@ -77,7 +79,7 @@ public class Account implements java.io.Serializable {
 			Integer updateCount, List<Report> reportsForReportedId,
 			AccountSys accountSys, List<Report> reportsForReportId,
 			Agent agent, List<Chain> chains, List<ChainHist> chainHists,
-			AccountStat accountStat, List<Message> messages,
+			AccountStat accountStat, Hot hot, List<Message> messages,
 			List<Plane> planesForOwnerId, List<PlaneHist> planeHists,
 			Profile profile, List<Plane> planesForTargetId,
 			List<ChainMessage> chainMessages) {
@@ -91,6 +93,7 @@ public class Account implements java.io.Serializable {
 		this.chains = chains;
 		this.chainHists = chainHists;
 		this.accountStat = accountStat;
+		this.hot = hot;
 		this.messages = messages;
 		this.planesForOwnerId = planesForOwnerId;
 		this.planeHists = planeHists;
@@ -190,6 +193,15 @@ public class Account implements java.io.Serializable {
 
 	public void setAccountStat(AccountStat accountStat) {
 		this.accountStat = accountStat;
+	}
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	public Hot getHot() {
+		return this.hot;
+	}
+
+	public void setHot(Hot hot) {
+		this.hot = hot;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")

@@ -25,29 +25,7 @@ import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.ChainMessageId;
 import com.airogami.persistence.entities.EntityManagerHelper;
 
-public class ChainDao extends ChainDAO {
-	private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
-	
-	public ChainMessage getChainMessage(int accountId, long chainId){
-		EntityManagerHelper.log("getChainMessageing", Level.INFO, null);
-		try {
-			TypedQuery<ChainMessage> query = EntityManagerHelper.getEntityManager().createQuery(
-					getChainMessageJPQL, ChainMessage.class);
-			query.setParameter(1, chainId);
-			query.setParameter(2, accountId);
-			List<ChainMessage> chainMessages = query.getResultList();
-			ChainMessage chainMessage = null;
-			if(chainMessages.size() > 0){
-				chainMessage = chainMessages.get(0);
-			}
-			EntityManagerHelper
-					.log("getChainMessage successful", Level.INFO, null);
-			return chainMessage;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getChainMessage failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
+public class ChainDao extends ChainAidedDao {
 	
 	private final String throwChainJPQL = "delete from ChainMessage chainMessage where chainMessage.account.accountId = ?2 and chainMessage.status = ?3 and chainMessage.chain.chainId = ?1";
 	private final String throwChainSetJPQL = "update Chain chain set chain.status = ?2 where chain.chainId = ?1";
@@ -108,47 +86,6 @@ public class ChainDao extends ChainDAO {
 		}
 	}
 	
-private final String increaseChainMessageCountJPQL = "update AccountStat accountStat set accountStat.chainMsgCount = accountStat.chainMsgCount + 1 where accountStat.account in (select chainMessage.account from ChainMessage chainMessage where chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3)";
-	
-//return increased lines
-	public int increaseChainMessageCount(long chainId, int accountId) {
-		EntityManagerHelper.log("increaseChainMessageCounting with chainId = " + chainId, Level.INFO, null);
-		try {
-			Query query = EntityManagerHelper.getEntityManager().createQuery(
-					increaseChainMessageCountJPQL);
-			query.setParameter(1, chainId);
-			query.setParameter(2, ChainMessageConstants.StatusReplied);
-			query.setParameter(3, accountId);
-			int count = query.executeUpdate();
-			EntityManagerHelper
-					.log("increaseChainMessageCount successful", Level.INFO, null);
-			return count;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("increaseChainMessageCount failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
-	
-	private final String getNotifiedInfoJPQL = "select new com.airogami.common.notification.CMNotifiedInfo(chainMessage.id.accountId, accountStat.chainMsgCount + accountStat.msgCount) from ChainMessage chainMessage, AccountStat accountStat where accountStat.accountId = chainMessage.id.accountId and chainMessage.id.chainId = ?1 and chainMessage.status = ?2 and chainMessage.id.accountId <> ?3";
-	
-	//
-	public List<NotifiedInfo> getNotifiedInfos(long chainId, int accountId) {
-		EntityManagerHelper.log("getNotifiedInfosing with chainId = " + chainId, Level.INFO, null);
-		try {
-			TypedQuery<NotifiedInfo> query = EntityManagerHelper.getEntityManager().createQuery(
-					getNotifiedInfoJPQL, NotifiedInfo.class);
-			query.setParameter(1, chainId);
-			query.setParameter(2, ChainMessageConstants.StatusReplied);
-			query.setParameter(3, accountId);
-			List<NotifiedInfo> notifiedInfos = query.getResultList();
-			EntityManagerHelper
-					.log("getNotifiedInfos successful", Level.INFO, null);
-			return notifiedInfos;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.log("getNotifiedInfos failed", Level.SEVERE, re);
-			throw re;
-		}
-	}
 	
 	private final String getChainMatchCountJPQL = "select chain.matchCount from Chain chain where chain.chainId = ?1";
 
@@ -239,9 +176,9 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 		}
 	}
 	
-	private final String getNeoChainsForwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc asc";
+	private final String getNeoChainsForwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount, chain.updatedTime) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc asc";
 
-	private final String getNeoChainsBackwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc desc";
+	private final String getNeoChainsBackwardJPQL = "select new com.airogami.persistence.classes.NeoChain(chain.chainId, chainMessage.updateInc, chain.updateCount, chain.updatedTime) from Chain chain, ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1 and (chain.account.accountId <> ?1 or chain.passCount > 0) and chainMessage.status < ?2 and (?3 is null or chainMessage.updateInc > ?3) and (?4 is null or chainMessage.updateInc < ?4) order by chainMessage.updateInc desc";
 
 	public List<NeoChain> getNeoChains(int accountId, Long start, Long end, int limit, boolean forward){
 		EntityManagerHelper.log("getNeoChainsing with accountId = " + accountId, Level.INFO, null);
@@ -272,14 +209,24 @@ private final String increaseChainMessageCountJPQL = "update AccountStat account
 	
 	private final String getChainsJPQL = "select chain from Chain chain join fetch chain.account where chain.chainId in (?2) and exists (select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1)";
 
-	public List<Chain> getChains(int accountId, List<Long> chainIds){
+	private final String getUpdatedChainsJPQL = "select new com.airogami.persistence.classes.UpdatedChain(chain.chainId, chain.updateCount) from Chain chain where chain.chainId in (?2) and exists (select chainMessage.id.accountId from ChainMessage chainMessage where chainMessage.chain = chain and chainMessage.account.accountId = ?1)";
+
+	//return List<Chain> or List<UpdatedChain>
+	public Object getChains(int accountId, List<Long> chainIds, boolean updated){
 		EntityManagerHelper.log("getChainsing with accountId = " + accountId, Level.INFO, null);
 		try {
-			TypedQuery<Chain> query = EntityManagerHelper.getEntityManager().createQuery(
-					getChainsJPQL, Chain.class);
+			String jpql = null;
+			if(updated){
+				jpql = getUpdatedChainsJPQL;
+			}
+			else{
+				jpql = getChainsJPQL;
+			}
+			Query query = EntityManagerHelper.getEntityManager().createQuery(
+					jpql);
 			query.setParameter(1, accountId);
 			query.setParameter(2, chainIds);
-			List<Chain> chains = query.getResultList();
+			Object chains = query.getResultList();
 			EntityManagerHelper
 					.log("getChains successful", Level.INFO, null);
 			return chains;

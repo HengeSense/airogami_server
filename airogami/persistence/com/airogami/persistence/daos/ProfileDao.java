@@ -3,10 +3,10 @@ package com.airogami.persistence.daos;
 import java.util.List;
 import java.util.logging.Level;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Hot;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.ProfileDAO;
 
@@ -31,6 +31,29 @@ public class ProfileDao extends ProfileDAO {
 			return profile;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("obtainProfile failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+	private final String obtainHotJPQL = "select hot from Hot hot where hot.accountId = ?1 and (?2 is null or hot.updateCount > ?2)";
+
+	public Hot obtainHot(long accountId, Integer updateCount) {
+		EntityManagerHelper.log("obtainHotting", Level.INFO, null);
+		try {
+			TypedQuery<Hot> query = EntityManagerHelper.getEntityManager().createQuery(
+					obtainHotJPQL, Hot.class);
+			query.setParameter(1, accountId);
+			query.setParameter(2, updateCount);
+			List<Hot> result = query.getResultList();
+			Hot hot = null;
+			if (result.size() > 0) {
+				hot = result.get(0);
+			}
+			EntityManagerHelper.log("obtainHot successful", Level.INFO,
+					null);
+			return hot;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("obtainHot failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

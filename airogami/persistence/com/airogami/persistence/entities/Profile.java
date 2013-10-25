@@ -41,8 +41,6 @@ public class Profile implements java.io.Serializable {
 
 	private Timestamp createdTime;
 
-	private Integer likesCount = 0;
-
 	private Date birthday;
 
 	private String fullName;
@@ -68,9 +66,8 @@ public class Profile implements java.io.Serializable {
 	/** minimal constructor */
 	public Profile(Integer accountId, Account account, Short sex,
 			Integer updateCount, Double longitude, Double latitude,
-			Short status, Timestamp createdTime, Integer likesCount,
-			Date birthday, String fullName, String city, String province,
-			String country) {
+			Short status, Timestamp createdTime, Date birthday,
+			String fullName, String city, String province, String country) {
 		this.accountId = accountId;
 		this.account = account;
 		this.sex = sex;
@@ -79,7 +76,6 @@ public class Profile implements java.io.Serializable {
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
-		this.likesCount = likesCount;
 		this.birthday = birthday;
 		this.fullName = fullName;
 		this.city = city;
@@ -90,9 +86,9 @@ public class Profile implements java.io.Serializable {
 	/** full constructor */
 	public Profile(Integer accountId, Account account, Short sex,
 			Integer updateCount, Double longitude, Double latitude,
-			Short status, Timestamp createdTime, Integer likesCount,
-			Date birthday, String fullName, String screenName, String shout,
-			String city, String province, String country, String language) {
+			Short status, Timestamp createdTime, Date birthday,
+			String fullName, String screenName, String shout, String city,
+			String province, String country, String language) {
 		this.accountId = accountId;
 		this.account = account;
 		this.sex = sex;
@@ -101,7 +97,6 @@ public class Profile implements java.io.Serializable {
 		this.latitude = latitude;
 		this.status = status;
 		this.createdTime = createdTime;
-		this.likesCount = likesCount;
 		this.birthday = birthday;
 		this.fullName = fullName;
 		this.screenName = screenName;
@@ -186,15 +181,6 @@ public class Profile implements java.io.Serializable {
 
 	public void setCreatedTime(Timestamp createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	@Column(name = "LIKES_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getLikesCount() {
-		return this.likesCount;
-	}
-
-	public void setLikesCount(Integer likesCount) {
-		this.likesCount = likesCount;
 	}
 
 	@Column(name = "BIRTHDAY", nullable = false, length = 10)

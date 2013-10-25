@@ -31,7 +31,7 @@ public class AppleNotification implements Runnable {
 	private long internal = 60 * 1000;// 60s
 	//for Feedback
 	//private final long period = 24 * 3600 * 1000;
-	private final long period = 60 * 1000;
+	private final long period = 3600 * 1000;
 
 	private PushQueue queue;
 

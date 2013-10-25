@@ -24,6 +24,7 @@ import com.airogami.persistence.entities.Agent;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Hot;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
@@ -41,6 +42,7 @@ public class AccountService implements IAccountService {
 		ApplicationException ae = null;
 		AccountStat accountStat = new AccountStat();
 		AccountSys accountSys = new AccountSys();
+		Hot hot = new Hot();
 		Authenticate authenticate = account.getAuthenticate();
 		Profile profile = account.getProfile();
 		account.setAuthenticate(null);
@@ -64,6 +66,8 @@ public class AccountService implements IAccountService {
 				DaoUtils.accountStatDao.save(accountStat);
 				accountSys.setAccountId(authenticate.getAccountId());
 				DaoUtils.accountSysDao.save(accountSys);
+				hot.setAccountId(authenticate.getAccountId());
+				DaoUtils.hotDao.save(hot);
 			}
 								
 			EntityManagerHelper.commit();
@@ -84,6 +88,7 @@ public class AccountService implements IAccountService {
 		account.setAccountStat(accountStat);
 		account.setProfile(profile);
 		account.setAuthenticate(authenticate);
+		account.setHot(hot);
 		account.setAgent(null);
 		return account;
 	}
@@ -296,6 +301,32 @@ public class AccountService implements IAccountService {
 		} 
 		
 		return profile;
+	}
+	
+	@Override
+	public Hot obtainHot(int accountId, Integer updateCount) throws ApplicationException{
+		ApplicationException ae = null;
+		Hot hot = null;
+		try {
+			EntityManagerHelper.beginTransaction();
+			hot = DaoUtils.profileDao.obtainHot(accountId, updateCount);								
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {		
+			//t.printStackTrace();
+            if(t.getCause() == null){
+				ae = new ApplicationException();
+			}
+			else{
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		} 
+		
+		return hot;
 	}
 	
 	public Report reportAccount(Report report) throws ApplicationException{

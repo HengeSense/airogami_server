@@ -6,6 +6,7 @@ import java.util.Map;
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.notification.ClientAgent;
 import com.airogami.persistence.entities.Account;
+import com.airogami.persistence.entities.Hot;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 
@@ -67,6 +68,15 @@ public interface IAccountService {
 	 */
 	public Profile obtainProfile(int accountId, Integer updateCount) throws ApplicationException;
 
+	/*
+	 * @param accountId:(int)
+	 * @param updateCount:(Integer)
+	 * @return hot, null if not updated
+	 * @throws ApplicationException if failed 
+	 */
+	public Hot obtainHot(int accountId, Integer updateCount) throws ApplicationException;
+
+	
 	/*
 	 * @param report:(Report)
 	 * @return report if successful or null if not

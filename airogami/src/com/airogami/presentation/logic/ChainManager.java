@@ -176,12 +176,13 @@ public class ChainManager {
 	/*
 	 * @param accountId:(int)
 	 * @param chainIds:(List<Long>)
+	 * @param updated:(boolean)
 	 * @return chains if successful
 	 * @throws AirogamiException if failed 
 	 */ 
-	public List<Chain> getChains(int accountId, List<Long> chainIds) throws AirogamiException{
+	public Map<String, Object> getChains(int accountId, List<Long> chainIds, boolean updated) throws AirogamiException{
 		try {
-			return  ServiceUtils.chainService.getChains(accountId, chainIds);
+			return  ServiceUtils.chainService.getChains(accountId, chainIds, updated);
 		} catch (ApplicationException re) {
 			throw new AirogamiException(
 					AirogamiException.Application_Exception_Status,

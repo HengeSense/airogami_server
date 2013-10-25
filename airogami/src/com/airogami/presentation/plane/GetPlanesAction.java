@@ -18,14 +18,14 @@ public class GetPlanesAction extends AirogamiActionSupport {
 
 	private static final long serialVersionUID = 1L;	
 	private List<Long> planeIds;
+	private boolean updated;
 	
 	public String execute() throws Exception{
 		boolean succeed = false;
 		try {			
 			User user = (User)request.getAttribute("user");
-			Map<String, Object> result = new TreeMap<String, Object>();
-			result.put("planes", ManagerUtils.planeManager.getPlanes(
-					user.getAccountId(), planeIds));
+			Map<String, Object> result = ManagerUtils.planeManager.getPlanes(
+					user.getAccountId(), planeIds, updated);
             dataMap.put("result", result);
 			succeed = true;
 		} catch (AirogamiException e) {
@@ -49,6 +49,14 @@ public class GetPlanesAction extends AirogamiActionSupport {
 
 	public void setPlaneIds(List<Long> chainIds) {
 		this.planeIds = chainIds;
+	}
+
+	public boolean isUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(boolean updated) {
+		this.updated = updated;
 	}
 
 }

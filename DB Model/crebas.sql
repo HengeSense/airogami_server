@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/21/2013 2:52:38 AM                        */
+/* Created on:     10/23/2013 5:50:02 PM                        */
 /*==============================================================*/
 
 
@@ -31,6 +31,8 @@ drop index UPDATE_INC_INDEX on CHAIN_MESSAGE;
 drop index CREATEDTIME_INDEX on CHAIN_MESSAGE;
 
 drop table if exists CHAIN_MESSAGE;
+
+drop table if exists HOT;
 
 drop index CREATEDTIME_INDEX on MESSAGE;
 
@@ -219,6 +221,17 @@ create index UPDATE_INC_INDEX on CHAIN_MESSAGE
 );
 
 /*==============================================================*/
+/* Table: HOT                                                   */
+/*==============================================================*/
+create table HOT
+(
+   ACCOUNT_ID           int not null,
+   LIKES_COUNT          int not null default 0,
+   UPDATE_COUNT         int not null default 0,
+   primary key (ACCOUNT_ID)
+);
+
+/*==============================================================*/
 /* Table: MESSAGE                                               */
 /*==============================================================*/
 create table MESSAGE
@@ -273,7 +286,7 @@ create table PLANE
    DELETED_BY_T         tinyint not null default 0,
    BIRTHDAY_LOWER       date,
    BIRTHDAY_UPPER       date,
-   LAST_MSG_ID          bigint,
+   TMP_MSG_ID           bigint,
    CITY                 varchar(255),
    PROVINCE             varchar(255),
    COUNTRY              varchar(255),
@@ -319,7 +332,6 @@ create table PROFILE
    LATITUDE             decimal(10,6) not null default 0.0,
    STATUS               tinyint not null default 0,
    CREATED_TIME         datetime not null,
-   LIKES_COUNT          int not null default 0,
    BIRTHDAY             date not null,
    FULL_NAME            varchar(70) not null,
    SCREEN_NAME          varchar(32),
@@ -377,6 +389,9 @@ alter table CHAIN_MESSAGE add constraint FK_CHAINHAVECHAINMESSAGE foreign key (C
       references CHAIN (CHAIN_ID) on delete restrict on update restrict;
 
 alter table CHAIN_MESSAGE add constraint FK_CHAINMESSAGEBELONGTOACCOUNT foreign key (ACCOUNT_ID)
+      references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
+
+alter table HOT add constraint FK_ACCOUNTOWNHOT foreign key (ACCOUNT_ID)
       references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
 
 alter table MESSAGE add constraint FK_ACCOUNTOWNMESSAGE foreign key (ACCOUNT_ID)

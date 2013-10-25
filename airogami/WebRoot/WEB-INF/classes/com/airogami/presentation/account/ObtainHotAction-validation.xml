@@ -1,0 +1,23 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+
+    <field name="accountId">
+		<field-validator type="required">
+			<message key="error.account.obtainhot.accountId.required">Please input an accountId</message>
+		</field-validator>
+		<field-validator type="int">
+			<param name="min"><![CDATA[1]]></param>
+			<message key="error.account.obtainhot.accountId.invalid">The accountId should be greater than ${min}</message>
+		</field-validator>
+
+	</field>
+
+	<field name="updateCount">
+		<field-validator type="int">
+			<param name="min"><![CDATA[-1]]></param>
+			<message key="error.account.obtainhot.updateCount.invalid">The updateCount should be greater than ${min}</message>
+		</field-validator>
+	</field>
+	
+</validators>

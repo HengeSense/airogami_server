@@ -21,7 +21,7 @@ public interface IPlaneService {
 	 * @return category if successful
 	 * @throws ApplicationException if failed 
 	 */
-	public Category createCatrgory(Category category) throws ApplicationException;
+	public Category createCategory(Category category) throws ApplicationException;
 	
 	/*
 	 * @param plane:(Plane) must be not null, have plane.message, plane.category
@@ -174,10 +174,11 @@ public interface IPlaneService {
 	/*
 	 * @param accountId:(int)
 	 * @param planeIds:(List<Long>) 
+	 * @param updated:(boolean)
 	 * @return planes
 	 * @throws ApplicationException if failed 
 	 */ 
-	public List<Plane> getPlanes(int accountId, List<Long> planeIds) throws ApplicationException;
+	public Map<String, Object> getPlanes(int accountId, List<Long> planeIds, boolean updated) throws ApplicationException;
 
 	
 	/*

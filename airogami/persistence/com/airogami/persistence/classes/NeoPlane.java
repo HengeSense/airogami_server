@@ -10,19 +10,19 @@ public class NeoPlane implements Serializable{
 	private Long updateInc;
 	private Integer updateCount;
 	private Long clearMsgId;
-	private Long readMsgId;//the opposite lastMsgId
+	private Long lastMsgId;//the opposite lastMsgId
 	private Long neoMsgId;
 	
 	public NeoPlane(){
 		
 	}
 	
-	public NeoPlane(Long planeId, Long updateInc, Integer updateCount, Long clearMsgId, Long readMsgId, Long neoMsgId){
+	public NeoPlane(Long planeId, Long updateInc, Integer updateCount, Long clearMsgId, Long lastMsgId, Long neoMsgId){
 		this.planeId = planeId;
 		this.updateInc = updateInc;
 		this.updateCount = updateCount;
 		this.clearMsgId = clearMsgId;
-		this.readMsgId = readMsgId;
+		this.lastMsgId = lastMsgId;
 		this.neoMsgId = neoMsgId;
 	}
 	
@@ -53,12 +53,12 @@ public class NeoPlane implements Serializable{
 		this.clearMsgId = clearMsgId;
 	}
 
-	public Long getReadMsgId() {
-		return readMsgId;
+	public Long getLastMsgId() {
+		return lastMsgId;
 	}
 
-	public void setReadMsgId(Long lastMsgId) {
-		this.readMsgId = lastMsgId;
+	public void setLastMsgId(Long lastMsgId) {
+		this.lastMsgId = lastMsgId;
 	}
 
 	public Long getNeoMsgId() {

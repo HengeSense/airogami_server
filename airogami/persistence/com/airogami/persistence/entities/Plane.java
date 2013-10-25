@@ -85,7 +85,7 @@ public class Plane implements java.io.Serializable {
 
 	private Date birthdayUpper;
 
-	private Long lastMsgId = 0L;
+	private Long tmpMsgId = 0L;
 
 	private String city;
 
@@ -143,8 +143,8 @@ public class Plane implements java.io.Serializable {
 			Short source, Double longitude, Double latitude, Short sex,
 			Short matchCount, Short maxMatchCount, Short likedByO,
 			Short likedByT, Short deletedByO, Short deletedByT,
-			Date birthdayLower, Date birthdayUpper, Long lastMsgId,
-			String city, String province, String country, String language,
+			Date birthdayLower, Date birthdayUpper, Long tmpMsgId, String city,
+			String province, String country, String language,
 			List<PlaneHist> planeHists, List<Message> messages) {
 		this.accountByTargetId = accountByTargetId;
 		this.category = category;
@@ -172,7 +172,7 @@ public class Plane implements java.io.Serializable {
 		this.deletedByT = deletedByT;
 		this.birthdayLower = birthdayLower;
 		this.birthdayUpper = birthdayUpper;
-		this.lastMsgId = lastMsgId;
+		this.tmpMsgId = tmpMsgId;
 		this.city = city;
 		this.province = province;
 		this.country = country;
@@ -434,13 +434,13 @@ public class Plane implements java.io.Serializable {
 		this.birthdayUpper = birthdayUpper;
 	}
 
-	@Column(name = "LAST_MSG_ID", updatable = false)
-	public Long getLastMsgId() {
-		return this.lastMsgId;
+	@Column(name = "TMP_MSG_ID")
+	public Long getTmpMsgId() {
+		return this.tmpMsgId;
 	}
 
-	public void setLastMsgId(Long lastMsgId) {
-		this.lastMsgId = lastMsgId;
+	public void setTmpMsgId(Long tmpMsgId) {
+		this.tmpMsgId = tmpMsgId;
 	}
 
 	@Column(name = "CITY")

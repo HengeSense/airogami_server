@@ -9,5 +9,5 @@ public interface MessageConstants {
 	
 	public final short MessageStatusUnread = 0;
 	public final short MessageStatusRead = 1;
-	public final String LikeContent = "I like your plane";
+	public final String LikeContent = "I like you";
 }

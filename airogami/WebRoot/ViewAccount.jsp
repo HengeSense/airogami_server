@@ -44,6 +44,20 @@
     <input type="checkbox" checked="checked" onclick="hideAll(this, 0)">
     </form>    
     
+    <h2>View Hot</h2>
+    <form action="account/obtainHot.action"  method="get"> 
+    <label>AccountId: </label>
+    <input type="text" name="accountId" value="2" />
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br> 
+    <label>Update Count: </label>
+    <input type="text" name="updateCount"  value="-1"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
+    <button type="button" onclick="print(1)">print</button>
+    <input type="reset" name="submit" value="reset" />
+    <input type="submit" name="submit" value="submit" />
+    <input type="checkbox" checked="checked" onclick="hideAll(this, 1)">
+    </form>   
+    
     <h2>Report Account</h2>
     <form action="account/reportAccount.action"  method="get"> 
     <label>ReportedId: </label>
@@ -52,10 +66,10 @@
     <label>Reason: </label>
     <input type="text" name="reason"  value="Bad words"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br><br>
-    <button type="button" onclick="print(1)">print</button>
+    <button type="button" onclick="print(2)">print</button>
     <input type="reset" name="submit" value="reset" />
     <input type="submit" name="submit" value="submit" />
-    <input type="checkbox" checked="checked" onclick="hideAll(this, 1)">
+    <input type="checkbox" checked="checked" onclick="hideAll(this, 2)">
     </form> 
 
     <p id="print"></p>

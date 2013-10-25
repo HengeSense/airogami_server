@@ -39,7 +39,7 @@ public class PlaneDAO {
 	public static final String LIKED_BY_T = "likedByT";
 	public static final String DELETED_BY_O = "deletedByO";
 	public static final String DELETED_BY_T = "deletedByT";
-	public static final String LAST_MSG_ID = "lastMsgId";
+	public static final String TMP_MSG_ID = "tmpMsgId";
 	public static final String CITY = "city";
 	public static final String PROVINCE = "province";
 	public static final String COUNTRY = "country";
@@ -556,9 +556,9 @@ public class PlaneDAO {
 		return findByProperty(DELETED_BY_T, deletedByT, rowStartIdxAndCount);
 	}
 
-	public List<Plane> findByLastMsgId(Object lastMsgId,
+	public List<Plane> findByTmpMsgId(Object tmpMsgId,
 			int... rowStartIdxAndCount) {
-		return findByProperty(LAST_MSG_ID, lastMsgId, rowStartIdxAndCount);
+		return findByProperty(TMP_MSG_ID, tmpMsgId, rowStartIdxAndCount);
 	}
 
 	public List<Plane> findByCity(Object city, int... rowStartIdxAndCount) {

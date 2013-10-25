@@ -150,4 +150,27 @@ public class ChainMessageDao extends ChainMessageDAO {
 		}
 		
 	}
+	
+private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+	
+	public ChainMessage getChainMessage(int accountId, long chainId){
+		EntityManagerHelper.log("getChainMessageing", Level.INFO, null);
+		try {
+			TypedQuery<ChainMessage> query = EntityManagerHelper.getEntityManager().createQuery(
+					getChainMessageJPQL, ChainMessage.class);
+			query.setParameter(1, chainId);
+			query.setParameter(2, accountId);
+			List<ChainMessage> chainMessages = query.getResultList();
+			ChainMessage chainMessage = null;
+			if(chainMessages.size() > 0){
+				chainMessage = chainMessages.get(0);
+			}
+			EntityManagerHelper
+					.log("getChainMessage successful", Level.INFO, null);
+			return chainMessage;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("getChainMessage failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
 }

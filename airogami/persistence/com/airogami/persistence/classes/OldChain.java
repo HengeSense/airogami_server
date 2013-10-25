@@ -30,6 +30,7 @@ public class OldChain implements Serializable {
 	public void setStatus(Short status) {
 		this.status = status;
 	}
+	
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Timestamp getLastViewedTime() {
 		return lastViewedTime;

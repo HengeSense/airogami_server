@@ -86,6 +86,9 @@
     <label>PlaneId4: </label>
     <input type="text" name="planeIds"  value="4"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>Updated: </label>
+    <input type="text" name="updated"  value="true"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <br>
     <button type="button" onclick="print(2)">print</button>
     <input type="reset" name="submit" value="reset" />

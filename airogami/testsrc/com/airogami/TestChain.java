@@ -155,9 +155,10 @@ public class TestChain {
 	public void testGetChains() {
 		int accountId = 1;
 		List<Long> chainIds = Arrays.asList(1L, 2L);
+		boolean updated = false;
 		try {
-			List<Chain> chains = ManagerUtils.chainManager.getChains(
-					accountId, chainIds);
+			Object chains = ManagerUtils.chainManager.getChains(
+					accountId, chainIds, updated);
 			ObjectUtils.printObject(chains);
 		} catch (AirogamiException e) {
 			e.printStackTrace();

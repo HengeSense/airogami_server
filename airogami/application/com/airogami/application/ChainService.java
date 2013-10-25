@@ -113,7 +113,7 @@ public class ChainService implements IChainService {
 				name = DaoUtils.profileDao.getFullName(accountId);
 			}
 			else{
-				chainMessage = DaoUtils.chainDao.getChainMessage(accountId, chainId);
+				chainMessage = DaoUtils.chainMessageDao.getChainMessage(accountId, chainId);
 				if(chainMessage == null){
 					error = "none";
 				}
@@ -237,7 +237,7 @@ public class ChainService implements IChainService {
 				DaoUtils.chainHistDao.save(chainHist);
 			}
 			else{
-				chainMessage = DaoUtils.chainDao.getChainMessage(accountId, chainId);
+				chainMessage = DaoUtils.chainMessageDao.getChainMessage(accountId, chainId);
 				if(chainMessage == null){
 					error = "none";
 				}
@@ -285,7 +285,7 @@ public class ChainService implements IChainService {
 				DaoUtils.chainMessageDao.decreaseChainMessageCount(chainId, accountId);
 			}
 			else{
-				chainMessage = DaoUtils.chainDao.getChainMessage(accountId, chainId);
+				chainMessage = DaoUtils.chainMessageDao.getChainMessage(accountId, chainId);
 				if(chainMessage == null){
 					error = "none";
 				}
@@ -386,12 +386,12 @@ public class ChainService implements IChainService {
 	}
 	
 	@Override
-	public List<Chain> getChains(int accountId, List<Long> chainIds) throws ApplicationException {
-		List<Chain> chains = null;
+	public Map<String, Object> getChains(int accountId, List<Long> chainIds, boolean updated) throws ApplicationException {
+		Object chains = null;
 		ApplicationException ae = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			chains = DaoUtils.chainDao.getChains(accountId, chainIds); 			
+			chains = DaoUtils.chainDao.getChains(accountId, chainIds, updated); 			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -406,7 +406,9 @@ public class ChainService implements IChainService {
 		if (ae != null) {
 			throw ae;
 		}
-		return chains;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		result.put("chains", chains);
+		return result;
 	}
 	
 	@Override

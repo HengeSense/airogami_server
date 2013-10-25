@@ -11,6 +11,7 @@ import com.airogami.common.notification.ClientAgent;
 import com.airogami.exception.AirogamiException;
 import com.airogami.persistence.entities.Account;
 import com.airogami.persistence.entities.Authenticate;
+import com.airogami.persistence.entities.Hot;
 import com.airogami.persistence.entities.Profile;
 import com.airogami.persistence.entities.Report;
 import com.airogami.persistence.entities.ReportId;
@@ -287,6 +288,32 @@ public class AccountManager {
 
 		try {
 			return ServiceUtils.accountService.obtainProfile(accountId,
+					updateCount);
+		} catch (Throwable re) {
+			throw new AirogamiException(
+					AirogamiException.Application_Exception_Status,
+					AirogamiException.Application_Exception_Message);
+		}
+	}
+	
+	/*
+	 * @param accountId:(int)
+	 * 
+	 * @param updateCount:(Integer)
+	 * 
+	 * @return hot, null if not updated
+	 * 
+	 * @throws AirogamiException if failed
+	 */
+	public Hot obtainHot(int accountId, Integer updateCount)
+			throws AirogamiException {
+		if (accountId < 1) {
+			throw new IllegalArgumentException(
+					"Illegal arguments in obtainAccount");
+		}
+
+		try {
+			return ServiceUtils.accountService.obtainHot(accountId,
 					updateCount);
 		} catch (Throwable re) {
 			throw new AirogamiException(

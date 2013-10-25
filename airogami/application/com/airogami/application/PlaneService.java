@@ -1,6 +1,5 @@
 package com.airogami.application;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -9,7 +8,6 @@ import javax.persistence.EntityExistsException;
 
 import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.MessageConstants;
-import com.airogami.common.constants.PlaneConstants;
 import com.airogami.common.notification.MessageNotifiedInfo;
 import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.common.notification.SilentNotifiedInfo;
@@ -27,7 +25,7 @@ import com.airogami.persistence.entities.PlaneHistId;
 
 public class PlaneService implements IPlaneService {
 	
-	public Category createCatrgory(Category category) throws ApplicationException{
+	public Category createCategory(Category category) throws ApplicationException{
 		ApplicationException ae = null;
 		try {
 			EntityManagerHelper.beginTransaction();
@@ -314,10 +312,12 @@ public class PlaneService implements IPlaneService {
 				message.setAccount(account);
 				DaoUtils.messageDao.save(message);
 				DaoUtils.messageDao.flush();
-				DaoUtils.profileDao.increaseLikesCount(oppositeAccountId, 1);	
+				DaoUtils.hotDao.increaseLikesCount(oppositeAccountId, 1);
+				DaoUtils.accountDao.increaseUpdateCount(oppositeAccountId, 1);
 				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
 				if(notifiedInfo != null){
 					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
+					DaoUtils.messageDao.updateNeoMsgId(planeId, message.getMessageId(), !byOwner);
 					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
 				}
 			}
@@ -511,12 +511,12 @@ public class PlaneService implements IPlaneService {
 	}
 	
 	@Override
-	public List<Plane> getPlanes(int accountId, List<Long> planeIds) throws ApplicationException{
+	public Map<String, Object> getPlanes(int accountId, List<Long> planeIds, boolean updated) throws ApplicationException{
 		ApplicationException ae = null;
-		List<Plane> planes = null;
+		Object planes = null;
 		try {
 			EntityManagerHelper.beginTransaction();
-			planes = DaoUtils.planeDao.getPlanes(accountId, planeIds);
+			planes = DaoUtils.planeDao.getPlanes(accountId, planeIds, updated);
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			
@@ -531,7 +531,9 @@ public class PlaneService implements IPlaneService {
 		if (ae != null) {
 			throw ae;
 		}
-		return planes;
+		Map<String, Object> result = new TreeMap<String, Object>();
+		result.put("planes", planes);
+		return result;
 	}
 	
 	@Override
