@@ -11,7 +11,7 @@ import java.security.SignatureException;
 
 public class SigGenerator {
 
-	private final String key = "+9/DARod2Gr8npmNqEAPY6UGjxLW5hcFUAH68DnK";
+	private final String key = "bwU6lfNpxuzj0fI1SeDgLvE09JjPpqJrCTKlyqRW";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	private SecretKeySpec signingKey;
 	private Mac mac;	

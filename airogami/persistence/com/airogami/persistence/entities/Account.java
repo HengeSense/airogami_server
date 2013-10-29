@@ -30,13 +30,15 @@ public class Account implements java.io.Serializable {
 
 	private Authenticate authenticate;
 
-	private Integer updateCount = 0;
+	private Long updateCount = 0L;
 
 	private List<Report> reportsForReportedId = new ArrayList<Report>(0);
 
 	private AccountSys accountSys;
 
 	private List<Report> reportsForReportId = new ArrayList<Report>(0);
+
+	private Good good;
 
 	private Agent agent;
 
@@ -68,7 +70,7 @@ public class Account implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Account(Integer accountId, Authenticate authenticate,
-			Integer updateCount) {
+			Long updateCount) {
 		this.accountId = accountId;
 		this.authenticate = authenticate;
 		this.updateCount = updateCount;
@@ -76,8 +78,8 @@ public class Account implements java.io.Serializable {
 
 	/** full constructor */
 	public Account(Integer accountId, Authenticate authenticate,
-			Integer updateCount, List<Report> reportsForReportedId,
-			AccountSys accountSys, List<Report> reportsForReportId,
+			Long updateCount, List<Report> reportsForReportedId,
+			AccountSys accountSys, List<Report> reportsForReportId, Good good,
 			Agent agent, List<Chain> chains, List<ChainHist> chainHists,
 			AccountStat accountStat, Hot hot, List<Message> messages,
 			List<Plane> planesForOwnerId, List<PlaneHist> planeHists,
@@ -89,6 +91,7 @@ public class Account implements java.io.Serializable {
 		this.reportsForReportedId = reportsForReportedId;
 		this.accountSys = accountSys;
 		this.reportsForReportId = reportsForReportId;
+		this.good = good;
 		this.agent = agent;
 		this.chains = chains;
 		this.chainHists = chainHists;
@@ -124,11 +127,11 @@ public class Account implements java.io.Serializable {
 	}
 
 	@Column(name = "UPDATE_COUNT", nullable = false, insertable = false, updatable = false)
-	public Integer getUpdateCount() {
+	public Long getUpdateCount() {
 		return this.updateCount;
 	}
 
-	public void setUpdateCount(Integer updateCount) {
+	public void setUpdateCount(Long updateCount) {
 		this.updateCount = updateCount;
 	}
 
@@ -157,6 +160,15 @@ public class Account implements java.io.Serializable {
 
 	public void setReportsForReportId(List<Report> reportsForReportId) {
 		this.reportsForReportId = reportsForReportId;
+	}
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	public Good getGood() {
+		return this.good;
+	}
+
+	public void setGood(Good good) {
+		this.good = good;
 	}
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")

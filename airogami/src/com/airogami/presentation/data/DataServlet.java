@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.security.SignatureException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.airogami.exception.AirogamiError;
+import com.airogami.exception.AirogamiException;
 import com.airogami.presentation.logic.DataManager;
 import com.airogami.presentation.logic.ManagerUtils;
 import com.airogami.presentation.logic.User;
@@ -26,7 +29,10 @@ import com.amazonaws.util.json.JSONObject;
 public class DataServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	//for profile icon tokens
 	private static final String ActionAccountIcon = "account.icon";
+	//for plane message data tokens
+	private static final String ActionMessageData = "message.data";
 
 	/**
 	 * Constructor of the object.
@@ -69,19 +75,26 @@ public class DataServlet extends HttpServlet {
 					AirogamiError.Account_No_Signin_Message);
 			out.print(json);
 		} else {
-			String action = request.getParameter("action");			
+			String action = request.getParameter("action");		
+			boolean succeed = true;
 			if (action == null || action.length() == 0 || ActionAccountIcon.equals(action)) {
 				out.print(ManagerUtils.dataManager.accountIcon(user.getAccountId()));
-			} else {
-				String json = JSONUtils.statusToJSONString(
+			}else if(ActionMessageData.equals(action)){
+			}
+			else {
+				succeed = false;
+			}
+            if(succeed == false){
+            	String json = JSONUtils.statusToJSONString(
 						AirogamiError.Application_Input_Status,
 						AirogamiError.Application_Input_Message);
 				out.print(json);
-			}
+            }
 		}
 
 		out.close();
 	}
+	
 
 	/**
 	 * The doPost method of the servlet. <br>

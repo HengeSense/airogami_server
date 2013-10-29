@@ -11,6 +11,7 @@ public class ServiceUtils {
 	public static final IPlaneService planeService = new PlaneService();
 	public static final IChainService chainService = new ChainService();
 	public static final AirogamiService airogamiService = new AirogamiService();
+	public static final IDataService dataService = new DataService();
 	
 	private static final int rand[] = {3, 2, 2, 1, 1, 1};
     private static Random random = new Random(System.currentTimeMillis());

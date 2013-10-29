@@ -4,6 +4,7 @@ public class MessageVO {
 
 	private String content;
 	private Short type;
+	private String link;
 	
 	public String getContent() {
 		return content;
@@ -16,6 +17,12 @@ public class MessageVO {
 	}
 	public void setType(Short type) {
 		this.type = type;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
 	}
 	
 }

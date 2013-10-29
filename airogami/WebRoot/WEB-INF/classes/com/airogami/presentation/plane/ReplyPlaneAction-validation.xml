@@ -33,9 +33,16 @@
 			<message key="error.plane.replyplane.messagevo.type.required">Please input a messageVO.type</message>
 		</field-validator>
 		<field-validator type="short">
-		    <param name="min">0</param>
-		    <param name="max">127</param>
+		    <param name="min">11</param>
+		    <param name="max">13</param>
 			<message key="error.plane.replyplane.messagevo.type.length">The messageVO.type must be between ${min} and ${max}</message>
+		</field-validator>
+	</field>
+	
+	<field name="messageVO.link">
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[messageVO.type < 12 || messageVO.link != null]]></param>
+			<message key="error.plane.replyplane.messagevo.link.required">The messageVO.link is required for current situation</message>
 		</field-validator>
 	</field>
 

@@ -20,6 +20,7 @@ public class AccountSysDAO {
 	// property constants
 	public static final String CHAIN_INC = "chainInc";
 	public static final String PLANE_INC = "planeInc";
+	public static final String MSG_DATA_INC = "msgDataInc";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -281,6 +282,27 @@ public class AccountSysDAO {
 		}
 	}
 
+	private static final String increaseMsgDataIncJPQL = "update AccountSys a set a.msgDataInc = a.msgDataInc + :count where a.accountId in (:accountId)";
+
+	public boolean increaseMsgDataInc(java.lang.Integer accountId, int count) {
+		EntityManagerHelper.log("increaseMsgDataInc with accountId: "
+				+ accountId, Level.INFO, null);
+		try {
+			Query query = getEntityManager()
+					.createQuery(increaseMsgDataIncJPQL);
+			query.setParameter("accountId", accountId);
+			query.setParameter("count", count);
+			boolean result = query.executeUpdate() == 1;
+			EntityManagerHelper.log("increaseMsgDataInc successful",
+					Level.INFO, null);
+			return result;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("increaseMsgDataInc failed", Level.SEVERE,
+					re);
+			throw re;
+		}
+	}
+
 	/**
 	 * Find all AccountSys entities with a specific property value.
 	 * 
@@ -334,6 +356,11 @@ public class AccountSysDAO {
 	public List<AccountSys> findByPlaneInc(Object planeInc,
 			int... rowStartIdxAndCount) {
 		return findByProperty(PLANE_INC, planeInc, rowStartIdxAndCount);
+	}
+
+	public List<AccountSys> findByMsgDataInc(Object msgDataInc,
+			int... rowStartIdxAndCount) {
+		return findByProperty(MSG_DATA_INC, msgDataInc, rowStartIdxAndCount);
 	}
 
 	/**

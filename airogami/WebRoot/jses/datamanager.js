@@ -7,10 +7,13 @@ xmlhttp.onreadystatechange = function() {
 			info.innerHTML = ret.message;
 		} else {
 			info.innerHTML = xmlhttp.responseText;
-			with(document.forms[xmlhttp.index]){
-				policy.value = ret.result.policy;
-				signature.value = ret.result.signature;
-				key.value = ret.result.key;
+			eval("token=" + ret.result.token);
+			with(document.forms[0]){
+				policy.value = token.policy;
+				signature.value = token.signature;
+				key.value = token.key;
+				acl.value = token.acl;
+				AWSAccessKeyId.value = token.AWSAccessKeyId;
 			}
 		}
 	}
@@ -18,10 +21,18 @@ xmlhttp.onreadystatechange = function() {
 
 function getToken(idx) {
 	info.innerHTML = 'Connecting';
-	var method = idx == 0 ? 'upload' : "download";
-	var params = 'method=' + method + "&random=" + Math.random();
-	xmlhttp.index = idx;
-	xmlhttp.open("GET", "/data/dataManager?" + params, true);
+	var actions = ["accountIconTokens", "messageDataToken", "chainDataToken"];
+	var action = actions[idx];
+	var params = "";
+	if(idx > 0){
+		params = "type=" + document.forms[0].type.value;
+		if(idx == 2){
+			params += "&chainId=" + document.forms[0].chainId.value;
+		}
+	}
+	params = params + "&random=" + Math.random();
+	//xmlhttp.index = 0;
+	xmlhttp.open("GET", "/data/" + action + ".action?" + params, true);
 	xmlhttp.setRequestHeader("Cache-Control", "no-cache");
 	xmlhttp.send();
 }

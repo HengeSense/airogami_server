@@ -118,25 +118,41 @@ public class PlaneService implements IPlaneService {
 		ApplicationException ae = null;
 		String error = null;
 		MessageNotifiedInfo notifiedInfo = null;
-		try {
-			EntityManagerHelper.beginTransaction();
-			if (DaoUtils.messageDao.verifyReply(planeId, accountId, byOwner)) {
-				Plane plane = DaoUtils.planeDao.getReference(planeId);
-				message.setPlane(plane);
-				Account account = DaoUtils.accountDao.getReference(accountId);
-				message.setAccount(account);
-				DaoUtils.messageDao.save(message);
-				DaoUtils.messageDao.flush();
-				notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
-				if(notifiedInfo != null){
-					DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
-					DaoUtils.messageDao.updateNeoMsgId(planeId, message.getMessageId(), !byOwner);
-					DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
-				}
-				
-			} else {
-				error = "none";
+		try { 
+			boolean data = true, hasData = false;
+			int msgDataInc = -1;
+			if(message.getType() > MessageConstants.MessageTypeText){
+				hasData = true;
+				msgDataInc = Integer.parseInt(message.getLink());
 			}
+			EntityManagerHelper.beginTransaction();
+			if(hasData){
+				data = DaoUtils.accountSysDao.verifyMsgDataInc(accountId, msgDataInc);
+			}
+			if(data){
+				if (DaoUtils.messageDao.verifyReply(planeId, accountId, byOwner)) {
+					Plane plane = DaoUtils.planeDao.getReference(planeId);
+					message.setPlane(plane);
+					Account account = DaoUtils.accountDao.getReference(accountId);
+					message.setAccount(account);
+					DaoUtils.messageDao.save(message);
+					DaoUtils.messageDao.flush();
+					notifiedInfo = DaoUtils.messageDao.getNotifiedInfo(planeId, accountId);
+					if(notifiedInfo != null){		
+						DaoUtils.planeDao.updateInc(planeId, notifiedInfo.getAccountId(), !byOwner);
+						DaoUtils.messageDao.updateNeoMsgId(planeId, message.getMessageId(), !byOwner);
+						DaoUtils.accountStatDao.increaseMsgCount(notifiedInfo.getAccountId(), 1);
+						DaoUtils.accountSysDao.increaseMsgDataInc(accountId, 1);
+					}
+					
+				} else {
+					error = "none";
+				}
+			}
+			else{
+				error = "data";
+			}
+			
 			EntityManagerHelper.commit();
 		} catch (Throwable t) {
 			//t.printStackTrace();

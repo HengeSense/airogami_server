@@ -17,4 +17,5 @@ public class DaoUtils {
     public static final AccountSysDao accountSysDao = new AccountSysDao();
     public static final AgentDao agentDao = new AgentDao();
     public static final HotDao hotDao = new HotDao();
+    public static final GoodDao goodDao = new GoodDao();
 }

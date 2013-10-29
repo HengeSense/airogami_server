@@ -12,6 +12,6 @@
 	<include file="account-struts.xml"/>
 	<include file="plane-struts.xml"/>
 	<include file="chain-struts.xml"/>
-	
+	<include file="data-struts.xml"/>
 
 </struts>

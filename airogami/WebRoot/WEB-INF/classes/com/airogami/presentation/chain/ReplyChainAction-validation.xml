@@ -27,8 +27,8 @@
 			<message key="error.chain.replychain.chainmessagevo.type.required">Please input a chainMessageVO.type</message>
 		</field-validator>
 		<field-validator type="short">
-		    <param name="min">0</param>
-		    <param name="max">127</param>
+		    <param name="min">11</param>
+		    <param name="max">13</param>
 			<message key="error.chain.replychain.chainmessagevo.type.length">The chainMessageVO.type must be between ${min} and ${max}</message>
 		</field-validator>
 	</field>

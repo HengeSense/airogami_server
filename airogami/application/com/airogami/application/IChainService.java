@@ -168,6 +168,14 @@ public final int MaxOldChainsLimit = 1000;
 	 */ 
 	public Map<String, Object> receiveChainIds(int accountId, long startId, int limit) throws ApplicationException;	
 
+	/* 
+	 * @param accountId:(int)
+	 * @param chainId:(long)
+	 * @return exists
+	 * @throws ApplicationException if failed 
+	 */ 
+	public boolean chainExists(int accountId, long chainId) throws ApplicationException;	
+
 	
 	/*
 	 * @param accountId:(int)

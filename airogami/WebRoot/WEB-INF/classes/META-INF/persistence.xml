@@ -28,6 +28,7 @@
 		<class>com.airogami.persistence.entities.AccountSys</class>
 		<class>com.airogami.persistence.entities.Agent</class>
 		<class>com.airogami.persistence.entities.Hot</class>
+		<class>com.airogami.persistence.entities.Good</class>
 		<properties>
 			<property name="openjpa.ConnectionDriverName"
 				value="com.mysql.jdbc.Driver" />

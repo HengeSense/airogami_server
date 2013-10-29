@@ -29,6 +29,8 @@ public class AccountSys implements java.io.Serializable {
 
 	private Long planeInc = 0L;
 
+	private Integer msgDataInc = 0;
+
 	// Constructors
 
 	/** default constructor */
@@ -37,11 +39,12 @@ public class AccountSys implements java.io.Serializable {
 
 	/** full constructor */
 	public AccountSys(Integer accountId, Account account, Long chainInc,
-			Long planeInc) {
+			Long planeInc, Integer msgDataInc) {
 		this.accountId = accountId;
 		this.account = account;
 		this.chainInc = chainInc;
 		this.planeInc = planeInc;
+		this.msgDataInc = msgDataInc;
 	}
 
 	// Property accessors
@@ -81,6 +84,15 @@ public class AccountSys implements java.io.Serializable {
 
 	public void setPlaneInc(Long planeInc) {
 		this.planeInc = planeInc;
+	}
+
+	@Column(name = "MSG_DATA_INC", nullable = false, insertable = false, updatable = false)
+	public Integer getMsgDataInc() {
+		return this.msgDataInc;
+	}
+
+	public void setMsgDataInc(Integer msgDataInc) {
+		this.msgDataInc = msgDataInc;
 	}
 
 	/**/

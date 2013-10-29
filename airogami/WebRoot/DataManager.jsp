@@ -32,9 +32,9 @@
      if(user != null){ %>
     <h2>Upload Data</h2>
     <p id='info'></p>
-    <form action="https://airogami-user-bucket.s3-us-west-2.amazonaws.com"  method="post" enctype="multipart/form-data"> 
+    <form action="https://airogami.s3.amazonaws.com"  method="post" enctype="multipart/form-data"> 
     <label>AccessKeyId: </label>
-    <input type="text" name="AWSAccessKeyId" value="AKIAIZ2JO6JPGKMSGQZA" readonly="readonly" />
+    <input type="text" name="AWSAccessKeyId" value="" readonly="readonly" />
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>  
     <label>Policy: </label>
     <input type="text" name="policy" value="" />
@@ -45,13 +45,21 @@
     <label>Key: </label>
     <input type="text" name="key"  value=""/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
-        <label>ACL: </label>
-    <input type="text" name="acl"  value="public-read"/>
+    <label>ACL: </label>
+    <input type="text" name="acl"  value=""/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <input type="file" name="file"  value=""/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>ChainId: </label>
+    <input type="text" name="chainId"  value=""/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>Type: </label>
+    <input type="text" name="type"  value="12"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <br>
-    <button type="button" onclick="getToken(0)">Get Token</button>
+    <button type="button" onclick="getToken(0)">Get AccountIcon Token</button>
+    <button type="button" onclick="getToken(1)">Get MessageData Token</button>
+    <button type="button" onclick="getToken(2)">Get ChainData Token</button>
     <button type="button" onclick="print(0)">print</button>
     <input type="reset" name="reset" value="reset" />
     <input type="submit" name="submit" value="submit" />

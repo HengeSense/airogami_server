@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/23/2013 5:50:02 PM                        */
+/* Created on:     10/28/2013 12:12:50 PM                       */
 /*==============================================================*/
 
 
@@ -32,6 +32,8 @@ drop index CREATEDTIME_INDEX on CHAIN_MESSAGE;
 
 drop table if exists CHAIN_MESSAGE;
 
+drop table if exists GOOD;
+
 drop table if exists HOT;
 
 drop index CREATEDTIME_INDEX on MESSAGE;
@@ -58,7 +60,7 @@ drop table if exists REPORT;
 create table ACCOUNT
 (
    ACCOUNT_ID           int not null,
-   UPDATE_COUNT         int not null default 0,
+   UPDATE_COUNT         bigint not null default 0,
    primary key (ACCOUNT_ID)
 );
 
@@ -87,6 +89,7 @@ create table ACCOUNT_SYS
    ACCOUNT_ID           int not null,
    CHAIN_INC            bigint not null default 0,
    PLANE_INC            bigint not null default 0,
+   MSG_DATA_INC         int not null default 0,
    primary key (ACCOUNT_ID)
 );
 
@@ -221,6 +224,17 @@ create index UPDATE_INC_INDEX on CHAIN_MESSAGE
 );
 
 /*==============================================================*/
+/* Table: GOOD                                                  */
+/*==============================================================*/
+create table GOOD
+(
+   ACCOUNT_ID           int not null,
+   FACEBOOK             tinyint not null default 0,
+   TWITTER              tinyint not null default 0,
+   primary key (ACCOUNT_ID)
+);
+
+/*==============================================================*/
 /* Table: HOT                                                   */
 /*==============================================================*/
 create table HOT
@@ -242,7 +256,8 @@ create table MESSAGE
    STATUS               tinyint not null default 0,
    TYPE                 tinyint not null,
    CREATED_TIME         datetime not null,
-   CONTENT              varchar(255) not null,
+   CONTENT              varchar(255) not null default '',
+   LINK                 varchar(255) not null default '',
    primary key (MESSAGE_ID)
 );
 
@@ -389,6 +404,9 @@ alter table CHAIN_MESSAGE add constraint FK_CHAINHAVECHAINMESSAGE foreign key (C
       references CHAIN (CHAIN_ID) on delete restrict on update restrict;
 
 alter table CHAIN_MESSAGE add constraint FK_CHAINMESSAGEBELONGTOACCOUNT foreign key (ACCOUNT_ID)
+      references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
+
+alter table GOOD add constraint FK_ACCOUNOWNGOOD foreign key (ACCOUNT_ID)
       references ACCOUNT (ACCOUNT_ID) on delete restrict on update restrict;
 
 alter table HOT add constraint FK_ACCOUNTOWNHOT foreign key (ACCOUNT_ID)

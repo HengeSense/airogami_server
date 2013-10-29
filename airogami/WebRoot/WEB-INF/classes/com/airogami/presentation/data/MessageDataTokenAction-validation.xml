@@ -1,0 +1,11 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="type">
+     	<field-validator type="fieldexpression">
+     	<param name="expression">type == 12 || type == 13</param>
+			<message key="error.data.messagedatatoken.type.invalid">Please input a valid type</message>
+		</field-validator>
+	</field>
+
+</validators>

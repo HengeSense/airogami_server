@@ -24,6 +24,7 @@ import com.airogami.persistence.entities.Agent;
 import com.airogami.persistence.entities.Authenticate;
 import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.EntityManagerHelper;
+import com.airogami.persistence.entities.Good;
 import com.airogami.persistence.entities.Hot;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.persistence.entities.Profile;
@@ -43,6 +44,7 @@ public class AccountService implements IAccountService {
 		AccountStat accountStat = new AccountStat();
 		AccountSys accountSys = new AccountSys();
 		Hot hot = new Hot();
+		Good good = new Good();
 		Authenticate authenticate = account.getAuthenticate();
 		Profile profile = account.getProfile();
 		account.setAuthenticate(null);
@@ -68,6 +70,8 @@ public class AccountService implements IAccountService {
 				DaoUtils.accountSysDao.save(accountSys);
 				hot.setAccountId(authenticate.getAccountId());
 				DaoUtils.hotDao.save(hot);
+				good.setAccountId(authenticate.getAccountId());
+				DaoUtils.goodDao.save(good);
 			}
 								
 			EntityManagerHelper.commit();
@@ -89,6 +93,7 @@ public class AccountService implements IAccountService {
 		account.setProfile(profile);
 		account.setAuthenticate(authenticate);
 		account.setHot(hot);
+		account.setGood(good);
 		account.setAgent(null);
 		return account;
 	}

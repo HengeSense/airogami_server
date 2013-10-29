@@ -70,6 +70,31 @@ public class PlaneDao extends PlaneAidedDao {
 		}
 	}
 	
+	public void updateInc(long planeId, int accountId, boolean byOwner, boolean hasData) {
+		EntityManagerHelper.log("updateIncing with planeId = " + planeId, Level.INFO, null);
+		try {
+			if(DaoUtils.accountSysDao.increasePlaneInc(accountId, 1)){
+				String sql = null;
+				if(byOwner){
+					sql = updateIncByOwnerSQL;
+				}
+				else{
+					sql = updateIncByTargetSQL;
+				}
+				Query query = EntityManagerHelper.getEntityManager().createNativeQuery(
+						sql);
+				query.setParameter(1, planeId);
+				query.executeUpdate();
+			}
+			
+			EntityManagerHelper
+					.log("updateInc successful", Level.INFO, null);
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("updateInc failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
 	private final String updateBothIncSQL = "update PLANE set OWNER_INC = (select PLANE_INC from ACCOUNT_SYS where ACCOUNT_ID = OWNER_ID), TARGET_INC = (select PLANE_INC from ACCOUNT_SYS where ACCOUNT_ID = TARGET_ID) WHERE PLANE_ID = ?1";
 	
 	public void updateBothInc(long planeId) {

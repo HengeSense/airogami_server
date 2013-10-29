@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="data" namespace="/data" extends="authorization-interceptor">
+		<default-interceptor-ref name="authorizationStack"></default-interceptor-ref>
+		
+		<action name="accountIconTokens" class="com.airogami.presentation.data.AccountIconTokensAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>	
+		
+		<action name="messageDataToken" class="com.airogami.presentation.data.MessageDataTokenAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="chainDataToken" class="com.airogami.presentation.data.ChainDataTokenAction">
+			<result type="json" name="input">
+				<param name="root">dataMap</param>
+			</result>
+			<result type="json" name="success">
+			    <param name="excludeNullProperties">true</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+	</package>
+
+</struts>

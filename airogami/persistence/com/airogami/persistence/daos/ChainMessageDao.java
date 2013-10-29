@@ -151,7 +151,7 @@ public class ChainMessageDao extends ChainMessageDAO {
 		
 	}
 	
-private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
+    private final String getChainMessageJPQL = "select chainMessage from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2";
 	
 	public ChainMessage getChainMessage(int accountId, long chainId){
 		EntityManagerHelper.log("getChainMessageing", Level.INFO, null);
@@ -170,6 +170,30 @@ private final String getChainMessageJPQL = "select chainMessage from ChainMessag
 			return chainMessage;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("getChainMessage failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	
+    private final String chainExistsJPQL = "select count(chainMessage) from ChainMessage chainMessage where chainMessage.chain.chainId = ?1 and chainMessage.account.accountId = ?2 and chainMessage.status = ?3";
+	
+	public boolean chainExists(int accountId, long chainId){
+		EntityManagerHelper.log("chainExistsing", Level.INFO, null);
+		try {
+			TypedQuery<Long> query = EntityManagerHelper.getEntityManager().createQuery(
+					chainExistsJPQL, Long.class);
+			query.setParameter(1, chainId);
+			query.setParameter(2, accountId);
+			query.setParameter(3, ChainMessageConstants.StatusNew);
+			List<Long> result = query.getResultList();
+			long count = 0;
+			if(result.size() > 0){
+				count = result.get(0);
+			}
+			EntityManagerHelper
+					.log("chainExists successful", Level.INFO, null);
+			return count == 1;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("chainExists failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

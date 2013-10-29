@@ -1,10 +1,6 @@
 package com.airogami.presentation.plane;
 
 import java.util.Map;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.beanutils.PropertyUtils;
 
 import com.airogami.exception.AirogamiException;
@@ -23,6 +19,23 @@ public class ReplyPlaneAction extends AirogamiActionSupport implements ModelDriv
 	public ReplyPlaneAction(){
 		replyPlaneVO = new ReplyPlaneVO();
 	}	
+	
+	@Override
+	public void validate(){	
+		super.validate();
+		if(this.hasActionErrors() == false && this.hasFieldErrors() == false){
+			try{
+				String link = replyPlaneVO.getMessageVO().getLink();
+				if(link!=null){
+					Integer.parseInt(link);
+				}
+			}catch(Throwable t){
+				this.addFieldError("messageVO.link", "Invalid messageVO.link");
+				JSONUtils.putInputStatus(dataMap);
+				dataMap.put("fieldErrors", this.getFieldErrors());
+			}	
+		}		
+	}
 	
 	@Override
 	public String execute() throws Exception {

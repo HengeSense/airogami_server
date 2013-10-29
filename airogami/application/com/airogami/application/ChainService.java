@@ -646,7 +646,6 @@ public class ChainService implements IChainService {
 	@Override
 	public Map<String, Object> viewedChainMessages(int accountId, long chainId, Timestamp last)
 			throws ApplicationException {
-		boolean succeed = false;
 		ApplicationException ae = null;
 		Object[] results = null;
 		try {
@@ -672,5 +671,30 @@ public class ChainService implements IChainService {
 			result.put("lastViewedTime", ServiceUtils.format((Timestamp)results[1]));
 		}
 		return result;
+	}
+
+	@Override
+	public boolean chainExists(int accountId, long chainId)
+			throws ApplicationException {
+		ApplicationException ae = null;
+		boolean exists = false;
+		try {
+			EntityManagerHelper.beginTransaction();
+			exists = DaoUtils.chainMessageDao.chainExists(accountId, chainId);
+			EntityManagerHelper.commit();
+		} catch (Throwable t) {
+			
+			if (t.getCause() == null) {
+				ae = new ApplicationException();
+			} else {
+				ae = new ApplicationException(t.getCause().getMessage());
+			}
+		} finally {
+			EntityManagerHelper.closeEntityManager();
+		}
+		if (ae != null) {
+			throw ae;
+		}
+		return exists;
 	}
 }

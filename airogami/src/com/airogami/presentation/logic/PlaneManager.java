@@ -25,9 +25,6 @@ import com.airogami.presentation.notification.SNotification;
 
 public class PlaneManager {
 
-	// private Timestamp baseTimestamp =
-	// Timestamp.valueOf("2013-01-01 00:00:00");
-
 	/*
 	 * @param category:(Category) must be not null, have name
 	 * 

@@ -2,7 +2,7 @@
   "conditions": [
     {"key":"accounts/"},    
     {"acl":"public-read"},    
-    {"bucket": "airogami-user-bucket"},  	
+    {"bucket": "airogami"},  	
 	["content-length-range", 1, 1048579]	
   ]
 }
