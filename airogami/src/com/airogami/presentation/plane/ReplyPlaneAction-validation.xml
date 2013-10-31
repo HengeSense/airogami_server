@@ -18,13 +18,13 @@
 	</field>
 
 	<field name="messageVO.content">
-		<field-validator type="requiredstring">
-			<message key="error.plane.replyplane.messagevo.content.required">Please input a messageVO.content</message>
-		</field-validator>
 		<field-validator type="stringlength">
-			<param name="minLength">1</param>
 			<param name="maxLength">255</param>
 			<message key="error.plane.replyplane.messagevo.content.length">The messageVO.content should have between ${minLength} and ${maxLength} characters</message>
+		</field-validator>
+		<field-validator type="fieldexpression">
+		    <param name="expression"><![CDATA[messageVO.type != 11 || messageVO.content.length() > 0]]></param>
+			<message key="error.plane.replyplane.messagevo.content.required">The messageVO.content is required for current situation</message>
 		</field-validator>
 	</field>
 	

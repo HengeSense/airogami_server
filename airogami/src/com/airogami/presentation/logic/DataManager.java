@@ -25,23 +25,48 @@ public class DataManager {
 	public final static String Method_Download = "download";
 	private final static String AWSAccessKeyId = "AKIAI72HDWKODEAAUIQQ";
 	private final static String msgDataTypes[] = {".audio", ".jpg"};
-	private String accountIconPolicy;
+	private final String fileNames[] = {"account_icon_policy.txt", "message_data_policy.txt"};
+	private final String policies[] = new String[2];
+	private final String ImageSizes[] = { "small", "medium" };
 	private final int expiration = 15 * 60 * 1000;// 15min
 	private final SimpleDateFormat sdf = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
 	public DataManager() {
-		String filename = "account_icon_policy.txt";
-		InputStream is = this.getClass().getResourceAsStream(filename);
-		Scanner scanner = new Scanner(is);
-		scanner.useDelimiter("\\Z");
-		accountIconPolicy = scanner.next();
-		scanner.close();
-		try {
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		for(int i = 0; i < fileNames.length; ++i){
+			InputStream is = this.getClass().getResourceAsStream(fileNames[i]);
+			Scanner scanner = new Scanner(is);
+			scanner.useDelimiter("\\Z");
+			policies[i] = scanner.next();
+			scanner.close();
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		
+	}
+	
+	private JSONObject createPolicy(String expiration, String key, String policy)
+			throws SignatureException, JSONException{
+		//
+		JSONObject jsonObj = new JSONObject(policies[1]);
+		jsonObj.put("expiration", expiration);
+		//
+		JSONArray jsonArray = jsonObj.getJSONArray("conditions");
+		jsonArray.optJSONObject(0).put("key", key);
+		String acl = jsonArray.optJSONObject(1).getString("acl");
+		String[] data = SigGenerator.instance
+				.calculateRFC2104HMAC(jsonObj.toString());
+		//
+		JSONObject token = new JSONObject();
+		token.put("policy", data[0]);
+		token.put("signature", data[1]);
+		token.put("key", key);
+		token.put("acl", acl);
+		token.put("AWSAccessKeyId", AWSAccessKeyId);
+		return token;
 	}
 
 	// "accounts/reversed accountId/account/..."
@@ -51,30 +76,16 @@ public class DataManager {
 			Date date = new Date(System.currentTimeMillis() + expiration);
 			String str = sdf.format(date);
 			//
-			String types[] = { "medium", "small" };
 			StringBuffer buffer = new StringBuffer("" + accountId);
 			buffer.reverse();
-			String reverse = buffer.toString();
+			String prefix = "accounts/" + buffer.toString() + "/account/icon";
 			//
-			String keys[] = {
-					"accounts/" + reverse + "/account/icon-medium.jpg",
-					"accounts/" + reverse + "/account/icon.jpg" };
-			for (int i = 0; i < keys.length; ++i) {
-				JSONObject jsonObj = new JSONObject(accountIconPolicy);
-				jsonObj.put("expiration", str);
-
-				JSONArray jsonArray = jsonObj.getJSONArray("conditions");
-				jsonArray.optJSONObject(0).put("key", keys[i]);
-				String acl = jsonArray.optJSONObject(1).getString("acl");
-				String[] data = SigGenerator.instance
-						.calculateRFC2104HMAC(jsonObj.toString());
-				JSONObject result = new JSONObject();
-				result.put("policy", data[0]);
-				result.put("signature", data[1]);
-				result.put("key", keys[i]);
-				result.put("acl", acl);
-				result.put("AWSAccessKeyId", AWSAccessKeyId);
-				json.put(types[i], result);
+			final String suffixes[] = {
+					".jpg",
+					"-medium.jpg"};
+			for (int i = 0; i < suffixes.length; ++i) {
+				JSONObject result = createPolicy(str, prefix + suffixes[i], policies[0]);
+				json.put(ImageSizes[i], result);
 			}
 		} catch (SignatureException e) {
 			// e.printStackTrace();
@@ -96,30 +107,28 @@ public class DataManager {
 				//
 				StringBuffer buffer = new StringBuffer("" + accountId);
 				buffer.reverse();
-				String key = "accounts/" + buffer.toString() + "/messagedata/";
+				String prefix = "accounts/" + buffer.toString() + "/messagedata/";
 				//
 				buffer = new StringBuffer("" + msgDataInc);
 				buffer.reverse();
-				key += buffer.toString() + msgDataTypes[type - MessageConstants.MessageTypeAudio];
+				prefix += buffer.toString();
 				//
-				JSONObject jsonObj = new JSONObject(accountIconPolicy);
-				jsonObj.put("expiration", str);
-				//
-				JSONArray jsonArray = jsonObj.getJSONArray("conditions");
-				jsonArray.optJSONObject(0).put("key", key);
-				String acl = jsonArray.optJSONObject(1).getString("acl");
-				String[] data = SigGenerator.instance
-						.calculateRFC2104HMAC(jsonObj.toString());
-				//
-				JSONObject token = new JSONObject();
-				token.put("policy", data[0]);
-				token.put("signature", data[1]);
-				token.put("key", key);
-				token.put("acl", acl);
-				token.put("AWSAccessKeyId", AWSAccessKeyId);
+				final String suffixes[] = {
+						"",
+						"-medium" };
+				int count = type == MessageConstants.MessageTypeAudio ? 1 : 2;
+				for(int i = 0; i < count; ++i){
+					String key = prefix + suffixes[i]+ msgDataTypes[type - MessageConstants.MessageTypeAudio];
+					JSONObject token = createPolicy(str, key, policies[1]);
+					if(count == 2){
+						result.put(this.ImageSizes[i], token.toString());
+					}
+					else{
+						result.put("token", token.toString());
+					}
+				}
 
 				result.put("msgDataInc", msgDataInc);
-				result.put("token", token.toString());
 			}
 
 		} catch (ApplicationException re) {
@@ -146,29 +155,26 @@ public class DataManager {
 				//
 				StringBuffer buffer = new StringBuffer("" + chainId);
 				buffer.reverse();
-				String key = "chains/" + buffer.toString() + "/";
+				String prefix = "chains/" + buffer.toString() + "/";
 				//
 				buffer = new StringBuffer("" + accountId);
 				buffer.reverse();
-				key += buffer.toString() + msgDataTypes[type - MessageConstants.MessageTypeAudio];
+				prefix += buffer.toString();
 				//
-				JSONObject jsonObj = new JSONObject(accountIconPolicy);
-				jsonObj.put("expiration", str);
-				//
-				JSONArray jsonArray = jsonObj.getJSONArray("conditions");
-				jsonArray.optJSONObject(0).put("key", key);
-				String acl = jsonArray.optJSONObject(1).getString("acl");
-				String[] data = SigGenerator.instance
-						.calculateRFC2104HMAC(jsonObj.toString());
-				//
-				JSONObject token = new JSONObject();
-				token.put("policy", data[0]);
-				token.put("signature", data[1]);
-				token.put("key", key);
-				token.put("acl", acl);
-				token.put("AWSAccessKeyId", AWSAccessKeyId);
-
-				result.put("token", token.toString());
+				final String suffixes[] = {
+						"",
+						"-medium" };
+				int count = type == MessageConstants.MessageTypeAudio ? 1 : 2;
+				for(int i = 0; i < count; ++i){
+					String key = prefix + suffixes[i]+ msgDataTypes[type - MessageConstants.MessageTypeAudio];
+					JSONObject token = createPolicy(str, key, policies[1]);
+					if(count == 2){
+						result.put(this.ImageSizes[i], token.toString());
+					}
+					else{
+						result.put("token", token.toString());
+					}
+				}
 			}
 			else{
 				result.put("error", "none");

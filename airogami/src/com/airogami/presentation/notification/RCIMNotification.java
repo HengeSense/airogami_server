@@ -10,11 +10,11 @@ import com.airogami.common.notification.ClientAgent;
 import com.airogami.common.notification.NotifiedInfo;
 
 //received chain message
-public class RCMNotification extends Notification{
+public class RCIMNotification extends Notification{
 	
-	public RCMNotification(NotifiedInfo notifiedInfos){
+	public RCIMNotification(NotifiedInfo notifiedInfos){
 		super(notifiedInfos);
-		type = TypeChainMessage;
+		type = TypeChainImageMessage;
 	}
 	
 	public PushNotificationPayload buildIOSPayload(){
@@ -22,7 +22,7 @@ public class RCMNotification extends Notification{
 		try {
 			payload.addCustomDictionary("type", type);
 			payload.addCustomAlertLocKey(LocKeys[type]);
-			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName(), notifiedInfos.getContent()));
+			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName()));
 			payload.addSound("default");
 		} catch (JSONException e) {
 			e.printStackTrace();

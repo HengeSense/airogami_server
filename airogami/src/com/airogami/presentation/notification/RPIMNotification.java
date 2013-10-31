@@ -7,14 +7,15 @@ import javapns.notification.PushNotificationPayload;
 import org.json.JSONException;
 
 import com.airogami.common.notification.ClientAgent;
+import com.airogami.common.notification.MessageNotifiedInfo;
 import com.airogami.common.notification.NotifiedInfo;
 
-//received chain message
-public class RCMNotification extends Notification{
+//received plane message
+public class RPIMNotification extends Notification{
 	
-	public RCMNotification(NotifiedInfo notifiedInfos){
+	public RPIMNotification(NotifiedInfo notifiedInfos){
 		super(notifiedInfos);
-		type = TypeChainMessage;
+		type = TypePlaneImageMessage;
 	}
 	
 	public PushNotificationPayload buildIOSPayload(){
@@ -22,7 +23,7 @@ public class RCMNotification extends Notification{
 		try {
 			payload.addCustomDictionary("type", type);
 			payload.addCustomAlertLocKey(LocKeys[type]);
-			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName(), notifiedInfos.getContent()));
+			payload.addCustomAlertLocArgs(Arrays.asList(notifiedInfos.getName()));
 			payload.addSound("default");
 		} catch (JSONException e) {
 			e.printStackTrace();

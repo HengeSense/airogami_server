@@ -10,6 +10,7 @@ import com.airogami.application.exception.ApplicationException;
 import com.airogami.common.constants.AccountConstants;
 import com.airogami.common.constants.ChainConstants;
 import com.airogami.common.constants.ChainMessageConstants;
+import com.airogami.common.constants.MessageConstants;
 import com.airogami.common.constants.PlaneConstants;
 import com.airogami.common.notification.NotifiedInfo;
 import com.airogami.exception.AirogamiException;
@@ -18,6 +19,7 @@ import com.airogami.persistence.entities.Chain;
 import com.airogami.persistence.entities.ChainMessage;
 import com.airogami.persistence.entities.Message;
 import com.airogami.presentation.notification.Notification;
+import com.airogami.presentation.notification.RCIMNotification;
 import com.airogami.presentation.notification.RCMNotification;
 
 public class ChainManager {
@@ -87,6 +89,12 @@ public class ChainManager {
 			NotifiedInfo notifiedInfo = (NotifiedInfo)result.remove("notifiedInfo");
 			if(notifiedInfo != null && notifiedInfo.getNotifiedInfos().size() > 0){
 				Notification notification = new RCMNotification(notifiedInfo);
+				if(type == MessageConstants.MessageTypeImage){
+					notification = new RCIMNotification(notifiedInfo);
+				}
+				else{
+					notification = new RCMNotification(notifiedInfo);
+				}
 				ManagerUtils.notificationManager.addNotification(notification);
 			}
 		}

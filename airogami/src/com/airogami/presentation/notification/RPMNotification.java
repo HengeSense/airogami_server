@@ -15,7 +15,7 @@ public class RPMNotification extends Notification{
 	
 	public RPMNotification(NotifiedInfo notifiedInfos){
 		super(notifiedInfos);
-		type = TypeReceivedPlaneMessage;
+		type = TypePlaneMessage;
 	}
 	
 	public PushNotificationPayload buildIOSPayload(){

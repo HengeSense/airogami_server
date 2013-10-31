@@ -86,8 +86,14 @@
     <input type="text" name="messageVO.content"  value="Reply, there!"/>
         <input type="checkbox" checked="checked" onchange="hide(this)"><br>
     <label>Message Type: </label>
-    <input type="text" name="messageVO.type"  value="1"/>
-        <input type="checkbox" checked="checked" onchange="hide(this)"><br>    
+    <input type="text" name="messageVO.type"  value="11"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>
+    <label>Message Link: </label>
+    <input type="text" name="messageVO.link"  value="33"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>  
+    <label>Message Prop: </label>
+    <input type="text" name="messageVO.prop"  value="1"/>
+        <input type="checkbox" checked="checked" onchange="hide(this)"><br>     
     <br>
     <button type="button" onclick="print(1)">print</button>
     <input type="reset" name="submit" value="reset" />

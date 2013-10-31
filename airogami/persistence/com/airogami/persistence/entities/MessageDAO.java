@@ -23,6 +23,7 @@ public class MessageDAO {
 	public static final String TYPE = "type";
 	public static final String CONTENT = "content";
 	public static final String LINK = "link";
+	public static final String PROP = "prop";
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -332,6 +333,10 @@ public class MessageDAO {
 
 	public List<Message> findByLink(Object link, int... rowStartIdxAndCount) {
 		return findByProperty(LINK, link, rowStartIdxAndCount);
+	}
+
+	public List<Message> findByProp(Object prop, int... rowStartIdxAndCount) {
+		return findByProperty(PROP, prop, rowStartIdxAndCount);
 	}
 
 	/**

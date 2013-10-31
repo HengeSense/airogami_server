@@ -20,6 +20,7 @@ import com.airogami.persistence.entities.Message;
 import com.airogami.persistence.entities.Plane;
 import com.airogami.presentation.notification.LPMNotification;
 import com.airogami.presentation.notification.Notification;
+import com.airogami.presentation.notification.RPIMNotification;
 import com.airogami.presentation.notification.RPMNotification;
 import com.airogami.presentation.notification.SNotification;
 
@@ -118,7 +119,7 @@ public class PlaneManager {
 		Map<String, Object> result = null;
 		if (message == null || message.getType() == null
 				|| message.getContent() == null
-				|| message.getContent().length() == 0) {
+				|| (message.getContent().length() == 0 && message.getType() == MessageConstants.MessageTypeText)) {
 			throw new IllegalArgumentException(
 					"Illegal arguments in replyPlane");
 		}
@@ -133,7 +134,13 @@ public class PlaneManager {
 		}
 		NotifiedInfo notifiedInfo = (NotifiedInfo) result.remove("notifiedInfo");
 		if (notifiedInfo != null) {
-			Notification notification = new RPMNotification(notifiedInfo);
+			Notification notification = null;
+			if(message.getType() == MessageConstants.MessageTypeImage){
+				notification = new RPIMNotification(notifiedInfo);
+			}
+			else{
+				notification = new RPMNotification(notifiedInfo);
+			}
 			ManagerUtils.notificationManager.addNotification(notification);
 		}
 

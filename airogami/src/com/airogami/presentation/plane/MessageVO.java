@@ -2,9 +2,10 @@ package com.airogami.presentation.plane;
 
 public class MessageVO {
 
-	private String content;
+	private String content = "";
 	private Short type;
 	private String link;
+	private int prop;
 	
 	public String getContent() {
 		return content;
@@ -23,6 +24,12 @@ public class MessageVO {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	public int getProp() {
+		return prop;
+	}
+	public void setProp(int prop) {
+		this.prop = prop;
 	}
 	
 }

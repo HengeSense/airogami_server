@@ -45,7 +45,7 @@ public class NotificationManager extends Thread{
 		while(true){
 			try{
 				Notification notification = notificationQueque.take();
-				if (notification.getType() == Notification.TypeReceivedChainMessage) {
+				if (notification.getType() == Notification.TypeChainMessage) {
 					for (NotifiedInfo notifiedInfo : notification.getNotifiedInfos().getNotifiedInfos()) {
 						this.sendNotification(notifiedInfo.getAccountId(), notifiedInfo.getMessagesCount(), notification);
 					}

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     10/28/2013 12:12:50 PM                       */
+/* Created on:     10/29/2013 3:47:55 PM                        */
 /*==============================================================*/
 
 
@@ -258,6 +258,7 @@ create table MESSAGE
    CREATED_TIME         datetime not null,
    CONTENT              varchar(255) not null default '',
    LINK                 varchar(255) not null default '',
+   PROP                 int not null default 0,
    primary key (MESSAGE_ID)
 );
 

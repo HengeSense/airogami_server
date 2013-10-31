@@ -41,6 +41,8 @@ public class Message implements java.io.Serializable {
 
 	private String link;
 
+	private Integer prop = 0;
+
 	// Constructors
 
 	/** default constructor */
@@ -49,7 +51,7 @@ public class Message implements java.io.Serializable {
 
 	/** full constructor */
 	public Message(Account account, Plane plane, Short status, Short type,
-			Timestamp createdTime, String content, String link) {
+			Timestamp createdTime, String content, String link, Integer prop) {
 		this.account = account;
 		this.plane = plane;
 		this.status = status;
@@ -57,6 +59,7 @@ public class Message implements java.io.Serializable {
 		this.createdTime = createdTime;
 		this.content = content;
 		this.link = link;
+		this.prop = prop;
 	}
 
 	// Property accessors
@@ -135,6 +138,15 @@ public class Message implements java.io.Serializable {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	@Column(name = "PROP", nullable = false)
+	public Integer getProp() {
+		return this.prop;
+	}
+
+	public void setProp(Integer prop) {
+		this.prop = prop;
 	}
 
 	@PrePersist

@@ -9,11 +9,13 @@ public abstract class Notification {
 	public static final int TypeSilent = 0;
 	public static final int TypeReceivedPlane = 1;
 	public static final int TypeReceivedChain = 2;
-	public static final int TypeReceivedPlaneMessage = 3;
-	public static final int TypeReceivedChainMessage = 4;
-	public static final int TypeLikedPlaneMessage = 5;
+	public static final int TypePlaneMessage = 3;
+	public static final int TypePlaneImageMessage = 4;
+	public static final int TypeChainMessage = 5;
+	public static final int TypeChainImageMessage = 6;
+	public static final int TypeLikedPlaneMessage = 7;
 	
-	protected static final String LocKeys[] = {"", "LKRP", "LKRC", "LKRPM", "LKRCM", "LKLPM"};
+	protected static final String LocKeys[] = {"", "LKRP", "LKRC", "LKRPM", "LKRPIM", "LKRCM", "LKRCIM", "LKLPM"};
 
 	protected int type;
 	protected NotifiedInfo notifiedInfos;
